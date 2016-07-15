@@ -57,9 +57,12 @@ public class Denizen2Sponge {
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
+        // Setup
         instance = this;
         plugin = Sponge.getPluginManager().getPlugin(PluginID).orElse(null);
+        // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
+        Denizen2Core.load();
         // Commands
         ExCommand.register();
         // Central loop
@@ -68,6 +71,6 @@ public class Denizen2Sponge {
             public void run() {
                 Denizen2Core.tick(0.05);
             }
-        });
+        }).submit(this);
     }
 }
