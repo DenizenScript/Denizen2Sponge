@@ -1,8 +1,12 @@
 package org.mcmonkey.denizen2sponge;
 
+import com.google.inject.Inject;
+import org.mcmonkey.denizen2core.Denizen2Core;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2core.utilities.debugging.Debug;
 import org.mcmonkey.denizen2core.utilities.yaml.YAMLConfiguration;
+import org.mcmonkey.denizen2sponge.spongecommands.ExCommand;
+import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -27,6 +31,12 @@ public class Denizen2Sponge {
 
     public static PluginContainer plugin;
 
+    public static Denizen2Sponge instance;
+
+    @Inject
+    public Logger logger;
+
+
     static {
         YAMLConfiguration config = null;
         try {
@@ -47,6 +57,17 @@ public class Denizen2Sponge {
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
+        instance = this;
         plugin = Sponge.getPluginManager().getPlugin(PluginID).orElse(null);
+        Denizen2Core.init(new Denizen2SpongeImplementation());
+        // Commands
+        ExCommand.register();
+        // Central loop
+        Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(new Runnable() {
+            @Override
+            public void run() {
+                Denizen2Core.tick(0.05);
+            }
+        });
     }
 }
