@@ -33,7 +33,8 @@ public class ExCommand implements CommandExecutor {
         String cmd = CoreUtilities.concat(new ArrayList<String>(commandContext.getAll("dCommand")), " ");
         // TODO: Redirect output to the commandSource!
         Denizen2Core.runString(cmd);
-        commandSource.sendMessage(Text.builder("Command executing... see console for details!").color(TextColors.YELLOW).toText()); // TODO: Scrap!
+        // TODO: Scrap this output in favor of outputting debug optionally.
+        commandSource.sendMessage(Text.builder("Command executing... see console for details!").color(TextColors.YELLOW).toText());
         return CommandResult.empty();
     }
 }

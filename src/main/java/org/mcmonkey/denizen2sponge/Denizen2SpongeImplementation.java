@@ -6,6 +6,8 @@ import org.mcmonkey.denizen2core.commands.CommandQueue;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializer;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
@@ -18,13 +20,14 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public void outputGood(String s) {
-        Sponge.getServer().getConsole().sendMessage(Text.builder("+> [Good] " + s).color(TextColors.GREEN).build());
+        Sponge.getServer().getConsole().sendMessage(Text.builder("+> [Good] ").append(
+                TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(s)).color(TextColors.GREEN).append().build());
     }
 
     @Override
     public void outputInfo(String s) {
-        // TODO: Color?
-        Sponge.getServer().getConsole().sendMessage(Text.builder("+> [Info] " + s).color(TextColors.GRAY).build());
+        Sponge.getServer().getConsole().sendMessage(Text.builder("+> [Info] ").append(
+                TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(s)).color(TextColors.GRAY).build());
     }
 
     @Override
@@ -34,7 +37,8 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public void outputError(String s) {
-        Sponge.getServer().getConsole().sendMessage(Text.builder("+> [Error] " + s).color(TextColors.DARK_RED).build());
+        Sponge.getServer().getConsole().sendMessage(Text.builder("+> [Error] ").append(
+                TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(s)).color(TextColors.RED).build());
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.mcmonkey.denizen2sponge;
 import com.google.inject.Inject;
 import org.mcmonkey.denizen2core.Denizen2Core;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
+import org.mcmonkey.denizen2core.utilities.debugging.ColorSet;
 import org.mcmonkey.denizen2core.utilities.debugging.Debug;
 import org.mcmonkey.denizen2core.utilities.yaml.YAMLConfiguration;
 import org.mcmonkey.denizen2sponge.spongecommands.ExCommand;
@@ -33,6 +34,8 @@ public class Denizen2Sponge {
 
     public static Denizen2Sponge instance;
 
+    public static char colorChar = '\u00A7';
+
     @Inject
     public Logger logger;
 
@@ -60,6 +63,11 @@ public class Denizen2Sponge {
         // Setup
         instance = this;
         plugin = Sponge.getPluginManager().getPlugin(PluginID).orElse(null);
+        // Colors
+        ColorSet.base = colorChar + "7";
+        ColorSet.good = colorChar + "a";
+        ColorSet.warning = colorChar + "c";
+        ColorSet.emphasis = colorChar + "b";
         // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
         Denizen2Core.load();

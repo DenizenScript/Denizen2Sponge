@@ -25,7 +25,7 @@
         <repository>
             <id>Frenetic-Repo</id>
             <name>Frenetic-Repo</name>
-            <url>http://jci.mcmonkey.org/plugin/repository/everything/</url>
+            <url>http://jci.frenetic.xyz/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
