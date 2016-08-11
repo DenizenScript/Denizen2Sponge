@@ -6,6 +6,7 @@ import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2core.utilities.debugging.ColorSet;
 import org.mcmonkey.denizen2core.utilities.debugging.Debug;
 import org.mcmonkey.denizen2core.utilities.yaml.YAMLConfiguration;
+import org.mcmonkey.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
 import org.mcmonkey.denizen2sponge.spongecommands.ExCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -70,6 +71,9 @@ public class Denizen2Sponge {
         ColorSet.emphasis = colorChar + "b";
         // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
+        // Events: Player
+        Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
+        // Load Denizen2
         Denizen2Core.load();
         // Commands
         ExCommand.register();
