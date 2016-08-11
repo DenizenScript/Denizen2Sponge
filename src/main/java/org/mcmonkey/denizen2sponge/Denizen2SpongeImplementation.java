@@ -6,12 +6,17 @@ import org.mcmonkey.denizen2core.commands.CommandQueue;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
 public class Denizen2SpongeImplementation extends Denizen2Implementation {
+
+    @Override
+    public boolean generalDebug() {
+        return true; // TODO: Config!
+    }
+
     @Override
     public void outputException(Exception e) {
         Sponge.getServer().getConsole().sendMessage(Text.builder("+> Internal exception! Trace follows: ").color(TextColors.RED).build());
