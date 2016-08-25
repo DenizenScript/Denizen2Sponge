@@ -14,7 +14,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public boolean generalDebug() {
-        return true; // TODO: Config!
+        return true; // TODO: Configuration file!
     }
 
     @Override
@@ -59,5 +59,10 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     @Override
     public String getImplementationVersion() {
         return Denizen2Sponge.version;
+    }
+
+    @Override
+    public boolean enforceLocale() {
+        return true; // TODO: Configuration file!
     }
 }

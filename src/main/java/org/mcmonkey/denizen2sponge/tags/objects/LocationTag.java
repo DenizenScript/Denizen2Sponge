@@ -19,13 +19,13 @@ public class LocationTag extends AbstractTagObject {
     // @Type LocationTag
     // @SubType TextTag
     // @Group Mathematics
-    // @Description Represents a point in a world.
+    // @Description Represents a position in a world.
     // -->
 
-    private double x;
-    private double y;
-    private double z;
-    private World world;
+    public double x;
+    public double y;
+    public double z;
+    public World world;
 
     public LocationTag(Location<World> location) {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
@@ -50,7 +50,7 @@ public class LocationTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType NumberTag
         // @Returns the X coordinate of the location.
-        // @Example "0.0,1.0,2.0,world" .x returns "0.0".
+        // @Example "0,1,2,world" .x returns "0".
         // -->
         handlers.put("x", (dat, obj) -> new NumberTag(((LocationTag) obj).x));
         // <--[tag]
@@ -58,7 +58,7 @@ public class LocationTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType NumberTag
         // @Returns the Y coordinate of the location.
-        // @Example "0.0,1.0,2.0,world" .y returns "1.0".
+        // @Example "0,1,2,world" .y returns "1".
         // -->
         handlers.put("y", (dat, obj) -> new NumberTag(((LocationTag) obj).y));
         // <--[tag]
@@ -66,7 +66,7 @@ public class LocationTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType NumberTag
         // @Returns the Z coordinate of the location.
-        // @Example "0.0,1.0,2.0,world" .z returns "2.0".
+        // @Example "0,1,2,world" .z returns "2".
         // -->
         handlers.put("z", (dat, obj) -> new NumberTag(((LocationTag) obj).z));
         // <--[tag]
@@ -74,7 +74,7 @@ public class LocationTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType WorldTag
         // @Returns the world of the location.
-        // @Example "0.0,1.0,2.0,world" .world returns "world".
+        // @Example "0,1,2,world" .world returns "world".
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).world));
     }
@@ -107,6 +107,9 @@ public class LocationTag extends AbstractTagObject {
 
     @Override
     public String toString() {
-        return x + "," + y + "," + z + "," + world;
+        return CoreUtilities.doubleToString(x) + ","
+                + CoreUtilities.doubleToString(y) + ","
+                + CoreUtilities.doubleToString(z) + ","
+                + world;
     }
 }

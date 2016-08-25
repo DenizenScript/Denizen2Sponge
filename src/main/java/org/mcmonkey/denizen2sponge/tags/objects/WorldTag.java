@@ -38,7 +38,7 @@ public class WorldTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the name of the world.
-        // @Example "world_nether" .name returns "world_nether".
+        // @Example "world" .name returns "world".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((WorldTag) obj).world.getName()));
         // <--[tag]
@@ -46,7 +46,6 @@ public class WorldTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the unique ID of the world.
-        // @Example "world_nether" .uuid returns "758b0710-1c21-4d69-a7b1-7543770948ef".
         // -->
         handlers.put("uuid", (dat, obj) -> new TextTag(((WorldTag) obj).world.getUniqueId().toString()));
     }
