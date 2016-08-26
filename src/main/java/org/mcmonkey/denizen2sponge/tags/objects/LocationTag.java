@@ -50,6 +50,7 @@ public class LocationTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Name LocationTag.x
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType NumberTag
         // @Returns the X coordinate of the location.
@@ -58,6 +59,7 @@ public class LocationTag extends AbstractTagObject {
         handlers.put("x", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.x));
         // <--[tag]
         // @Name LocationTag.y
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType NumberTag
         // @Returns the Y coordinate of the location.
@@ -66,6 +68,7 @@ public class LocationTag extends AbstractTagObject {
         handlers.put("y", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.y));
         // <--[tag]
         // @Name LocationTag.z
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType NumberTag
         // @Returns the Z coordinate of the location.
@@ -74,6 +77,7 @@ public class LocationTag extends AbstractTagObject {
         handlers.put("z", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.z));
         // <--[tag]
         // @Name LocationTag.world
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType WorldTag
         // @Returns the world of the location.

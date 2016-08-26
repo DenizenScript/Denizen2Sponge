@@ -21,6 +21,8 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
     // @Events
     // client pings server
     //
+    // @Updated 2016/08/26
+    //
     // @Cancellable false
     //
     // @Triggers when a client pings the server for information.

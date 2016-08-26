@@ -36,6 +36,7 @@ public class PlayerTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Name PlayerTag.name
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the name of the player.

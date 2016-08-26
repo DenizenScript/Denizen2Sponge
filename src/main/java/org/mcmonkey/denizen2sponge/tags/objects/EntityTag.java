@@ -37,6 +37,7 @@ public class EntityTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Name EntityTag.uuid
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the unique ID of the entity.
@@ -44,6 +45,7 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("uuid", (dat, obj) -> new TextTag(((EntityTag) obj).internal.getUniqueId().toString()));
         // <--[tag]
         // @Name EntityTag.location
+        // @Updated 2016/08/26
         // @Group General Information
         // @ReturnType LocationTag
         // @Returns the location of the entity.
@@ -51,6 +53,7 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("location", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getLocation()));
         // <--[tag]
         // @Name EntityTag.velocity
+        // @Updated 2016/08/26
         // @Group General Information
         // @ReturnType LocationTag
         // @Returns the velocity of the entity (The vector it is is currently moving in.)

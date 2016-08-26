@@ -39,6 +39,7 @@ public class OfflinePlayerTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Name OfflinePlayerTag.name
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the name of the player.
@@ -56,6 +57,7 @@ public class OfflinePlayerTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Name OfflinePlayerTag.uuid
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the unique ID of the player.

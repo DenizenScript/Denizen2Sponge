@@ -35,6 +35,7 @@ public class WorldTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Name WorldTag.name
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the name of the world.
@@ -43,6 +44,7 @@ public class WorldTag extends AbstractTagObject {
         handlers.put("name", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getName()));
         // <--[tag]
         // @Name WorldTag.uuid
+        // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the unique ID of the world.
