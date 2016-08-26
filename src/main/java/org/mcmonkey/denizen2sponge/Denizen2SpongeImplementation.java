@@ -62,6 +62,11 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     }
 
     @Override
+    public File getAddonsFolder() {
+        return new File("./assets/Denizen/addons/");
+    }
+
+    @Override
     public String getImplementationName() {
         return "Denizen2Sponge";
     }

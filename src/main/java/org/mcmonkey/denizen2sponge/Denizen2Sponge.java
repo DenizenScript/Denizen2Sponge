@@ -2,6 +2,7 @@ package org.mcmonkey.denizen2sponge;
 
 import com.google.inject.Inject;
 import org.mcmonkey.denizen2core.Denizen2Core;
+import org.mcmonkey.denizen2core.Denizen2Implementation;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2core.utilities.debugging.ColorSet;
 import org.mcmonkey.denizen2core.utilities.debugging.Debug;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -75,9 +77,11 @@ public class Denizen2Sponge {
         ColorSet.warning = colorChar + "c";
         ColorSet.emphasis = colorChar + "b";
         // Denizen2
-        Denizen2Core.init(new Denizen2SpongeImplementation());
-        // Ensure the script folder exists
-        Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
+        Denizen2Implementation impl = new Denizen2SpongeImplementation();
+        Denizen2Core.init(impl);
+        // Ensure the script and addon folders exist
+        impl.getScriptsFolder().mkdirs();
+        impl.getAddonsFolder().mkdirs();
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         // Events: Server
@@ -93,5 +97,11 @@ public class Denizen2Sponge {
         ExCommand.register();
         // Central loop
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);
+    }
+
+    @Listener
+    public void onServerStop(GameStoppingServerEvent event) {
+        // Disable Denizen2
+        Denizen2Core.unload();
     }
 }
