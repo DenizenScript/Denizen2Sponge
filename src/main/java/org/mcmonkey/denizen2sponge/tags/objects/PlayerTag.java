@@ -7,7 +7,6 @@ import org.mcmonkey.denizen2core.utilities.Action;
 import org.mcmonkey.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -15,13 +14,11 @@ import java.util.UUID;
 
 public class PlayerTag extends AbstractTagObject {
 
-    // TODO: EntityTag subtag!
-
     // TODO: OfflinePlayerTag?
 
     // <--[object]
     // @Type PlayerTag
-    // @SubType TextTag
+    // @SubType EntityTag
     // @Group Entities
     // @Description Represents an online on the server.
     // -->
@@ -47,13 +44,6 @@ public class PlayerTag extends AbstractTagObject {
         // @Example "Bob" .name returns "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
-        // <--[tag]
-        // @Name PlayerTag.uuid
-        // @Group Identification
-        // @ReturnType TextTag
-        // @Returns the unique ID of the player.
-        // -->
-        handlers.put("uuid", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getUniqueId().toString()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
@@ -86,7 +76,7 @@ public class PlayerTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        return new TextTag(toString()).handle(data);
+        return new EntityTag(internal).handle(data);
     }
 
     @Override
