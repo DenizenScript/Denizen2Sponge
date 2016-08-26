@@ -74,6 +74,8 @@ public class Denizen2Sponge {
         ColorSet.emphasis = colorChar + "b";
         // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
+        // Ensure the script folder exists
+        Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         // Events: Server
