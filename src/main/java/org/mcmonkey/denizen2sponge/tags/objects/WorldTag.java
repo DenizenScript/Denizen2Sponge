@@ -20,14 +20,14 @@ public class WorldTag extends AbstractTagObject {
     // @Description Represents a world on the server.
     // -->
 
-    private World world;
+    private World internal;
 
     public WorldTag(World world) {
-        this.world = world;
+        internal = world;
     }
 
     public World getInternal() {
-        return world;
+        return internal;
     }
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
@@ -40,14 +40,14 @@ public class WorldTag extends AbstractTagObject {
         // @Returns the name of the world.
         // @Example "world" .name returns "world".
         // -->
-        handlers.put("name", (dat, obj) -> new TextTag(((WorldTag) obj).world.getName()));
+        handlers.put("name", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getName()));
         // <--[tag]
         // @Name WorldTag.uuid
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the unique ID of the world.
         // -->
-        handlers.put("uuid", (dat, obj) -> new TextTag(((WorldTag) obj).world.getUniqueId().toString()));
+        handlers.put("uuid", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getUniqueId().toString()));
     }
 
     public static WorldTag getFor(Action<String> error, String text) {
@@ -75,6 +75,6 @@ public class WorldTag extends AbstractTagObject {
 
     @Override
     public String toString() {
-        return world.getName();
+        return internal.getName();
     }
 }

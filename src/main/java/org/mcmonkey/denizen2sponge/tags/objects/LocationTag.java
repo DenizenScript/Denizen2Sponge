@@ -7,6 +7,7 @@ import org.mcmonkey.denizen2core.tags.objects.TextTag;
 import org.mcmonkey.denizen2core.utilities.Action;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2core.utilities.Function2;
+import org.mcmonkey.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -22,10 +23,7 @@ public class LocationTag extends AbstractTagObject {
     // @Description Represents a position in a world.
     // -->
 
-    public double x;
-    public double y;
-    public double z;
-    public World world;
+    public UtilLocation internal = new UtilLocation();
 
     public LocationTag(Location<World> location) {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
@@ -36,10 +34,10 @@ public class LocationTag extends AbstractTagObject {
     }
 
     public LocationTag(double x, double y, double z, World world) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.world = world;
+        this.internal.x = x;
+        this.internal.y = y;
+        this.internal.z = z;
+        this.internal.world = world;
     }
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
@@ -52,7 +50,7 @@ public class LocationTag extends AbstractTagObject {
         // @Returns the X coordinate of the location.
         // @Example "0,1,2,world" .x returns "0".
         // -->
-        handlers.put("x", (dat, obj) -> new NumberTag(((LocationTag) obj).x));
+        handlers.put("x", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.x));
         // <--[tag]
         // @Name LocationTag.y
         // @Group Identification
@@ -60,7 +58,7 @@ public class LocationTag extends AbstractTagObject {
         // @Returns the Y coordinate of the location.
         // @Example "0,1,2,world" .y returns "1".
         // -->
-        handlers.put("y", (dat, obj) -> new NumberTag(((LocationTag) obj).y));
+        handlers.put("y", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.y));
         // <--[tag]
         // @Name LocationTag.z
         // @Group Identification
@@ -68,7 +66,7 @@ public class LocationTag extends AbstractTagObject {
         // @Returns the Z coordinate of the location.
         // @Example "0,1,2,world" .z returns "2".
         // -->
-        handlers.put("z", (dat, obj) -> new NumberTag(((LocationTag) obj).z));
+        handlers.put("z", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.z));
         // <--[tag]
         // @Name LocationTag.world
         // @Group Identification
@@ -76,7 +74,7 @@ public class LocationTag extends AbstractTagObject {
         // @Returns the world of the location.
         // @Example "0,1,2,world" .world returns "world".
         // -->
-        handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).world));
+        handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).internal.world));
     }
 
     public static LocationTag getFor(Action<String> error, String text) {
@@ -107,9 +105,12 @@ public class LocationTag extends AbstractTagObject {
 
     @Override
     public String toString() {
-        return CoreUtilities.doubleToString(x) + ","
-                + CoreUtilities.doubleToString(y) + ","
-                + CoreUtilities.doubleToString(z) + ","
-                + world.getName();
+        String s = CoreUtilities.doubleToString(internal.x) + ","
+                + CoreUtilities.doubleToString(internal.y) + ","
+                + CoreUtilities.doubleToString(internal.z);
+        if (internal.world != null) {
+            s += "," + internal.world.getName();
+        }
+        return s;
     }
 }

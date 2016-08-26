@@ -26,14 +26,14 @@ public class PlayerTag extends AbstractTagObject {
     // @Description Represents an online on the server.
     // -->
 
-    private Player player;
+    private Player internal;
 
     public PlayerTag(Player player) {
-        this.player = player;
+        internal = player;
     }
 
     public Player getInternal() {
-        return player;
+        return internal;
     }
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
@@ -46,23 +46,33 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the name of the player.
         // @Example "Bob" .name returns "Bob".
         // -->
-        handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).player.getName()));
+        handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
         // <--[tag]
         // @Name PlayerTag.uuid
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the unique ID of the player.
         // -->
-        handlers.put("uuid", (dat, obj) -> new TextTag(((PlayerTag) obj).player.getUniqueId().toString()));
+        handlers.put("uuid", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getUniqueId().toString()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
-        Optional<Player> oplayer = Sponge.getServer().getPlayer(UUID.fromString(text));
-        if (!oplayer.isPresent()) {
-            error.run("Invalid PlayerTag input!");
-            return null;
+        try {
+            Optional<Player> oplayer = Sponge.getServer().getPlayer(UUID.fromString(text));
+            if (!oplayer.isPresent()) {
+                error.run("Invalid PlayerTag UUID input!");
+                return null;
+            }
+            return new PlayerTag(oplayer.get());
         }
-        return new PlayerTag(oplayer.get());
+        catch (IllegalArgumentException e) {
+            Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
+            if (!oplayer.isPresent()) {
+                error.run("Invalid PlayerTag named input!");
+                return null;
+            }
+            return new PlayerTag(oplayer.get());
+        }
     }
 
     public static PlayerTag getFor(Action<String> error, AbstractTagObject text) {
@@ -81,6 +91,6 @@ public class PlayerTag extends AbstractTagObject {
 
     @Override
     public String toString() {
-        return player.getUniqueId().toString();
+        return internal.getUniqueId().toString();
     }
 }
