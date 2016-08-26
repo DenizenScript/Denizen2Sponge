@@ -14,13 +14,11 @@ import java.util.UUID;
 
 public class PlayerTag extends AbstractTagObject {
 
-    // TODO: OfflinePlayerTag?
-
     // <--[object]
     // @Type PlayerTag
     // @SubType EntityTag
     // @Group Entities
-    // @Description Represents an online on the server.
+    // @Description Represents an online player on the server.
     // -->
 
     private Player internal;

@@ -49,6 +49,13 @@ public class EntityTag extends AbstractTagObject {
         // @Returns the location of the entity.
         // -->
         handlers.put("location", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getLocation()));
+        // <--[tag]
+        // @Name EntityTag.velocity
+        // @Group General Information
+        // @ReturnType LocationTag
+        // @Returns the velocity of the entity (The vector it is is currently moving in.)
+        // -->
+        handlers.put("velocity", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getVelocity()));
     }
 
     public static EntityTag getFor(Action<String> error, String text) {

@@ -1,5 +1,6 @@
 package org.mcmonkey.denizen2sponge.tags.objects;
 
+import com.flowpowered.math.vector.Vector3d;
 import org.mcmonkey.denizen2core.tags.AbstractTagObject;
 import org.mcmonkey.denizen2core.tags.TagData;
 import org.mcmonkey.denizen2core.tags.objects.NumberTag;
@@ -27,6 +28,10 @@ public class LocationTag extends AbstractTagObject {
 
     public LocationTag(Location<World> location) {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
+    }
+
+    public LocationTag(Vector3d location) {
+        this(location.getX(), location.getY(), location.getZ());
     }
 
     public LocationTag(double x, double y, double z) {

@@ -3,24 +3,24 @@ package org.mcmonkey.denizen2sponge.tags.handlers;
 import org.mcmonkey.denizen2core.tags.AbstractTagBase;
 import org.mcmonkey.denizen2core.tags.AbstractTagObject;
 import org.mcmonkey.denizen2core.tags.TagData;
-import org.mcmonkey.denizen2sponge.tags.objects.EntityTag;
+import org.mcmonkey.denizen2sponge.tags.objects.OfflinePlayerTag;
 
-public class EntityTagBase extends AbstractTagBase {
+public class OfflinePlayerTagBase extends AbstractTagBase {
 
     // <--[tagbase]
-    // @Base entity[<EntityTag>]
+    // @Base offline_player[<OfflinePlayerTag>]
     // @Group Sponge Base Types
-    // @ReturnType EntityTag
-    // @Returns the input as an EntityTag.
+    // @ReturnType OfflinePlayerTag
+    // @Returns the input as an OfflinePlayerTag.
     // -->
 
     @Override
     public String getName() {
-        return "entity";
+        return "offline_player";
     }
 
     @Override
     public AbstractTagObject handle(TagData data) {
-        return EntityTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
+        return OfflinePlayerTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }
