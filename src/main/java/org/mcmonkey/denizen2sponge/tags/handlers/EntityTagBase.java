@@ -4,7 +4,6 @@ import org.mcmonkey.denizen2core.tags.AbstractTagBase;
 import org.mcmonkey.denizen2core.tags.AbstractTagObject;
 import org.mcmonkey.denizen2core.tags.TagData;
 import org.mcmonkey.denizen2sponge.tags.objects.EntityTag;
-import org.mcmonkey.denizen2sponge.tags.objects.PlayerTag;
 
 public class EntityTagBase extends AbstractTagBase {
 

@@ -120,7 +120,7 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
             max_players = IntegerTag.getFor(this::error, value);
             Optional<ClientPingServerEvent.Response.Players> optPlayers = internal.getResponse().getPlayers();
             if (optPlayers.isPresent()) {
-                optPlayers.get().setMax((int)max_players.getInternal());
+                optPlayers.get().setMax((int) max_players.getInternal());
             }
         }
         else if (determination.equals("num_players")) {
@@ -134,7 +134,7 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
             num_players = temp;
             Optional<ClientPingServerEvent.Response.Players> optPlayers = internal.getResponse().getPlayers();
             if (optPlayers.isPresent()) {
-                optPlayers.get().setOnline((int)num_players.getInternal());
+                optPlayers.get().setOnline((int) num_players.getInternal());
             }
         }
         else {

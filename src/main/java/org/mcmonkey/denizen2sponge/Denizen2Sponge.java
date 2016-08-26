@@ -2,7 +2,6 @@ package org.mcmonkey.denizen2sponge;
 
 import com.google.inject.Inject;
 import org.mcmonkey.denizen2core.Denizen2Core;
-import org.mcmonkey.denizen2core.Denizen2Implementation;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2core.utilities.debugging.ColorSet;
 import org.mcmonkey.denizen2core.utilities.debugging.Debug;
@@ -28,7 +27,7 @@ import java.io.InputStream;
 /**
  * Main plugin class for Denizen2Sponge.
  */
-@Plugin(id = Denizen2Sponge.PluginID, name = Denizen2Sponge.PluginName, version=Denizen2Sponge.PluginVersionString)
+@Plugin(id = Denizen2Sponge.PluginID, name = Denizen2Sponge.PluginName, version = Denizen2Sponge.PluginVersionString)
 public class Denizen2Sponge {
 
     public final static String PluginID = "denizen2sponge";
