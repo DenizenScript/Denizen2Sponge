@@ -92,7 +92,7 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
         ClientPingsServerScriptEvent event = (ClientPingsServerScriptEvent) clone();
         event.address = new TextTag(client.getAddress().toString());
         event.version = new TextTag(client.getVersion().getName());
-        event.motd = new TextTag(response.getDescription().toString()); // TODO: some sort of objects for formatted Text?
+        event.motd = new TextTag(response.getDescription().toPlain()); // TODO: some sort of objects for formatted Text?
         Optional<ClientPingServerEvent.Response.Players> optPlayers = response.getPlayers();
         int numPlayers = 0;
         int maxPlayers = 0;
@@ -101,8 +101,8 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
             numPlayers = players.getOnline();
             maxPlayers = players.getMax();
         }
-        num_players = new IntegerTag(numPlayers);
-        max_players = new IntegerTag(maxPlayers);
+        event.num_players = new IntegerTag(numPlayers);
+        event.max_players = new IntegerTag(maxPlayers);
         event.run();
     }
 }

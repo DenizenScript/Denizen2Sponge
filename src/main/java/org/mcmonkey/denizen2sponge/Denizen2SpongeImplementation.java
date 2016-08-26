@@ -20,7 +20,17 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     @Override
     public void outputException(Exception e) {
         Sponge.getServer().getConsole().sendMessage(Text.builder("+> Internal exception! Trace follows: ").color(TextColors.RED).build());
-        Denizen2Sponge.instance.logger.trace("Internal exception", e);
+        trace(e);
+    }
+
+    public void trace(Throwable e) {
+        Sponge.getServer().getConsole().sendMessage(Text.of("   " + e.getClass().getCanonicalName() + ": " + e.getMessage()));
+        for (StackTraceElement ste : e.getStackTrace()) {
+            Sponge.getServer().getConsole().sendMessage(Text.of("     " + ste.toString()));
+        }
+        if (e.getCause() != e) {
+            trace(e);
+        }
     }
 
     @Override
