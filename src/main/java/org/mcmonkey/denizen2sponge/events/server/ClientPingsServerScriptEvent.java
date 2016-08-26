@@ -4,6 +4,7 @@ import org.mcmonkey.denizen2core.events.ScriptEvent;
 import org.mcmonkey.denizen2core.tags.AbstractTagObject;
 import org.mcmonkey.denizen2core.tags.objects.IntegerTag;
 import org.mcmonkey.denizen2core.tags.objects.TextTag;
+import org.mcmonkey.denizen2core.utilities.debugging.Debug;
 import org.mcmonkey.denizen2sponge.Denizen2Sponge;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
@@ -125,7 +126,9 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
         else if (determination.equals("num_players")) {
             IntegerTag temp = IntegerTag.getFor(this::error, value);
             if (temp.getInternal() > num_players.getInternal()) {
-                error("Invalid num_players! Value too high!");
+                if (errors) {
+                    Debug.error("Invalid num_players! Value too high!");
+                }
                 return;
             }
             num_players = temp;
