@@ -5,9 +5,14 @@ import org.mcmonkey.denizen2core.tags.TagData;
 import org.mcmonkey.denizen2core.tags.objects.TextTag;
 import org.mcmonkey.denizen2core.utilities.Action;
 import org.mcmonkey.denizen2core.utilities.Function2;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
 
 public class EntityTag extends AbstractTagObject {
 
@@ -48,8 +53,14 @@ public class EntityTag extends AbstractTagObject {
     }
 
     public static EntityTag getFor(Action<String> error, String text) {
-        // TODO: Entity getter!
-        error.run("Not yet implemented!");
+        UUID id = UUID.fromString(text);
+        for (World world : Sponge.getServer().getWorlds()) {
+            Optional<Entity> e = world.getEntity(id);
+            if (e.isPresent()) {
+                return new EntityTag(e.get());
+            }
+        }
+        error.run("Invalid EntityTag UUID input!");
         return null;
     }
 
