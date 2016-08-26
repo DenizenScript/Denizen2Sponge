@@ -5,6 +5,7 @@ import org.mcmonkey.denizen2core.tags.AbstractTagObject;
 import org.mcmonkey.denizen2core.tags.objects.TextTag;
 import org.mcmonkey.denizen2sponge.Denizen2Sponge;
 import org.mcmonkey.denizen2sponge.tags.objects.LocationTag;
+import org.mcmonkey.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
@@ -27,7 +28,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     // @Triggers when a player breaks a block.
     //
     // @Context
-    // player TextTag returns the name of the player. // TODO: PlayerTag.
+    // player PlayerTag returns the player that broke the block.
     // material TextTag returns the name of the broken material. // TODO: MaterialTag.
     // location LocationTag returns the location of the broken block.
     //
@@ -50,7 +51,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
         return true;
     }
 
-    public TextTag player;
+    public PlayerTag player;
 
     public TextTag material;
 
@@ -79,7 +80,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     public void onBlockBroken(ChangeBlockEvent.Break evt, @Root Player player) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
             PlayerBreaksBlockScriptEvent event = (PlayerBreaksBlockScriptEvent) clone();
-            event.player = new TextTag(player.getName());
+            event.player = new PlayerTag(player);
             event.material = new TextTag(block.getOriginal().getState().getType().getName());
             event.location = new LocationTag(block.getOriginal().getLocation().get()); // TODO: mayyybe possibly handle world-less positions?
             event.cancelled = evt.isCancelled();

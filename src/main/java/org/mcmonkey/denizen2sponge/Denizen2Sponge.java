@@ -10,6 +10,7 @@ import org.mcmonkey.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
 import org.mcmonkey.denizen2sponge.events.server.ClientPingsServerScriptEvent;
 import org.mcmonkey.denizen2sponge.spongecommands.ExCommand;
 import org.mcmonkey.denizen2sponge.tags.handlers.LocationTagBase;
+import org.mcmonkey.denizen2sponge.tags.handlers.PlayerTagBase;
 import org.mcmonkey.denizen2sponge.tags.handlers.WorldTagBase;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -82,6 +83,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         // Sponge Tag Handlers
         Denizen2Core.register(new LocationTagBase());
+        Denizen2Core.register(new PlayerTagBase());
         Denizen2Core.register(new WorldTagBase());
         // Load Denizen2
         Denizen2Core.load();

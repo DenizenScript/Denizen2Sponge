@@ -16,7 +16,7 @@ public class WorldTag extends AbstractTagObject {
     // <--[object]
     // @Type WorldTag
     // @SubType TextTag
-    // @Group Mathematics
+    // @Group Areas
     // @Description Represents a world on the server.
     // -->
 
