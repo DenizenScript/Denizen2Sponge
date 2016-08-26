@@ -29,7 +29,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
             Sponge.getServer().getConsole().sendMessage(Text.of("     " + ste.toString()));
         }
         if (e.getCause() != e) {
-            trace(e);
+            trace(e.getCause());
         }
     }
 
