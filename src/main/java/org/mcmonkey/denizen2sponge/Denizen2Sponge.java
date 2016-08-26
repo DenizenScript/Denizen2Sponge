@@ -22,6 +22,7 @@ import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
+import java.io.File;
 import java.io.InputStream;
 
 /**
@@ -77,11 +78,10 @@ public class Denizen2Sponge {
         ColorSet.warning = colorChar + "c";
         ColorSet.emphasis = colorChar + "b";
         // Denizen2
-        Denizen2Implementation impl = new Denizen2SpongeImplementation();
-        Denizen2Core.init(impl);
-        // Ensure the script and addon folders exist
-        impl.getScriptsFolder().mkdirs();
-        impl.getAddonsFolder().mkdirs();
+        Denizen2Core.init(new Denizen2SpongeImplementation());
+        // Ensure the scripts and addons folders exist
+        Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
+        Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         // Events: Server
@@ -92,11 +92,15 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerTagBase());
         Denizen2Core.register(new WorldTagBase());
         // Load Denizen2
-        Denizen2Core.load();
+        Denizen2Core.start();
         // Commands
         ExCommand.register();
         // Central loop
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);
+    }
+
+    public File getMainDirectory() {
+        return new File("./assets/Denizen/");
     }
 
     @Listener

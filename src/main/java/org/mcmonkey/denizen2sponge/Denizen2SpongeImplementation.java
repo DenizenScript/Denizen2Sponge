@@ -58,12 +58,12 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public File getScriptsFolder() {
-        return new File("./assets/Denizen/scripts/");
+        return new File(Denizen2Sponge.instance.getMainDirectory(), "./scripts/");
     }
 
     @Override
     public File getAddonsFolder() {
-        return new File("./assets/Denizen/addons/");
+        return new File(Denizen2Sponge.instance.getMainDirectory(), "./addons/");
     }
 
     @Override
