@@ -9,6 +9,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.server.ClientPingServerEvent;
 import org.spongepowered.api.network.status.StatusClient;
+import org.spongepowered.api.text.Text;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -31,7 +32,9 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
     // max_players IntegerTag returns the number of maximum players that will display on the client.
     //
     // @Determinations
-    // None. // TODO: Change motd, favicon, hide players (num/max players??)
+    // motd TextTag set the description/Message-of-the-Day text visible to the client ping.
+    // max_players IntegerTag set the maximum number of players visible to the client ping.
+    // num_players IntegerTag set the number of players visible to the client ping. NOTE: CANNOT BE GREATER THAN EXISTING VALUE!
     // -->
 
     @Override
@@ -53,11 +56,14 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
 
     public TextTag version;
 
+    // TODO: FormattedTextTag!
     public TextTag motd;
 
     public IntegerTag num_players;
 
     public IntegerTag max_players;
+
+    public ClientPingServerEvent internal;
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
@@ -68,11 +74,6 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
         defs.put("num_players", num_players);
         defs.put("max_players", max_players);
         return defs;
-    }
-
-    @Override
-    public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
-        super.applyDetermination(errors, determination, value);
     }
 
     @Override
@@ -87,12 +88,13 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
 
     @Listener
     public void onClientPingServer(ClientPingServerEvent evt) {
+        ClientPingsServerScriptEvent event = (ClientPingsServerScriptEvent) clone();
+        event.internal = evt;
         StatusClient client = evt.getClient();
         ClientPingServerEvent.Response response = evt.getResponse();
-        ClientPingsServerScriptEvent event = (ClientPingsServerScriptEvent) clone();
         event.address = new TextTag(client.getAddress().toString());
         event.version = new TextTag(client.getVersion().getName());
-        event.motd = new TextTag(response.getDescription().toPlain()); // TODO: some sort of objects for formatted Text?
+        event.motd = new TextTag(response.getDescription().toPlain());
         Optional<ClientPingServerEvent.Response.Players> optPlayers = response.getPlayers();
         int numPlayers = 0;
         int maxPlayers = 0;
@@ -103,6 +105,37 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
         }
         event.num_players = new IntegerTag(numPlayers);
         event.max_players = new IntegerTag(maxPlayers);
+        // TODO: Read and control the player name list! (Profiles)
         event.run();
+    }
+
+    @Override
+    public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
+        if (determination.equals("motd")) {
+            motd = new TextTag(value.toString());
+            internal.getResponse().setDescription(Text.of(motd.toString()));
+        }
+        else if (determination.equals("max_players")) {
+            max_players = IntegerTag.getFor(this::error, value);
+            Optional<ClientPingServerEvent.Response.Players> optPlayers = internal.getResponse().getPlayers();
+            if (optPlayers.isPresent()) {
+                optPlayers.get().setMax((int)max_players.getInternal());
+            }
+        }
+        else if (determination.equals("num_players")) {
+            IntegerTag temp = IntegerTag.getFor(this::error, value);
+            if (temp.getInternal() > num_players.getInternal()) {
+                error("Invalid num_players! Value too high!");
+                return;
+            }
+            num_players = temp;
+            Optional<ClientPingServerEvent.Response.Players> optPlayers = internal.getResponse().getPlayers();
+            if (optPlayers.isPresent()) {
+                optPlayers.get().setOnline((int)num_players.getInternal());
+            }
+        }
+        else {
+            super.applyDetermination(errors, determination, value);
+        }
     }
 }

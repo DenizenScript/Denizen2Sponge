@@ -12,7 +12,6 @@ import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
-import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.HashMap;
@@ -57,6 +56,10 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
 
     public LocationTag location;
 
+    public ChangeBlockEvent.Break internal;
+
+    public Transaction<BlockSnapshot> block;
+
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
@@ -80,6 +83,8 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     public void onBlockBroken(ChangeBlockEvent.Break evt, @Root Player player) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
             PlayerBreaksBlockScriptEvent event = (PlayerBreaksBlockScriptEvent) clone();
+            event.internal = evt;
+            event.block = block;
             event.player = new PlayerTag(player);
             event.material = new TextTag(block.getOriginal().getState().getType().getName());
             event.location = new LocationTag(block.getOriginal().getLocation().get()); // TODO: mayyybe possibly handle world-less positions?
@@ -87,5 +92,10 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
             event.run();
             evt.setCancelled(event.cancelled);
         }
+    }
+
+    @Override
+    public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
+        super.applyDetermination(errors, determination, value);
     }
 }
