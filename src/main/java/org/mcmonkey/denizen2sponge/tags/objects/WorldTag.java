@@ -75,6 +75,6 @@ public class WorldTag extends AbstractTagObject {
 
     @Override
     public String toString() {
-        return world.toString();
+        return world.getName();
     }
 }

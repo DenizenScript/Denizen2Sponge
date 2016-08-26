@@ -110,6 +110,6 @@ public class LocationTag extends AbstractTagObject {
         return CoreUtilities.doubleToString(x) + ","
                 + CoreUtilities.doubleToString(y) + ","
                 + CoreUtilities.doubleToString(z) + ","
-                + world;
+                + world.getName();
     }
 }

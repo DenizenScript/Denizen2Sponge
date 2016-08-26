@@ -12,6 +12,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.HashMap;
 
@@ -75,7 +76,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onBlockBroken(ChangeBlockEvent.Break evt, @First Player player) {
+    public void onBlockBroken(ChangeBlockEvent.Break evt, @Root Player player) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
             PlayerBreaksBlockScriptEvent event = (PlayerBreaksBlockScriptEvent) clone();
             event.player = new TextTag(player.getName());
