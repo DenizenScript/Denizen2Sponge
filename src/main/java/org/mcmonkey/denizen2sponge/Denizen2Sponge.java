@@ -83,7 +83,9 @@ public class Denizen2Sponge {
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         // Sponge Tag Handlers
+        Denizen2Core.register(new BlockTypeTagBase());
         Denizen2Core.register(new EntityTagBase());
+        Denizen2Core.register(new ItemTypeTagBase());
         Denizen2Core.register(new LocationTagBase());
         Denizen2Core.register(new OfflinePlayerTagBase());
         Denizen2Core.register(new PlayerTagBase());

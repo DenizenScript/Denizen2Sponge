@@ -24,7 +24,7 @@ public class LocationTag extends AbstractTagObject {
     // @Description Represents a position in a world.
     // -->
 
-    public UtilLocation internal = new UtilLocation();
+    private UtilLocation internal = new UtilLocation();
 
     public LocationTag(Location<World> location) {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
@@ -43,6 +43,10 @@ public class LocationTag extends AbstractTagObject {
         this.internal.y = y;
         this.internal.z = z;
         this.internal.world = world;
+    }
+
+    public UtilLocation getInternal() {
+        return internal;
     }
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
