@@ -3,6 +3,7 @@ package org.mcmonkey.denizen2sponge.spongecommands;
 import org.mcmonkey.denizen2core.Denizen2Core;
 import org.mcmonkey.denizen2core.tags.objects.BooleanTag;
 import org.mcmonkey.denizen2core.tags.objects.MapTag;
+import org.mcmonkey.denizen2core.tags.objects.TextTag;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2sponge.Denizen2Sponge;
 import org.mcmonkey.denizen2sponge.tags.objects.LocationTag;
@@ -40,20 +41,15 @@ public class ExCommand implements CommandExecutor {
         // TODO: Redirect output to the commandSource!
         MapTag defs = new MapTag();
         if (commandSource instanceof Player) {
-            defs.getInternal().put("is_server", new BooleanTag(false));
-            defs.getInternal().put("is_player", new BooleanTag(true));
+            defs.getInternal().put("source", new TextTag("player"));
             defs.getInternal().put("player", new PlayerTag((Player) commandSource));
         }
         else if (commandSource instanceof CommandBlockSource) {
-            defs.getInternal().put("is_server", new BooleanTag(false));
-            defs.getInternal().put("is_player", new BooleanTag(false));
-            defs.getInternal().put("is_block", new BooleanTag(true));
+            defs.getInternal().put("source", new TextTag("block"));
             defs.getInternal().put("location", new LocationTag(((CommandBlockSource) commandSource).getLocation()));
         }
         else {
-            defs.getInternal().put("is_server", new BooleanTag(true));
-            defs.getInternal().put("is_player", new BooleanTag(false));
-            defs.getInternal().put("is_block", new BooleanTag(false));
+            defs.getInternal().put("source", new TextTag("server"));
         }
         Denizen2Core.runString(cmd, defs);
         // TODO: Scrap this output in favor of outputting debug optionally.
