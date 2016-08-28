@@ -48,7 +48,7 @@ public class ExCommand implements CommandExecutor {
             defs.getInternal().put("is_server", new BooleanTag(false));
             defs.getInternal().put("is_player", new BooleanTag(false));
             defs.getInternal().put("is_block", new BooleanTag(true));
-            defs.getInternal().put("location", new LocationTag(((CommandBlockSource) commandSource).getLocation());
+            defs.getInternal().put("location", new LocationTag(((CommandBlockSource) commandSource).getLocation()));
         }
         else {
             defs.getInternal().put("is_server", new BooleanTag(true));
