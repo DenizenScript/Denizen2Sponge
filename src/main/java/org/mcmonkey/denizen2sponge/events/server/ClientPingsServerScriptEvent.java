@@ -28,16 +28,16 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
     // @Triggers when a client pings the server for information.
     //
     // @Context
-    // address TextTag returns the address of the client.
-    // version TextTag returns the Minecraft version the client is using to ping.
-    // motd TextTag returns the Message Of The Day that will display on the client.
-    // num_players IntegerTag returns the number of online players that will display on the client.
-    // max_players IntegerTag returns the number of maximum players that will display on the client.
+    // address (TextTag) returns the address of the client.
+    // version (TextTag) returns the Minecraft version the client is using to ping.
+    // motd (TextTag) returns the Message Of The Day that will display on the client.
+    // num_players (IntegerTag) returns the number of online players that will display on the client.
+    // max_players (IntegerTag) returns the number of maximum players that will display on the client.
     //
     // @Determinations
-    // motd TextTag set the description/Message-of-the-Day text visible to the client ping.
-    // max_players IntegerTag set the maximum number of players visible to the client ping.
-    // num_players IntegerTag set the number of players visible to the client ping. NOTE: CANNOT BE GREATER THAN EXISTING VALUE!
+    // motd (TextTag) set the description/Message-of-the-Day text visible to the client ping.
+    // max_players (IntegerTag) set the maximum number of players visible to the client ping.
+    // num_players 9IntegerTag) set the number of players visible to the client ping. NOTE: CANNOT BE GREATER THAN EXISTING VALUE!
     // -->
 
     @Override

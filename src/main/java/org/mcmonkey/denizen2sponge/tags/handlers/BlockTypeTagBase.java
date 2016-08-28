@@ -11,7 +11,7 @@ public class BlockTypeTagBase extends AbstractTagBase {
     // @Base block_type[<BlockTypeTag>]
     // @Group Sponge Base Types
     // @ReturnType BlockTypeTag
-    // @Returns the input as a ItemTypeTag.
+    // @Returns the input as a BlockTypeTag.
     // -->
 
     @Override

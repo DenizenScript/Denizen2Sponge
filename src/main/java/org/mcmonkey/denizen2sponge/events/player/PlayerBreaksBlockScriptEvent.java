@@ -29,9 +29,9 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     // @Triggers when a player breaks a block.
     //
     // @Context
-    // player PlayerTag returns the player that broke the block.
-    // material TextTag returns the name of the broken material. // TODO: MaterialTag.
-    // location LocationTag returns the location of the broken block.
+    // player (PlayerTag) returns the player that broke the block.
+    // material (TextTag) returns the name of the broken material. // TODO: MaterialTag.
+    // location (LocationTag) returns the location of the broken block.
     //
     // @Determinations
     // None. // TODO: Change drops, etc.

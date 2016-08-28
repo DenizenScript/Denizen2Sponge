@@ -34,7 +34,7 @@ public class BlockTypeTag extends AbstractTagObject {
 
     static {
         // <--[tag]
-        // @Name ItemTypeTag.id
+        // @Name BlockTypeTag.id
         // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
@@ -43,7 +43,7 @@ public class BlockTypeTag extends AbstractTagObject {
         // -->
         handlers.put("id", (dat, obj) -> new TextTag(((BlockTypeTag) obj).internal.getId()));
         // <--[tag]
-        // @Name ItemTypeTag.item_type
+        // @Name BlockTypeTag.item_type
         // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType ItemTypeTag
@@ -55,7 +55,7 @@ public class BlockTypeTag extends AbstractTagObject {
             return null;
         })));
         // <--[tag]
-        // @Name ItemTypeTag.name
+        // @Name BlockTypeTag.name
         // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
