@@ -37,7 +37,7 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
     // @Determinations
     // motd (TextTag) set the description/Message-of-the-Day text visible to the client ping.
     // max_players (IntegerTag) set the maximum number of players visible to the client ping.
-    // num_players 9IntegerTag) set the number of players visible to the client ping. NOTE: CANNOT BE GREATER THAN EXISTING VALUE!
+    // num_players (IntegerTag) set the number of players visible to the client ping. NOTE: CANNOT BE GREATER THAN EXISTING VALUE!
     // -->
 
     @Override
