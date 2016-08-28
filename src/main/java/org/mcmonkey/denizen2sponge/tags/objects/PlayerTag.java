@@ -18,7 +18,7 @@ public class PlayerTag extends AbstractTagObject {
     // @Type PlayerTag
     // @SubType EntityTag
     // @Group Entities
-    // @Description Represents an online player on the server.
+    // @Description Represents an online player on the server. Identified by UUID.
     // -->
 
     private Player internal;

@@ -19,7 +19,7 @@ public class EntityTag extends AbstractTagObject {
     // @Type EntityTag
     // @SubType TextTag
     // @Group Entities
-    // @Description Represents an entity on the server.
+    // @Description Represents an entity on the server. Identified by UUID.
     // -->
 
     private Entity internal;

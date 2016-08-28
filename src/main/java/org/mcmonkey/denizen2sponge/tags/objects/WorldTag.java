@@ -17,7 +17,7 @@ public class WorldTag extends AbstractTagObject {
     // @Type WorldTag
     // @SubType TextTag
     // @Group Areas
-    // @Description Represents a world on the server.
+    // @Description Represents a world on the server. Identified by name.
     // -->
 
     private World internal;

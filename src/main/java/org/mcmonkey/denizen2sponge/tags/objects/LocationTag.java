@@ -21,7 +21,7 @@ public class LocationTag extends AbstractTagObject {
     // @Type LocationTag
     // @SubType TextTag
     // @Group Mathematics
-    // @Description Represents a position in a world.
+    // @Description Represents a position in a world. Identified in the format "x,y,z,world".
     // -->
 
     private UtilLocation internal = new UtilLocation();

@@ -17,7 +17,7 @@ public class BlockTypeTag extends AbstractTagObject {
     // @Type BlockTypeTag
     // @SubType TextTag
     // @Group Items
-    // @Description Represents a block type.
+    // @Description Represents a block type. Identified by block type ID.
     // -->
 
     private BlockType internal;
@@ -39,7 +39,7 @@ public class BlockTypeTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the ID of the item type.
-        // @Example "dirt" .id returns "minecraft:dirt".
+        // @Example "minecraft:dirt" .id returns "minecraft:dirt".
         // -->
         handlers.put("id", (dat, obj) -> new TextTag(((BlockTypeTag) obj).internal.getId()));
         // <--[tag]
@@ -48,7 +48,6 @@ public class BlockTypeTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType ItemTypeTag
         // @Returns the item type equivalent of this block type.
-        // @Example "wool" .item_type returns "wool".
         // -->
         handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((BlockTypeTag) obj).internal.getItem().orElseGet(() -> {
             dat.error.run("This block type does not have an item type equivalent!");
@@ -60,7 +59,7 @@ public class BlockTypeTag extends AbstractTagObject {
         // @Group Identification
         // @ReturnType TextTag
         // @Returns the name of the item type.
-        // @Example "dirt" .name returns "dirt".
+        // @Example "minecraft:dirt" .name returns "dirt".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((BlockTypeTag) obj).internal.getName()));
     }

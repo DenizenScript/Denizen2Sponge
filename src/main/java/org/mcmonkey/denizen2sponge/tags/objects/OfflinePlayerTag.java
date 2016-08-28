@@ -21,7 +21,7 @@ public class OfflinePlayerTag extends AbstractTagObject {
     // @Type OfflinePlayerTag
     // @SubType TextTag
     // @Group Entities
-    // @Description Represents an offline player that has previously played on the server.
+    // @Description Represents an offline player that has previously played on the server. Identified by UUID.
     // -->
 
     private GameProfile internal;
