@@ -24,6 +24,9 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     }
 
     public void trace(Throwable e) {
+        if (e == null) {
+            return;
+        }
         Sponge.getServer().getConsole().sendMessage(Text.of("   " + e.getClass().getCanonicalName() + ": " + e.getMessage()));
         for (StackTraceElement ste : e.getStackTrace()) {
             Sponge.getServer().getConsole().sendMessage(Text.of("     " + ste.toString()));
