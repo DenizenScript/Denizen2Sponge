@@ -4,10 +4,12 @@ import org.mcmonkey.denizen2core.Denizen2Core;
 import org.mcmonkey.denizen2core.tags.objects.BooleanTag;
 import org.mcmonkey.denizen2core.tags.objects.MapTag;
 import org.mcmonkey.denizen2core.tags.objects.TextTag;
+import org.mcmonkey.denizen2core.utilities.AbstractSender;
 import org.mcmonkey.denizen2core.utilities.CoreUtilities;
 import org.mcmonkey.denizen2sponge.Denizen2Sponge;
 import org.mcmonkey.denizen2sponge.tags.objects.LocationTag;
 import org.mcmonkey.denizen2sponge.tags.objects.PlayerTag;
+import org.mcmonkey.denizen2sponge.utilities.PlayerSender;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -25,9 +27,25 @@ import java.util.ArrayList;
 
 public class ExCommand implements CommandExecutor {
 
+    // <--[explanation]
+    // @Name The Ex Command
+    // @Group Sponge Commands
+    // @Description
+    // The /ex command lets you execute any code directly from the console or in-game chat!
+    //
+    // A regular example is: /ex echo 'hello world!'
+    // By default, it will feed back all output to you if you are in-game.
+    // To disable this do, run: /ex -q <command>
+    // specifically with the -q flag.
+    // To run multiple commands, simply separate them with dashes. EG: /ex command - command - command
+    //
+    // This can be used for such quick helpers as: /ex reload
+    // TODO: Explain better
+    // -->
+
     public static void register() {
         CommandSpec cmd = CommandSpec.builder()
-                .description(Text.of("Executes a Denizen2 command."))
+                .description(Text.of("Executes a Denizen2 command. Use -q for quiet."))
                 .permission("denizen2.commands.ex")
                 .arguments(GenericArguments.allOf(GenericArguments.string(Text.of("dCommand"))))
                 .executor(new ExCommand())
@@ -37,12 +55,20 @@ public class ExCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
-        String cmd = CoreUtilities.concat(new ArrayList<>(commandContext.getAll("dCommand")), " ");
+        ArrayList<String> argset = new ArrayList<>(commandContext.getAll("dCommand"));
+        boolean quiet = false;
+        if (argset.size() > 0 && argset.get(0).equals("-q")) {
+            quiet = true;
+            argset.remove(0);
+        }
+        String cmd = CoreUtilities.concat(argset, " ");
         // TODO: Redirect output to the commandSource!
         MapTag defs = new MapTag();
+        AbstractSender send = null;
         if (commandSource instanceof Player) {
             defs.getInternal().put("source", new TextTag("player"));
             defs.getInternal().put("player", new PlayerTag((Player) commandSource));
+            send = new PlayerSender((Player) commandSource);
         }
         else if (commandSource instanceof CommandBlockSource) {
             defs.getInternal().put("source", new TextTag("block"));
@@ -51,9 +77,7 @@ public class ExCommand implements CommandExecutor {
         else {
             defs.getInternal().put("source", new TextTag("server"));
         }
-        Denizen2Core.runString(cmd, defs);
-        // TODO: Scrap this output in favor of outputting debug optionally.
-        commandSource.sendMessage(Text.builder("Command executing... see console for details!").color(TextColors.YELLOW).toText());
+        Denizen2Core.runString(cmd, defs, quiet ? null : send);
         return CommandResult.empty();
     }
 }
