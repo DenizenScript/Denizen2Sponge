@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.mcmonkey</groupId>
+    <groupId>com.denizenscript</groupId>
     <artifactId>denizen2sponge</artifactId>
     <packaging>jar</packaging>
     <version>0.1.2</version>
@@ -23,9 +23,9 @@
             <url>https://repo.spongepowered.org/maven</url>
         </repository>
         <repository>
-            <id>Frenetic-Repo</id>
-            <name>Frenetic-Repo</name>
-            <url>http://jci.frenetic.xyz/plugin/repository/everything/</url>
+            <id>Denizen-Repo</id>
+            <name>Denizen-Repo</name>
+            <url>http://jci.denizenscript.com/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
@@ -79,7 +79,7 @@
                             <minimizeJar>false</minimizeJar>
                             <filters>
                                 <filter>
-                                    <artifact>org.mcmonkey.denizen2core</artifact>
+                                    <artifact>com.denizenscript.denizen2core</artifact>
                                     <includes>
                                         <include>**</include>
                                     </includes>
