@@ -3,6 +3,14 @@ Denizen2 - Sponge Minecraft
 
 A Sponge-Minecraft implementation of Denizen2, currently in pre-alpha.
 
+For the core, see [https://github.com/DenizenScript/Denizen2Core](https://github.com/DenizenScript/Denizen2Core).
+
+For builds, see [http://jci.denizenscript.com/job/Denizen2Core/](http://jci.denizenscript.com/job/Denizen2Core/).
+
+Discuss on our forums at [http://forum.denizenscript.com/](http://forum.denizenscript.com/).
+
+Discuss in a live IRC chat room at [http://one.denizenscript.com/ircchat_denizen](http://one.denizenscript.com/ircchat_denizen).
+
 ### Licensing pre-note:
 
 This is an open source project, provided entirely freely, for everyone to use and contribute to.
