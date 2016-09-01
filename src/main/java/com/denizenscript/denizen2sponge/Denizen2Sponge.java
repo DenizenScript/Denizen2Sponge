@@ -2,11 +2,11 @@ package com.denizenscript.denizen2sponge;
 
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
-import org.mcmonkey.denizen2core.Denizen2Core;
-import org.mcmonkey.denizen2core.utilities.CoreUtilities;
-import org.mcmonkey.denizen2core.utilities.debugging.ColorSet;
-import org.mcmonkey.denizen2core.utilities.debugging.Debug;
-import org.mcmonkey.denizen2core.utilities.yaml.YAMLConfiguration;
+import com.denizenscript.denizen2core.Denizen2Core;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
+import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;

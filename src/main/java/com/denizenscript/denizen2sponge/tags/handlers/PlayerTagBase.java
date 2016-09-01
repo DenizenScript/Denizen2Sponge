@@ -1,8 +1,8 @@
 package com.denizenscript.denizen2sponge.tags.handlers;
 
-import org.mcmonkey.denizen2core.tags.AbstractTagBase;
-import org.mcmonkey.denizen2core.tags.AbstractTagObject;
-import org.mcmonkey.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.AbstractTagBase;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 
 public class PlayerTagBase extends AbstractTagBase {

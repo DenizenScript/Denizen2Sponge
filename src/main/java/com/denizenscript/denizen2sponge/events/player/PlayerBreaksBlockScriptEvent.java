@@ -2,9 +2,9 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import org.mcmonkey.denizen2core.events.ScriptEvent;
-import org.mcmonkey.denizen2core.tags.AbstractTagObject;
-import org.mcmonkey.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.events.ScriptEvent;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;

@@ -1,13 +1,13 @@
 package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.flowpowered.math.vector.Vector3d;
-import org.mcmonkey.denizen2core.tags.AbstractTagObject;
-import org.mcmonkey.denizen2core.tags.TagData;
-import org.mcmonkey.denizen2core.tags.objects.NumberTag;
-import org.mcmonkey.denizen2core.tags.objects.TextTag;
-import org.mcmonkey.denizen2core.utilities.Action;
-import org.mcmonkey.denizen2core.utilities.CoreUtilities;
-import org.mcmonkey.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.NumberTag;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;

@@ -1,10 +1,10 @@
 package com.denizenscript.denizen2sponge.tags.objects;
 
-import org.mcmonkey.denizen2core.tags.AbstractTagObject;
-import org.mcmonkey.denizen2core.tags.TagData;
-import org.mcmonkey.denizen2core.tags.objects.TextTag;
-import org.mcmonkey.denizen2core.utilities.Action;
-import org.mcmonkey.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 

@@ -1,7 +1,7 @@
 package com.denizenscript.denizen2sponge.utilities;
 
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
-import org.mcmonkey.denizen2core.utilities.AbstractSender;
+import com.denizenscript.denizen2core.utilities.AbstractSender;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.serializer.TextSerializers;
 

@@ -1,11 +1,11 @@
 package com.denizenscript.denizen2sponge.events.server;
 
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
-import org.mcmonkey.denizen2core.events.ScriptEvent;
-import org.mcmonkey.denizen2core.tags.AbstractTagObject;
-import org.mcmonkey.denizen2core.tags.objects.IntegerTag;
-import org.mcmonkey.denizen2core.tags.objects.TextTag;
-import org.mcmonkey.denizen2core.utilities.debugging.Debug;
+import com.denizenscript.denizen2core.events.ScriptEvent;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.server.ClientPingServerEvent;

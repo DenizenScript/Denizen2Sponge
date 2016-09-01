@@ -38,7 +38,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.mcmonkey</groupId>
+            <groupId>com.denizenscript</groupId>
             <artifactId>denizen2core</artifactId>
             <version>0.1.2</version>
         </dependency>

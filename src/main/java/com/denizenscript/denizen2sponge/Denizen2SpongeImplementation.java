@@ -1,8 +1,8 @@
 package com.denizenscript.denizen2sponge;
 
-import org.mcmonkey.denizen2core.Denizen2Implementation;
-import org.mcmonkey.denizen2core.commands.CommandEntry;
-import org.mcmonkey.denizen2core.commands.CommandQueue;
+import com.denizenscript.denizen2core.Denizen2Implementation;
+import com.denizenscript.denizen2core.commands.CommandEntry;
+import com.denizenscript.denizen2core.commands.CommandQueue;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
