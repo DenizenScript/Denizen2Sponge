@@ -25,7 +25,7 @@
         <repository>
             <id>Denizen-Repo</id>
             <name>Denizen-Repo</name>
-            <url>http://jci.denizenscript.com/plugin/repository/everything/</url>
+            <url>http://repo.denizenscript.com/</url>
         </repository>
     </repositories>
 
@@ -62,7 +62,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilerArgument></compilerArgument>
                 </configuration>
             </plugin>
             <plugin>
