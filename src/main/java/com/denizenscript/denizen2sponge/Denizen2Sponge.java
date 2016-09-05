@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge;
 
+import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
 import com.denizenscript.denizen2core.Denizen2Core;
@@ -78,6 +79,8 @@ public class Denizen2Sponge {
         // Ensure the scripts and addons folders exist
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
+        // Commands: Player
+        Denizen2Core.register(new TellCommand());
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         // Events: Server

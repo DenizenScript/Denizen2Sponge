@@ -27,9 +27,10 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
         if (e == null) {
             return;
         }
-        Sponge.getServer().getConsole().sendMessage(Text.of("   " + e.getClass().getCanonicalName() + ": " + e.getMessage()));
+        Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode(Denizen2Sponge.colorChar)
+                .deserialize(("   " + e.getClass().getCanonicalName() + ": " + e.getMessage())));
         for (StackTraceElement ste : e.getStackTrace()) {
-            Sponge.getServer().getConsole().sendMessage(Text.of("     " + ste.toString()));
+            Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(("     " + ste.toString())));
         }
         if (e.getCause() != e) {
             trace(e.getCause());
