@@ -100,6 +100,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         // Sponge Tag Handlers
         Denizen2Core.register(new BlockTypeTagBase());
+        Denizen2Core.register(new ContextTagBase());
         Denizen2Core.register(new EntityTagBase());
         Denizen2Core.register(new FormattedTextTagBase());
         Denizen2Core.register(new ItemTypeTagBase());
