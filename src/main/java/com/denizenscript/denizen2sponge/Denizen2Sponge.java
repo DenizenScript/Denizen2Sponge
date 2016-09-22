@@ -1,6 +1,7 @@
 package com.denizenscript.denizen2sponge;
 
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
+import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
 import com.denizenscript.denizen2core.Denizen2Core;
@@ -14,6 +15,8 @@ import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -41,6 +44,10 @@ public class Denizen2Sponge {
     public static Denizen2Sponge instance;
 
     public static char colorChar = '\u00A7';
+
+    public static Cause getGenericCause() {
+        return Cause.of(NamedCause.of("plugin", plugin));
+    }
 
     @Inject
     public Logger logger;
@@ -81,6 +88,8 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         // Commands: Player
         Denizen2Core.register(new TellCommand());
+        // Commands: World
+        Denizen2Core.register(new SetBlockCommand());
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         // Events: Server
