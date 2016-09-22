@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
+import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
 import com.denizenscript.denizen2core.Denizen2Core;
@@ -94,6 +95,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new SetBlockCommand());
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
+        Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         // Sponge Tag Handlers

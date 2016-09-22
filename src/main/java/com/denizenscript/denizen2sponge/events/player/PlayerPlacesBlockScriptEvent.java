@@ -1,11 +1,10 @@
 package com.denizenscript.denizen2sponge.events.player;
 
+import com.denizenscript.denizen2core.events.ScriptEvent;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2core.events.ScriptEvent;
-import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
@@ -17,21 +16,22 @@ import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.HashMap;
 
-public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
+public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // player breaks block
+    // player places block
     //
     // @Updated 2016/09/22
     //
     // @Cancellable true
     //
-    // @Triggers when a player breaks a block.
+    // @Triggers when a player places a block.
     //
     // @Context
     // player (PlayerTag) returns the player that broke the block.
-    // material (BlockTypeTag) returns the broken material.
+    // material (BlockTypeTag) returns the placed material.
+    // old_material (BlockTypeTag) returns the material that the block was placed onto.
     // location (LocationTag) returns the location of the broken block.
     //
     // @Determinations
@@ -40,16 +40,16 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "PlayerBreaksBlock";
+        return "PlayerPlacesBlock";
     }
 
     @Override
-    public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("player breaks block");
+    public boolean couldMatch(ScriptEvent.ScriptEventData data) {
+        return data.eventPath.startsWith("player places block");
     }
 
     @Override
-    public boolean matches(ScriptEventData data) {
+    public boolean matches(ScriptEvent.ScriptEventData data) {
         return true;
     }
 
@@ -57,17 +57,20 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
 
     public BlockTypeTag material;
 
+    public BlockTypeTag old_material;
+
     public LocationTag location;
 
-    public ChangeBlockEvent.Break internal;
+    public ChangeBlockEvent.Place internal;
 
     public Transaction<BlockSnapshot> block;
 
     @Override
-    public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
+    public HashMap<String, AbstractTagObject> getDefinitions(ScriptEvent.ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("player", player);
         defs.put("material", material);
+        defs.put("old_material", old_material);
         defs.put("location", location);
         return defs;
     }
@@ -83,13 +86,14 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onBlockBroken(ChangeBlockEvent.Break evt, @Root Player player) {
+    public void onBlockBroken(ChangeBlockEvent.Place evt, @Root Player player) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
-            PlayerBreaksBlockScriptEvent event = (PlayerBreaksBlockScriptEvent) clone();
+            PlayerPlacesBlockScriptEvent event = (PlayerPlacesBlockScriptEvent) clone();
             event.internal = evt;
             event.block = block;
             event.player = new PlayerTag(player);
-            event.material = new BlockTypeTag(block.getOriginal().getState().getType());
+            event.material = new BlockTypeTag(block.getFinal().getState().getType());
+            event.old_material = new BlockTypeTag(block.getOriginal().getState().getType());
             event.location = new LocationTag(block.getOriginal().getLocation().get());
             event.cancelled = evt.isCancelled();
             event.run();

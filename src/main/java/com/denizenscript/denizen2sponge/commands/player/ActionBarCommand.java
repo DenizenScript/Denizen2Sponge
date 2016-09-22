@@ -16,7 +16,7 @@ public class ActionBarCommand extends AbstractCommand {
     // @Name actionbar
     // @Arguments <player> <message>
     // @Short sends an actionbar message to a player a message.
-    // @Updated 2016/09/05
+    // @Updated 2016/09/22
     // @Group Player
     // @Minimum 2
     // @Maximum 2
