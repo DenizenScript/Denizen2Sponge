@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge;
 import com.denizenscript.denizen2core.Denizen2Implementation;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
+import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -20,7 +21,12 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     @Override
     public void outputException(Exception e) {
         Sponge.getServer().getConsole().sendMessage(Text.builder("+> Internal exception! Trace follows: ").color(TextColors.RED).build());
-        trace(e);
+        if (e instanceof ErrorInducedException) {
+            outputError(e.getMessage());
+        }
+        else {
+            trace(e);
+        }
     }
 
     public void trace(Throwable e) {
