@@ -65,6 +65,7 @@ public class SetBlockCommand extends AbstractCommand {
                     + " with physics " + ColorSet.emphasis + (phys ? "on" : "off"));
         }
         loc.getInternal().world.setBlockType(loc.getInternal().toVector3i(), type.getInternal(),
+                // TODO: BlockChangeFlag.ALL doesn't seem to actually trigger physics. Needs fixing.
                 phys ? BlockChangeFlag.ALL : BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
         // TODO: "Cause" argument!
     }

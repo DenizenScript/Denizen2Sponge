@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge;
 
+import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
@@ -87,6 +88,7 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         // Commands: Player
+        Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new TellCommand());
         // Commands: World
         Denizen2Core.register(new SetBlockCommand());

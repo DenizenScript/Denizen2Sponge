@@ -1,6 +1,7 @@
 package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
@@ -30,11 +31,11 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     //
     // @Context
     // player (PlayerTag) returns the player that broke the block.
-    // material (TextTag) returns the name of the broken material. // TODO: MaterialTag.
+    // material (BLockTypeTag) returns the name of the broken material.
     // location (LocationTag) returns the location of the broken block.
     //
     // @Determinations
-    // None. // TODO: Change drops, etc.
+    // None.
     // -->
 
     @Override
@@ -54,7 +55,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
 
     public PlayerTag player;
 
-    public TextTag material;
+    public BlockTypeTag material;
 
     public LocationTag location;
 
@@ -88,8 +89,8 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
             event.internal = evt;
             event.block = block;
             event.player = new PlayerTag(player);
-            event.material = new TextTag(block.getOriginal().getState().getType().getName());
-            event.location = new LocationTag(block.getOriginal().getLocation().get()); // TODO: mayyybe possibly handle world-less positions?
+            event.material = new BlockTypeTag(block.getOriginal().getState().getType());
+            event.location = new LocationTag(block.getOriginal().getLocation().get());
             event.cancelled = evt.isCancelled();
             event.run();
             evt.setCancelled(event.cancelled);
