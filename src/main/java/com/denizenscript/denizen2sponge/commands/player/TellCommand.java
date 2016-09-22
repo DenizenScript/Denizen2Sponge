@@ -3,7 +3,9 @@ package com.denizenscript.denizen2sponge.commands.player;
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.text.Text;
 
@@ -13,8 +15,8 @@ public class TellCommand extends AbstractCommand {
     // @Name tell
     // @Arguments <player> <message>
     // @Short tells a player a message.
-    // @Updated 2016/08/27
-    // @Group Queue
+    // @Updated 2016/09/05
+    // @Group Player
     // @Minimum 2
     // @Maximum 2
     // @Description
@@ -48,11 +50,15 @@ public class TellCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String message = entry.getArgumentObject(queue, 1).toString();
+        AbstractTagObject ato = entry.getArgumentObject(queue, 1);
         if (queue.shouldShowGood()) {
-            queue.outGood("Telling " + ColorSet.emphasis + player.getInternal().getName() + ColorSet.good + ": " + ColorSet.emphasis + message);
+            queue.outGood("Telling " + ColorSet.emphasis + player.getInternal().getName() + ColorSet.good + ": " + ColorSet.emphasis + ato.toString());
         }
-        // TODO: preformatted text magic stuff. A wrapper tag type around Sponge Text class.
-        player.getInternal().sendMessage(Text.of(message));
+        if (ato instanceof FormattedTextTag) {
+            player.getInternal().sendMessage(((FormattedTextTag) ato).getInternal());
+        }
+        else {
+            player.getInternal().sendMessage(Text.of(ato.toString()));
+        }
     }
 }

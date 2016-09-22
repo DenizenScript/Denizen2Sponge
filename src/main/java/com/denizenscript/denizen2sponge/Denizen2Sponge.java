@@ -88,10 +88,12 @@ public class Denizen2Sponge {
         // Sponge Tag Handlers
         Denizen2Core.register(new BlockTypeTagBase());
         Denizen2Core.register(new EntityTagBase());
+        Denizen2Core.register(new FormattedTextTagBase());
         Denizen2Core.register(new ItemTypeTagBase());
         Denizen2Core.register(new LocationTagBase());
         Denizen2Core.register(new OfflinePlayerTagBase());
         Denizen2Core.register(new PlayerTagBase());
+        Denizen2Core.register(new TextsTagBase());
         Denizen2Core.register(new WorldTagBase());
         // Load Denizen2
         Denizen2Core.start();

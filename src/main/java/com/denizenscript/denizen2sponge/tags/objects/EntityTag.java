@@ -24,8 +24,8 @@ public class EntityTag extends AbstractTagObject {
 
     private Entity internal;
 
-    public EntityTag(Entity player) {
-        internal = player;
+    public EntityTag(Entity ent) {
+        internal = ent;
     }
 
     public Entity getInternal() {
