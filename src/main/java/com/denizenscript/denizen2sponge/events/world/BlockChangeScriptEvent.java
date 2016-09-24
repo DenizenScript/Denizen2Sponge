@@ -1,38 +1,37 @@
-package com.denizenscript.denizen2sponge.events.player;
+package com.denizenscript.denizen2sponge.events.world;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
-import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.event.entity.SpawnEntityEvent;
 
 import java.util.HashMap;
 
-public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
+public class BlockChangeScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // player places block
+    // block changes
     //
-    // @Updated 2016/09/22
+    // @Updated 2016/09/23
     //
     // @Cancellable true
     //
-    // @Triggers when a player places a block.
+    // @Triggers when a block changes for any given reason.
     //
     // @Context
-    // player (PlayerTag) returns the player that broke the block.
-    // material (BlockTypeTag) returns the placed material.
-    // old_material (BlockTypeTag) returns the material that the block was placed onto.
-    // location (LocationTag) returns the location of the broken block.
+    // location (LocationTag) returns the location of the changed block.
+    // new_material (BlockTypeTag) returns the new type of the block.
+    // old_material (BlockTypeTag) returns the old type of the block.
     //
     // @Determinations
     // None.
@@ -40,38 +39,33 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "PlayerPlacesBlock";
+        return "BlockChanges";
     }
 
     @Override
-    public boolean couldMatch(ScriptEvent.ScriptEventData data) {
-        return data.eventPath.startsWith("player places block");
+    public boolean couldMatch(ScriptEventData data) {
+        return data.eventPath.startsWith("block changes");
     }
 
     @Override
-    public boolean matches(ScriptEvent.ScriptEventData data) {
+    public boolean matches(ScriptEventData data) {
         return true;
     }
 
-    public PlayerTag player;
+    public LocationTag location;
 
-    public BlockTypeTag material;
+    public BlockTypeTag new_material;
 
     public BlockTypeTag old_material;
 
-    public LocationTag location;
-
-    public ChangeBlockEvent.Place internal;
-
-    public Transaction<BlockSnapshot> block;
+    public ChangeBlockEvent internal;
 
     @Override
-    public HashMap<String, AbstractTagObject> getDefinitions(ScriptEvent.ScriptEventData data) {
+    public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
-        defs.put("player", player);
-        defs.put("material", material);
-        defs.put("old_material", old_material);
         defs.put("location", location);
+        defs.put("new_material", new_material);
+        defs.put("old_material", old_material);
         return defs;
     }
 
@@ -86,15 +80,13 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onBlockPlaced(ChangeBlockEvent.Place evt, @Root Player player) {
+    public void onBlockChanged(ChangeBlockEvent evt) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
-            PlayerPlacesBlockScriptEvent event = (PlayerPlacesBlockScriptEvent) clone();
+            BlockChangeScriptEvent event = (BlockChangeScriptEvent) clone();
             event.internal = evt;
-            event.block = block;
-            event.player = new PlayerTag(player);
-            event.material = new BlockTypeTag(block.getFinal().getState().getType());
+            event.location = new LocationTag(block.getFinal().getLocation().get());
+            event.new_material = new BlockTypeTag(block.getFinal().getState().getType());
             event.old_material = new BlockTypeTag(block.getOriginal().getState().getType());
-            event.location = new LocationTag(block.getOriginal().getLocation().get());
             event.cancelled = evt.isCancelled();
             event.run();
             evt.setCancelled(event.cancelled);
@@ -106,3 +98,4 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
         super.applyDetermination(errors, determination, value);
     }
 }
+
