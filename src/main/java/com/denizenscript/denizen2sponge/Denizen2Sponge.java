@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge;
 
+import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
@@ -90,6 +91,8 @@ public class Denizen2Sponge {
         // Ensure the scripts and addons folders exist
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
+        // Commands: Entity
+        Denizen2Core.register(new SpawnCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new TellCommand());
