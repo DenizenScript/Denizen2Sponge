@@ -111,6 +111,9 @@ public class SpawnCommand extends AbstractCommand {
                 else if (Double.class.isAssignableFrom(clazz)) {
                     entity.offer(found, NumberTag.getFor(queue.error, mapEntry.getValue()).getInternal());
                 }
+                else if (Enum.class.isAssignableFrom(clazz)) {
+                    entity.offer(found, Enum.valueOf(clazz, mapEntry.getValue().toString().toUpperCase()));
+                }
                 else if (Integer.class.isAssignableFrom(clazz)) {
                     entity.offer(found, (int) IntegerTag.getFor(queue.error, mapEntry.getValue()).getInternal());
                 }
