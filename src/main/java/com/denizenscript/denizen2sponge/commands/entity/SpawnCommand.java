@@ -12,6 +12,7 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
@@ -107,6 +108,9 @@ public class SpawnCommand extends AbstractCommand {
                 Class clazz = found.getElementToken().getRawType();
                 if (Boolean.class.isAssignableFrom(clazz)) {
                     entity.offer(found, BooleanTag.getFor(queue.error, mapEntry.getValue()).getInternal());
+                }
+                else if (CatalogType.class.isAssignableFrom(clazz)) {
+                    entity.offer(found, Sponge.getRegistry().getType(clazz, mapEntry.getValue().toString()));
                 }
                 else if (Double.class.isAssignableFrom(clazz)) {
                     entity.offer(found, NumberTag.getFor(queue.error, mapEntry.getValue()).getInternal());
