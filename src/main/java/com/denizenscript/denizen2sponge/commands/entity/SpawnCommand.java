@@ -110,7 +110,13 @@ public class SpawnCommand extends AbstractCommand {
                     entity.offer(found, BooleanTag.getFor(queue.error, mapEntry.getValue()).getInternal());
                 }
                 else if (CatalogType.class.isAssignableFrom(clazz)) {
-                    entity.offer(found, Sponge.getRegistry().getType(clazz, mapEntry.getValue().toString()));
+                    String string = mapEntry.getValue().toString();
+                    Optional optCatalogType = Sponge.getRegistry().getType(clazz, string);
+                    if (!optCatalogType.isPresent()) {
+                        queue.handleError(entry, "Invalid value '" + string + "' for property '" + found.getId() + "'!");
+                        continue;
+                    }
+                    entity.offer(found, optCatalogType.get());
                 }
                 else if (Double.class.isAssignableFrom(clazz)) {
                     entity.offer(found, NumberTag.getFor(queue.error, mapEntry.getValue()).getInternal());
