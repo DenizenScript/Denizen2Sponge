@@ -65,11 +65,6 @@ public class SpawnCommand extends AbstractCommand {
     }
 
     @Override
-    public boolean isProcedural() {
-        return false;
-    }
-
-    @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         String entityTypeString = entry.getArgumentObject(queue, 0).toString(); // TODO: EntityTypeTag?
         Optional<EntityType> optEntityType = Sponge.getRegistry().getType(EntityType.class, entityTypeString);
@@ -92,18 +87,19 @@ public class SpawnCommand extends AbstractCommand {
                 String property = CoreUtilities.toLowerCase(mapEntry.getKey());
                 Key found = null;
                 for (Key key : keys) {
-                    if (property.equals(CoreUtilities.after(key.getId(), ":"))) {
+                    if (property.equals(CoreUtilities.after(key.getId(), ":"))
+                            || property.equals(key.getId())) {
                         found = key;
                     }
                 }
                 if (found == null) {
                     queue.handleError(entry, "Invalid property '" + property + "' in Spawn command!");
-                    continue;
+                    return;
                 }
                 if (!entity.supports(found)) {
                     queue.handleError(entry, "The entity type '" + entityType.getName()
                             + "' does not support the property '" + found.getId() + "'!");
-                    continue;
+                    return;
                 }
                 Class clazz = found.getElementToken().getRawType();
                 if (Boolean.class.isAssignableFrom(clazz)) {
@@ -114,7 +110,7 @@ public class SpawnCommand extends AbstractCommand {
                     Optional optCatalogType = Sponge.getRegistry().getType(clazz, string);
                     if (!optCatalogType.isPresent()) {
                         queue.handleError(entry, "Invalid value '" + string + "' for property '" + found.getId() + "'!");
-                        continue;
+                        return;
                     }
                     entity.offer(found, optCatalogType.get());
                 }
@@ -132,10 +128,11 @@ public class SpawnCommand extends AbstractCommand {
                 }
                 else {
                     queue.handleError(entry, "The value type '" + clazz.getName() + "' is not supported yet!");
+                    return;
                 }
             }
         }
         location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()
-                .entity(entity).type(SpawnTypes.PLUGIN)).build());
+                .entity(entity).type(SpawnTypes.PLUGIN)).build()); // TODO: Allow scripts control of causes
     }
 }
