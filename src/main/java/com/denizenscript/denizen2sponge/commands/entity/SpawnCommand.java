@@ -9,6 +9,9 @@ import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
@@ -36,6 +39,8 @@ public class SpawnCommand extends AbstractCommand {
     // @Group Entities
     // @Minimum 2
     // @Maximum 3
+    // @Tag <[spawn_success]> (BooleanTag) returns whether the spawn passed.
+    // @Tag <[spawn_entity]> (EntityTag) returns the entity that was spawned (only if the spawn passed).
     // @Description
     // Spawns an entity at the specified location. Optionally, specify a MapTag of properties
     // to spawn the entity with those values automatically set on it.
@@ -66,13 +71,8 @@ public class SpawnCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        String entityTypeString = entry.getArgumentObject(queue, 0).toString(); // TODO: EntityTypeTag?
-        Optional<EntityType> optEntityType = Sponge.getRegistry().getType(EntityType.class, entityTypeString);
-        if (!optEntityType.isPresent()) {
-            queue.handleError(entry, "Invalid entity type in Spawn command!");
-            return;
-        }
-        EntityType entityType = optEntityType.get();
+        EntityTypeTag entityTypeTag = EntityTypeTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
+        EntityType entityType = entityTypeTag.getInternal();
         LocationTag locationTag = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         UtilLocation location = locationTag.getInternal();
         if (location.world == null) {
@@ -132,7 +132,21 @@ public class SpawnCommand extends AbstractCommand {
                 }
             }
         }
-        location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()
-                .entity(entity).type(SpawnTypes.PLUGIN)).build()); // TODO: Allow scripts control of causes
+        if (queue.shouldShowGood()) {
+            queue.outGood("Spawning an entity of type "
+                    + ColorSet.emphasis + entityType.getId() + ColorSet.base
+                    + " with the specified properties at location "
+                    + ColorSet.emphasis+ locationTag + ColorSet.base + "...");
+        }
+        boolean passed = location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()
+                .entity(entity).type(SpawnTypes.PLUGIN)).build());
+        // TODO: "Cause" argument!
+        if (queue.shouldShowGood()) {
+            queue.outGood("Spawning " + (passed ? "succeeded" : "was blocked") + "!");
+        }
+        queue.commandStack.peek().setDefinition("spawn_success", new BooleanTag(passed));
+        if (passed) {
+            queue.commandStack.peek().setDefinition("spawn_entity", new EntityTag(entity));
+        }
     }
 }
