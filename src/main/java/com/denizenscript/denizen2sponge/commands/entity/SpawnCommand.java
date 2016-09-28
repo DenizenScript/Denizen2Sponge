@@ -14,6 +14,7 @@ import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.EntityKeys;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
@@ -80,63 +81,23 @@ public class SpawnCommand extends AbstractCommand {
             return;
         }
         Entity entity = location.world.createEntity(entityType, location.toVector3d());
-        Collection<Key> keys = Sponge.getRegistry().getAllOf(Key.class);
+        EntityKeys.updateKeys();
         if (entry.arguments.size() > 2) {
             MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
             for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
-                String property = CoreUtilities.toLowerCase(mapEntry.getKey());
-                Key found = null;
-                for (Key key : keys) {
-                    if (property.equals(CoreUtilities.after(key.getId(), ":"))
-                            || property.equals(key.getId())) {
-                        found = key;
-                    }
-                }
+                Key found = EntityKeys.getKeyForName(mapEntry.getKey());
                 if (found == null) {
-                    queue.handleError(entry, "Invalid property '" + property + "' in Spawn command!");
+                    queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in Spawn command!");
                     return;
                 }
-                if (!entity.supports(found)) {
-                    queue.handleError(entry, "The entity type '" + entityType.getName()
-                            + "' does not support the property '" + found.getId() + "'!");
-                    return;
-                }
-                Class clazz = found.getElementToken().getRawType();
-                if (Boolean.class.isAssignableFrom(clazz)) {
-                    entity.offer(found, BooleanTag.getFor(queue.error, mapEntry.getValue()).getInternal());
-                }
-                else if (CatalogType.class.isAssignableFrom(clazz)) {
-                    String string = mapEntry.getValue().toString();
-                    Optional optCatalogType = Sponge.getRegistry().getType(clazz, string);
-                    if (!optCatalogType.isPresent()) {
-                        queue.handleError(entry, "Invalid value '" + string + "' for property '" + found.getId() + "'!");
-                        return;
-                    }
-                    entity.offer(found, optCatalogType.get());
-                }
-                else if (Double.class.isAssignableFrom(clazz)) {
-                    entity.offer(found, NumberTag.getFor(queue.error, mapEntry.getValue()).getInternal());
-                }
-                else if (Enum.class.isAssignableFrom(clazz)) {
-                    entity.offer(found, Enum.valueOf(clazz, mapEntry.getValue().toString().toUpperCase()));
-                }
-                else if (Integer.class.isAssignableFrom(clazz)) {
-                    entity.offer(found, (int) IntegerTag.getFor(queue.error, mapEntry.getValue()).getInternal());
-                }
-                else if (Text.class.isAssignableFrom(clazz)) {
-                    entity.offer(found, FormattedTextTag.getFor(queue.error, mapEntry.getValue()).getInternal());
-                }
-                else {
-                    queue.handleError(entry, "The value type '" + clazz.getName() + "' is not supported yet!");
-                    return;
-                }
+                EntityKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
             }
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Spawning an entity of type "
-                    + ColorSet.emphasis + entityType.getId() + ColorSet.base
+                    + ColorSet.emphasis + entityType.getId() + ColorSet.good
                     + " with the specified properties at location "
-                    + ColorSet.emphasis+ locationTag + ColorSet.base + "...");
+                    + ColorSet.emphasis+ locationTag + ColorSet.good + "...");
         }
         boolean passed = location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()
                 .entity(entity).type(SpawnTypes.PLUGIN)).build());
