@@ -2,10 +2,13 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.NullTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.EntityKeys;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.world.World;
 
@@ -56,9 +59,26 @@ public class EntityTag extends AbstractTagObject {
         // @Updated 2016/08/26
         // @Group General Information
         // @ReturnType LocationTag
-        // @Returns the velocity of the entity (The vector it is is currently moving in.)
+        // @Returns the velocity of the entity (The vector it is is currently moving in).
         // -->
         handlers.put("velocity", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getVelocity()));
+        // <--[tag]
+        // @Name EntityTag.get[<TextTag>]
+        // @Updated 2016/08/26
+        // @Group General Information
+        // @ReturnType LocationTag
+        // @Returns the value of the specified key on the entity.
+        // -->
+        handlers.put("get", (dat, obj) -> {
+            String keyName = dat.getNextModifier().toString();
+            EntityKeys.updateKeys();
+            Key key = EntityKeys.getKeyForName(keyName);
+            if (key == null) {
+                dat.error.run("Invalid key '" + keyName + "'!");
+                return new NullTag();
+            }
+            return EntityKeys.getValue(((EntityTag) obj).internal, key, dat.error);
+        });
     }
 
     public static EntityTag getFor(Action<String> error, String text) {
