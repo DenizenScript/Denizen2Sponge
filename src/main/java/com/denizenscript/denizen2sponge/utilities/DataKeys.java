@@ -25,13 +25,18 @@ import java.util.Optional;
 public class DataKeys {
 
     private static Collection<Key> keys;
+    private static int lastUpdate;
 
-    public static void updateKeys() {
-        // TODO: Prevent calling this several times a tick?
-        keys = Sponge.getRegistry().getAllOf(Key.class);
+    private static void updateKeys() {
+        int currentTime = Sponge.getServer().getRunningTimeTicks();
+        if (currentTime != lastUpdate) {
+            lastUpdate = currentTime;
+            keys = Sponge.getRegistry().getAllOf(Key.class);
+        }
     }
 
     public static Key getKeyForName(String name) {
+        updateKeys();
         name = CoreUtilities.toLowerCase(name);
         for (Key key : keys) {
             if (name.equals(CoreUtilities.after(key.getId(), ":"))

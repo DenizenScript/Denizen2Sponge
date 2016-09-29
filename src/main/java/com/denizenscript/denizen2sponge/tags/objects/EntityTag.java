@@ -71,7 +71,6 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("get", (dat, obj) -> {
             String keyName = dat.getNextModifier().toString();
-            DataKeys.updateKeys();
             Key key = DataKeys.getKeyForName(keyName);
             if (key == null) {
                 dat.error.run("Invalid key '" + keyName + "'!");

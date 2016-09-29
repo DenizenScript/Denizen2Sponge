@@ -54,7 +54,6 @@ public class EditEntityCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Entity entity = entityTag.getInternal();
-        DataKeys.updateKeys();
         MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
             Key found = DataKeys.getKeyForName(mapEntry.getKey());

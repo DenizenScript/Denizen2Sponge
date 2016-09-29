@@ -72,7 +72,6 @@ public class SpawnCommand extends AbstractCommand {
             return;
         }
         Entity entity = location.world.createEntity(entityType, location.toVector3d());
-        DataKeys.updateKeys();
         if (entry.arguments.size() > 2) {
             MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
             for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
