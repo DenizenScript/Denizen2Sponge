@@ -63,10 +63,18 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("velocity", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getVelocity()));
         // <--[tag]
-        // @Name EntityTag.get[<TextTag>]
-        // @Updated 2016/08/26
+        // @Name EntityTag.data
+        // @Updated 2016/08/28
         // @Group General Information
-        // @ReturnType LocationTag
+        // @ReturnType MapTag
+        // @Returns a list of all data keys and their values for the entity.
+        // -->
+        handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((EntityTag) obj).internal));
+        // <--[tag]
+        // @Name EntityTag.get[<TextTag>]
+        // @Updated 2016/08/28
+        // @Group General Information
+        // @ReturnType Dynamic
         // @Returns the value of the specified key on the entity.
         // -->
         handlers.put("get", (dat, obj) -> {

@@ -1,14 +1,11 @@
 package com.denizenscript.denizen2sponge.utilities;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
-import com.denizenscript.denizen2core.tags.objects.IntegerTag;
-import com.denizenscript.denizen2core.tags.objects.NullTag;
-import com.denizenscript.denizen2core.tags.objects.NumberTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.flowpowered.math.vector.Vector3d;
@@ -45,6 +42,26 @@ public class DataKeys {
             }
         }
         return null;
+    }
+
+    public static MapTag getAllKeys(DataHolder dataHolder) {
+        MapTag temp = new MapTag();
+        for (Key key : dataHolder.getKeys()) {
+            if (!dataHolder.supports(key)) { // Just in case
+                continue;
+            }
+            if (dataHolder.getOrNull(key) == null) {
+                // Nope nope nope!
+                continue;
+            }
+            AbstractTagObject ato = getValue(dataHolder, key, (s) -> {
+                Debug.error("Failed to read key '" + key.getId() + "': " + s);
+            });
+            if (ato != null && !(ato instanceof NullTag)) {
+                temp.getInternal().put(key.getId(), ato);
+            }
+        }
+        return temp;
     }
 
     public static AbstractTagObject getValue(DataHolder dataHolder, Key key, Action<String> error) {
