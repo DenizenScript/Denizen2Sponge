@@ -6,7 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.NullTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
-import com.denizenscript.denizen2sponge.utilities.EntityKeys;
+import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
@@ -71,13 +71,13 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("get", (dat, obj) -> {
             String keyName = dat.getNextModifier().toString();
-            EntityKeys.updateKeys();
-            Key key = EntityKeys.getKeyForName(keyName);
+            DataKeys.updateKeys();
+            Key key = DataKeys.getKeyForName(keyName);
             if (key == null) {
                 dat.error.run("Invalid key '" + keyName + "'!");
                 return new NullTag();
             }
-            return EntityKeys.getValue(((EntityTag) obj).internal, key, dat.error);
+            return DataKeys.getValue(((EntityTag) obj).internal, key, dat.error);
         });
     }
 

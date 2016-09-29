@@ -5,30 +5,21 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
-import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
-import com.denizenscript.denizen2core.tags.objects.NumberTag;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
-import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2sponge.utilities.EntityKeys;
+import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
-import org.spongepowered.api.CatalogType;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
-import org.spongepowered.api.text.Text;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 
 public class SpawnCommand extends AbstractCommand {
 
@@ -81,16 +72,16 @@ public class SpawnCommand extends AbstractCommand {
             return;
         }
         Entity entity = location.world.createEntity(entityType, location.toVector3d());
-        EntityKeys.updateKeys();
+        DataKeys.updateKeys();
         if (entry.arguments.size() > 2) {
             MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
             for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
-                Key found = EntityKeys.getKeyForName(mapEntry.getKey());
+                Key found = DataKeys.getKeyForName(mapEntry.getKey());
                 if (found == null) {
                     queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in Spawn command!");
                     return;
                 }
-                EntityKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+                DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
             }
         }
         if (queue.shouldShowGood()) {

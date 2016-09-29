@@ -1,7 +1,11 @@
 package com.denizenscript.denizen2sponge.utilities;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.*;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
+import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.tags.objects.NullTag;
+import com.denizenscript.denizen2core.tags.objects.NumberTag;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
@@ -10,15 +14,15 @@ import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.BaseValue;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.Text;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public class EntityKeys {
+public class DataKeys {
 
     private static Collection<Key> keys;
 
@@ -38,34 +42,33 @@ public class EntityKeys {
         return null;
     }
 
-
-    public static AbstractTagObject getValue(Entity entity, Key key, Action<String> error) {
-        if (!entity.supports(key)) {
-            error.run("The entity type '" + entity.getType().getName()
-                    + "' does not support the property '" + key.getId() + "'!");
+    public static AbstractTagObject getValue(DataHolder dataHolder, Key key, Action<String> error) {
+        if (!dataHolder.supports(key)) {
+            // TODO: improve this error maybe?
+            error.run("This data holder does not support the key '" + key.getId() + "'!");
             return new NullTag();
         }
         Class clazz = key.getElementToken().getRawType();
         if (Boolean.class.isAssignableFrom(clazz)) {
-            return new BooleanTag(entity.getOrElse((Key<BaseValue<Boolean>>) key, false));
+            return new BooleanTag(dataHolder.getOrElse((Key<BaseValue<Boolean>>) key, false));
         }
         else if (CatalogType.class.isAssignableFrom(clazz)) {
-            return new TextTag(entity.getValue((Key<BaseValue<CatalogType>>) key).orElseThrow(() -> new ErrorInducedException("Value not present!")).get().toString());
+            return new TextTag(dataHolder.getValue((Key<BaseValue<CatalogType>>) key).orElseThrow(() -> new ErrorInducedException("Value not present!")).get().toString());
         }
         else if (Double.class.isAssignableFrom(clazz)) {
-            return new NumberTag(entity.getOrElse((Key<BaseValue<Double>>) key, 0.0));
+            return new NumberTag(dataHolder.getOrElse((Key<BaseValue<Double>>) key, 0.0));
         }
         else if (Enum.class.isAssignableFrom(clazz)) {
-            return new TextTag(entity.getValue((Key<BaseValue<Enum>>) key).orElseThrow(() -> new ErrorInducedException("Empty enum value!")).get().name());
+            return new TextTag(dataHolder.getValue((Key<BaseValue<Enum>>) key).orElseThrow(() -> new ErrorInducedException("Empty enum value!")).get().name());
         }
         else if (Integer.class.isAssignableFrom(clazz)) {
-            return new IntegerTag(entity.getOrElse((Key<BaseValue<Integer>>) key, 0));
+            return new IntegerTag(dataHolder.getOrElse((Key<BaseValue<Integer>>) key, 0));
         }
         else if (Vector3d.class.isAssignableFrom(clazz)) {
-            return new LocationTag(entity.getOrElse((Key<BaseValue<Vector3d>>) key, new Vector3d(0, 0, 0)));
+            return new LocationTag(dataHolder.getOrElse((Key<BaseValue<Vector3d>>) key, new Vector3d(0, 0, 0)));
         }
         else if (Text.class.isAssignableFrom(clazz)) {
-            return new FormattedTextTag(entity.getOrElse((Key<BaseValue<Text>>) key, Text.EMPTY));
+            return new FormattedTextTag(dataHolder.getOrElse((Key<BaseValue<Text>>) key, Text.EMPTY));
         }
         else {
             error.run("The value type '" + clazz.getName() + "' is not supported yet!");
@@ -73,10 +76,10 @@ public class EntityKeys {
         }
     }
 
-    public static void tryApply(Entity entity, Key key, AbstractTagObject value, Action<String> error) {
+    public static void tryApply(DataHolder entity, Key key, AbstractTagObject value, Action<String> error) {
         if (!entity.supports(key)) {
-            error.run("The entity type '" + entity.getType().getName()
-                    + "' does not support the property '" + key.getId() + "'!");
+            // TODO: improve this error maybe?
+            error.run("This data holder does not support the key '" + key.getId() + "'!");
             return;
         }
         Class clazz = key.getElementToken().getRawType();

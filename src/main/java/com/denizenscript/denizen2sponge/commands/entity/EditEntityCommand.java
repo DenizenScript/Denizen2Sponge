@@ -4,20 +4,12 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
-import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2sponge.utilities.EntityKeys;
-import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityType;
-import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
-import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
 import java.util.Map;
 
@@ -62,15 +54,15 @@ public class EditEntityCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Entity entity = entityTag.getInternal();
-        EntityKeys.updateKeys();
+        DataKeys.updateKeys();
         MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
-            Key found = EntityKeys.getKeyForName(mapEntry.getKey());
+            Key found = DataKeys.getKeyForName(mapEntry.getKey());
             if (found == null) {
                 queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in EditEntity command!");
                 return;
             }
-            EntityKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+            DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Edited the entity "
