@@ -7,6 +7,8 @@ import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEvent;
+import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScriptEvent;
+import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
@@ -106,12 +108,14 @@ public class Denizen2Sponge {
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
+        Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
+        Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         Denizen2Core.register(new EntitySpawnScriptEvent());
-        // Sponge Tag Handlers
+        // Tag Handlers: Sponge Basics
         Denizen2Core.register(new BlockTypeTagBase());
         Denizen2Core.register(new ContextTagBase());
         Denizen2Core.register(new EntityTagBase());
