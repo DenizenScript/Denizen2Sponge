@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -22,6 +23,8 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     // @Updated 2016/09/28
     //
     // @Cancellable true
+    //
+    // @Switch type (EntityTypeTag) checks the entity type.
     //
     // @Triggers when a player right clicks an entity.
     //
@@ -45,6 +48,12 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
+        if (data.switches.containsKey("type")) {
+            if (!EntityTypeTag.getFor(this::error, data.switches.get("type"))
+                    .getInternal().equals(entity.getInternal().getType())) {
+                return false;
+            }
+        }
         return true;
     }
 

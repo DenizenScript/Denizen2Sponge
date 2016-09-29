@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
@@ -20,6 +21,8 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
     // @Updated 2016/09/23
     //
     // @Cancellable true
+    //
+    // @Switch type (EntityTypeTag) checks the entity type.
     //
     // @Triggers when an entity spawns in the world (non players).
     //
@@ -42,6 +45,12 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEvent.ScriptEventData data) {
+        if (data.switches.containsKey("type")) {
+            if (!EntityTypeTag.getFor(this::error, data.switches.get("type"))
+                    .getInternal().equals(entity.getInternal().getType())) {
+                return false;
+            }
+        }
         return true;
     }
 
