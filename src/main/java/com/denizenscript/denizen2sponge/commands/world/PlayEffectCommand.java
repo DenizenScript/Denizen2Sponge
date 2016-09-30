@@ -16,7 +16,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // <--[command]
     // @Name playeffect
     // @Arguments <location> <effect> [count] [offset] [motion]
-    // @Short Plays an effect.
+    // @Short plays an effect.
     // @Updated 2016/09/28
     // @Group World
     // @Minimum 2

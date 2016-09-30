@@ -5,6 +5,7 @@ import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
+import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.events.entity.EntityDamagedScriptEvent;
@@ -106,6 +107,7 @@ public class Denizen2Sponge {
         // Commands: Server
         Denizen2Core.register(new ExecuteCommand());
         // Commands: World
+        Denizen2Core.register(new EditBlockCommand());
         Denizen2Core.register(new PlayEffectCommand());
         Denizen2Core.register(new SetBlockCommand());
         // Events: Entity

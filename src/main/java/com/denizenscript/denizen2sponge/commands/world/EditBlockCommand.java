@@ -1,4 +1,4 @@
-package com.denizenscript.denizen2sponge.commands.entity;
+package com.denizenscript.denizen2sponge.commands.world;
 
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
@@ -6,38 +6,42 @@ import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.world.BlockChangeFlag;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.Map;
 
-public class EditEntityCommand extends AbstractCommand {
+public class EditBlockCommand extends AbstractCommand {
 
     // <--[command]
-    // @Name editentity
-    // @Arguments <entity> <map of properties>
-    // @Short edits an entity.
-    // @Updated 2016/09/26
+    // @Name editblock
+    // @Arguments <location> <map of properties>
+    // @Short Edits a block.
+    // @Updated 2016/09/29
     // @Group Entities
     // @Minimum 2
     // @Maximum 2
     // @Description
-    // Edits an entity to have the specified map of new properties.
+    // Edits a location in a world to have the specified map of new properties.
     // @Example
-    // # Lights the player on fire.
-    // - editentity <[player]> fire_ticks:999999
+    // # Edits a wool block to be blue.
+    // - editblock <[player].location> dye_color:blue
     // -->
 
     @Override
     public String getName() {
-        return "editentity";
+        return "editblock";
     }
 
     @Override
     public String getArguments() {
-        return "<entity> <map of properties>";
+        return "<location> <map of properties>";
     }
 
     @Override
@@ -52,20 +56,22 @@ public class EditEntityCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        Entity entity = entityTag.getInternal();
+        LocationTag locationTag = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
+        Location<World> loc = locationTag.getInternal().toLocation();
+        BlockState bs = loc.getBlock();
         MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
             Key found = DataKeys.getKeyForName(mapEntry.getKey());
             if (found == null) {
-                queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in EditEntity command!");
+                queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in EditBlock command!");
                 return;
             }
-            DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+            bs = (BlockState) DataKeys.with(bs, found, mapEntry.getValue(), queue.error);
         }
+        loc.setBlock(bs, BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
         if (queue.shouldShowGood()) {
-            queue.outGood("Edited the entity "
-                    + ColorSet.emphasis + entityTag.toString() + ColorSet.good
+            queue.outGood("Edited the location "
+                    + ColorSet.emphasis + locationTag.toString() + ColorSet.good
                     + " to have the new specified properties...");
         }
     }

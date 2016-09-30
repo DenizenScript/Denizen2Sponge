@@ -1,5 +1,7 @@
 package com.denizenscript.denizen2sponge.tags.objects;
 
+import com.denizenscript.denizen2core.tags.objects.NullTag;
+import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.flowpowered.math.vector.Vector3d;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
@@ -9,6 +11,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -88,6 +91,30 @@ public class LocationTag extends AbstractTagObject {
         // @Example "0,1,2,world" .world returns "world".
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).internal.world));
+        // <--[tag]
+        // @Name EntityTag.data
+        // @Updated 2016/08/28
+        // @Group General Information
+        // @ReturnType MapTag
+        // @Returns a list of all data keys and their values for the entity.
+        // -->
+        handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((LocationTag) obj).internal.toLocation()));
+        // <--[tag]
+        // @Name EntityTag.get[<TextTag>]
+        // @Updated 2016/08/28
+        // @Group General Information
+        // @ReturnType Dynamic
+        // @Returns the value of the specified key on the entity.
+        // -->
+        handlers.put("get", (dat, obj) -> {
+            String keyName = dat.getNextModifier().toString();
+            Key key = DataKeys.getKeyForName(keyName);
+            if (key == null) {
+                dat.error.run("Invalid key '" + keyName + "'!");
+                return new NullTag();
+            }
+            return DataKeys.getValue(((LocationTag) obj).internal.toLocation(), key, dat.error);
+        });
     }
 
     public static LocationTag getFor(Action<String> error, String text) {

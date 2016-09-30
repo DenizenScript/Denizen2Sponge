@@ -26,7 +26,7 @@ public class SpawnCommand extends AbstractCommand {
     // <--[command]
     // @Name spawn
     // @Arguments <entity type> <location> [map of properties]
-    // @Short Spawns a new entity.
+    // @Short spawns a new entity.
     // @Updated 2016/09/26
     // @Group Entities
     // @Minimum 2

@@ -12,6 +12,7 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataHolder;
+import org.spongepowered.api.data.ImmutableDataHolder;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.text.Text;
@@ -134,6 +135,46 @@ public class DataKeys {
         }
         else {
             error.run("The value type '" + clazz.getName() + "' is not supported yet!");
+        }
+    }
+
+    public static ImmutableDataHolder with(ImmutableDataHolder entity, Key key, AbstractTagObject value, Action<String> error) {
+        if (!entity.supports(key)) {
+            // TODO: improve this error maybe?
+            error.run("This data holder does not support the key '" + key.getId() + "'!");
+            return null;
+        }
+        Class clazz = key.getElementToken().getRawType();
+        if (Boolean.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder)  entity.with(key, BooleanTag.getFor(error, value).getInternal()).get();
+        }
+        else if (CatalogType.class.isAssignableFrom(clazz)) {
+            String val = value.toString();
+            Optional optCatalogType = Sponge.getRegistry().getType(clazz, val);
+            if (!optCatalogType.isPresent()) {
+                error.run("Invalid value '" + val + "' for property '" + key.getId() + "'!");
+                return null;
+            }
+            return (ImmutableDataHolder) entity.with(key, optCatalogType.get()).get();
+        }
+        else if (Double.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder) entity.with(key, NumberTag.getFor(error, value).getInternal()).get();
+        }
+        else if (Enum.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder) entity.with(key, Enum.valueOf(clazz, value.toString().toUpperCase())).get();
+        }
+        else if (Integer.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder) entity.with(key, (int) IntegerTag.getFor(error, value).getInternal()).get();
+        }
+        else if (Vector3d.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder) entity.with(key, LocationTag.getFor(error, value).getInternal().toVector3d()).get();
+        }
+        else if (Text.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder) entity.with(key, FormattedTextTag.getFor(error, value).getInternal()).get();
+        }
+        else {
+            error.run("The value type '" + clazz.getName() + "' is not supported yet!");
+            return null;
         }
     }
 }
