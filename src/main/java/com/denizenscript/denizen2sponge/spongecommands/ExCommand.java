@@ -45,7 +45,7 @@ public class ExCommand implements CommandExecutor {
         CommandSpec cmd = CommandSpec.builder()
                 .description(Text.of("Executes a Denizen2 command. Use -q for quiet."))
                 .permission("denizen2.commands.ex")
-                .arguments(GenericArguments.allOf(GenericArguments.string(Text.of("dCommand"))))
+                .arguments(GenericArguments.remainingRawJoinedStrings(Text.of("dCommand")))
                 .executor(new ExCommand())
                 .build();
         Sponge.getCommandManager().register(Denizen2Sponge.instance, cmd, "ex", "denizenex", "dex", "dexecute", "execute");
