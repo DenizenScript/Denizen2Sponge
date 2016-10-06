@@ -15,6 +15,7 @@ import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScr
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
+import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
 import com.denizenscript.denizen2core.Denizen2Core;
@@ -137,6 +138,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new WorldTagBase());
         // Sponge Commands
         ExCommand.register();
+        // Call loading event for sub-plugins registering things
+        Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
         Denizen2Core.start();
         // Central loop
