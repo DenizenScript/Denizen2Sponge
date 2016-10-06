@@ -40,14 +40,14 @@ import java.io.InputStream;
 /**
  * Main plugin class for Denizen2Sponge.
  */
-@Plugin(id = Denizen2Sponge.PluginID, name = Denizen2Sponge.PluginName, version = Denizen2Sponge.PluginVersionString)
+@Plugin(id = Denizen2Sponge.PLUGIN_ID, name = Denizen2Sponge.PLUGIN_NAME, version = Denizen2Sponge.PLUGIN_VERSION)
 public class Denizen2Sponge {
 
-    public final static String PluginID = "denizen2sponge";
+    public final static String PLUGIN_ID = "denizen2sponge";
 
-    public final static String PluginName = "Denizen2Sponge";
+    public final static String PLUGIN_NAME = "Denizen2Sponge";
 
-    public final static String PluginVersionString = PomData.VERSION + " (build " + PomData.BUILD_NUMBER + ")";
+    public final static String PLUGIN_VERSION = PomData.VERSION + " (build " + PomData.BUILD_NUMBER + ")";
 
     public final static String version;
 
@@ -87,7 +87,7 @@ public class Denizen2Sponge {
     public void onServerStart(GameInitializationEvent event) {
         // Setup
         instance = this;
-        plugin = Sponge.getPluginManager().getPlugin(PluginID).orElse(null);
+        plugin = Sponge.getPluginManager().getPlugin(PLUGIN_ID).orElse(null);
         // Colors
         ColorSet.base = colorChar + "7";
         ColorSet.good = colorChar + "a";
