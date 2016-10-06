@@ -29,8 +29,8 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
-import org.spongepowered.api.event.game.state.GameInitializationEvent;
-import org.spongepowered.api.event.game.state.GameStoppingEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -84,7 +84,7 @@ public class Denizen2Sponge {
     }
 
     @Listener
-    public void onServerStart(GameInitializationEvent event) {
+    public void onServerStart(GamePreInitializationEvent event) {
         // Setup
         instance = this;
         plugin = Sponge.getPluginManager().getPlugin(PLUGIN_ID).orElse(null);
@@ -147,7 +147,7 @@ public class Denizen2Sponge {
     }
 
     @Listener
-    public void onServerStop(GameStoppingEvent event) {
+    public void onServerStop(GameStoppedEvent event) {
         // Disable Denizen2
         Denizen2Core.unload();
     }
