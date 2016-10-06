@@ -14,6 +14,7 @@ import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScri
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.EntitySpawnScriptEvent;
+import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
 import com.denizenscript.denizen2core.Denizen2Core;
@@ -140,6 +141,8 @@ public class Denizen2Sponge {
         Denizen2Core.start();
         // Central loop
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);
+        // Call loaded event for sub-plugins to listen for
+        Sponge.getEventManager().post(new Denizen2SpongeLoadedEvent(getGenericCause()));
     }
 
     public File getMainDirectory() {
