@@ -53,7 +53,7 @@ public class PlayEffectCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         String effectName = entry.getArgumentObject(queue, 1).toString().toLowerCase();
-        ParticleEffect.ParticleBuilder build = ParticleEffect.builder();
+        ParticleEffect.Builder build = ParticleEffect.builder();
         Optional<ParticleType> type = Sponge.getRegistry().getType(ParticleType.class, effectName);
         if (!type.isPresent()) {
             queue.handleError(entry, "Invalid particle effect type: '" + effectName + "'!");
@@ -62,7 +62,7 @@ public class PlayEffectCommand extends AbstractCommand {
         build.type(type.get());
         if (entry.arguments.size() > 2) {
             IntegerTag integer = IntegerTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
-            build.count((int) integer.getInternal());
+            build.quantity((int) integer.getInternal());
         }
         if (entry.arguments.size() > 3) {
             LocationTag offset = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 3));
@@ -70,7 +70,7 @@ public class PlayEffectCommand extends AbstractCommand {
         }
         if (entry.arguments.size() > 4) {
             LocationTag offset = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 4));
-            build.motion(offset.getInternal().toVector3d());
+            build.velocity(offset.getInternal().toVector3d());
         }
         loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
         if (queue.shouldShowGood()) {
