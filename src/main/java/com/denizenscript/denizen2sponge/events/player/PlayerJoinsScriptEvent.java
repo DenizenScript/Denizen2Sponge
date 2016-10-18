@@ -9,11 +9,11 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.Root;
-import org.spongepowered.api.event.message.MessageChannelEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 
 import java.util.HashMap;
 
-public class PlayerChatsScriptEvent extends ScriptEvent {
+public class PlayerJoinsScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
@@ -21,13 +21,13 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
     //
     // @Updated 2016/10/18
     //
-    // @Cancellable true
+    // @Cancellable false
     //
-    // @Triggers when a player sends a chat message.
+    // @Triggers when a player successfully joins the server.
     //
     // @Context
-    // player (PlayerTag) returns the player that sent the message.
-    // message (FormattedTextTag) returns the chat message.
+    // player (PlayerTag) returns the player that joined.
+    // message (FormattedTextTag) returns the message that will be broadcast to the server.
     //
     // @Determinations
     // None.
@@ -35,12 +35,12 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "PlayerChats";
+        return "PlayerJoins";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("player chats");
+        return data.eventPath.startsWith("player joins");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
 
     public FormattedTextTag message;
 
-    public MessageChannelEvent.Chat internal;
+    public ClientConnectionEvent.Join internal;
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
@@ -73,14 +73,12 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onChat(MessageChannelEvent.Chat evt, @Root Player player) {
-        PlayerChatsScriptEvent event = (PlayerChatsScriptEvent) clone();
+    public void onJoin(ClientConnectionEvent.Join evt, @Root Player player) {
+        PlayerJoinsScriptEvent event = (PlayerJoinsScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
-        event.message = new FormattedTextTag(evt.getRawMessage());
-        event.cancelled = evt.isCancelled();
+        event.message = new FormattedTextTag(evt.getMessage());
         event.run();
-        evt.setCancelled(event.cancelled);
     }
 
     @Override

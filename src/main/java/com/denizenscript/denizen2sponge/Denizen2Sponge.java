@@ -16,6 +16,7 @@ import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.events.entity.EntityDamagedScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerChatsScriptEvent;
+import com.denizenscript.denizen2sponge.events.player.PlayerJoinsScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
@@ -118,6 +119,7 @@ public class Denizen2Sponge {
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());
+        Denizen2Core.register(new PlayerJoinsScriptEvent());
         Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
