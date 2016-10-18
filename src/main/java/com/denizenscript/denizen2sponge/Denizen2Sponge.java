@@ -1,5 +1,10 @@
 package com.denizenscript.denizen2sponge;
 
+import com.denizenscript.denizen2core.Denizen2Core;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
+import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.EditEntityCommand;
 import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
@@ -9,23 +14,19 @@ import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.events.entity.EntityDamagedScriptEvent;
+import com.denizenscript.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
+import com.denizenscript.denizen2sponge.events.player.PlayerChatsScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
+import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.EntitySpawnScriptEvent;
+import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.google.inject.Inject;
-import com.denizenscript.denizen2core.Denizen2Core;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
-import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
-import com.denizenscript.denizen2core.utilities.debugging.Debug;
-import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
-import com.denizenscript.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
-import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
-import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
@@ -116,6 +117,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntityDamagedScriptEvent());
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
+        Denizen2Core.register(new PlayerChatsScriptEvent());
         Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
