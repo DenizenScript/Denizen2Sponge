@@ -17,7 +17,7 @@ public class PlayerJoinsScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // player chats
+    // player joins
     //
     // @Updated 2016/10/18
     //
