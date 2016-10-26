@@ -28,6 +28,7 @@ import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
+import com.denizenscript.denizen2sponge.utilities.FlagHelper;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -144,6 +145,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new WorldTagBase());
         // Sponge Commands
         ExCommand.register();
+        // Sponge-related Utilities
+        FlagHelper.registerFlagKeyToEntities();
         // Call loading event for sub-plugins registering things
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
@@ -152,7 +155,46 @@ public class Denizen2Sponge {
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);
         // Call loaded event for sub-plugins to listen for
         Sponge.getEventManager().post(new Denizen2SpongeLoadedEvent(getGenericCause()));
+        // TODO: Config option -> readyToSpamEvents = true;
     }
+
+    /*
+    private static boolean readyToSpamEvents = false;
+
+    private static HashMap<Class, Integer> limiter = new HashMap<>();
+
+    @Listener
+    public void onAnyEvent(Event evt) {
+        if (readyToSpamEvents) {
+            if (evt instanceof AITaskEvent
+                    || evt instanceof SpawnEntityEvent
+                    || evt instanceof LoadChunkEvent
+                    || evt instanceof MoveEntityEvent) {
+                return;
+            }
+            if (limiter.containsKey(evt.getClass())) {
+                int current = limiter.get(evt.getClass());
+                limiter.put(evt.getClass(), current + 1);
+                if (current > 100) {
+                    return;
+                }
+            }
+            else {
+                limiter.put(evt.getClass(), 1);
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(evt.getClass().getCanonicalName()).append(":");
+            Class clz = evt.getClass().getSuperclass();
+            while (clz != null) {
+                sb.append(clz.getCanonicalName()).append(",");
+                clz = clz.getSuperclass();
+            }
+            if (sb.length() > 0 && sb.toString().contains("spongepowered")) {
+                Debug.info("EVENT OCCURRED: " + sb.toString());
+            }
+        }
+    }
+    */
 
     public File getMainDirectory() {
         return new File("./assets/Denizen/");
