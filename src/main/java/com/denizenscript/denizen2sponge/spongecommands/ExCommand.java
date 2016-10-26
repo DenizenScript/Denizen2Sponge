@@ -1,5 +1,7 @@
 package com.denizenscript.denizen2sponge.spongecommands;
 
+import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
@@ -9,6 +11,7 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.AbstractSender;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.utilities.PlayerSender;
+import com.denizenscript.denizen2sponge.utilities.flags.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -22,6 +25,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class ExCommand implements CommandExecutor {
 
@@ -67,6 +71,30 @@ public class ExCommand implements CommandExecutor {
             defs.getInternal().put("source", new TextTag("player"));
             defs.getInternal().put("player", new PlayerTag((Player) commandSource));
             send = new PlayerSender((Player) commandSource);
+            /*
+            MapTag mt;
+            Debug.info("SUPPORTS? : " + ((Player) commandSource).supports(FlagHelper.FLAGMAP));
+            Optional<FlagMap> omt = ((Player) commandSource).get(FlagHelper.FLAGMAP);
+            if (omt.isPresent()) {
+                Debug.info("FOUND IT!: " + omt.get().flags);
+                mt = omt.get().flags;
+            }
+            else {
+                mt = new MapTag();
+            }
+            IntegerTag it;
+            if (mt.getInternal().containsKey("HELLO")) {
+                it = IntegerTag.getFor((e) -> { throw new RuntimeException("Denizen2: " + e); }, mt.getInternal().get("HELLO"));
+                Debug.info("FOUND NUMBER!: " + it);
+                it = new IntegerTag(it.getInternal() + 1);
+            }
+            else {
+                it = new IntegerTag(0);
+            }
+            mt.getInternal().put("HELLO", it);
+            ((Player) commandSource).offer(new FlagMapDataImpl(new FlagMap(mt)));
+            commandSource.sendMessage(Text.of("FOUND: " + mt.getInternal().get("HELLO")));
+            */
         }
         else if (commandSource instanceof CommandBlockSource) {
             defs.getInternal().put("source", new TextTag("block"));

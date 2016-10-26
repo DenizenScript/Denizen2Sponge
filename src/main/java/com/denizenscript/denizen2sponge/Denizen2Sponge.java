@@ -28,7 +28,7 @@ import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
-import com.denizenscript.denizen2sponge.utilities.FlagHelper;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -145,8 +145,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new WorldTagBase());
         // Sponge Commands
         ExCommand.register();
-        // Sponge-related Utilities
-        FlagHelper.registerFlagKeyToEntities();
+        // Sponge related Helpers
+        FlagHelper.register();
         // Call loading event for sub-plugins registering things
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
@@ -163,6 +163,7 @@ public class Denizen2Sponge {
 
     private static HashMap<Class, Integer> limiter = new HashMap<>();
 
+    // TODO: Move this block to a separate class so that we can easily unregister it!
     @Listener
     public void onAnyEvent(Event evt) {
         if (readyToSpamEvents) {
