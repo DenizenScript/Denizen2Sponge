@@ -1,7 +1,6 @@
 package com.denizenscript.denizen2sponge.utilities.flags;
 
 import com.denizenscript.denizen2core.tags.objects.MapTag;
-import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Key;
@@ -32,7 +31,6 @@ public class ImmFlagMapDataImpl extends AbstractImmutableSingleData<FlagMap, Imm
 
     @Override
     public DataContainer toContainer() {
-        Debug.info("ImmFlagMapDataImpl -> toContainer");
         DataContainer container = super.toContainer();
         container.set(FlagHelper.FLAGMAP.getQuery(), getValue());
         return container;

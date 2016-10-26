@@ -8,6 +8,8 @@ import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
@@ -66,12 +68,14 @@ public class DataKeys {
     }
 
     public static AbstractTagObject getValue(DataHolder dataHolder, Key key, Action<String> error) {
+        Class clazz = key.getElementToken().getRawType();
         if (!dataHolder.supports(key)) {
-            // TODO: improve this error maybe?
+            if (FlagMap.class.isAssignableFrom(clazz)) {
+                return new MapTag();
+            }
             error.run("This data holder does not support the key '" + key.getId() + "'!");
             return new NullTag();
         }
-        Class clazz = key.getElementToken().getRawType();
         if (Boolean.class.isAssignableFrom(clazz)) {
             return new BooleanTag(dataHolder.getOrElse((Key<BaseValue<Boolean>>) key, false));
         }
@@ -93,6 +97,9 @@ public class DataKeys {
         else if (Text.class.isAssignableFrom(clazz)) {
             return new FormattedTextTag(dataHolder.getOrElse((Key<BaseValue<Text>>) key, Text.EMPTY));
         }
+        else if (FlagMap.class.isAssignableFrom(clazz)) {
+            return new MapTag(dataHolder.getOrElse((Key<BaseValue<FlagMap>>) key, new FlagMap(new MapTag())).flags.getInternal());
+        }
         else {
             error.run("The value type '" + clazz.getName() + "' is not supported yet!");
             return new NullTag();
@@ -100,12 +107,16 @@ public class DataKeys {
     }
 
     public static void tryApply(DataHolder entity, Key key, AbstractTagObject value, Action<String> error) {
-        if (!entity.supports(key)) {
-            // TODO: improve this error maybe?
-            error.run("This data holder does not support the key '" + key.getId() + "'!");
-            return;
-        }
         Class clazz = key.getElementToken().getRawType();
+        if (!entity.supports(key)) {
+            if (FlagMap.class.isAssignableFrom(clazz)) {
+                entity.offer(new FlagMapDataImpl(new FlagMap(new MapTag())));
+            }
+            else {
+                error.run("This data holder does not support the key '" + key.getId() + "'!");
+                return;
+            }
+        }
         if (Boolean.class.isAssignableFrom(clazz)) {
             entity.offer(key, BooleanTag.getFor(error, value).getInternal());
         }
@@ -133,18 +144,25 @@ public class DataKeys {
         else if (Text.class.isAssignableFrom(clazz)) {
             entity.offer(key, FormattedTextTag.getFor(error, value).getInternal());
         }
+        else if (FlagMap.class.isAssignableFrom(clazz)) {
+            entity.offer(new FlagMapDataImpl(new FlagMap(MapTag.getFor(error, value))));
+        }
         else {
             error.run("The value type '" + clazz.getName() + "' is not supported yet!");
         }
     }
 
     public static ImmutableDataHolder with(ImmutableDataHolder entity, Key key, AbstractTagObject value, Action<String> error) {
-        if (!entity.supports(key)) {
-            // TODO: improve this error maybe?
-            error.run("This data holder does not support the key '" + key.getId() + "'!");
-            return null;
-        }
         Class clazz = key.getElementToken().getRawType();
+        if (!entity.supports(key)) {
+            if (FlagMap.class.isAssignableFrom(clazz)) {
+                entity = (ImmutableDataHolder) entity.with(new FlagMapDataImpl(new FlagMap(new MapTag()))).get();
+            }
+            else {
+                error.run("This data holder does not support the key '" + key.getId() + "'!");
+                return null;
+            }
+        }
         if (Boolean.class.isAssignableFrom(clazz)) {
             return (ImmutableDataHolder)  entity.with(key, BooleanTag.getFor(error, value).getInternal()).get();
         }
@@ -171,6 +189,9 @@ public class DataKeys {
         }
         else if (Text.class.isAssignableFrom(clazz)) {
             return (ImmutableDataHolder) entity.with(key, FormattedTextTag.getFor(error, value).getInternal()).get();
+        }
+        else if (FlagMap.class.isAssignableFrom(clazz)) {
+            return (ImmutableDataHolder) entity.with(new FlagMapDataImpl(new FlagMap(MapTag.getFor(error, value)))).get();
         }
         else {
             error.run("The value type '" + clazz.getName() + "' is not supported yet!");
