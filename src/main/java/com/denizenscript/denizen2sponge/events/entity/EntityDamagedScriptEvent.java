@@ -23,6 +23,8 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     //
     // @Triggers when an entity is damaged.
     //
+    // @Switch type (EntityTypeTag) checks the entity type.
+    //
     // @Context
     // entity (EntityTag) returns the entity that was damaged.
     // damage (NumberTag) returns the amount of damage applied.

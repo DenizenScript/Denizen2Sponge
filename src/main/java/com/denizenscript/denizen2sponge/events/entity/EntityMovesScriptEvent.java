@@ -24,6 +24,8 @@ public class EntityMovesScriptEvent extends ScriptEvent {
     //
     // @Triggers when an entity moves.
     //
+    // @Switch type (EntityTypeTag) checks the entity type.
+    //
     // @Context
     // entity (EntityTag) returns the entity that moved.
     // to_position (LocationTag) returns the position the entity moved to.
