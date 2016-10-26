@@ -2,11 +2,16 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
+import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.NullTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
@@ -85,6 +90,51 @@ public class EntityTag extends AbstractTagObject {
                 return new NullTag();
             }
             return DataKeys.getValue(((EntityTag) obj).internal, key, dat.error);
+        });
+        // <--[tag]
+        // @Name EntityTag.has_flag[<TextTag>]
+        // @Updated 2016/10/26
+        // @Group Flag Data
+        // @ReturnType BooleanTag
+        // @Returns whether the entity has a flag with the specified key.
+        // -->
+        handlers.put("has_flag", (dat, obj) -> {
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            MapTag flags;
+            Entity e = ((EntityTag) obj).internal;
+            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                flags = fm.get().flags;
+            }
+            else {
+                flags = new MapTag();
+            }
+            return new BooleanTag(flags.getInternal().containsKey(flagName));
+        });
+        // <--[tag]
+        // @Name EntityTag.flag[<TextTag>]
+        // @Updated 2016/10/26
+        // @Group Flag Data
+        // @ReturnType Dynamic
+        // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
+        // -->
+        handlers.put("flag", (dat, obj) -> {
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            MapTag flags;
+            Entity e = ((EntityTag) obj).internal;
+            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                flags = fm.get().flags;
+            }
+            else {
+                flags = new MapTag();
+            }
+            AbstractTagObject ato = flags.getInternal().get(flagName);
+            if (ato == null) {
+                dat.error.run("Invalid flag specified, not present on this entity!");
+                return new NullTag();
+            }
+            return ato;
         });
     }
 

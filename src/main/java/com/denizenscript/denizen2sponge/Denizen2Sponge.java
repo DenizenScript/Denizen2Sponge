@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.EditEntityCommand;
+import com.denizenscript.denizen2sponge.commands.entity.FlagEntityCommand;
 import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
@@ -106,6 +107,7 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         // Commands: Entity
         Denizen2Core.register(new EditEntityCommand());
+        Denizen2Core.register(new FlagEntityCommand());
         Denizen2Core.register(new SpawnCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
