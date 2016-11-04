@@ -33,6 +33,7 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
@@ -42,7 +43,11 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.nio.file.Path;
 
 /**
  * Main plugin class for Denizen2Sponge.
@@ -61,6 +66,14 @@ public class Denizen2Sponge {
     public static PluginContainer plugin;
 
     public static Denizen2Sponge instance;
+
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    private Path configDir;
+
+    private File configFile;
+
+    public YAMLConfiguration config;
 
     public static char colorChar = '\u00A7';
 
@@ -95,6 +108,7 @@ public class Denizen2Sponge {
         // Setup
         instance = this;
         plugin = Sponge.getPluginManager().getPlugin(PLUGIN_ID).orElse(null);
+        configFile = configDir.resolve("config.yml").toFile();
         // Colors
         ColorSet.base = colorChar + "7";
         ColorSet.good = colorChar + "a";
@@ -102,6 +116,9 @@ public class Denizen2Sponge {
         ColorSet.emphasis = colorChar + "b";
         // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
+        // Load config (save default if it doesn't exist)
+        saveDefaultConfig();
+        loadConfig();
         // Ensure the scripts and addons folders exist
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
@@ -207,5 +224,26 @@ public class Denizen2Sponge {
     public void onServerStop(GameStoppedEvent event) {
         // Disable Denizen2
         Denizen2Core.unload();
+    }
+
+    private void saveDefaultConfig() {
+        if (!configFile.exists()) {
+            configFile.getParentFile().mkdirs();
+            try (InputStream is = getClass().getResourceAsStream("defaultConfig.yml");
+                 PrintWriter writer = new PrintWriter(configFile)) {
+                writer.write(CoreUtilities.streamToString(is));
+            }
+            catch (IOException e) {
+            }
+        }
+    }
+
+    private void loadConfig() {
+        try {
+            config = YAMLConfiguration.load(CoreUtilities.streamToString(new FileInputStream(configFile)));
+        }
+        catch (IOException e) {
+            Denizen2Core.getImplementation().outputException(e);
+        }
     }
 }

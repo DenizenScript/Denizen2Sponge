@@ -1,0 +1,5 @@
+# Toggles locale enforcement. If set to true, locale will be forced to en-US to prevent strange language messages.
+Enforce Locale: true
+Debug:
+  # Toggles general debug. If set to true, debug not attached to any queue will show.
+  General: true

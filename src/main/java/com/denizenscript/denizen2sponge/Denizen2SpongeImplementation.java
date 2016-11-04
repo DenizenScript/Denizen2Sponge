@@ -15,7 +15,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public boolean generalDebug() {
-        return true; // TODO: Configuration file!
+        return Settings.debugGeneral();
     }
 
     @Override
@@ -88,6 +88,6 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public boolean enforceLocale() {
-        return true; // TODO: Configuration file!
+        return Settings.enforceLocale();
     }
 }
