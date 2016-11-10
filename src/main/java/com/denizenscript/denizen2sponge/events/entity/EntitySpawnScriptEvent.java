@@ -1,4 +1,4 @@
-package com.denizenscript.denizen2sponge.events.world;
+package com.denizenscript.denizen2sponge.events.entity;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
