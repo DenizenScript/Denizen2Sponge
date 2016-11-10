@@ -33,7 +33,6 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
@@ -47,7 +46,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Path;
 
 /**
  * Main plugin class for Denizen2Sponge.
@@ -67,12 +65,6 @@ public class Denizen2Sponge {
 
     public static Denizen2Sponge instance;
 
-    @Inject
-    @ConfigDir(sharedRoot = false)
-    private Path configDir;
-
-    private File configFile;
-
     public YAMLConfiguration config;
 
     public static char colorChar = '\u00A7';
@@ -86,20 +78,20 @@ public class Denizen2Sponge {
 
 
     static {
-        YAMLConfiguration config = null;
+        YAMLConfiguration tconfig = null;
         try {
             InputStream is = Denizen2Sponge.class.getResourceAsStream("/denizen2sponge.yml");
-            config = YAMLConfiguration.load(CoreUtilities.streamToString(is));
+            tconfig = YAMLConfiguration.load(CoreUtilities.streamToString(is));
             is.close();
         }
         catch (Exception ex) {
             Debug.exception(ex);
         }
-        if (config == null) {
+        if (tconfig == null) {
             version = "UNKNOWN (Error reading version file!)";
         }
         else {
-            version = config.getString("VERSION", "UNKNOWN") + " (build " + config.getString("BUILD_NUMBER", "UNKNOWN") + ")";
+            version = tconfig.getString("VERSION", "UNKNOWN") + " (build " + tconfig.getString("BUILD_NUMBER", "UNKNOWN") + ")";
         }
     }
 
@@ -108,17 +100,16 @@ public class Denizen2Sponge {
         // Setup
         instance = this;
         plugin = Sponge.getPluginManager().getPlugin(PLUGIN_ID).orElse(null);
-        configFile = configDir.resolve("config.yml").toFile();
         // Colors
         ColorSet.base = colorChar + "7";
         ColorSet.good = colorChar + "a";
         ColorSet.warning = colorChar + "c";
         ColorSet.emphasis = colorChar + "b";
-        // Denizen2
-        Denizen2Core.init(new Denizen2SpongeImplementation());
         // Load config (save default if it doesn't exist)
         saveDefaultConfig();
         loadConfig();
+        // Denizen2
+        Denizen2Core.init(new Denizen2SpongeImplementation());
         // Ensure the scripts and addons folders exist
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
@@ -226,24 +217,42 @@ public class Denizen2Sponge {
         Denizen2Core.unload();
     }
 
+    private File getConfigFile() {
+        return new File(getMainDirectory(), "./config/config.yml");
+    }
+
     private void saveDefaultConfig() {
-        if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            try (InputStream is = getClass().getResourceAsStream("defaultConfig.yml");
-                 PrintWriter writer = new PrintWriter(configFile)) {
-                writer.write(CoreUtilities.streamToString(is));
+        File cf = getConfigFile();
+        if (!cf.exists()) {
+            cf.getParentFile().mkdirs();
+            try {
+                InputStream is = getClass().getResourceAsStream("default_config.yml");
+                String res = CoreUtilities.streamToString(is);
+                is.close();
+                PrintWriter writer = new PrintWriter(cf);
+                writer.write(res);
+                writer.close();
             }
-            catch (IOException e) {
+            catch (IOException ex) {
+                Debug.exception(ex);
             }
         }
     }
 
     private void loadConfig() {
+        config = null;
         try {
-            config = YAMLConfiguration.load(CoreUtilities.streamToString(new FileInputStream(configFile)));
+            File cf = getConfigFile();
+            if (!cf.exists()) {
+                saveDefaultConfig();
+            }
+            config = YAMLConfiguration.load(CoreUtilities.streamToString(new FileInputStream(cf)));
         }
-        catch (IOException e) {
-            Denizen2Core.getImplementation().outputException(e);
+        catch (IOException ex) {
+            Debug.exception(ex);
+        }
+        if (config == null) {
+            config = new YAMLConfiguration();
         }
     }
 }
