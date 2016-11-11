@@ -14,6 +14,11 @@ import java.io.File;
 public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
+    public void reload() {
+        // TODO: stuff?
+    }
+
+    @Override
     public boolean generalDebug() {
         return Settings.debugGeneral();
     }
