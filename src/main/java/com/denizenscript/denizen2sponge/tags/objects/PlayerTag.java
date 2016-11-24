@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.HashMap;
@@ -34,6 +35,16 @@ public class PlayerTag extends AbstractTagObject {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Name PlayerTag.held_item_type
+        // @Updated 2016/11/24
+        // @Group Identification
+        // @ReturnType ItemTypeTag
+        // @Returns the item held by the player.
+        // @Example "Bob" .held_item_type may return "minecraft:iron_axe".
+        // @Warning This tag is temporary, until an ItemTag is available!
+        // -->
+        handlers.put("held_item_type", (dat, obj) -> new ItemTypeTag(((PlayerTag) obj).internal.getItemInHand(HandTypes.MAIN_HAND).get().getItem()));
         // <--[tag]
         // @Name PlayerTag.name
         // @Updated 2016/08/26
