@@ -3,10 +3,7 @@ package com.denizenscript.denizen2sponge.tags.handlers;
 import com.denizenscript.denizen2core.tags.AbstractTagBase;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.ListTag;
-import com.denizenscript.denizen2core.tags.objects.MapTag;
-import com.denizenscript.denizen2core.tags.objects.NullTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
@@ -14,6 +11,7 @@ import com.denizenscript.denizen2sponge.tags.objects.CuboidTag;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColor;
@@ -41,6 +39,15 @@ public class ServerTagBase extends AbstractTagBase {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Name ServerBaseTag.block_type_is_valid[<ListTag>]
+        // @Updated 2016//11/24
+        // @Group Data Safety
+        // @ReturnType BooleanTag
+        // @Returns whether the specified text is a valid block type, and can be read as a BlockTypeTag.
+        // -->
+        handlers.put("block_type_is_valid", (dat, obj) -> new BooleanTag(Sponge.getRegistry().getType(
+                BlockType.class, dat.getNextModifier().toString()).isPresent()));
         // <--[tag]
         // @Name ServerBaseTag.cuboid_wrapping[<ListTag>]
         // @Updated 2016//11/24
@@ -85,7 +92,7 @@ public class ServerTagBase extends AbstractTagBase {
 
         @Override
         public AbstractTagObject handleElseCase(TagData data) {
-            return new TextTag(getName()).handle(data);
+            return new TextTag(getName());
         }
     }
 }

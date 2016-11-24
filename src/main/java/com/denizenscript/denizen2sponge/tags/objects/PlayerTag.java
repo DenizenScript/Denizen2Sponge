@@ -8,6 +8,9 @@ import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -36,15 +39,15 @@ public class PlayerTag extends AbstractTagObject {
 
     static {
         // <--[tag]
-        // @Name PlayerTag.held_item_type
+        // @Name PlayerTag.held_item
         // @Updated 2016/11/24
         // @Group Identification
-        // @ReturnType ItemTypeTag
+        // @ReturnType ItemTag
         // @Returns the item held by the player.
-        // @Example "Bob" .held_item_type may return "minecraft:iron_axe".
-        // @Warning This tag is temporary, until an ItemTag is available!
+        // @Example "Bob" .held_item may return "minecraft:iron_axe/1/".
         // -->
-        handlers.put("held_item_type", (dat, obj) -> new ItemTypeTag(((PlayerTag) obj).internal.getItemInHand(HandTypes.MAIN_HAND).get().getItem()));
+        handlers.put("held_item", (dat, obj) -> new ItemTag(((PlayerTag) obj).internal.getItemInHand(HandTypes.MAIN_HAND)
+             .orElse(ItemStack.of(ItemTypes.NONE, 1))));
         // <--[tag]
         // @Name PlayerTag.name
         // @Updated 2016/08/26
@@ -86,7 +89,7 @@ public class PlayerTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        return new EntityTag(internal).handle(data);
+        return new EntityTag(internal);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import com.flowpowered.math.vector.Vector3d;
@@ -20,6 +21,7 @@ import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.text.Text;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 public class DataKeys {
@@ -31,7 +33,8 @@ public class DataKeys {
         int currentTime = Sponge.getServer().getRunningTimeTicks();
         if (currentTime != lastUpdate) {
             lastUpdate = currentTime;
-            keys = Sponge.getRegistry().getAllOf(Key.class);
+            keys = new HashSet<>(Sponge.getRegistry().getAllOf(Key.class));
+            keys.add(FlagHelper.FLAGMAP); // TODO: Make this not needed! GetAllOf shouldn't require manual key registration!
         }
     }
 

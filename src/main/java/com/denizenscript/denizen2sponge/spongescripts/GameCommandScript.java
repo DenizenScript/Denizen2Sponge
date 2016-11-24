@@ -92,10 +92,14 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
     public CommandMapping cmdMapping;
 
     public void disable() {
+        if (Denizen2Core.getImplementation().generalDebug()) {
+            Debug.good("De-registering command " + ColorSet.emphasis + cmdName + ColorSet.good + " from sponge...");
+        }
         Sponge.getCommandManager().removeMapping(cmdMapping);
     }
 
     public void register() {
+        currentCommandScripts.add(this);
         if (Denizen2Core.getImplementation().generalDebug()) {
             Debug.good("Registering command " + ColorSet.emphasis + cmdName + ColorSet.good + " to sponge...");
         }

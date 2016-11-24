@@ -18,9 +18,9 @@ public class FlagHelper {
     public static Key<Value<FlagMap>> FLAGMAP = KeyFactory.makeSingleKey(
             FLAGMAP_TOKEN,
             FLAGMAP_VALUE_TOKEN,
-            DataQuery.of("Denizen_FlagMap"),
+            DataQuery.of("denizen:flagmap"),
             "denizen:flagmap",
-            "Denizen FlagMap"
+            "denizen:flagmap"
     );
 
     public static FlagMapDataBuilder FMDB;

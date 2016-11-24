@@ -105,9 +105,9 @@ public class CuboidTag extends AbstractTagObject {
             }
             CuboidTag ct = (CuboidTag) obj;
             ListTag lt = new ListTag();
-            int maxx = (int)Math.ceil(ct.internal.max.x);
-            int maxy = (int)Math.ceil(ct.internal.max.y);
-            int maxz = (int)Math.ceil(ct.internal.max.z);
+            int maxx = (int)Math.ceil(ct.internal.max.x + 0.01);
+            int maxy = (int)Math.ceil(ct.internal.max.y + 0.01);
+            int maxz = (int)Math.ceil(ct.internal.max.z + 0.01);
             for (int x = (int)Math.floor(ct.internal.min.x); x < maxx; x++) {
                 for (int y = (int)Math.floor(ct.internal.min.y); y < maxy; y++) {
                     for (int z = (int)Math.floor(ct.internal.min.z); z < maxz; z++) {
@@ -153,7 +153,7 @@ public class CuboidTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        return new TextTag(toString()).handle(data);
+        return new TextTag(toString());
     }
 
     @Override

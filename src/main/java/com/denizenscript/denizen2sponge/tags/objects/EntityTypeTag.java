@@ -74,7 +74,7 @@ public class EntityTypeTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        return new TextTag(toString()).handle(data);
+        return new TextTag(toString());
     }
 
     @Override
