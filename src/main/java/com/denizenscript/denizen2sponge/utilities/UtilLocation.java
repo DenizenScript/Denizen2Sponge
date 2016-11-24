@@ -12,6 +12,17 @@ public class UtilLocation {
     public double z;
     public World world;
 
+    public UtilLocation() {
+        // Do nothing.
+    }
+
+    public UtilLocation(double _x, double _y, double _z, World _w) {
+        x = _x;
+        y = _y;
+        z = _z;
+        world = _w;
+    }
+
     public Vector3d toVector3d() {
         return new Vector3d(x, y, z);
     }

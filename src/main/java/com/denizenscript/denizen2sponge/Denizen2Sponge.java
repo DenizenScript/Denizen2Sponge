@@ -144,6 +144,7 @@ public class Denizen2Sponge {
         // Tag Handlers: Sponge Basics
         Denizen2Core.register(new BlockTypeTagBase());
         Denizen2Core.register(new ContextTagBase());
+        Denizen2Core.register(new CuboidTagBase());
         Denizen2Core.register(new EntityTagBase());
         Denizen2Core.register(new EntityTypeTagBase());
         Denizen2Core.register(new FormattedTextTagBase());

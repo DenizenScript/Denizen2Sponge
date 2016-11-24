@@ -25,9 +25,14 @@ public class LocationTag extends AbstractTagObject {
     // @SubType TextTag
     // @Group Mathematics
     // @Description Represents a position in a world. Identified in the format "x,y,z,world".
+    // @Note Can also be "x,y,z" without a world. This is a vector.
     // -->
 
     private UtilLocation internal = new UtilLocation();
+
+    public LocationTag(UtilLocation location) {
+        this(location.x, location.y, location.z, location.world);
+    }
 
     public LocationTag(Location<World> location) {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
