@@ -92,19 +92,19 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).internal.world));
         // <--[tag]
-        // @Name EntityTag.data
+        // @Name LocationTag.data
         // @Updated 2016/08/28
         // @Group General Information
         // @ReturnType MapTag
-        // @Returns a list of all data keys and their values for the entity.
+        // @Returns a list of all data keys and their values for the block at the location specified.
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((LocationTag) obj).internal.toLocation()));
         // <--[tag]
-        // @Name EntityTag.get[<TextTag>]
+        // @Name LocationTag.get[<TextTag>]
         // @Updated 2016/08/28
         // @Group General Information
         // @ReturnType Dynamic
-        // @Returns the value of the specified key on the entity.
+        // @Returns the value of the specified key on the block at the location specified.
         // -->
         handlers.put("get", (dat, obj) -> {
             String keyName = dat.getNextModifier().toString();
