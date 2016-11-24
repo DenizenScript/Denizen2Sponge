@@ -97,6 +97,18 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).internal.world));
         // <--[tag]
+        // @Name LocationTag.add[<LocationTag>]
+        // @Updated 2016/11/24
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns the location with the specified location vector added to it.
+        // -->
+        handlers.put("add", (dat, obj) -> {
+            UtilLocation t = ((LocationTag) obj).internal;
+            UtilLocation a = LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(t.x + a.x, t.y + a.y, t.z + a.z, t.world);
+        });
+        // <--[tag]
         // @Name LocationTag.data
         // @Updated 2016/08/28
         // @Group General Information
