@@ -26,7 +26,7 @@ public class TextsTagBase extends AbstractTagBase {
     // @Base texts
     // @Group Sponge Base Types
     // @ReturnType TextsBaseTag
-    // @Returns the input as a FormattedTextTag.
+    // @Returns a generic handler for texts.
     // -->
 
     @Override
@@ -38,7 +38,7 @@ public class TextsTagBase extends AbstractTagBase {
 
     static {
         // <--[tag]
-        // @Name TextsBaseTag.for_plain
+        // @Name TextsBaseTag.for_plain[<TextTag>]
         // @Updated 2016/09/21
         // @Group Text Formatting
         // @ReturnType FormattedTextTag
@@ -46,7 +46,7 @@ public class TextsTagBase extends AbstractTagBase {
         // -->
         handlers.put("for_plain", (dat, obj) -> new FormattedTextTag(Text.of(dat.getNextModifier().toString())));
         // <--[tag]
-        // @Name TextsBaseTag.for_old_colors
+        // @Name TextsBaseTag.for_old_colors[<TextTag>]
         // @Updated 2016/09/21
         // @Group Text Formatting
         // @ReturnType FormattedTextTag
@@ -55,7 +55,7 @@ public class TextsTagBase extends AbstractTagBase {
         handlers.put("for_old_colors", (dat, obj) -> new FormattedTextTag(
                 TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize((dat.getNextModifier().toString()))));
         // <--[tag]
-        // @Name TextsBaseTag.for_input
+        // @Name TextsBaseTag.for_input[<MapTag>]
         // @Updated 2016/09/21
         // @Group Text Formatting
         // @ReturnType FormattedTextTag

@@ -154,6 +154,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new LocationTagBase());
         Denizen2Core.register(new OfflinePlayerTagBase());
         Denizen2Core.register(new PlayerTagBase());
+        Denizen2Core.register(new ServerTagBase());
         Denizen2Core.register(new TextsTagBase());
         Denizen2Core.register(new WorldTagBase());
         // Sponge Commands
