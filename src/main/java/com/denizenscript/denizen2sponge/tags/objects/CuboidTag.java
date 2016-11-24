@@ -2,6 +2,7 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
@@ -38,11 +39,16 @@ public class CuboidTag extends AbstractTagObject {
         return internal;
     }
 
+    public boolean contains(UtilLocation point) {
+        return point.x >= internal.min.x && point.y >= internal.min.y && point.z >= internal.min.z
+                && point.x <= internal.max.x && point.y <= internal.max.y && point.z <= internal.max.z;
+    }
+
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
         // <--[tag]
-        // @Name LocationTag.min
+        // @Name CuboidTag.min
         // @Updated 2016/11/24
         // @Group Identification
         // @ReturnType LocationTag
@@ -51,7 +57,7 @@ public class CuboidTag extends AbstractTagObject {
         // -->
         handlers.put("min", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.min));
         // <--[tag]
-        // @Name LocationTag.max
+        // @Name CuboidTag.max
         // @Updated 2016/11/24
         // @Group Identification
         // @ReturnType LocationTag
@@ -60,7 +66,7 @@ public class CuboidTag extends AbstractTagObject {
         // -->
         handlers.put("max", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.max));
         // <--[tag]
-        // @Name LocationTag.world
+        // @Name CuboidTag.world
         // @Updated 2016/11/24
         // @Group Identification
         // @ReturnType WorldTag
@@ -69,9 +75,19 @@ public class CuboidTag extends AbstractTagObject {
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((CuboidTag) obj).internal.min.world));
         // <--[tag]
-        // @Name LocationTag.block_locations[<ListTag>]
+        // @Name CuboidTag.contains[<LocationTag>]
         // @Updated 2016/11/24
-        // @Group Identification
+        // @Group Mathematics
+        // @ReturnType WorldTag
+        // @Returns whether the cuboid contains the specified location.
+        // @Example "0,1,2/4,5,6/world" .contains[1,2,3,world] returns "true".
+        // -->
+        handlers.put("contains", (dat, obj) -> new BooleanTag(((CuboidTag) obj).contains(
+                LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // <--[tag]
+        // @Name CuboidTag.block_locations[<ListTag>]
+        // @Updated 2016/11/24
+        // @Group Connected Information
         // @ReturnType ListTag
         // @Returns the location of all block locations in this cuboid. Optionally, specify a list of BlockType's to use.
         // @Note that partially covered blocks are counted.
