@@ -64,37 +64,12 @@ public class ExCommand implements CommandExecutor {
             argset.remove(0);
         }
         String cmd = CoreUtilities.concat(argset, " ");
-        // TODO: Redirect output to the commandSource!
         MapTag defs = new MapTag();
         AbstractSender send = null;
         if (commandSource instanceof Player) {
             defs.getInternal().put("source", new TextTag("player"));
             defs.getInternal().put("player", new PlayerTag((Player) commandSource));
             send = new PlayerSender((Player) commandSource);
-            /*
-            MapTag mt;
-            Debug.info("SUPPORTS? : " + ((Player) commandSource).supports(FlagHelper.FLAGMAP));
-            Optional<FlagMap> omt = ((Player) commandSource).get(FlagHelper.FLAGMAP);
-            if (omt.isPresent()) {
-                Debug.info("FOUND IT!: " + omt.get().flags);
-                mt = omt.get().flags;
-            }
-            else {
-                mt = new MapTag();
-            }
-            IntegerTag it;
-            if (mt.getInternal().containsKey("HELLO")) {
-                it = IntegerTag.getFor((e) -> { throw new RuntimeException("Denizen2: " + e); }, mt.getInternal().get("HELLO"));
-                Debug.info("FOUND NUMBER!: " + it);
-                it = new IntegerTag(it.getInternal() + 1);
-            }
-            else {
-                it = new IntegerTag(0);
-            }
-            mt.getInternal().put("HELLO", it);
-            ((Player) commandSource).offer(new FlagMapDataImpl(new FlagMap(mt)));
-            commandSource.sendMessage(Text.of("FOUND: " + mt.getInternal().get("HELLO")));
-            */
         }
         else if (commandSource instanceof CommandBlockSource) {
             defs.getInternal().put("source", new TextTag("block"));

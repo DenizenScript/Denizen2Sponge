@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.Denizen2Implementation;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
+import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -14,8 +15,13 @@ import java.io.File;
 public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
+    public void preReload() {
+        GameCommandScript.clear();
+    }
+
+    @Override
     public void reload() {
-        // TODO: stuff?
+        // ...?
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.denizenscript.denizen2sponge.events.entity.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
+import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
@@ -157,6 +158,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ServerTagBase());
         Denizen2Core.register(new TextsTagBase());
         Denizen2Core.register(new WorldTagBase());
+        // Sponge Script Types
+        Denizen2Core.register("command", GameCommandScript::new);
         // Sponge Commands
         ExCommand.register();
         // Sponge related Helpers
