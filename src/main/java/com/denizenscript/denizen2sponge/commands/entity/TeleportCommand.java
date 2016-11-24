@@ -50,7 +50,7 @@ public class TeleportCommand extends AbstractCommand {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         if (queue.shouldShowGood()) {
-            queue.outGood("Teleporting " + ColorSet.emphasis + ent.toString() + ColorSet.good
+            queue.outGood("Teleporting " + ColorSet.emphasis + ent.friendlyName() + ColorSet.good
                     + " to " + ColorSet.emphasis + loc.toString() + ColorSet.good + "!");
         }
         ent.getInternal().setLocation(loc.getInternal().toLocation()); // TODO: use the returned boolean?
