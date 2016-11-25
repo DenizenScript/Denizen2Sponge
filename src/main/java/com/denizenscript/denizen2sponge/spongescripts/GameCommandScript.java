@@ -119,12 +119,12 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
         ArrayList<String> argset = new ArrayList<>(commandContext.hasAny("dCommand") ?
                 commandContext.getAll("dCommand") : new ArrayList<>());
         String cmd = CoreUtilities.concat(argset, " ");
-        AbstractSender send = null;
         CommandQueue q = getSection("script").toQueue();
         MapTag context = new MapTag();
         context.getInternal().put("raw_arguments", new TextTag(cmd));
         ListTag lt = new ListTag();
-        for (String str : argset) {
+        // TODO: better splitter?
+        for (String str : CoreUtilities.split(cmd, ' ')) {
             lt.getInternal().add(new TextTag(str));
         }
         context.getInternal().put("arguments", lt);
