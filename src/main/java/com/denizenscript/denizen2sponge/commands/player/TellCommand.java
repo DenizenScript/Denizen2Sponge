@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.text.Text;
@@ -58,7 +59,7 @@ public class TellCommand extends AbstractCommand {
             player.getInternal().sendMessage(((FormattedTextTag) ato).getInternal());
         }
         else {
-            player.getInternal().sendMessage(Text.of(ato.toString()));
+            player.getInternal().sendMessage(Denizen2Sponge.parseColor(ato.toString()));
         }
     }
 }

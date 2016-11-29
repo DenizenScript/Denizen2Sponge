@@ -43,6 +43,8 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,6 +76,10 @@ public class Denizen2Sponge {
 
     public static Cause getGenericCause() {
         return Cause.of(NamedCause.of("plugin", plugin));
+    }
+
+    public static Text parseColor(String inp) {
+        return TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(inp);
     }
 
     @Inject
@@ -148,6 +154,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new BlockChangeScriptEvent());
         // Tag Handlers: Sponge Basics
         Denizen2Core.register(new BlockTypeTagBase());
+        Denizen2Core.register(new ColorTagBase());
         Denizen2Core.register(new ContextTagBase());
         Denizen2Core.register(new CuboidTagBase());
         Denizen2Core.register(new EntityTagBase());

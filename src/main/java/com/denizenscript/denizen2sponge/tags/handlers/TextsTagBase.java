@@ -24,7 +24,7 @@ public class TextsTagBase extends AbstractTagBase {
 
     // <--[tagbase]
     // @Base texts
-    // @Group Sponge Base Types
+    // @Group Sponge Helper Types
     // @ReturnType TextsBaseTag
     // @Returns a generic handler for texts.
     // -->

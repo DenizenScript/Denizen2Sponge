@@ -26,7 +26,7 @@ public class ServerTagBase extends AbstractTagBase {
 
     // <--[tagbase]
     // @Base server
-    // @Group Sponge Base Types
+    // @Group Sponge Helper Types
     // @ReturnType ServerBaseTag
     // @Returns a generic handler for server data.
     // -->
