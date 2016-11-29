@@ -125,7 +125,9 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
         ListTag lt = new ListTag();
         // TODO: better splitter?
         for (String str : CoreUtilities.split(cmd, ' ')) {
-            lt.getInternal().add(new TextTag(str));
+            if (str.length() > 0) {
+                lt.getInternal().add(new TextTag(str));
+            }
         }
         context.getInternal().put("arguments", lt);
         if (commandSource instanceof Player) {
