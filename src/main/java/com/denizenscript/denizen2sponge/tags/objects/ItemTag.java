@@ -9,6 +9,7 @@ import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -69,11 +70,46 @@ public class ItemTag extends AbstractTagObject {
             return DataKeys.getValue(((ItemTag) obj).internal, key, dat.error);
         });
         // <--[tag]
+        // @Name ItemTag.with_flags[<MapTag>]
+        // @Updated 2016/12/04
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns a copy of the item, with the specified flag adjustments.
+        // -->
+        handlers.put("with_flags", (dat, obj) -> {
+            MapTag flags;
+            ItemStack e = ((ItemTag) obj).internal;
+            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                flags = new MapTag(fm.get().flags.getInternal());
+            }
+            else {
+                flags = new MapTag();
+            }
+            MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
+            flags.getInternal().putAll(toApply.getInternal());
+            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            its.offer(new FlagMapDataImpl(new FlagMap(flags)));
+            return new ItemTag(its);
+        });
+        // <--[tag]
+        // @Name ItemTag.with_quantity[<IntegerTag>]
+        // @Updated 2016/12/04
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns a copy of the item, with the specified quantity.
+        // -->
+        handlers.put("with_quantity", (dat, obj) -> {
+            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            its.setQuantity((int)IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal());
+            return new ItemTag(its);
+        });
+        // <--[tag]
         // @Name ItemTag.with[<MapTag>]
         // @Updated 2016/11/24
         // @Group General Information
         // @ReturnType ItemTag
-        // @Returns a copy of the item, with the specified adjustments.
+        // @Returns a copy of the item, with the specified data adjustments.
         // -->
         handlers.put("with", (dat, obj) -> {
             ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
