@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.Denizen2Implementation;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
@@ -100,5 +101,52 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     @Override
     public boolean enforceLocale() {
         return Settings.enforceLocale();
+    }
+
+    public File getScriptDataFolder() {
+        return new File(Denizen2Sponge.instance.getMainDirectory(), "./data/");
+    }
+
+    private static File getBaseDirectory() {
+        // Genius!
+        return new File("./");
+    }
+
+    private static File getModsFolder() {
+        // TODO: Accuracy!
+        return new File(getBaseDirectory(), "./mods/");
+    }
+
+    public boolean isSafePath(String file) {
+        // TODO: Potentially prevent paths with bad symbolism, EG backslashes or colons, which could be misintrepretted based on environment?
+        try {
+            File f = new File(getScriptDataFolder(), file);
+            String canPath = f.getCanonicalPath();
+            if (Settings.noWeirdFiles()) {
+                if (canPath.contains(getAddonsFolder().getCanonicalPath())) {
+                    return false;
+                }
+                if (canPath.contains(getScriptsFolder().getCanonicalPath())) {
+                    return false;
+                }
+                if (canPath.contains(getModsFolder().getCanonicalPath())) {
+                    return false;
+                }
+                if (canPath.contains(Denizen2Sponge.instance.getConfigFile().getCanonicalPath())) {
+                    return false;
+                }
+                // TODO: Prevent fiddling with main jar / launcher scripts here?
+            }
+            if (Settings.noUnrelatedFiles()) {
+                if (!canPath.contains(getBaseDirectory().getCanonicalPath())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        catch (Exception e) {
+            Debug.exception(e);
+            return false;
+        }
     }
 }

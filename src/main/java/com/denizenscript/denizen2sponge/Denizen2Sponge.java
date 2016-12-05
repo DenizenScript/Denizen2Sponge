@@ -119,9 +119,10 @@ public class Denizen2Sponge {
         loadConfig();
         // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
-        // Ensure the scripts and addons folders exist
+        // Ensure the scripts, addons, and data folders exist
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
+        Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new FlagEntityCommand());
@@ -185,45 +186,6 @@ public class Denizen2Sponge {
         // TODO: Config option -> readyToSpamEvents = true;
     }
 
-    /*
-    private static boolean readyToSpamEvents = false;
-
-    private static HashMap<Class, Integer> limiter = new HashMap<>();
-
-    // TODO: Move this block to a separate class so that we can easily unregister it!
-    @Listener
-    public void onAnyEvent(Event evt) {
-        if (readyToSpamEvents) {
-            if (evt instanceof AITaskEvent
-                    || evt instanceof SpawnEntityEvent
-                    || evt instanceof LoadChunkEvent
-                    || evt instanceof MoveEntityEvent) {
-                return;
-            }
-            if (limiter.containsKey(evt.getClass())) {
-                int current = limiter.get(evt.getClass());
-                limiter.put(evt.getClass(), current + 1);
-                if (current > 100) {
-                    return;
-                }
-            }
-            else {
-                limiter.put(evt.getClass(), 1);
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append(evt.getClass().getCanonicalName()).append(":");
-            Class clz = evt.getClass().getSuperclass();
-            while (clz != null) {
-                sb.append(clz.getCanonicalName()).append(",");
-                clz = clz.getSuperclass();
-            }
-            if (sb.length() > 0 && sb.toString().contains("spongepowered")) {
-                Debug.info("EVENT OCCURRED: " + sb.toString());
-            }
-        }
-    }
-    */
-
     public File getMainDirectory() {
         return new File("./assets/Denizen/");
     }
@@ -234,7 +196,7 @@ public class Denizen2Sponge {
         Denizen2Core.unload();
     }
 
-    private File getConfigFile() {
+    public File getConfigFile() {
         return new File(getMainDirectory(), "./config/config.yml");
     }
 

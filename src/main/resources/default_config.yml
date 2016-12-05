@@ -3,3 +3,9 @@ Enforce Locale: true
 Debug:
   # Toggles general debug. If set to true, debug not attached to any queue will show.
   General: true
+
+Files:
+  # Just leave this one on for safety.
+  Basic Protection: true
+  # This one can be disabled if you have specific reason to modify files outside the directory of the server.
+  Advanced Protection: true
