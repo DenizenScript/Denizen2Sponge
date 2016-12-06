@@ -154,6 +154,7 @@ public class Denizen2Sponge {
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         // Tag Handlers: Sponge Basics
+        Denizen2Core.register(new AmpersandTagBase());
         Denizen2Core.register(new BlockTypeTagBase());
         Denizen2Core.register(new ColorTagBase());
         Denizen2Core.register(new ContextTagBase());
