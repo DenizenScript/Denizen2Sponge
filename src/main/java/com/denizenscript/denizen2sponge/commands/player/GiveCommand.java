@@ -8,6 +8,8 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.item.inventory.transaction.InventoryTransactionResult;
 import org.spongepowered.api.text.Text;
 
 public class GiveCommand extends AbstractCommand {
@@ -55,6 +57,16 @@ public class GiveCommand extends AbstractCommand {
         if (queue.shouldShowGood()) {
             queue.outGood("Giving " + ColorSet.emphasis + player.getInternal().getName() + ColorSet.good + ": " + ColorSet.emphasis + item.toString());
         }
-        player.getInternal().getInventory().offer(item.getInternal()); // TODO: use return value?
+        InventoryTransactionResult itr = player.getInternal().getInventory().offer(item.getInternal());
+        for (ItemStackSnapshot iss : itr.getReplacedItems()) {
+            if (queue.shouldShowGood()) {
+                queue.outGood("Gave: " + new ItemTag(iss.createStack()));
+            }
+        }
+        for (ItemStackSnapshot iss : itr.getRejectedItems()) {
+            if (queue.shouldShowGood()) {
+                queue.outGood("Failed to give: " + new ItemTag(iss.createStack()));
+            }
+        }
     }
 }
