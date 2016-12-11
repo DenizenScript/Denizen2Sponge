@@ -60,7 +60,7 @@ public class TextsTagBase extends AbstractTagBase {
         // @Group Text Formatting
         // @ReturnType FormattedTextTag
         // @Returns the input map tag converted to a FormattedTextTag.
-        // @Other Valid inputs:
+        // @Note Valid inputs:
         // text:hello -> the base text will be 'hello'.
         // color:blue -> the color will be blue.
         // style:italics|bold -> the style will be bold-italic. Also allowed: obfuscated, reset, underline, strike.
