@@ -25,8 +25,8 @@ public class ActionBarCommand extends AbstractCommand {
     // Sends an actionbar message to a player a message.
     // TODO: Explain more!
     // @Example
-    // # This example sends the player "bob" the message "hello there!"
-    // - actionbar bob "hello there!"
+    // # This example sends the current player the message "hello there!" in their action bar.
+    // - actionbar <player> "hello there!"
     // -->
 
     @Override

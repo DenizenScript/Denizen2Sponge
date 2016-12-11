@@ -24,8 +24,8 @@ public class TellCommand extends AbstractCommand {
     // Tells a player a message.
     // TODO: Explain more!
     // @Example
-    // # This example tells player "bob" the message "hello there!"
-    // - tell bob "hello there!"
+    // # This example tells the current player the message "hello there!" in the chat box.
+    // - tell <player> "hello there!"
     // -->
 
     @Override
