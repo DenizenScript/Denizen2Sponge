@@ -25,6 +25,7 @@ import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEve
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
+import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.entity.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
@@ -151,6 +152,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
+        Denizen2Core.register(new InternalScriptEvent());
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         // Tag Handlers: Sponge Basics
