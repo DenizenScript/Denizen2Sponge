@@ -29,6 +29,8 @@ public class InternalScriptEvent extends ScriptEvent {
     //
     // @Switch event_type (TextTag) checks the event type.
     //
+    // @Warning This event depends on the internal system (Sponge) being consistent and trustworthy. Prefer D2-standard events over this!
+    //
     // @Context
     // event_type (TextTag) returns the internal name of the event type.
     // cause (MapTag) returns a simple Text:TextTag map of all named causes in the event.
