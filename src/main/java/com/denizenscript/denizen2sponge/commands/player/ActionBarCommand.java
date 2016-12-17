@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.text.Text;
@@ -24,8 +25,8 @@ public class ActionBarCommand extends AbstractCommand {
     // Sends an actionbar message to a player a message.
     // TODO: Explain more!
     // @Example
-    // # This example sends the player "bob" the message "hello there!"
-    // - actionbar bob "hello there!"
+    // # This example sends the current player the message "hello there!" in their action bar.
+    // - actionbar <player> "hello there!"
     // -->
 
     @Override
@@ -59,7 +60,7 @@ public class ActionBarCommand extends AbstractCommand {
             player.getInternal().sendMessage(ChatTypes.ACTION_BAR, ((FormattedTextTag) ato).getInternal());
         }
         else {
-            player.getInternal().sendMessage(ChatTypes.ACTION_BAR, Text.of(ato.toString()));
+            player.getInternal().sendMessage(ChatTypes.ACTION_BAR, Denizen2Sponge.parseColor(ato.toString()));
         }
     }
 }

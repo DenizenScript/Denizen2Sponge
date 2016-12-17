@@ -15,6 +15,7 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
@@ -42,7 +43,24 @@ public class EntityTag extends AbstractTagObject {
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
+    public String friendlyName() {
+        if (internal instanceof Player) {
+            return ((Player) internal).getName() + "/" + internal.getUniqueId();
+        }
+        else {
+            return internal.getType().getId() + "/" + internal.getUniqueId();
+        }
+    }
+
     static {
+        // <--[tag]
+        // @Name EntityTag.friendly_name
+        // @Updated 2016/08/26
+        // @Group Identification
+        // @ReturnType TextTag
+        // @Returns the "friendly name" of the entity, for debug output.
+        // -->
+        handlers.put("friendly_name", (dat, obj) -> new TextTag(((EntityTag) obj).friendlyName()));
         // <--[tag]
         // @Name EntityTag.uuid
         // @Updated 2016/08/26
@@ -161,7 +179,7 @@ public class EntityTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        return new TextTag(toString()).handle(data);
+        return new TextTag(toString());
     }
 
     @Override

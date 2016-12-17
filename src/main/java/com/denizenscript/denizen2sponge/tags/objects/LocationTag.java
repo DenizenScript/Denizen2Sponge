@@ -25,9 +25,14 @@ public class LocationTag extends AbstractTagObject {
     // @SubType TextTag
     // @Group Mathematics
     // @Description Represents a position in a world. Identified in the format "x,y,z,world".
+    // @Note Can also be "x,y,z" without a world. This is a vector.
     // -->
 
     private UtilLocation internal = new UtilLocation();
+
+    public LocationTag(UtilLocation location) {
+        this(location.x, location.y, location.z, location.world);
+    }
 
     public LocationTag(Location<World> location) {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
@@ -92,19 +97,31 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).internal.world));
         // <--[tag]
-        // @Name EntityTag.data
+        // @Name LocationTag.add[<LocationTag>]
+        // @Updated 2016/11/24
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns the location with the specified location vector added to it.
+        // -->
+        handlers.put("add", (dat, obj) -> {
+            UtilLocation t = ((LocationTag) obj).internal;
+            UtilLocation a = LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(t.x + a.x, t.y + a.y, t.z + a.z, t.world);
+        });
+        // <--[tag]
+        // @Name LocationTag.data
         // @Updated 2016/08/28
         // @Group General Information
         // @ReturnType MapTag
-        // @Returns a list of all data keys and their values for the entity.
+        // @Returns a list of all data keys and their values for the block at the location specified.
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((LocationTag) obj).internal.toLocation()));
         // <--[tag]
-        // @Name EntityTag.get[<TextTag>]
+        // @Name LocationTag.get[<TextTag>]
         // @Updated 2016/08/28
         // @Group General Information
         // @ReturnType Dynamic
-        // @Returns the value of the specified key on the entity.
+        // @Returns the value of the specified key on the block at the location specified.
         // -->
         handlers.put("get", (dat, obj) -> {
             String keyName = dat.getNextModifier().toString();
@@ -140,7 +157,7 @@ public class LocationTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        return new TextTag(toString()).handle(data);
+        return new TextTag(toString());
     }
 
     @Override

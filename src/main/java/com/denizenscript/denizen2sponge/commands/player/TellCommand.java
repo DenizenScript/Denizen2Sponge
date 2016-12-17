@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.text.Text;
@@ -23,8 +24,8 @@ public class TellCommand extends AbstractCommand {
     // Tells a player a message.
     // TODO: Explain more!
     // @Example
-    // # This example tells player "bob" the message "hello there!"
-    // - tell bob "hello there!"
+    // # This example tells the current player the message "hello there!" in the chat box.
+    // - tell <player> "hello there!"
     // -->
 
     @Override
@@ -58,7 +59,7 @@ public class TellCommand extends AbstractCommand {
             player.getInternal().sendMessage(((FormattedTextTag) ato).getInternal());
         }
         else {
-            player.getInternal().sendMessage(Text.of(ato.toString()));
+            player.getInternal().sendMessage(Denizen2Sponge.parseColor(ato.toString()));
         }
     }
 }

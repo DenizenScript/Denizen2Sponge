@@ -17,4 +17,12 @@ public class Settings {
     public static boolean debugGeneral() {
         return tryBool(Denizen2Sponge.instance.config.getString("Debug.General", "true"));
     }
+
+    public static boolean noWeirdFiles() {
+        return tryBool(Denizen2Sponge.instance.config.getString("Files.Basic Protection", "true"));
+    }
+
+    public static boolean noUnrelatedFiles() {
+        return tryBool(Denizen2Sponge.instance.config.getString("Files.Advanced Protection", "true"));
+    }
 }

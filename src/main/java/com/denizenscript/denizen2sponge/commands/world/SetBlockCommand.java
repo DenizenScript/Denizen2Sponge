@@ -3,7 +3,9 @@ package com.denizenscript.denizen2sponge.commands.world;
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
@@ -14,9 +16,9 @@ public class SetBlockCommand extends AbstractCommand {
 
     // <--[command]
     // @Name setblock
-    // @Arguments <location> <blocktype> [physics? boolean]
+    // @Arguments <list of locations> <blocktype> [physics? boolean]
     // @Short sets a block's type.
-    // @Updated 2016/09/22
+    // @Updated 2016/11/24
     // @Group World
     // @Minimum 2
     // @Maximum 3
@@ -38,7 +40,7 @@ public class SetBlockCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<location> <blocktype> [physics? boolean]";
+        return "<list of locations> <blocktype> [physics? boolean]";
     }
 
     @Override
@@ -53,19 +55,22 @@ public class SetBlockCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
+        ListTag locs = ListTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         BlockTypeTag type = BlockTypeTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         boolean phys = true;
         if (entry.arguments.size() > 2) {
             phys = BooleanTag.getFor(queue.error, entry.getArgumentObject(queue, 2)).getInternal();
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Changing location " + ColorSet.emphasis + loc + ColorSet.good
+            queue.outGood("Changing location(s) " + ColorSet.emphasis + locs + ColorSet.good
                     + " to type " + ColorSet.emphasis + type + ColorSet.good
                     + " with physics " + ColorSet.emphasis + (phys ? "on" : "off"));
         }
-        loc.getInternal().world.setBlockType(loc.getInternal().toVector3i(), type.getInternal(),
-                phys ? BlockChangeFlag.ALL : BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
+        for (AbstractTagObject ato : locs.getInternal()) {
+            LocationTag loc = LocationTag.getFor(queue.error, ato);
+            loc.getInternal().world.setBlockType(loc.getInternal().toVector3i(), type.getInternal(),
+                    phys ? BlockChangeFlag.ALL : BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
+        }
         // TODO: "Cause" argument!
     }
 }

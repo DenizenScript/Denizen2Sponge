@@ -8,7 +8,9 @@ import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.EditEntityCommand;
 import com.denizenscript.denizen2sponge.commands.entity.FlagEntityCommand;
 import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
+import com.denizenscript.denizen2sponge.commands.entity.TeleportCommand;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
+import com.denizenscript.denizen2sponge.commands.player.GiveCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
@@ -23,11 +25,13 @@ import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEve
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScriptEvent;
 import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
+import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.entity.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
+import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
@@ -40,6 +44,8 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -71,6 +77,10 @@ public class Denizen2Sponge {
 
     public static Cause getGenericCause() {
         return Cause.of(NamedCause.of("plugin", plugin));
+    }
+
+    public static Text parseColor(String inp) {
+        return TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(inp);
     }
 
     @Inject
@@ -110,15 +120,18 @@ public class Denizen2Sponge {
         loadConfig();
         // Denizen2
         Denizen2Core.init(new Denizen2SpongeImplementation());
-        // Ensure the scripts and addons folders exist
+        // Ensure the scripts, addons, and data folders exist
         Denizen2Core.getImplementation().getScriptsFolder().mkdirs();
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
+        Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new FlagEntityCommand());
         Denizen2Core.register(new SpawnCommand());
+        Denizen2Core.register(new TeleportCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
+        Denizen2Core.register(new GiveCommand());
         Denizen2Core.register(new TellCommand());
         // Commands: Server
         Denizen2Core.register(new ExecuteCommand());
@@ -139,20 +152,28 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
+        Denizen2Core.register(new InternalScriptEvent());
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         // Tag Handlers: Sponge Basics
+        Denizen2Core.register(new AmpersandTagBase());
         Denizen2Core.register(new BlockTypeTagBase());
+        Denizen2Core.register(new ColorTagBase());
         Denizen2Core.register(new ContextTagBase());
+        Denizen2Core.register(new CuboidTagBase());
         Denizen2Core.register(new EntityTagBase());
         Denizen2Core.register(new EntityTypeTagBase());
         Denizen2Core.register(new FormattedTextTagBase());
+        Denizen2Core.register(new ItemTagBase());
         Denizen2Core.register(new ItemTypeTagBase());
         Denizen2Core.register(new LocationTagBase());
         Denizen2Core.register(new OfflinePlayerTagBase());
         Denizen2Core.register(new PlayerTagBase());
+        Denizen2Core.register(new ServerTagBase());
         Denizen2Core.register(new TextsTagBase());
         Denizen2Core.register(new WorldTagBase());
+        // Sponge Script Types
+        Denizen2Core.register("command", GameCommandScript::new);
         // Sponge Commands
         ExCommand.register();
         // Sponge related Helpers
@@ -168,45 +189,6 @@ public class Denizen2Sponge {
         // TODO: Config option -> readyToSpamEvents = true;
     }
 
-    /*
-    private static boolean readyToSpamEvents = false;
-
-    private static HashMap<Class, Integer> limiter = new HashMap<>();
-
-    // TODO: Move this block to a separate class so that we can easily unregister it!
-    @Listener
-    public void onAnyEvent(Event evt) {
-        if (readyToSpamEvents) {
-            if (evt instanceof AITaskEvent
-                    || evt instanceof SpawnEntityEvent
-                    || evt instanceof LoadChunkEvent
-                    || evt instanceof MoveEntityEvent) {
-                return;
-            }
-            if (limiter.containsKey(evt.getClass())) {
-                int current = limiter.get(evt.getClass());
-                limiter.put(evt.getClass(), current + 1);
-                if (current > 100) {
-                    return;
-                }
-            }
-            else {
-                limiter.put(evt.getClass(), 1);
-            }
-            StringBuilder sb = new StringBuilder();
-            sb.append(evt.getClass().getCanonicalName()).append(":");
-            Class clz = evt.getClass().getSuperclass();
-            while (clz != null) {
-                sb.append(clz.getCanonicalName()).append(",");
-                clz = clz.getSuperclass();
-            }
-            if (sb.length() > 0 && sb.toString().contains("spongepowered")) {
-                Debug.info("EVENT OCCURRED: " + sb.toString());
-            }
-        }
-    }
-    */
-
     public File getMainDirectory() {
         return new File("./assets/Denizen/");
     }
@@ -217,7 +199,7 @@ public class Denizen2Sponge {
         Denizen2Core.unload();
     }
 
-    private File getConfigFile() {
+    public File getConfigFile() {
         return new File(getMainDirectory(), "./config/config.yml");
     }
 
