@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.Denizen2Implementation;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
+import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeReloadEvent;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -15,7 +16,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public void reload() {
-        // TODO: stuff?
+        Sponge.getEventManager().post(new Denizen2SpongeReloadEvent(Denizen2Sponge.getGenericCause()));
     }
 
     @Override
