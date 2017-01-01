@@ -27,6 +27,8 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
+    // @Group Player
+    //
     // @Triggers when a player breaks a block.
     //
     // @Context

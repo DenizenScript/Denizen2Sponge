@@ -23,6 +23,8 @@ public class PlayerJoinsScriptEvent extends ScriptEvent {
     //
     // @Cancellable false
     //
+    // @Group Player
+    //
     // @Triggers when a player successfully joins the server.
     //
     // @Context

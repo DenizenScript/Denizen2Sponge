@@ -23,7 +23,9 @@ public class InternalScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
-    // @Note Cancellability depends on internal event.
+    // @Group Server
+    //
+    // @Note Cancel-ability depends on internal event.
     //
     // @Triggers when any internal event occurs.
     //

@@ -24,6 +24,8 @@ public class BlockChangeScriptEvent extends ScriptEvent {
     //
     // @Updated 2016/09/23
     //
+    // @Group World
+    //
     // @Cancellable true
     //
     // @Triggers when a block changes for any given reason.

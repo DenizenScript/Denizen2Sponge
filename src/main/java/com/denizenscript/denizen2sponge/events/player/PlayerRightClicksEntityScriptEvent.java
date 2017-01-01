@@ -24,6 +24,8 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
+    // @Group Player
+    //
     // @Switch type (EntityTypeTag) checks the entity type.
     //
     // @Triggers when a player right clicks an entity.

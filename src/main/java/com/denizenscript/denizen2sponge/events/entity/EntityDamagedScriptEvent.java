@@ -19,6 +19,8 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     //
     // @Updated 2016/09/28
     //
+    // @Group Entity
+    //
     // @Cancellable true
     //
     // @Triggers when an entity is damaged.

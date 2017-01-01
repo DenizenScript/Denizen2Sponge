@@ -20,6 +20,8 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
     //
     // @Updated 2016/09/23
     //
+    // @Group Entity
+    //
     // @Cancellable true
     //
     // @Switch type (EntityTypeTag) checks the entity type.

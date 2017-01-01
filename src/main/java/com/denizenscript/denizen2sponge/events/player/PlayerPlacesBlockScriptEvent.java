@@ -26,6 +26,8 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
+    // @Group Player
+    //
     // @Triggers when a player places a block.
     //
     // @Context

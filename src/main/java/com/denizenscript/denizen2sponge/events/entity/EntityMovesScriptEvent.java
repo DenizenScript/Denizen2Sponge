@@ -20,6 +20,8 @@ public class EntityMovesScriptEvent extends ScriptEvent {
     //
     // @Updated 2016/10/25
     //
+    // @Group Entity
+    //
     // @Cancellable true
     //
     // @Triggers when an entity moves.

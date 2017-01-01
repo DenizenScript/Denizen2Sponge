@@ -23,6 +23,8 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
+    // @Group Player
+    //
     // @Triggers when a player sends a chat message.
     //
     // @Context

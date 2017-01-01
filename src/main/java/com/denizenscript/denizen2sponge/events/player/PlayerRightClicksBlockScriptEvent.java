@@ -25,6 +25,8 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
+    // @Group Player
+    //
     // @Triggers when a player right clicks an block. Note that this may fire twice per triggering.
     //
     // @Context
