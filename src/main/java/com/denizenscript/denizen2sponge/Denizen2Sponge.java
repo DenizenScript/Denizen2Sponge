@@ -190,7 +190,7 @@ public class Denizen2Sponge {
     }
 
     public File getMainDirectory() {
-        return new File("./assets/Denizen/");
+        return new File("./config/denizen/");
     }
 
     @Listener
