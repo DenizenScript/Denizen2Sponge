@@ -22,6 +22,11 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     }
 
     @Override
+    public void midLoad() {
+        // ...?
+    }
+
+    @Override
     public void reload() {
         Sponge.getEventManager().post(new Denizen2SpongeReloadEvent(Denizen2Sponge.getGenericCause()));
         // ...?
