@@ -2,10 +2,12 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
@@ -50,6 +52,26 @@ public class WorldTag extends AbstractTagObject {
         // @Returns the unique ID of the world.
         // -->
         handlers.put("uuid", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getUniqueId().toString()));
+        // <--[tag]
+        // @Name WorldTag.entities[<EntityTypeTag>]
+        // @Updated 2017/01/19
+        // @Group Server Lists
+        // @ReturnType ListTag
+        // @Returns a list of all entities in the world, optionally with a specific type only.
+        // -->
+        handlers.put("entities", (dat, obj) -> {
+            ListTag list = new ListTag();
+            EntityTypeTag requiredTypeTag = null;
+            if (dat.hasNextModifier()) {
+                requiredTypeTag = EntityTypeTag.getFor(dat.error, dat.getNextModifier());
+            }
+            for (Entity entity : ((WorldTag) obj).getInternal().getEntities()) {
+                if (requiredTypeTag == null || entity.getType().equals(requiredTypeTag.getInternal())) {
+                    list.getInternal().add(new EntityTag(entity));
+                }
+            }
+            return list;
+        });
     }
 
     public static WorldTag getFor(Action<String> error, String text) {
