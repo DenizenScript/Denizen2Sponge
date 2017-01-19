@@ -10,6 +10,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.CuboidTag;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.text.Text;
@@ -17,6 +18,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextStyles;
 import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.world.World;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,6 +41,20 @@ public class ServerTagBase extends AbstractTagBase {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Name ServerBaseTag.worlds
+        // @Updated 2017/01/19
+        // @Group Server Lists
+        // @ReturnType ListTag
+        // @Returns a list of all worlds on the server.
+        // -->
+        handlers.put("worlds", (dat, obj) -> {
+            ListTag list = new ListTag();
+            for (World world : Sponge.getServer().getWorlds()) {
+                list.getInternal().add(new WorldTag(world));
+            }
+            return list;
+        });
         // <--[tag]
         // @Name ServerBaseTag.block_type_is_valid[<ListTag>]
         // @Updated 2016//11/24
