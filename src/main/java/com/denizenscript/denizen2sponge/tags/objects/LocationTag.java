@@ -88,6 +88,30 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("z", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.z));
         // <--[tag]
+        // @Name LocationTag.vector_length
+        // @Updated 2017/01/19
+        // @Group Mathematics
+        // @ReturnType NumberTag
+        // @Returns the vector-length of the vector this location is interpretted as.
+        // @Example "0,2,0" .vector_length returns "2".
+        // -->
+        handlers.put("vector_length", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            return new NumberTag(Math.sqrt(loc.x * loc.x + loc.y * loc.y + loc.z * loc.z));
+        });
+        // <--[tag]
+        // @Name LocationTag.vector_length_squared
+        // @Updated 2017/01/19
+        // @Group Mathematics
+        // @ReturnType NumberTag
+        // @Returns the square of the vector-length of the vector this location is interpretted as.
+        // @Example "0,2,0" .vector_length_squared returns "4".
+        // -->
+        handlers.put("vector_length_squared", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            return new NumberTag(loc.x * loc.x + loc.y * loc.y + loc.z * loc.z);
+        });
+        // <--[tag]
         // @Name LocationTag.world
         // @Updated 2016/08/26
         // @Group Identification
@@ -107,6 +131,32 @@ public class LocationTag extends AbstractTagObject {
             UtilLocation t = ((LocationTag) obj).internal;
             UtilLocation a = LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal();
             return new LocationTag(t.x + a.x, t.y + a.y, t.z + a.z, t.world);
+        });
+        // <--[tag]
+        // @Name LocationTag.multiply[<NumberTag>]
+        // @Updated 2017/01/19
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns the location vector, multiplied by a scalar value.
+        // @Example "0,2,0" .multiply[2] returns "0,4,0".
+        // -->
+        handlers.put("multiply", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            double scalar = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
+        });
+        // <--[tag]
+        // @Name LocationTag.divide[<NumberTag>]
+        // @Updated 2017/01/19
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns the location vector, divided by a scalar value.
+        // @Example "0,2,0" .divide[2] returns "0,1,0".
+        // -->
+        handlers.put("divide", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            double scalar = 1.0 / NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
         });
         // <--[tag]
         // @Name LocationTag.data
