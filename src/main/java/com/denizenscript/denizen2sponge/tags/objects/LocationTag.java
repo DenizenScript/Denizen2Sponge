@@ -1,22 +1,23 @@
 package com.denizenscript.denizen2sponge.tags.objects;
 
-import com.denizenscript.denizen2core.tags.objects.NullTag;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.flowpowered.math.vector.Vector3d;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.NumberTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class LocationTag extends AbstractTagObject {
 
@@ -161,7 +162,7 @@ public class LocationTag extends AbstractTagObject {
         // <--[tag]
         // @Name LocationTag.data
         // @Updated 2016/08/28
-        // @Group General Information
+        // @Group World Data
         // @ReturnType MapTag
         // @Returns a list of all data keys and their values for the block at the location specified.
         // -->
@@ -169,7 +170,7 @@ public class LocationTag extends AbstractTagObject {
         // <--[tag]
         // @Name LocationTag.get[<TextTag>]
         // @Updated 2016/08/28
-        // @Group General Information
+        // @Group World Data
         // @ReturnType Dynamic
         // @Returns the value of the specified key on the block at the location specified.
         // -->
@@ -182,6 +183,37 @@ public class LocationTag extends AbstractTagObject {
             }
             return DataKeys.getValue(((LocationTag) obj).internal.toLocation(), key, dat.error);
         });
+        // <--[tag]
+        // @Name LocationTag.nearby_entities[<MapTag>]
+        // @Updated 2016/08/26
+        // @Group World Data
+        // @ReturnType ListTag
+        // @Returns a list of entities of a specified type (or any type if unspecified) near the location.
+        // Input is type:<EntityTypeTag>|range:<NumberTag>
+        // -->
+        handlers.put("nearby_entities", (dat, obj) -> {
+            ListTag list = new ListTag();
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            EntityTypeTag requiredTypeTag = null;
+            if (map.getInternal().containsKey("type")) {
+                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+            }
+            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            UtilLocation loc = ((LocationTag) obj).getInternal();
+            Set<Entity> ents = loc.world.getIntersectingEntities(new AABB(
+                    loc.x - range, loc.y - range, loc.z - range, loc.x + range, loc.y + range, loc.z + range));
+            for (Entity ent : ents) {
+                if ((requiredTypeTag == null || ent.getType() == requiredTypeTag.getInternal())
+                        && LengthSquared(ent.getLocation().sub(loc.toVector3d())) < range) {
+                    list.getInternal().add(new EntityTag(ent));
+                }
+            }
+            return list;
+        });
+    }
+
+    public static double LengthSquared(Location<World> loc) {
+        return loc.getX() * loc.getX() + loc.getY() * loc.getY() + loc.getZ() * loc.getZ();
     }
 
     public static LocationTag getFor(Action<String> error, String text) {
