@@ -70,6 +70,8 @@ public class DataKeys {
         return temp;
     }
 
+    // TODO: List support!
+
     public static AbstractTagObject getValue(DataHolder dataHolder, Key key, Action<String> error) {
         Class clazz = key.getElementToken().getRawType();
         if (!dataHolder.supports(key)) {

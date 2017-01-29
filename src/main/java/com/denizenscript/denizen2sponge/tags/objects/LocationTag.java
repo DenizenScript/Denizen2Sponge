@@ -10,13 +10,16 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class LocationTag extends AbstractTagObject {
@@ -206,6 +209,38 @@ public class LocationTag extends AbstractTagObject {
                 if ((requiredTypeTag == null || ent.getType() == requiredTypeTag.getInternal())
                         && LengthSquared(ent.getLocation().sub(loc.toVector3d())) < range) {
                     list.getInternal().add(new EntityTag(ent));
+                }
+            }
+            return list;
+        });
+        // <--[tag]
+        // @Name LocationTag.nearby_blocks[<MapTag>]
+        // @Updated 2017/01/29
+        // @Group World Data
+        // @ReturnType ListTag
+        // @Returns a list of block locations of a specified type (or any type if unspecified) near the location.
+        // Input is type:<BlockTypeTag>|range:<NumberTag>
+        // -->
+        handlers.put("nearby_blocks", (dat, obj) -> {
+            ListTag list = new ListTag();
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            BlockTypeTag requiredTypeTag = null;
+            if (map.getInternal().containsKey("type")) {
+                requiredTypeTag = BlockTypeTag.getFor(dat.error, map.getInternal().get("type"));
+            }
+            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            UtilLocation loc = ((LocationTag) obj).getInternal();
+            int low = (int)Math.floor(-range);
+            int high = (int)Math.ceil(range);
+            for (int x = low; x < high; x++) {
+                for (int y = low; y < high; y++) {
+                    for (int z = low; z < high; z++) {
+                        Location<World> le = new Location<>(loc.world, loc.x + x, loc.y + y, loc.z + z);
+                        if ((requiredTypeTag == null || le.getBlock().getType() == requiredTypeTag.getInternal())
+                                && LengthSquared(le.sub(loc.toVector3d())) < range) {
+                            list.getInternal().add(new LocationTag(le));
+                        }
+                    }
                 }
             }
             return list;
