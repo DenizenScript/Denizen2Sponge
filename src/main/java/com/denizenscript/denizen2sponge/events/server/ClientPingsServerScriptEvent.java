@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
+import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.server.ClientPingServerEvent;
@@ -61,14 +62,15 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
 
     public TextTag version;
 
-    // TODO: FormattedTextTag!
-    public TextTag motd;
+    public FormattedTextTag motd;
 
     public IntegerTag num_players;
 
     public IntegerTag max_players;
 
     public ClientPingServerEvent internal;
+
+    // TODO: Thread safety!
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
@@ -99,7 +101,7 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
         ClientPingServerEvent.Response response = evt.getResponse();
         event.address = new TextTag(client.getAddress().toString());
         event.version = new TextTag(client.getVersion().getName());
-        event.motd = new TextTag(response.getDescription().toPlain());
+        event.motd = new FormattedTextTag(response.getDescription());
         Optional<ClientPingServerEvent.Response.Players> optPlayers = response.getPlayers();
         int numPlayers = 0;
         int maxPlayers = 0;
@@ -117,8 +119,8 @@ public class ClientPingsServerScriptEvent extends ScriptEvent {
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
         if (determination.equals("motd")) {
-            motd = new TextTag(value.toString());
-            internal.getResponse().setDescription(Text.of(motd.toString()));
+            motd = FormattedTextTag.getFor(this::error, value);
+            internal.getResponse().setDescription(motd.getInternal());
         }
         else if (determination.equals("max_players")) {
             max_players = IntegerTag.getFor(this::error, value);
