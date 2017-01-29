@@ -116,6 +116,19 @@ public class LocationTag extends AbstractTagObject {
             return new NumberTag(loc.x * loc.x + loc.y * loc.y + loc.z * loc.z);
         });
         // <--[tag]
+        // @Name LocationTag.normalized
+        // @Updated 2017/01/29
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns the normalized form of this vector location.
+        // @Example "0,2,0" .normalized returns "0,1,0".
+        // -->
+        handlers.put("normalized", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            double len = 1.0 / Math.sqrt(loc.x * loc.x + loc.y * loc.y + loc.z * loc.z);
+            return new LocationTag(loc.x * len, loc.y * len, loc.z * len, loc.world);
+        });
+        // <--[tag]
         // @Name LocationTag.world
         // @Updated 2016/08/26
         // @Group Identification
