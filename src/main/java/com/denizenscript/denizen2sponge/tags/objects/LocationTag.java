@@ -163,6 +163,28 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
         });
         // <--[tag]
+        // @Name LocationTag.sign_contents
+        // @Updated 2017/01/29
+        // @Group World Data
+        // @ReturnType ListTag
+        // @Returns a list of all text on the sign at this location.
+        // @Example "0,2,0,world" .sign_contents might return "First Line||Third Line|".
+        // -->
+        handlers.put("sign_contents", (dat, obj) -> {
+            Optional<List<Text>> contents = ((LocationTag) obj).internal.toLocation().get(Keys.SIGN_LINES);
+            if (!contents.isPresent()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("No sign contents present for this location!");
+                }
+                return new NullTag();
+            }
+            ListTag list = new ListTag();
+            for (Text t : contents.get()) {
+                list.getInternal().add(new FormattedTextTag(t));
+            }
+            return list;
+        });
+        // <--[tag]
         // @Name LocationTag.data
         // @Updated 2016/08/28
         // @Group World Data
