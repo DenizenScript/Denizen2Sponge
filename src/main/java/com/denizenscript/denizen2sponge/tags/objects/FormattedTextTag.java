@@ -17,7 +17,7 @@ public class FormattedTextTag extends AbstractTagObject {
     // @Type FormattedTextTag
     // @SubType TextTag
     // @Group Sponge Base Types
-    // @Description represents formatted text. (EG, colors, hover events, and/or ...).
+    // @Description Represents formatted text. (EG, colors, hover events, and/or ...).
     // -->
 
     private Text internal;

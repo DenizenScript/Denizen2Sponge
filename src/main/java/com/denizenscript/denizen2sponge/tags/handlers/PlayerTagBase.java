@@ -11,6 +11,7 @@ public class PlayerTagBase extends AbstractTagBase {
     // <--[tagbase]
     // @Base player[<PlayerTag>]
     // @Group Sponge Base Types
+    // @Modifier optional
     // @ReturnType PlayerTag
     // @Returns the input as a PlayerTag.
     // @Note If no input is given, and the value of definition [player],
