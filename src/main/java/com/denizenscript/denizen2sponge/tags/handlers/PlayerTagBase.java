@@ -13,7 +13,8 @@ public class PlayerTagBase extends AbstractTagBase {
     // @Group Sponge Base Types
     // @ReturnType PlayerTag
     // @Returns the input as a PlayerTag.
-    // @Other If no input is given, and the value of definition [player] is a PlayerTag, will return that instead!
+    // @Note If no input is given, and the value of definition [player],
+    // or context definition context.[player] is a PlayerTag, will return that instead!
     // This is for backwards compatibility.
     // -->
 
