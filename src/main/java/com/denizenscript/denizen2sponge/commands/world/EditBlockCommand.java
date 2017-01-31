@@ -31,7 +31,7 @@ public class EditBlockCommand extends AbstractCommand {
     // Edits a location in a world to have the specified map of new properties.
     // @Example
     // # Edits a wool block to be blue.
-    // - editblock <[player].location> dye_color:blue
+    // - editblock <player.location> dye_color:blue
     // -->
 
     @Override

@@ -22,7 +22,7 @@ public class TeleportCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example teleports the player five blocks upward
-    // - teleport <[player]> <[player].location.add[0,5,0]>
+    // - teleport <player> <player.location.add[0,5,0]>
     // -->
 
     @Override

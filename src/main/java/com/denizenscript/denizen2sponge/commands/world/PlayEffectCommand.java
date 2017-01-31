@@ -26,7 +26,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.
-    // - playeffect <[player].location> heart 50 1,1,1 0,0,0
+    // - playeffect <player.location> heart 50 1,1,1 0,0,0
     // -->
 
     @Override

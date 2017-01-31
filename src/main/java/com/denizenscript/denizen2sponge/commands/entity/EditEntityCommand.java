@@ -27,7 +27,7 @@ public class EditEntityCommand extends AbstractCommand {
     // Edits an entity to have the specified map of new properties.
     // @Example
     // # Lights the player on fire.
-    // - editentity <[player]> fire_ticks:999999
+    // - editentity <player> fire_ticks:999999
     // -->
 
     @Override

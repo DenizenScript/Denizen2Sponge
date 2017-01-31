@@ -38,7 +38,7 @@ public class SpawnCommand extends AbstractCommand {
     // to spawn the entity with those values automatically set on it.
     // @Example
     // # Spawns a sheep that feels the burn.
-    // - spawn sheep <[player].location> display_name:<texts.for_input[text:Bahhhb]>|max_health:300|health:300|fire_ticks:999999|is_sheared:true
+    // - spawn sheep <player.location> display_name:<texts.for_input[text:Bahhhb]>|max_health:300|health:300|fire_ticks:999999|is_sheared:true
     // -->
 
     @Override

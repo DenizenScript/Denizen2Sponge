@@ -27,10 +27,10 @@ public class SetBlockCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example sets the block at a player's location to stone.
-    // - setblock <[player].location> minecraft:stone
+    // - setblock <player.location> minecraft:stone
     // @Example
     // # This example sets the block at a player's location to sand that won't fall immediately.
-    // - setblock <[player].location> minecraft:sand false
+    // - setblock <player.location> minecraft:sand false
     // -->
 
     @Override
