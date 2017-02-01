@@ -5,7 +5,7 @@ A Sponge-Minecraft implementation of Denizen2, currently in pre-alpha.
 
 For the core, see [https://github.com/DenizenScript/Denizen2Core](https://github.com/DenizenScript/Denizen2Core).
 
-For builds, see [http://jci.denizenscript.com/job/Denizen2Sponge/](http://jci.denizenscript.com/job/Denizen2Sponge/).
+For builds, see [http://ci.citizensnpcs.co/job/Denizen2Sponge/](http://ci.citizensnpcs.co/job/Denizen2Sponge/).
 
 Discuss on our forums at [http://forum.denizenscript.com/](http://forum.denizenscript.com/).
 
