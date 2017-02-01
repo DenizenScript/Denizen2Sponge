@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
 import com.denizenscript.denizen2sponge.commands.entity.TeleportCommand;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.GiveCommand;
+import com.denizenscript.denizen2sponge.commands.player.NarrateCommand;
 import com.denizenscript.denizen2sponge.commands.player.TellCommand;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
@@ -132,6 +133,7 @@ public class Denizen2Sponge {
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new GiveCommand());
+        Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new TellCommand());
         // Commands: Server
         Denizen2Core.register(new ExecuteCommand());
