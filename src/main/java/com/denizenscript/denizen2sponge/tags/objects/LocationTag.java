@@ -65,6 +65,15 @@ public class LocationTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Name LocationTag.block_type
+        // @Updated 2017/02/07
+        // @Group Identification
+        // @ReturnType BlockTypeTag
+        // @Returns the type of the block at the location.
+        // @Example "0,1,2,world" .block_type may return "stone".
+        // -->
+        handlers.put("block_type", (dat, obj) -> new BlockTypeTag(((LocationTag) obj).internal.toLocation().getBlockType()));
+        // <--[tag]
         // @Name LocationTag.x
         // @Updated 2016/08/26
         // @Group Identification
