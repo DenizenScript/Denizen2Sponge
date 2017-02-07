@@ -67,7 +67,7 @@ public class LocationTag extends AbstractTagObject {
         // <--[tag]
         // @Name LocationTag.block_type
         // @Updated 2017/02/07
-        // @Group Identification
+        // @Group World Data
         // @ReturnType BlockTypeTag
         // @Returns the type of the block at the location.
         // @Example "0,1,2,world" .block_type may return "stone".

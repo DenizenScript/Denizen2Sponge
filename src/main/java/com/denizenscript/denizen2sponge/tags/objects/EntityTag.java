@@ -54,6 +54,14 @@ public class EntityTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Name EntityTag.entity_type
+        // @Updated 2017/02/07
+        // @Group Identification
+        // @ReturnType EntiyTypeTag
+        // @Returns the type of this entity.
+        // -->
+        handlers.put("entity_type", (dat, obj) -> new EntityTypeTag(((EntityTag) obj).internal.getType()));
+        // <--[tag]
         // @Name EntityTag.friendly_name
         // @Updated 2016/08/26
         // @Group Identification
