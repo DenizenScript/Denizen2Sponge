@@ -159,6 +159,18 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(t.x + a.x, t.y + a.y, t.z + a.z, t.world);
         });
         // <--[tag]
+        // @Name LocationTag.subtract[<LocationTag>]
+        // @Updated 2017/02/07
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns the location with the specified location vector subtracted from it.
+        // -->
+        handlers.put("subtract", (dat, obj) -> {
+            UtilLocation t = ((LocationTag) obj).internal;
+            UtilLocation a = LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(t.x - a.x, t.y - a.y, t.z - a.z, t.world);
+        });
+        // <--[tag]
         // @Name LocationTag.multiply[<NumberTag>]
         // @Updated 2017/01/19
         // @Group Mathematics
