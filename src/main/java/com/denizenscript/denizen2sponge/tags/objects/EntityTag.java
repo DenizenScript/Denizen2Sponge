@@ -86,6 +86,14 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("location", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getLocation()));
         // <--[tag]
+        // @Name EntityTag.rotation
+        // @Updated 2017/02/09
+        // @Group General Information
+        // @ReturnType LocationTag
+        // @Returns the rotation of the entity, as a rotation vector.
+        // -->
+        handlers.put("rotation", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getRotation()));
+        // <--[tag]
         // @Name EntityTag.velocity
         // @Updated 2016/08/26
         // @Group General Information
