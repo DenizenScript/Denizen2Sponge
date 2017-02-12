@@ -52,8 +52,9 @@ public class DataKeys {
 
     public static MapTag getAllKeys(DataHolder dataHolder) {
         MapTag temp = new MapTag();
-        for (Key key : dataHolder.getKeys()) {
-            if (!dataHolder.supports(key)) { // Just in case
+        updateKeys();
+        for (Key key : keys) {
+            if (!dataHolder.supports(key)) {
                 continue;
             }
             if (dataHolder.getOrNull(key) == null) {
