@@ -5,10 +5,7 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
-import com.denizenscript.denizen2sponge.commands.entity.EditEntityCommand;
-import com.denizenscript.denizen2sponge.commands.entity.FlagEntityCommand;
-import com.denizenscript.denizen2sponge.commands.entity.SpawnCommand;
-import com.denizenscript.denizen2sponge.commands.entity.TeleportCommand;
+import com.denizenscript.denizen2sponge.commands.entity.*;
 import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
 import com.denizenscript.denizen2sponge.commands.player.GiveCommand;
 import com.denizenscript.denizen2sponge.commands.player.NarrateCommand;
@@ -128,6 +125,7 @@ public class Denizen2Sponge {
         // Commands: Entity
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new FlagEntityCommand());
+        Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new SpawnCommand());
         Denizen2Core.register(new TeleportCommand());
         // Commands: Player
