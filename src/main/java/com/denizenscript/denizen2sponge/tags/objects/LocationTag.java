@@ -74,6 +74,16 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("block_type", (dat, obj) -> new BlockTypeTag(((LocationTag) obj).internal.toLocation().getBlockType()));
         // <--[tag]
+        // @Name LocationTag.block
+        // @Updated 2017/02/12
+        // @Group Identification
+        // @ReturnType LocationTag
+        // @Returns the block coordinates of this location.
+        // -->
+        handlers.put("block", (dat, obj) -> new LocationTag(Math.round(((LocationTag) obj).internal.x),
+                Math.round(((LocationTag) obj).internal.y), Math.round(((LocationTag) obj).internal.z),
+                ((LocationTag) obj).internal.world));
+        // <--[tag]
         // @Name LocationTag.x
         // @Updated 2016/08/26
         // @Group Identification
