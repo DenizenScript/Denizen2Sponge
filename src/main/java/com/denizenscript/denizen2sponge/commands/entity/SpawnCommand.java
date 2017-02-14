@@ -75,12 +75,18 @@ public class SpawnCommand extends AbstractCommand {
         if (entry.arguments.size() > 2) {
             MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
             for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
-                Key found = DataKeys.getKeyForName(mapEntry.getKey());
-                if (found == null) {
-                    queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in Spawn command!");
-                    return;
+                if (mapEntry.getKey().equalsIgnoreCase("rotation")) {
+                    LocationTag rot = LocationTag.getFor(queue.error, mapEntry.getValue());
+                    entity.setRotation(rot.getInternal().toVector3d());
                 }
-                DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+                else {
+                    Key found = DataKeys.getKeyForName(mapEntry.getKey());
+                    if (found == null) {
+                        queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in Spawn command!");
+                        return;
+                    }
+                    DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+                }
             }
         }
         if (queue.shouldShowGood()) {
