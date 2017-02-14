@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
@@ -56,12 +57,18 @@ public class EditEntityCommand extends AbstractCommand {
         Entity entity = entityTag.getInternal();
         MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
-            Key found = DataKeys.getKeyForName(mapEntry.getKey());
-            if (found == null) {
-                queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in EditEntity command!");
-                return;
+            if (mapEntry.getKey().equalsIgnoreCase("rotation")) {
+                LocationTag rot = LocationTag.getFor(queue.error, mapEntry.getValue());
+                entity.setRotation(rot.getInternal().toVector3d());
             }
-            DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+            else {
+                Key found = DataKeys.getKeyForName(mapEntry.getKey());
+                if (found == null) {
+                    queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in EditEntity command!");
+                    return;
+                }
+                DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+            }
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Edited the entity "
