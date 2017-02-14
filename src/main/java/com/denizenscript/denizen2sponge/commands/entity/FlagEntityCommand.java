@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
@@ -26,11 +27,15 @@ public class FlagEntityCommand extends AbstractCommand {
     // @Group Entities
     // @Minimum 2
     // @Maximum 2
+    // @Switch remove BooleanTag whether to remove things.
     // @Description
     // Adds or edits flags on an entity (including players, etc.)
     // @Example
     // # Mark the player as a VIP.
     // - flagentity <player> vip:true
+    // @Example
+    // # Remove the flag 'VIP' from the player.
+    // - flagentity <player> vip:null -remove true
     // -->
 
     @Override
@@ -58,6 +63,8 @@ public class FlagEntityCommand extends AbstractCommand {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Entity entity = entityTag.getInternal();
         MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+        boolean remover = entry.namedArgs.containsKey("remove") &&
+                BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "remove")).getInternal();
         MapTag basic;
         Optional<FlagMap> fm = entity.get(FlagHelper.FLAGMAP);
         if (fm.isPresent()) {
@@ -67,13 +74,18 @@ public class FlagEntityCommand extends AbstractCommand {
             basic = new MapTag();
         }
         for (Map.Entry<String, AbstractTagObject> dat : propertyMap.getInternal().entrySet()) {
-            basic.getInternal().put(CoreUtilities.toLowerCase(dat.getKey()), dat.getValue());
+            if (remover) {
+                basic.getInternal().remove(dat.getKey());
+            }
+            else {
+                basic.getInternal().put(CoreUtilities.toLowerCase(dat.getKey()), dat.getValue());
+            }
         }
         entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
         if (queue.shouldShowGood()) {
             queue.outGood("Flagged the entity "
                     + ColorSet.emphasis + entityTag.friendlyName() + ColorSet.good
-                    + " with the specified data...");
+                    + " with the specified data... " + (remover ? "(Removal mode)" : "(Normal mode)"));
         }
     }
 }
