@@ -70,6 +70,31 @@ public class ItemTag extends AbstractTagObject {
             return DataKeys.getValue(((ItemTag) obj).internal, key, dat.error);
         });
         // <--[tag]
+        // @Name ItemTag.without_flags[<MapTag>]
+        // @Updated 2017/02/13
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns a copy of the item, with the specified flags removed.
+        // -->
+        handlers.put("without_flags", (dat, obj) -> {
+            MapTag flags;
+            ItemStack e = ((ItemTag) obj).internal;
+            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                flags = new MapTag(fm.get().flags.getInternal());
+            }
+            else {
+                flags = new MapTag();
+            }
+            MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
+            for (String k : toApply.getInternal().keySet()) {
+                flags.getInternal().remove(k);
+            }
+            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            its.offer(new FlagMapDataImpl(new FlagMap(flags)));
+            return new ItemTag(its);
+        });
+        // <--[tag]
         // @Name ItemTag.with_flags[<MapTag>]
         // @Updated 2016/12/04
         // @Group General Information
