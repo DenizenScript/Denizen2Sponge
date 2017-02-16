@@ -70,7 +70,7 @@ public class ItemTag extends AbstractTagObject {
             return DataKeys.getValue(((ItemTag) obj).internal, key, dat.error);
         });
         // <--[tag]
-        // @Name ItemTag.without_flags[<MapTag>]
+        // @Name ItemTag.without_flags[<ListTag>]
         // @Updated 2017/02/13
         // @Group General Information
         // @ReturnType ItemTag
@@ -86,9 +86,9 @@ public class ItemTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
-            MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
-            for (String k : toApply.getInternal().keySet()) {
-                flags.getInternal().remove(k);
+            ListTag toRemove = ListTag.getFor(dat.error, dat.getNextModifier());
+            for (AbstractTagObject k : toRemove.getInternal()) {
+                flags.getInternal().remove(k.toString());
             }
             ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
             its.offer(new FlagMapDataImpl(new FlagMap(flags)));

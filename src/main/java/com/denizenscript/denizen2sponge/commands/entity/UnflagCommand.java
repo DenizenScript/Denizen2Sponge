@@ -4,7 +4,7 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
@@ -14,38 +14,34 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import org.spongepowered.api.entity.Entity;
 
-import java.util.Map;
 import java.util.Optional;
 
-public class FlagEntityCommand extends AbstractCommand {
+public class UnflagCommand extends AbstractCommand {
 
     // <--[command]
-    // @Name flagentity
-    // @Arguments <entity> <map of flags to set>
-    // @Short flags an entity.
-    // @Updated 2016/10/26
+    // @Name unflag
+    // @Arguments <entity> <list of flags to remove>
+    // @Short removes a list of flags from an entity.
+    // @Updated 2017/02/15
     // @Group Entities
     // @Minimum 2
     // @Maximum 2
-    // @Switch remove BooleanTag whether to remove things.
     // @Description
-    // Adds or edits flags on an entity (including players, etc.)
+    // Removes flags from an entity (including players, etc.).
+    // See also the <@link command flag>flag command<@/link>.
     // @Example
-    // # Mark the player as a VIP.
-    // - flagentity <player> vip:true
-    // @Example
-    // # Remove the flag 'VIP' from the player.
-    // - flagentity <player> vip:null -remove true
+    // # Mark the player as no longer VIP.
+    // - unflag <player> vip
     // -->
 
     @Override
     public String getName() {
-        return "flagentity";
+        return "unflag";
     }
 
     @Override
     public String getArguments() {
-        return "<entity> <map of flags to set>";
+        return "<entity> <list of flags to remove>";
     }
 
     @Override
@@ -62,9 +58,7 @@ public class FlagEntityCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Entity entity = entityTag.getInternal();
-        MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        boolean remover = entry.namedArgs.containsKey("remove") &&
-                BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "remove")).getInternal();
+        ListTag toRemove = ListTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         MapTag basic;
         Optional<FlagMap> fm = entity.get(FlagHelper.FLAGMAP);
         if (fm.isPresent()) {
@@ -73,19 +67,14 @@ public class FlagEntityCommand extends AbstractCommand {
         else {
             basic = new MapTag();
         }
-        for (Map.Entry<String, AbstractTagObject> dat : propertyMap.getInternal().entrySet()) {
-            if (remover) {
-                basic.getInternal().remove(dat.getKey());
-            }
-            else {
-                basic.getInternal().put(CoreUtilities.toLowerCase(dat.getKey()), dat.getValue());
-            }
+        for (AbstractTagObject dat : toRemove.getInternal()) {
+            basic.getInternal().remove(CoreUtilities.toLowerCase(dat.toString()));
         }
         entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
         if (queue.shouldShowGood()) {
-            queue.outGood("Flagged the entity "
+            queue.outGood("Removed from the entity "
                     + ColorSet.emphasis + entityTag.friendlyName() + ColorSet.good
-                    + " with the specified data... " + (remover ? "(Removal mode)" : "(Normal mode)"));
+                    + " the specified flags... (" + toRemove + ")");
         }
     }
 }
