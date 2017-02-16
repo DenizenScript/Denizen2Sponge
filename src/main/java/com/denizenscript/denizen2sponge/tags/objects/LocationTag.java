@@ -80,8 +80,8 @@ public class LocationTag extends AbstractTagObject {
         // @ReturnType LocationTag
         // @Returns the block coordinates of this location.
         // -->
-        handlers.put("block", (dat, obj) -> new LocationTag(Math.round(((LocationTag) obj).internal.x),
-                Math.round(((LocationTag) obj).internal.y), Math.round(((LocationTag) obj).internal.z),
+        handlers.put("block", (dat, obj) -> new LocationTag(Math.floor(((LocationTag) obj).internal.x),
+                Math.floor(((LocationTag) obj).internal.y), Math.floor(((LocationTag) obj).internal.z),
                 ((LocationTag) obj).internal.world));
         // <--[tag]
         // @Name LocationTag.x
