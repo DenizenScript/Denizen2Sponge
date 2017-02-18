@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
@@ -61,7 +62,7 @@ public class ItemTypeTag extends AbstractTagObject {
         // @Returns the name of the item type.
         // @Example "minecraft:dirt" .name returns "dirt".
         // -->
-        handlers.put("name", (dat, obj) -> new TextTag(((ItemTypeTag) obj).internal.getName()));
+        handlers.put("name", (dat, obj) -> new TextTag(CoreUtilities.after(((ItemTypeTag) obj).internal.getName(), ":")));
     }
 
     public static ItemTypeTag getFor(Action<String> error, String text) {
