@@ -39,7 +39,7 @@ public class EntityTypeTag extends AbstractTagObject {
         // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
-        // @Returns the ID of the item type.
+        // @Returns the ID of the entity type.
         // @Example "minecraft:creeper" .id returns "minecraft:creeper".
         // -->
         handlers.put("id", (dat, obj) -> new TextTag(((EntityTypeTag) obj).internal.getId()));
@@ -48,7 +48,7 @@ public class EntityTypeTag extends AbstractTagObject {
         // @Updated 2016/08/26
         // @Group Identification
         // @ReturnType TextTag
-        // @Returns the name of the item type.
+        // @Returns the name of the entity type.
         // @Example "minecraft:creeper" .name returns "creeper".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(CoreUtilities.after(((EntityTypeTag) obj).internal.getName(), ":")));

@@ -272,7 +272,7 @@ public class LocationTag extends AbstractTagObject {
             Set<Entity> ents = loc.world.getIntersectingEntities(new AABB(
                     loc.x - range, loc.y - range, loc.z - range, loc.x + range, loc.y + range, loc.z + range));
             for (Entity ent : ents) {
-                if ((requiredTypeTag == null || ent.getType() == requiredTypeTag.getInternal())
+                if ((requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal()))
                         && LengthSquared(ent.getLocation().sub(loc.toVector3d())) < range * range) {
                     list.getInternal().add(new EntityTag(ent));
                 }
@@ -302,7 +302,7 @@ public class LocationTag extends AbstractTagObject {
                 for (int y = low; y < high; y++) {
                     for (int z = low; z < high; z++) {
                         Location<World> le = new Location<>(loc.world, loc.x + x, loc.y + y, loc.z + z);
-                        if ((requiredTypeTag == null || le.getBlock().getType() == requiredTypeTag.getInternal())
+                        if ((requiredTypeTag == null || le.getBlock().getType().equals(requiredTypeTag.getInternal()))
                                 && LengthSquared(le.sub(loc.toVector3d())) < range * range) {
                             list.getInternal().add(new LocationTag(le));
                         }
