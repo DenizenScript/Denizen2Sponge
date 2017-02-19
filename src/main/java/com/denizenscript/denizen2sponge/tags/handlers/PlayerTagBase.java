@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagBase;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
+import com.denizenscript.denizen2core.tags.objects.NullTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 
 public class PlayerTagBase extends AbstractTagBase {
@@ -27,13 +28,15 @@ public class PlayerTagBase extends AbstractTagBase {
     @Override
     public AbstractTagObject handle(TagData data) {
         if (!data.hasNextModifier() && data.currentQueue != null) {
-            if (data.currentQueue.commandStack.peek().hasDefinition("player")){
+            if (data.currentQueue.commandStack.peek().hasDefinition("player")) {
                 AbstractTagObject ato = data.currentQueue.commandStack.peek().getDefinition("player");
                 if (ato instanceof PlayerTag) {
                     return ato.handle(data.shrink());
                 }
+                data.error.run("Tried to read connected player, but failed (improperly typed player).");
+                return new NullTag();
             }
-            else if (data.currentQueue.commandStack.peek().hasDefinition("context")){
+            else if (data.currentQueue.commandStack.peek().hasDefinition("context")) {
                 AbstractTagObject ato = data.currentQueue.commandStack.peek().getDefinition("context");
                 if (ato instanceof MapTag) {
                     if (((MapTag) ato).getInternal().containsKey("player")) {
@@ -41,9 +44,15 @@ public class PlayerTagBase extends AbstractTagBase {
                         if (plt instanceof PlayerTag) {
                             return plt.handle(data.shrink());
                         }
+                        data.error.run("Tried to read connected player, but failed (improperly typed context -> player).");
+                        return new NullTag();
                     }
                 }
+                data.error.run("Tried to read connected player, but failed (context isn't a map?!).");
+                return new NullTag();
             }
+            data.error.run("Tried to read connected player, but failed (no connected player).");
+            return new NullTag();
         }
         return PlayerTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }

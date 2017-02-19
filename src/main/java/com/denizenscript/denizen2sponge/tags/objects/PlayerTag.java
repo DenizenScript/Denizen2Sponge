@@ -68,7 +68,7 @@ public class PlayerTag extends AbstractTagObject {
             }
             return new PlayerTag(oplayer.get());
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException e) { // TODO: better impl of this backup logic
             Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
             if (!oplayer.isPresent()) {
                 error.run("Invalid PlayerTag named input!");
