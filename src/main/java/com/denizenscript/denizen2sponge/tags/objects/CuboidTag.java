@@ -91,7 +91,6 @@ public class CuboidTag extends AbstractTagObject {
         // @ReturnType ListTag
         // @Returns the location of all block locations in this cuboid. Optionally, specify a list of BlockType's to use.
         // @Note Partially covered blocks are counted.
-        // @Example "0,1,2,world" .world returns "world".
         // -->
         handlers.put("block_locations", (dat, obj) -> {
             List<BlockType> valids = null;

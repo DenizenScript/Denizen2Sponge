@@ -23,9 +23,9 @@
             <url>https://repo.spongepowered.org/maven</url>
         </repository>
         <repository>
-            <id>Denizen-Repo</id>
-            <name>Denizen-Repo</name>
-            <url>http://repo.denizenscript.com/</url>
+            <id>jenkins</id>
+            <name>jenkins</name>
+            <url>http://repo.citizensnpcs.co</url>
         </repository>
     </repositories>
 
