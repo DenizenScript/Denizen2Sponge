@@ -2,11 +2,14 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.entity.living.Humanoid;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -57,6 +60,42 @@ public class PlayerTag extends AbstractTagObject {
         // @Example "Bob" .name returns "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
+        // <--[tag]
+        // @Name PlayerTag.food_level
+        // @Updated 2017/02/28
+        // @Group Player Properties
+        // @ReturnType IntegerTag
+        // @Returns the food level of the entity.
+        // -->
+        handlers.put("food_level", (dat, obj) -> {
+            Humanoid player = ((PlayerTag) obj).internal;
+            Integer food = player.foodLevel().get();
+            return new IntegerTag(food);
+        });
+        // <--[tag]
+        // @Name PlayerTag.saturation
+        // @Updated 2017/02/28
+        // @Group Player Properties
+        // @ReturnType NumberTag
+        // @Returns the saturation level of the entity.
+        // -->
+        handlers.put("saturation", (dat, obj) -> {
+            Humanoid player = ((PlayerTag) obj).internal;
+            Double saturation = player.saturation().get();
+            return new NumberTag(saturation);
+        });
+        // <--[tag]
+        // @Name PlayerTag.exhaustion
+        // @Updated 2017/02/28
+        // @Group Player Properties
+        // @ReturnType NumberTag
+        // @Returns the exhaustion level of the entity.
+        // -->
+        handlers.put("exhaustion", (dat, obj) -> {
+            Humanoid player = ((PlayerTag) obj).internal;
+            Double exhaustion = player.exhaustion().get();
+            return new NumberTag(exhaustion);
+        });
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

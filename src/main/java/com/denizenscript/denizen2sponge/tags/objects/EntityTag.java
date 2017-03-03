@@ -2,10 +2,7 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
-import com.denizenscript.denizen2core.tags.objects.MapTag;
-import com.denizenscript.denizen2core.tags.objects.NullTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
@@ -14,8 +11,12 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.property.entity.EyeHeightProperty;
+import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
@@ -169,6 +170,54 @@ public class EntityTag extends AbstractTagObject {
                 return new NullTag();
             }
             return ato;
+        });
+        // <--[tag]
+        // @Name EntityTag.eye_height
+        // @Updated 2017/02/28
+        // @Group General Information
+        // @ReturnType NumberTag
+        // @Returns the eye height of the entity.
+        // -->
+        handlers.put("eye_height", (dat, obj) -> {
+            Entity entity = ((EntityTag) obj).internal;
+            Double height = entity.getProperty(EyeHeightProperty.class).orElse(null).getValue();
+            return new NumberTag(height);
+        });
+        // <--[tag]
+        // @Name EntityTag.eye_location
+        // @Updated 2017/02/28
+        // @Group General Information
+        // @ReturnType LocationTag
+        // @Returns the eye location of the entity.
+        // -->
+        handlers.put("eye_location", (dat, obj) -> {
+            Entity entity = ((EntityTag) obj).internal;
+            Location<World> location = new Location<>(entity.getWorld(), entity.getProperty(EyeLocationProperty.class).orElse(null).getValue());
+            return new LocationTag(location);
+        });
+        // <--[tag]
+        // @Name EntityTag.health
+        // @Updated 2017/02/28
+        // @Group Entity Properties
+        // @ReturnType NumberTag
+        // @Returns the current health of the entity.
+        // -->
+        handlers.put("health", (dat, obj) -> {
+            Living entity = (Living) ((EntityTag) obj).internal;
+            Double health = entity.health().get();
+            return new NumberTag(health);
+        });
+        // <--[tag]
+        // @Name EntityTag.max_health
+        // @Updated 2017/02/28
+        // @Group Entity Properties
+        // @ReturnType NumberTag
+        // @Returns the maximum health of the entity.
+        // -->
+        handlers.put("max_health", (dat, obj) -> {
+            Living entity = (Living) ((EntityTag) obj).internal;
+            Double maxHealth = entity.maxHealth().get();
+            return new NumberTag(maxHealth);
         });
     }
 
