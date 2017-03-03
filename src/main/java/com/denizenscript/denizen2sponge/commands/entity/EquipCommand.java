@@ -5,7 +5,9 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Tuple;
+import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.utilities.Equipment;
@@ -59,10 +61,10 @@ public class EquipCommand extends AbstractCommand {
         MapTag map = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> mapentry : map.getInternal().entrySet()) {
             ItemTag itm = ItemTag.getFor(queue.error, mapentry.getValue());
-            Equipment.equippers.get(mapentry.getKey()).run(new Tuple<>((Living) ent.getInternal(), itm));
+            Equipment.equippers.get(CoreUtilities.toLowerCase(mapentry.getKey())).run(new Tuple<>((Living) ent.getInternal(), itm));
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Equipped " + " on the entity!");
+            queue.outGood("Equipped " + ColorSet.emphasis + map + ColorSet.good + " on the entity!");
         }
     }
 }

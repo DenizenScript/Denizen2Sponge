@@ -160,7 +160,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the helmet currently worn by the entity.
         // -->
-        handlers.put("helmet", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.HEADWEAR).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("helmet", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getHelmet().orElse(ItemStack.of(ItemTypes.NONE, 1))));
         // <--[tag]
         // @Name EntityTag.chestplate
         // @Updated 2017/03/03
@@ -168,7 +168,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the chestplate currently worn by the entity.
         // -->
-        handlers.put("chestplate", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.CHESTPLATE).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("chestplate", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getChestplate().orElse(ItemStack.of(ItemTypes.NONE, 1))));
         // <--[tag]
         // @Name EntityTag.leggings
         // @Updated 2017/03/03
@@ -176,7 +176,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the leggings currently worn by the entity.
         // -->
-        handlers.put("leggings", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.LEGGINGS).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("leggings", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getLeggings().orElse(ItemStack.of(ItemTypes.NONE, 1))));
         // <--[tag]
         // @Name EntityTag.boots
         // @Updated 2017/03/03
@@ -184,7 +184,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the boots currently worn by the entity.
         // -->
-        handlers.put("boots", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.BOOTS).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("boots", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getBoots().orElse(ItemStack.of(ItemTypes.NONE, 1))));
         // <--[tag]
         // @Name EntityTag.held_item
         // @Updated 2017/03/03
