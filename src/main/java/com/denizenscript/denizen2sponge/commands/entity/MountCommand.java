@@ -15,8 +15,8 @@ public class MountCommand extends AbstractCommand {
     // @Name mount
     // @Arguments <entity> <entity list>
     // @Short mounts all the entities in the list onto the given entity.
-    // @Updated 2018/02/12
-    // @Group Player
+    // @Updated 2017/02/12
+    // @Group Entities
     // @Minimum 2
     // @Maximum 2
     // @Description

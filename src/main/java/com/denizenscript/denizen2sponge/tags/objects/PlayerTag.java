@@ -39,16 +39,6 @@ public class PlayerTag extends AbstractTagObject {
 
     static {
         // <--[tag]
-        // @Name PlayerTag.held_item
-        // @Updated 2016/11/24
-        // @Group Identification
-        // @ReturnType ItemTag
-        // @Returns the item held by the player.
-        // @Example "Bob" .held_item may return "minecraft:iron_axe/1/".
-        // -->
-        handlers.put("held_item", (dat, obj) -> new ItemTag(((PlayerTag) obj).internal.getItemInHand(HandTypes.MAIN_HAND)
-             .orElse(ItemStack.of(ItemTypes.NONE, 1))));
-        // <--[tag]
         // @Name PlayerTag.name
         // @Updated 2016/08/26
         // @Group Identification

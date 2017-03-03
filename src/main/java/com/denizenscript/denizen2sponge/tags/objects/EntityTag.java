@@ -13,9 +13,17 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.property.entity.EyeHeightProperty;
 import org.spongepowered.api.data.property.entity.EyeLocationProperty;
+import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.entity.ArmorEquipable;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.Equipable;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.equipment.EquipmentType;
+import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
@@ -145,6 +153,54 @@ public class EntityTag extends AbstractTagObject {
             Living ent = ((Living) ((EntityTag) obj).internal);
             return new NumberTag(ent.health().get() / ent.maxHealth().get());
         });
+        // <--[tag]
+        // @Name EntityTag.helmet
+        // @Updated 2017/03/03
+        // @Group Equipment
+        // @ReturnType ItemTag
+        // @Returns the helmet currently worn by the entity.
+        // -->
+        handlers.put("helmet", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.HEADWEAR).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        // <--[tag]
+        // @Name EntityTag.chestplate
+        // @Updated 2017/03/03
+        // @Group Equipment
+        // @ReturnType ItemTag
+        // @Returns the chestplate currently worn by the entity.
+        // -->
+        handlers.put("chestplate", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.CHESTPLATE).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        // <--[tag]
+        // @Name EntityTag.leggings
+        // @Updated 2017/03/03
+        // @Group Equipment
+        // @ReturnType ItemTag
+        // @Returns the leggings currently worn by the entity.
+        // -->
+        handlers.put("leggings", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.LEGGINGS).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        // <--[tag]
+        // @Name EntityTag.boots
+        // @Updated 2017/03/03
+        // @Group Equipment
+        // @ReturnType ItemTag
+        // @Returns the boots currently worn by the entity.
+        // -->
+        handlers.put("boots", (dat, obj) -> new ItemTag(((Equipable) ((EntityTag) obj).internal).getEquipped(EquipmentTypes.BOOTS).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        // <--[tag]
+        // @Name EntityTag.held_item
+        // @Updated 2017/03/03
+        // @Group Equipment
+        // @ReturnType ItemTag
+        // @Returns the item currently held the entity in its main hand.
+        // -->
+        handlers.put("held_item", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        // <--[tag]
+        // @Name EntityTag.held_item_offhand
+        // @Updated 2017/03/03
+        // @Group Equipment
+        // @ReturnType ItemTag
+        // @Returns the item currently held the entity in its off hand.
+        // -->
+        handlers.put("held_item_offhand", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.OFF_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))));
         // <--[tag]
         // @Name EntityTag.data
         // @Updated 2016/08/28

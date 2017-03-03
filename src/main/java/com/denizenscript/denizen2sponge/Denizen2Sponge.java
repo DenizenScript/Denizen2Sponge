@@ -124,6 +124,7 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
         Denizen2Core.register(new EditEntityCommand());
+        Denizen2Core.register(new EquipCommand());
         Denizen2Core.register(new FlagCommand());
         Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new SpawnCommand());
