@@ -2,10 +2,7 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
-import com.denizenscript.denizen2core.tags.objects.MapTag;
-import com.denizenscript.denizen2core.tags.objects.NullTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
@@ -14,7 +11,10 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.property.entity.EyeHeightProperty;
+import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
@@ -80,7 +80,7 @@ public class EntityTag extends AbstractTagObject {
         // <--[tag]
         // @Name EntityTag.location
         // @Updated 2016/08/26
-        // @Group General Information
+        // @Group Current Information
         // @ReturnType LocationTag
         // @Returns the location of the entity.
         // -->
@@ -88,7 +88,7 @@ public class EntityTag extends AbstractTagObject {
         // <--[tag]
         // @Name EntityTag.rotation
         // @Updated 2017/02/09
-        // @Group General Information
+        // @Group Current Information
         // @ReturnType LocationTag
         // @Returns the rotation of the entity, as a rotation vector.
         // -->
@@ -96,15 +96,59 @@ public class EntityTag extends AbstractTagObject {
         // <--[tag]
         // @Name EntityTag.velocity
         // @Updated 2016/08/26
-        // @Group General Information
+        // @Group Current Information
         // @ReturnType LocationTag
         // @Returns the velocity of the entity (The vector it is is currently moving in).
         // -->
         handlers.put("velocity", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getVelocity()));
         // <--[tag]
+        // @Name EntityTag.eye_height
+        // @Updated 2017/03/03
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the height of the entity's eye, from its feet up.
+        // -->
+        handlers.put("eye_height", (dat, obj) -> new NumberTag((((EntityTag) obj).internal.getProperty(EyeHeightProperty.class).get().getValue())));
+        // <--[tag]
+        // @Name EntityTag.eye_location
+        // @Updated 2017/03/03
+        // @Group Current Information
+        // @ReturnType LocationTag
+        // @Returns the position in the world of the entity's eye.
+        // -->
+        handlers.put("eye_location", (dat, obj) -> new LocationTag((((EntityTag) obj).internal.getProperty(EyeLocationProperty.class).get().getValue())));
+        // <--[tag]
+        // @Name EntityTag.health
+        // @Updated 2017/03/03
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the current health value of the entity (0 is dead, max_health is fully alive).
+        // -->
+        handlers.put("health", (dat, obj) -> new NumberTag(((Living) ((EntityTag) obj).internal).health().get()));
+        // <--[tag]
+        // @Name EntityTag.max_health
+        // @Updated 2017/03/03
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the maximum health value this entity may currently have
+        // (IE, if the entity health is equal to this value, they are fully alive).
+        // -->
+        handlers.put("max_health", (dat, obj) -> new NumberTag(((Living) ((EntityTag) obj).internal).maxHealth().get()));
+        // <--[tag]
+        // @Name EntityTag.health_percentage
+        // @Updated 2017/03/03
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns a percentage of health the entity currently has. 0 is dead, 1 is fully alive. Can be a decimal in between.
+        // -->
+        handlers.put("health_percentage", (dat, obj) -> {
+            Living ent = ((Living) ((EntityTag) obj).internal);
+            return new NumberTag(ent.health().get() / ent.maxHealth().get());
+        });
+        // <--[tag]
         // @Name EntityTag.data
         // @Updated 2016/08/28
-        // @Group General Information
+        // @Group Current Information
         // @ReturnType MapTag
         // @Returns a list of all data keys and their values for the entity.
         // -->
@@ -112,7 +156,7 @@ public class EntityTag extends AbstractTagObject {
         // <--[tag]
         // @Name EntityTag.get[<TextTag>]
         // @Updated 2016/08/28
-        // @Group General Information
+        // @Group Current Information
         // @ReturnType Dynamic
         // @Returns the value of the specified key on the entity.
         // -->
