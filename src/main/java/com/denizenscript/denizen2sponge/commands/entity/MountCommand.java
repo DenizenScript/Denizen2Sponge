@@ -56,7 +56,8 @@ public class MountCommand extends AbstractCommand {
             ent.getInternal().addPassenger(tEnt.getInternal());
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Mounted " + ColorSet.emphasis + list.getInternal().size() + ColorSet.good + " entities on the base entity!");
+            queue.outGood("Mounted " + ColorSet.emphasis + list.debug() + ColorSet.good + " entities on entity: "
+                    + ent.debug());
         }
     }
 }

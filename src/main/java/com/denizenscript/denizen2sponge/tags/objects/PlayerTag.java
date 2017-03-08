@@ -86,4 +86,9 @@ public class PlayerTag extends AbstractTagObject {
     public String toString() {
         return internal.getUniqueId().toString();
     }
+
+    @Override
+    public String debug() {
+        return toString() + "/" + internal.getName();
+    }
 }

@@ -74,7 +74,7 @@ public class PlayEffectCommand extends AbstractCommand {
         }
         loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
         if (queue.shouldShowGood()) {
-            queue.outGood("Successfully played the specified effect!");
+            queue.outGood("Successfully played the specified effect of type: " + type.get().getName());
         }
     }
 }

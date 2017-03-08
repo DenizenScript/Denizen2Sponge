@@ -73,8 +73,8 @@ public class UnflagCommand extends AbstractCommand {
         entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
         if (queue.shouldShowGood()) {
             queue.outGood("Removed from the entity "
-                    + ColorSet.emphasis + entityTag.friendlyName() + ColorSet.good
-                    + " the specified flags... (" + toRemove + ")");
+                    + ColorSet.emphasis + entityTag.debug() + ColorSet.good
+                    + " the specified flags... (" + toRemove.debug() + ")");
         }
     }
 }

@@ -72,8 +72,9 @@ public class SpawnCommand extends AbstractCommand {
             return;
         }
         Entity entity = location.world.createEntity(entityType, location.toVector3d());
+        MapTag propertyMap = new MapTag();
         if (entry.arguments.size() > 2) {
-            MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
+            propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
             for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
                 if (mapEntry.getKey().equalsIgnoreCase("rotation")) {
                     LocationTag rot = LocationTag.getFor(queue.error, mapEntry.getValue());
@@ -92,8 +93,8 @@ public class SpawnCommand extends AbstractCommand {
         if (queue.shouldShowGood()) {
             queue.outGood("Spawning an entity of type "
                     + ColorSet.emphasis + entityType.getId() + ColorSet.good
-                    + " with the specified properties at location "
-                    + ColorSet.emphasis + locationTag + ColorSet.good + "...");
+                    + " with the follwing properties: " + ColorSet.emphasis + propertyMap.debug()
+                    + " at location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "...");
         }
         boolean passed = location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()
                 .entity(entity).type(SpawnTypes.PLUGIN)).build());

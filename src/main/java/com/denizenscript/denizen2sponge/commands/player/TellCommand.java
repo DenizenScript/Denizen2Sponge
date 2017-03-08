@@ -53,7 +53,8 @@ public class TellCommand extends AbstractCommand {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         AbstractTagObject ato = entry.getArgumentObject(queue, 1);
         if (queue.shouldShowGood()) {
-            queue.outGood("Telling " + ColorSet.emphasis + player.getInternal().getName() + ColorSet.good + ": " + ColorSet.emphasis + ato.toString());
+            queue.outGood("Telling " + ColorSet.emphasis + player.debug()
+                    + ColorSet.good + ": " + ColorSet.emphasis + ato.debug());
         }
         if (ato instanceof FormattedTextTag) {
             player.getInternal().sendMessage(((FormattedTextTag) ato).getInternal());

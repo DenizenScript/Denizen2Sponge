@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 
@@ -51,10 +52,17 @@ public class ExecuteCommand  extends AbstractCommand {
         String cmd = entry.getArgumentObject(queue, 1).toString();
         if (mode.equals("as_server")) {
             Sponge.getCommandManager().process(Sponge.getServer().getConsole(), cmd);
+            if (queue.shouldShowGood()) {
+                queue.outGood("Executed " + ColorSet.emphasis + cmd + ColorSet.good + " as the server!");
+            }
         }
         else if (mode.equals("as_player")) {
             PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
             Sponge.getCommandManager().process(player.getInternal(), cmd);
+            if (queue.shouldShowGood()) {
+                queue.outGood("Executed " + ColorSet.emphasis + cmd + ColorSet.good + " as the player: "
+                        + ColorSet.emphasis + player.debug());
+            }
         }
         else {
             queue.handleError(entry, "Invalid mode specified: '" + mode + "'!");

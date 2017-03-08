@@ -64,7 +64,8 @@ public class EquipCommand extends AbstractCommand {
             Equipment.equippers.get(CoreUtilities.toLowerCase(mapentry.getKey())).run(new Tuple<>((Living) ent.getInternal(), itm));
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Equipped " + ColorSet.emphasis + map + ColorSet.good + " on the entity!");
+            queue.outGood("Equipped " + ColorSet.emphasis + map.debug() + ColorSet.good + " on entity: "
+                    + ent.debug());
         }
     }
 }

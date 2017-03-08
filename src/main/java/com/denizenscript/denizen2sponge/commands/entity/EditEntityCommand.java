@@ -72,8 +72,9 @@ public class EditEntityCommand extends AbstractCommand {
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Edited the entity "
-                    + ColorSet.emphasis + entityTag.friendlyName() + ColorSet.good
-                    + " to have the new specified properties...");
+                    + ColorSet.emphasis + entityTag.debug() + ColorSet.good
+                    + " to have the following properties: "
+                    + ColorSet.emphasis + propertyMap.debug());
         }
     }
 }

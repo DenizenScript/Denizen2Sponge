@@ -71,10 +71,12 @@ public class NarrateCommand extends AbstractCommand {
         }
         if (player == null) {
             queue.handleError(entry, "No player located to narrate to!");
+            return;
         }
         AbstractTagObject ato = entry.getArgumentObject(queue, 0);
         if (queue.shouldShowGood()) {
-            queue.outGood("Telling " + ColorSet.emphasis + player.getInternal().getName() + ColorSet.good + ": " + ColorSet.emphasis + ato.toString());
+            queue.outGood("Telling " + ColorSet.emphasis + player.debug()
+                    + ColorSet.good + ": " + ColorSet.emphasis + ato.debug());
         }
         if (ato instanceof FormattedTextTag) {
             player.getInternal().sendMessage(((FormattedTextTag) ato).getInternal());

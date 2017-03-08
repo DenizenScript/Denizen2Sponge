@@ -70,8 +70,8 @@ public class EditBlockCommand extends AbstractCommand {
         }
         loc.setBlock(bs, BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
         if (queue.shouldShowGood()) {
-            queue.outGood("Edited the location " + ColorSet.emphasis + locationTag.toString() + ColorSet.good
-                    + " to have the new specified properties...");
+            queue.outGood("Edited the location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good
+                    + " to have the new following properties: " + propertyMap.debug());
         }
     }
 }

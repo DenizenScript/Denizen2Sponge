@@ -62,8 +62,8 @@ public class SetBlockCommand extends AbstractCommand {
             phys = BooleanTag.getFor(queue.error, entry.getArgumentObject(queue, 2)).getInternal();
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Changing location(s) " + ColorSet.emphasis + locs + ColorSet.good
-                    + " to type " + ColorSet.emphasis + type + ColorSet.good
+            queue.outGood("Changing location(s) " + ColorSet.emphasis + locs.debug() + ColorSet.good
+                    + " to type " + ColorSet.emphasis + type.debug() + ColorSet.good
                     + " with physics " + ColorSet.emphasis + (phys ? "on" : "off"));
         }
         for (AbstractTagObject ato : locs.getInternal()) {

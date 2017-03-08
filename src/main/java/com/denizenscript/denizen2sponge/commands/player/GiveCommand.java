@@ -55,17 +55,18 @@ public class GiveCommand extends AbstractCommand {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         if (queue.shouldShowGood()) {
-            queue.outGood("Giving " + ColorSet.emphasis + player.getInternal().getName() + ColorSet.good + ": " + ColorSet.emphasis + item.toString());
+            queue.outGood("Giving " + ColorSet.emphasis + player.debug() + ColorSet.good
+                    + ": " + ColorSet.emphasis + item.debug());
         }
         InventoryTransactionResult itr = player.getInternal().getInventory().offer(item.getInternal());
         for (ItemStackSnapshot iss : itr.getReplacedItems()) {
             if (queue.shouldShowGood()) {
-                queue.outGood("Gave: " + new ItemTag(iss.createStack()));
+                queue.outGood("Gave: " + new ItemTag(iss.createStack()).debug());
             }
         }
         for (ItemStackSnapshot iss : itr.getRejectedItems()) {
             if (queue.shouldShowGood()) {
-                queue.outGood("Failed to give: " + new ItemTag(iss.createStack()));
+                queue.outGood("Failed to give: " + new ItemTag(iss.createStack()).debug());
             }
         }
     }

@@ -74,8 +74,8 @@ public class FlagCommand extends AbstractCommand {
         entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
         if (queue.shouldShowGood()) {
             queue.outGood("Flagged the entity "
-                    + ColorSet.emphasis + entityTag.friendlyName() + ColorSet.good
-                    + " with the specified data... (" + propertyMap + ")");
+                    + ColorSet.emphasis + entityTag.debug() + ColorSet.good
+                    + " with the specified data... (" + propertyMap.debug() + ")");
         }
     }
 }
