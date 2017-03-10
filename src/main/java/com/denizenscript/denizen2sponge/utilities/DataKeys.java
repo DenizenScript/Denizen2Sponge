@@ -87,7 +87,7 @@ public class DataKeys {
             return new BooleanTag(dataHolder.getOrElse((Key<BaseValue<Boolean>>) key, false));
         }
         else if (CatalogType.class.isAssignableFrom(clazz)) {
-            return new TextTag(dataHolder.getValue((Key<BaseValue<CatalogType>>) key).orElseThrow(() -> new ErrorInducedException("Value not present!")).get().toString());
+            return new TextTag(dataHolder.getValue((Key<BaseValue<CatalogType>>) key).orElseThrow(() -> new ErrorInducedException("Value not present!")).get().getId());
         }
         else if (Double.class.isAssignableFrom(clazz)) {
             return new NumberTag(dataHolder.getOrElse((Key<BaseValue<Double>>) key, 0.0));
