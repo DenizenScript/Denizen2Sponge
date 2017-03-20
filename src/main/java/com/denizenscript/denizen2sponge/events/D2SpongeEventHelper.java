@@ -16,10 +16,10 @@ public class D2SpongeEventHelper {
                 .equals(btype);
     }
 
-    public static boolean checkEntityType(EntityType btype, ScriptEvent.ScriptEventData data, Action<String> error) {
+    public static boolean checkEntityType(EntityType etype, ScriptEvent.ScriptEventData data, Action<String> error) {
         // TODO: type_list as well?
         return !data.switches.containsKey("type")
                 || EntityTypeTag.getFor(error, data.switches.get("type")).getInternal()
-                .equals(btype);
+                .equals(etype);
     }
 }

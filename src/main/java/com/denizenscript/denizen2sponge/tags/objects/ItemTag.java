@@ -184,7 +184,9 @@ public class ItemTag extends AbstractTagObject {
             }
             AbstractTagObject ato = flags.getInternal().get(flagName);
             if (ato == null) {
-                dat.error.run("Invalid flag specified, not present on this entity!");
+                if (!dat.hasFallback()) {
+                    dat.error.run("Invalid flag specified, not present on this entity!");
+                }
                 return new NullTag();
             }
             return ato;
