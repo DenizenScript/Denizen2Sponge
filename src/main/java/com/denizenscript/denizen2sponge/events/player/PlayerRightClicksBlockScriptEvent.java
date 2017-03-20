@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.events.player;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
@@ -27,7 +28,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     //
     // @Group Player
     //
-    // @Triggers when a player right clicks an block. Note that this may fire twice per triggering.
+    // @Triggers when a player right clicks a block. Note that this may fire twice per triggering.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
@@ -50,7 +51,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return true;
+        return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error);
     }
 
     public PlayerTag player;

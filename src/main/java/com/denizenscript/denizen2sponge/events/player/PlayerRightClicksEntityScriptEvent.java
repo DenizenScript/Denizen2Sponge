@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.events.player;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
@@ -28,7 +29,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     //
     // @Switch type (EntityTypeTag) checks the entity type.
     //
-    // @Triggers when a player right clicks an entity.
+    // @Triggers when a player right clicks an entity. Note that this may fire twice per triggering.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
@@ -50,13 +51,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        if (data.switches.containsKey("type")) {
-            if (!EntityTypeTag.getFor(this::error, data.switches.get("type"))
-                    .getInternal().equals(entity.getInternal().getType())) {
-                return false;
-            }
-        }
-        return true;
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
     }
 
     public PlayerTag player;

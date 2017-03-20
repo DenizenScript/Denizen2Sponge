@@ -1,6 +1,7 @@
 package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2core.events.ScriptEvent;
@@ -52,7 +53,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return true;
+        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error);
     }
 
     public PlayerTag player;

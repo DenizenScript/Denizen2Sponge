@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
@@ -47,13 +48,7 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        if (data.switches.containsKey("type")) {
-            if (!EntityTypeTag.getFor(this::error, data.switches.get("type"))
-                    .getInternal().equals(entity.getInternal().getType())) {
-                return false;
-            }
-        }
-        return true;
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
     }
 
     public EntityTag entity;
