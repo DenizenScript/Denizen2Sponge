@@ -2,6 +2,7 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
@@ -32,7 +33,8 @@ public class PlayerJoinsScriptEvent extends ScriptEvent {
     // message (FormattedTextTag) returns the message that will be broadcast to the server.
     //
     // @Determinations
-    // None.
+    // message (FormattedTextTag) to set the message displayed when a player joins.
+    // cancel_message (BooleanTag) to set whether the join message is cancelled.
     // -->
 
     @Override
@@ -85,6 +87,18 @@ public class PlayerJoinsScriptEvent extends ScriptEvent {
 
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
-        super.applyDetermination(errors, determination, value);
+        if (determination.equals("message")) {
+            FormattedTextTag ftt = FormattedTextTag.getFor(this::error, value);
+            message = ftt;
+            internal.setMessage(ftt.getInternal());
+        }
+        else if (determination.equals("cancel_message")) {
+            // TODO: Context for this?
+            BooleanTag bt = BooleanTag.getFor(this::error, value);
+            internal.setMessageCancelled(bt.getInternal());
+        }
+        else {
+            super.applyDetermination(errors, determination, value);
+        }
     }
 }
