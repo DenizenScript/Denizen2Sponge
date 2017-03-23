@@ -68,6 +68,13 @@ public class PlayerTag extends AbstractTagObject {
         }
     }
 
+    public void checkValid(Action<String> error) {
+        if (!internal.isOnline()) {
+            error.run("That player is no longer online!");
+            throw new RuntimeException("That player is no longer online!"); // Just in case
+        }
+    }
+
     public static PlayerTag getFor(Action<String> error, AbstractTagObject text) {
         return (text instanceof PlayerTag) ? (PlayerTag) text : getFor(error, text.toString());
     }
@@ -79,6 +86,7 @@ public class PlayerTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
+        checkValid(data.error);
         return new EntityTag(internal);
     }
 

@@ -2,18 +2,17 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.NullTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.profile.GameProfile;
+import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.service.user.UserStorageService;
 
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class OfflinePlayerTag extends AbstractTagObject {
 
@@ -24,13 +23,13 @@ public class OfflinePlayerTag extends AbstractTagObject {
     // @Description Represents an offline player that has previously played on the server. Identified by UUID.
     // -->
 
-    private GameProfile internal;
+    private User internal;
 
-    public OfflinePlayerTag(GameProfile player) {
+    public OfflinePlayerTag(User player) {
         internal = player;
     }
 
-    public GameProfile getInternal() {
+    public User getInternal() {
         return internal;
     }
 
@@ -46,14 +45,7 @@ public class OfflinePlayerTag extends AbstractTagObject {
         // @Example "Bob" .name returns "Bob".
         // -->
         handlers.put("name", (dat, obj) -> {
-            Optional<String> nameOpt = ((OfflinePlayerTag) obj).internal.getName();
-            if (nameOpt.isPresent()) {
-                return new TextTag(nameOpt.get());
-            }
-            else {
-                dat.error.run("Specified game profile lacks a name - file data error?");
-                return new NullTag();
-            }
+            return new TextTag(((OfflinePlayerTag) obj).internal.getName());
         });
         // <--[tag]
         // @Name OfflinePlayerTag.uuid
@@ -70,19 +62,19 @@ public class OfflinePlayerTag extends AbstractTagObject {
     public static OfflinePlayerTag getFor(Action<String> error, String text) {
         try {
             try {
-                CompletableFuture<GameProfile> oplayer = Sponge.getServer().getGameProfileManager().get(UUID.fromString(text));
-                GameProfile gp = oplayer.get();
+                Optional<User> oplayer = Sponge.getGame().getServiceManager().provideUnchecked(UserStorageService.class).get(UUID.fromString(text));
+                User gp = oplayer.orElse(null);
                 if (gp == null) {
-                    error.run("Invalid PlayerTag UUID input!");
+                    error.run("Invalid OfflinePlayerTag UUID input!");
                     return null;
                 }
                 return new OfflinePlayerTag(gp);
             }
             catch (IllegalArgumentException e) {
-                CompletableFuture<GameProfile> oplayer = Sponge.getServer().getGameProfileManager().get(UUID.fromString(text));
-                GameProfile gp = oplayer.get();
+                Optional<User> oplayer = Sponge.getGame().getServiceManager().provideUnchecked(UserStorageService.class).get(text);
+                User gp = oplayer.orElse(null);
                 if (gp == null) {
-                    error.run("Invalid PlayerTag named input!");
+                    error.run("Invalid OfflinePlayerTag named input!");
                     return null;
                 }
                 return new OfflinePlayerTag(gp);
