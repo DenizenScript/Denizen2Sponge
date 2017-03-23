@@ -32,7 +32,7 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
     // message (FormattedTextTag) returns the chat message.
     //
     // @Determinations
-    // None.
+    // message (FormattedTextTag) to set the message that will be displayed instead.
     // -->
 
     @Override

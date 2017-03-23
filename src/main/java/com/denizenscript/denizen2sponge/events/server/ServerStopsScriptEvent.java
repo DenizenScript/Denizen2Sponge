@@ -9,6 +9,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.event.server.ClientPingServerEvent;
 import org.spongepowered.api.network.status.StatusClient;
@@ -70,7 +71,7 @@ public class ServerStopsScriptEvent extends ScriptEvent {
         Sponge.getEventManager().unregisterListeners(this);
     }
 
-    @Listener
+    @Listener(order = Order.EARLY)
     public void onServerStop(GameStoppingServerEvent evt) {
         ServerStopsScriptEvent event = (ServerStopsScriptEvent) clone();
         event.internal = evt;
