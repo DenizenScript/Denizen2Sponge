@@ -15,15 +15,11 @@ import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
 import com.denizenscript.denizen2sponge.events.entity.EntityDamagedScriptEvent;
-import com.denizenscript.denizen2sponge.events.player.PlayerBreaksBlockScriptEvent;
-import com.denizenscript.denizen2sponge.events.player.PlayerChatsScriptEvent;
-import com.denizenscript.denizen2sponge.events.player.PlayerJoinsScriptEvent;
+import com.denizenscript.denizen2sponge.events.player.*;
 import com.denizenscript.denizen2sponge.events.entity.EntityMovesScriptEvent;
-import com.denizenscript.denizen2sponge.events.player.PlayerPlacesBlockScriptEvent;
-import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksBlockScriptEvent;
-import com.denizenscript.denizen2sponge.events.player.PlayerRightClicksEntityScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
+import com.denizenscript.denizen2sponge.events.server.ServerStopsScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
 import com.denizenscript.denizen2sponge.events.entity.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
@@ -148,6 +144,7 @@ public class Denizen2Sponge {
         // Events: Player
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());
+        Denizen2Core.register(new PlayerDisconnectsScriptEvent());
         Denizen2Core.register(new PlayerJoinsScriptEvent());
         Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
@@ -155,6 +152,7 @@ public class Denizen2Sponge {
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         Denizen2Core.register(new InternalScriptEvent());
+        Denizen2Core.register(new ServerStopsScriptEvent());
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         // Tag Handlers: Sponge Basics
