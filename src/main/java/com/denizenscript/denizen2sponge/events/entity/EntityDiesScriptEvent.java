@@ -2,51 +2,55 @@ package com.denizenscript.denizen2sponge.events.entity;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
-import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class EntityDamagedScriptEvent extends ScriptEvent {
+public class EntityDiesScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // entity damaged
+    // entity dies
     //
     // @Updated 2017/03/24
     //
     // @Group Entity
     //
-    // @Cancellable true
+    // @Cancellable false
     //
-    // @Triggers when an entity is damaged.
+    // @Triggers when an entity dies.
     //
     // @Switch type (EntityTypeTag) checks the entity type.
     //
     // @Context
-    // entity (EntityTag) returns the entity that was damaged.
-    // damage (NumberTag) returns the amount of damage applied.
+    // entity (EntityTag) returns the entity that died.
+    // message (FormattedTextTag) returns the message that will be broadcast to the server.
     //
     // @Determinations
-    // damage (NumberTag) to set the amount of damage applied.
+    // message (FormattedTextTag) to set the message displayed when the entity dies.
+    // cancel_message (BooleanTag) to set whether the death message is cancelled.
     // -->
 
     @Override
     public String getName() {
-        return "EntityDamaged";
+        return "EntityDies";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("entity damaged");
+        return data.eventPath.startsWith("entity dies");
     }
 
     @Override
@@ -56,15 +60,15 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
 
     public EntityTag entity;
 
-    public NumberTag damage;
+    public FormattedTextTag message;
 
-    public DamageEntityEvent internal;
+    public DestructEntityEvent.Death internal;
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("entity", entity);
-        defs.put("damage", damage);
+        defs.put("message", message);
         return defs;
     }
 
@@ -79,26 +83,25 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onEntityDamaged(DamageEntityEvent evt) {
-        EntityDamagedScriptEvent event = (EntityDamagedScriptEvent) clone();
+    public void onEntityDies(DestructEntityEvent.Death evt) {
+        EntityDiesScriptEvent event = (EntityDiesScriptEvent) clone();
         event.internal = evt;
         event.entity = new EntityTag(evt.getTargetEntity());
-        event.damage = new NumberTag(evt.getFinalDamage());
-        event.cancelled = evt.isCancelled();
-        // TODO: Cause viewing
+        event.message = new FormattedTextTag(evt.getMessage());
         event.run();
-        evt.setCancelled(event.cancelled);
     }
 
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
-        if (determination.equals("damage")) {
-            NumberTag nt = NumberTag.getFor(this::error, value);
-            damage = nt;
-            internal.setBaseDamage(nt.getInternal());
-            for (Tuple<DamageModifier, Function<? super Double,Double>> tuple : internal.getModifiers()) {
-                internal.setDamage(tuple.getFirst(), (x) -> 0.0);
-            }
+        if (determination.equals("message")) {
+            FormattedTextTag ftt = FormattedTextTag.getFor(this::error, value);
+            message = ftt;
+            internal.setMessage(ftt.getInternal());
+        }
+        else if (determination.equals("cancel_message")) {
+            // TODO: Context for this?
+            BooleanTag bt = BooleanTag.getFor(this::error, value);
+            internal.setMessageCancelled(bt.getInternal());
         }
         else {
             super.applyDetermination(errors, determination, value);

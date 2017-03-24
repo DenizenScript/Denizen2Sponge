@@ -32,6 +32,8 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     //
     // @Triggers when a player breaks a block.
     //
+    // @Switch type (BlockTypeTag) checks the block type.
+    //
     // @Context
     // player (PlayerTag) returns the player that broke the block.
     // material (BlockTypeTag) returns the broken material.
