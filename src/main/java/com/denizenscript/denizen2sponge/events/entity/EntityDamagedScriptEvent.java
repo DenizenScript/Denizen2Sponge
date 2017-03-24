@@ -33,10 +33,10 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     //
     // @Context
     // entity (EntityTag) returns the entity that was damaged.
-    // damage (NumberTag) returns the amount of damage applied.
+    // damage (NumberTag) returns the (final) amount of damage applied.
     //
     // @Determinations
-    // damage (NumberTag) to set the amount of damage applied.
+    // damage (NumberTag) to set the (final) amount of damage applied. (This will override any damage modifiers!)
     // -->
 
     @Override
@@ -65,6 +65,7 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("entity", entity);
         defs.put("damage", damage);
+        // TODO: Contexts for base damage, modifiers, ...
         return defs;
     }
 
@@ -92,6 +93,7 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
 
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
+        // TODO: Ways to edit base damage, modifiers, ...
         if (determination.equals("damage")) {
             NumberTag nt = NumberTag.getFor(this::error, value);
             damage = nt;

@@ -80,11 +80,11 @@ public class EntityKilledScriptEvent extends ScriptEvent {
 
     @Listener
     public void onEntityKilled(DamageEntityEvent evt) {
-        EntityKilledScriptEvent event = (EntityKilledScriptEvent) clone();
-        event.internal = evt;
         if (!evt.willCauseDeath()) {
             return;
         }
+        EntityKilledScriptEvent event = (EntityKilledScriptEvent) clone();
+        event.internal = evt;
         event.entity = new EntityTag(evt.getTargetEntity());
         event.damage = new NumberTag(evt.getFinalDamage());
         event.cancelled = evt.isCancelled();
