@@ -14,14 +14,12 @@ import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
-import com.denizenscript.denizen2sponge.events.entity.EntityDamagedScriptEvent;
+import com.denizenscript.denizen2sponge.events.entity.*;
 import com.denizenscript.denizen2sponge.events.player.*;
-import com.denizenscript.denizen2sponge.events.entity.EntityMovesScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ServerStopsScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
-import com.denizenscript.denizen2sponge.events.entity.EntitySpawnScriptEvent;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
@@ -139,6 +137,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new SetBlockCommand());
         // Events: Entity
         Denizen2Core.register(new EntityDamagedScriptEvent());
+        Denizen2Core.register(new EntityDiesScriptEvent());
+        Denizen2Core.register(new EntityKilledScriptEvent());
         Denizen2Core.register(new EntityMovesScriptEvent());
         Denizen2Core.register(new EntitySpawnScriptEvent());
         // Events: Player

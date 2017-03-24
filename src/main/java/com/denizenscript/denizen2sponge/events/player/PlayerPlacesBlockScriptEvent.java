@@ -31,6 +31,8 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
     //
     // @Triggers when a player places a block.
     //
+    // @Switch type (BlockTypeTag) checks the block type.
+    //
     // @Context
     // player (PlayerTag) returns the player that broke the block.
     // material (BlockTypeTag) returns the placed material.
