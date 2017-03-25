@@ -7,7 +7,6 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.world.UnloadWorldEvent;
 
 import java.util.HashMap;
@@ -16,7 +15,7 @@ public class WorldUnloadsScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // block fades
+    // world unloads
     //
     // @Updated 2017/03/24
     //

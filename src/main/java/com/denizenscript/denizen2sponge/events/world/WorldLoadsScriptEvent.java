@@ -15,7 +15,7 @@ public class WorldLoadsScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // block fades
+    // world loads
     //
     // @Updated 2017/03/24
     //
