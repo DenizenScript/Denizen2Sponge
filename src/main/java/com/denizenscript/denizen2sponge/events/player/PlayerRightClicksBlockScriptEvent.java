@@ -22,7 +22,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player right clicks block
     //
-    // @Updated 2017/03/24
+    // @Updated 2016/09/28
     //
     // @Cancellable true
     //

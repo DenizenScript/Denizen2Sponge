@@ -19,7 +19,7 @@ public class EntityMovesScriptEvent extends ScriptEvent {
     // @Events
     // entity moves
     //
-    // @Updated 2017/03/24
+    // @Updated 2016/10/25
     //
     // @Group Entity
     //
@@ -100,6 +100,7 @@ public class EntityMovesScriptEvent extends ScriptEvent {
         event.cancelled = evt.isCancelled();
         // TODO: Cause viewing
         event.run();
+        // TODO: Set To Transform determinations.
         evt.setCancelled(event.cancelled);
     }
 

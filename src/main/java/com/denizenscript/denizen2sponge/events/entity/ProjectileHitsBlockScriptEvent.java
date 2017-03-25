@@ -34,7 +34,6 @@ public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
     //
     // @Context
     // entity (EntityTag) returns the entity that hit the block.
-    // material (BlockTypeTag) returns the material of the block hit.
     // location (LocationTag) returns the location of the block hit.
     //
     // @Determinations
@@ -53,7 +52,8 @@ public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type") && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type");
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type")
+                && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type");
     }
 
     public EntityTag entity;
@@ -78,7 +78,6 @@ public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("entity", entity);
-        defs.put("material", material);
         defs.put("location", location);
         return defs;
     }
@@ -87,9 +86,6 @@ public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
     public void onEntityCollidesWithBlock(CollideBlockEvent.Impact evt) {
         ProjectileHitsBlockScriptEvent event = (ProjectileHitsBlockScriptEvent) clone();
         event.internal = evt;
-        if (!evt.getCause().first(Entity.class).isPresent()) {
-            return; // What?!
-        }
         event.entity = new EntityTag(evt.getCause().first(Entity.class).get());
         event.material = new BlockTypeTag(evt.getTargetBlock().getType());
         event.location = new LocationTag(evt.getTargetLocation());

@@ -82,9 +82,6 @@ public class BlockFadesScriptEvent extends ScriptEvent {
     public void onBlockFades(ChangeBlockEvent.Decay evt) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
             BlockFadesScriptEvent event = (BlockFadesScriptEvent) clone();
-            if (!block.getFinal().getLocation().isPresent()) {
-                return; // What?!
-            }
             event.internal = evt;
             event.location = new LocationTag(block.getFinal().getLocation().get());
             event.material = new BlockTypeTag(block.getOriginal().getState().getType());

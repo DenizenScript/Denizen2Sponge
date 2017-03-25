@@ -55,7 +55,8 @@ public class BlockChangeScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type") && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type");
+        return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type")
+                && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type");
 
     }
 

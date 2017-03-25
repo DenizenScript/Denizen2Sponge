@@ -58,7 +58,7 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("food_level", (dat, obj) -> new IntegerTag(((PlayerTag) obj).internal.foodLevel().get()));
         // <--[tag]
-        // @Name PlayerTag.food_level
+        // @Name PlayerTag.exhaustion
         // @Updated 2017/03/24
         // @Group Properties
         // @ReturnType NumberTag
@@ -66,7 +66,7 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("exhaustion", (dat, obj) -> new NumberTag(((PlayerTag) obj).internal.exhaustion().get()));
         // <--[tag]
-        // @Name PlayerTag.food_level
+        // @Name PlayerTag.saturation
         // @Updated 2017/03/24
         // @Group Properties
         // @ReturnType NumberTag
