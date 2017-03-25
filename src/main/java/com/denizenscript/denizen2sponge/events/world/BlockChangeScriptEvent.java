@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.events.world;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
@@ -22,13 +23,16 @@ public class BlockChangeScriptEvent extends ScriptEvent {
     // @Events
     // block changes
     //
-    // @Updated 2016/09/23
+    // @Updated 2017/03/24
     //
     // @Group World
     //
     // @Cancellable true
     //
-    // @Triggers when a block changes for any given reason.
+    // @Triggers when a block changes for any given reason. Note that this may fire twice per triggering.
+    //
+    // @Switch new_type (BlockTypeTag) checks the new block type.
+    // @Switch old_type (BlockTypeTag) checks the old block type.
     //
     // @Context
     // location (LocationTag) returns the location of the changed block.
@@ -51,7 +55,8 @@ public class BlockChangeScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return true;
+        return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type") && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type");
+
     }
 
     public LocationTag location;
