@@ -2,6 +2,8 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
@@ -47,6 +49,30 @@ public class PlayerTag extends AbstractTagObject {
         // @Example "Bob" .name returns "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
+        // <--[tag]
+        // @Name PlayerTag.food_level
+        // @Updated 2017/03/24
+        // @Group Properties
+        // @ReturnType IntegerTag
+        // @Returns the food level of the player.
+        // -->
+        handlers.put("food_level", (dat, obj) -> new IntegerTag(((PlayerTag) obj).internal.foodLevel().get()));
+        // <--[tag]
+        // @Name PlayerTag.exhaustion
+        // @Updated 2017/03/24
+        // @Group Properties
+        // @ReturnType NumberTag
+        // @Returns the exhaustion of the player.
+        // -->
+        handlers.put("exhaustion", (dat, obj) -> new NumberTag(((PlayerTag) obj).internal.exhaustion().get()));
+        // <--[tag]
+        // @Name PlayerTag.saturation
+        // @Updated 2017/03/24
+        // @Group Properties
+        // @ReturnType NumberTag
+        // @Returns the saturation of the player.
+        // -->
+        handlers.put("saturation", (dat, obj) -> new NumberTag(((PlayerTag) obj).internal.saturation().get()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

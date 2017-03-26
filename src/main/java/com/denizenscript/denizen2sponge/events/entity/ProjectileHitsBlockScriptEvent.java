@@ -4,37 +4,37 @@ import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
+import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 
 import java.util.HashMap;
 
-public class EntityMovesScriptEvent extends ScriptEvent {
+public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // entity moves
+    // projectile hits block
     //
-    // @Updated 2016/10/25
+    // @Updated 2017/03/24
     //
     // @Group Entity
     //
     // @Cancellable true
     //
-    // @Triggers when an entity moves.
+    // @Triggers when a projectile hits a block.
     //
-    // @Switch type (EntityTypeTag) checks the entity type.
+    // @Switch entity_type (EntityTypeTag) checks the entity type.
+    // @Switch block_type (BlockTypeTag) checks the block type.
     //
     // @Context
-    // entity (EntityTag) returns the entity that moved.
-    // to_position (LocationTag) returns the position the entity moved to.
-    // to_rotation (LocationTag) returns the rotation the entity moved to.
-    // from_position (LocationTag) returns the position the entity moved from.
-    // from_rotation (LocationTag) returns the rotation the entity moved from.
+    // entity (EntityTag) returns the entity that hit the block.
+    // location (LocationTag) returns the location of the block hit.
     //
     // @Determinations
     // None.
@@ -42,30 +42,27 @@ public class EntityMovesScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "EntityMoves";
+        return "ProjectileHitsBlock";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("entity moves");
+        return data.eventPath.startsWith("projectile hits block");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type")
+                && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type");
     }
 
     public EntityTag entity;
 
-    public LocationTag fromPosition;
+    public BlockTypeTag material;
 
-    public LocationTag fromRotation;
+    public LocationTag location;
 
-    public LocationTag toPosition;
-
-    public LocationTag toRotation;
-
-    public MoveEntityEvent internal;
+    public CollideBlockEvent.Impact internal;
 
     @Override
     public void enable() {
@@ -81,26 +78,19 @@ public class EntityMovesScriptEvent extends ScriptEvent {
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("entity", entity);
-        defs.put("to_position", toPosition);
-        defs.put("to_rotation", toRotation);
-        defs.put("from_position", fromPosition);
-        defs.put("from_rotation", fromRotation);
+        defs.put("location", location);
         return defs;
     }
 
     @Listener
-    public void onEntityMoves(MoveEntityEvent evt) {
-        EntityMovesScriptEvent event = (EntityMovesScriptEvent) clone();
+    public void onEntityCollidesWithBlock(CollideBlockEvent.Impact evt) {
+        ProjectileHitsBlockScriptEvent event = (ProjectileHitsBlockScriptEvent) clone();
         event.internal = evt;
-        event.entity = new EntityTag(evt.getTargetEntity());
-        event.toPosition = new LocationTag(evt.getToTransform().getLocation());
-        event.toRotation = new LocationTag(evt.getToTransform().getRotation());
-        event.fromPosition = new LocationTag(evt.getFromTransform().getLocation());
-        event.fromRotation = new LocationTag(evt.getFromTransform().getRotation());
+        event.entity = new EntityTag(evt.getCause().first(Entity.class).get());
+        event.material = new BlockTypeTag(evt.getTargetBlock().getType());
+        event.location = new LocationTag(evt.getTargetLocation());
         event.cancelled = evt.isCancelled();
-        // TODO: Cause viewing
         event.run();
-        // TODO: Set To Transform determinations.
         evt.setCancelled(event.cancelled);
     }
 
