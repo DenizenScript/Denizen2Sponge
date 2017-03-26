@@ -51,7 +51,6 @@ public class BlockFadesScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error);
-
     }
 
     public LocationTag location;

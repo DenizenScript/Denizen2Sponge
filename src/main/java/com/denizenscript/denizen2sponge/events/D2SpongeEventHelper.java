@@ -1,6 +1,8 @@
 package com.denizenscript.denizen2sponge.events;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
@@ -16,10 +18,15 @@ public class D2SpongeEventHelper {
     }
 
     public static boolean checkBlockType(BlockType btype, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
-        // TODO: type_list as well?
-        return !data.switches.containsKey(tname)
-                || BlockTypeTag.getFor(error, data.switches.get(tname)).getInternal()
-                .equals(btype);
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            if ((BlockTypeTag.getFor(error, ato)).getInternal().equals(btype)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean checkEntityType(EntityType etype, ScriptEvent.ScriptEventData data, Action<String> error) {
@@ -27,10 +34,15 @@ public class D2SpongeEventHelper {
     }
 
     public static boolean checkEntityType(EntityType etype, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
-        // TODO: type_list as well?
-        return !data.switches.containsKey(tname)
-                || EntityTypeTag.getFor(error, data.switches.get(tname)).getInternal()
-                .equals(etype);
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            if ((EntityTypeTag.getFor(error, ato)).getInternal().equals(etype)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean checkWorld(World world, ScriptEvent.ScriptEventData data, Action<String> error) {
@@ -38,9 +50,14 @@ public class D2SpongeEventHelper {
     }
 
     public static boolean checkWorld(World world, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
-        // TODO: type_list as well?
-        return !data.switches.containsKey(tname)
-                || WorldTag.getFor(error, data.switches.get(tname)).getInternal()
-                .equals(world);
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            if ((WorldTag.getFor(error, ato)).getInternal().equals(world)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
