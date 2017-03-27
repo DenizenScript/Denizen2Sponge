@@ -88,6 +88,10 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         PlayerRightClicksBlockScriptEvent event = (PlayerRightClicksBlockScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
+        if (!evt.getTargetBlock().getLocation().isPresent()) {
+            // Sponge is dumb!
+            return;
+        }
         event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
         if (evt.getInteractionPoint().isPresent()) {
             event.intersection = new LocationTag(evt.getInteractionPoint().get());
