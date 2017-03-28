@@ -2,6 +2,7 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
@@ -28,6 +29,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     // @Group Player
     //
     // @Switch type (EntityTypeTag) checks the entity type.
+    // @Switch hand (TextTag) checks the hand type.
     //
     // @Triggers when a player right clicks an entity. Note that this may fire twice per triggering.
     //
@@ -51,12 +53,15 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
+                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
     }
 
     public PlayerTag player;
 
     public EntityTag entity;
+
+    public TextTag hand;
 
     public InteractEntityEvent.Secondary internal;
 
@@ -65,6 +70,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("player", player);
         defs.put("entity", entity);
+        defs.put("hand", hand);
         return defs;
     }
 
@@ -84,6 +90,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
         event.internal = evt;
         event.player = new PlayerTag(player);
         event.entity = new EntityTag(evt.getTargetEntity());
+        event.hand = new TextTag(evt.getHandType().toString());
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);

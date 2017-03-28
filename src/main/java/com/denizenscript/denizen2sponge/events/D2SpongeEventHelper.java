@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.events;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
@@ -55,6 +56,22 @@ public class D2SpongeEventHelper {
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
             if ((WorldTag.getFor(error, ato)).getInternal().equals(world)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkHandType(String htype, ScriptEvent.ScriptEventData data, Action<String> error) {
+        return checkHandType(htype, data, error, "hand");
+    }
+
+    public static boolean checkHandType(String htype, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            if ((TextTag.getFor(error, ato)).getInternal().toUpperCase().equals(htype)) {
                 return true;
             }
         }
