@@ -73,6 +73,14 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the saturation of the player.
         // -->
         handlers.put("saturation", (dat, obj) -> new NumberTag(((PlayerTag) obj).internal.saturation().get()));
+        // <--[tag]
+        // @Name PlayerTag.gamemode
+        // @Updated 2017/03/28
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the gamemode of the player.
+        // -->
+        handlers.put("gamemode", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.gameMode().get().toString()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
