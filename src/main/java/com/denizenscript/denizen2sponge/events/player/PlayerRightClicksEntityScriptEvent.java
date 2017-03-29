@@ -7,7 +7,6 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -23,7 +22,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     // @Events
     // player right clicks entity
     //
-    // @Updated 2016/09/28
+    // @Updated 2017/03/28
     //
     // @Cancellable true
     //
@@ -37,6 +36,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
     // entity (EntityTag) returns the entity that was right clicked.
+    // hand (TextTag) returns the hand type that triggered the event.
     //
     // @Determinations
     // None.
@@ -55,7 +55,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
-                && D2SpongeEventHelper.checkHandType(CoreUtilities.toLowerCase(hand.getInternal()), data, this::error);
+                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
     }
 
     public PlayerTag player;
@@ -91,7 +91,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
         event.internal = evt;
         event.player = new PlayerTag(player);
         event.entity = new EntityTag(evt.getTargetEntity());
-        event.hand = new TextTag(evt.getHandType().toString());
+        event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);

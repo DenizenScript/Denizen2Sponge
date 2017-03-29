@@ -8,8 +8,6 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.text.translation.Translation;
 
 public class KickCommand extends AbstractCommand {
 
