@@ -93,7 +93,7 @@ public class SpawnCommand extends AbstractCommand {
         if (queue.shouldShowGood()) {
             queue.outGood("Spawning an entity of type "
                     + ColorSet.emphasis + entityType.getId() + ColorSet.good
-                    + " with the follwing properties: " + ColorSet.emphasis + propertyMap.debug()
+                    + " with the following properties: " + ColorSet.emphasis + propertyMap.debug()
                     + " at location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "...");
         }
         boolean passed = location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()

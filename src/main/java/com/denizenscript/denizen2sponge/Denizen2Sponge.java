@@ -6,10 +6,7 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.*;
-import com.denizenscript.denizen2sponge.commands.player.ActionBarCommand;
-import com.denizenscript.denizen2sponge.commands.player.GiveCommand;
-import com.denizenscript.denizen2sponge.commands.player.NarrateCommand;
-import com.denizenscript.denizen2sponge.commands.player.TellCommand;
+import com.denizenscript.denizen2sponge.commands.player.*;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
@@ -123,6 +120,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new EquipCommand());
         Denizen2Core.register(new FlagCommand());
+        Denizen2Core.register(new HurtCommand());
         Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new SpawnCommand());
         Denizen2Core.register(new TeleportCommand());
@@ -130,6 +128,7 @@ public class Denizen2Sponge {
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new GiveCommand());
+        Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new TellCommand());
         // Commands: Server

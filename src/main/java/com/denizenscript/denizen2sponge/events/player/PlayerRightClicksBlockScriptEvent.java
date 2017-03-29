@@ -2,16 +2,16 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
-import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player right clicks block
     //
-    // @Updated 2016/09/28
+    // @Updated 2017/03/28
     //
     // @Cancellable true
     //
@@ -31,11 +31,13 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Triggers when a player right clicks a block. Note that this may fire twice per triggering.
     //
     // @Switch type (BlockTypeTag) checks the entity type.
+    // @Switch hand (TextTag) checks the hand type.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
     // location (LocationTag) returns the location of the block that was right clicked.
     // intersection (LocationTag) returns the exact point of intersection on the block where it was clicked (When available).
+    // hand (TextTag) returns the hand type that triggered the event.
     //
     // @Determinations
     // None.
@@ -53,7 +55,8 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error);
+        return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error)
+                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
     }
 
     public PlayerTag player;
@@ -61,6 +64,8 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     public LocationTag location;
 
     public LocationTag intersection;
+
+    public TextTag hand;
 
     public InteractBlockEvent.Secondary internal;
 
@@ -70,6 +75,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         defs.put("player", player);
         defs.put("location", location);
         defs.put("intersection", intersection);
+        defs.put("hand", hand);
         return defs;
     }
 
@@ -97,6 +103,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
             event.intersection = new LocationTag(evt.getInteractionPoint().get());
             event.intersection.getInternal().world = event.location.getInternal().world;
         }
+        event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);
