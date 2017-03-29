@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.events.player;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
@@ -56,7 +57,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error)
-                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkHandType(CoreUtilities.toLowerCase(hand.getInternal()), data, this::error);
     }
 
     public PlayerTag player;

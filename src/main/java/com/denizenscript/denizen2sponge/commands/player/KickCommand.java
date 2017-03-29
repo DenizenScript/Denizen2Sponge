@@ -8,16 +8,18 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.text.translation.Translation;
 
 public class KickCommand extends AbstractCommand {
 
     // <--[command]
     // @Name kick
-    // @Arguments <player> <reason>
+    // @Arguments <player> [reason]
     // @Short kicks a player with the specified reason.
     // @Updated 2017/03/28
     // @Group Player
-    // @Minimum 2
+    // @Minimum 1
     // @Maximum 2
     // @Description
     // Kicks a player with the specified reason.
@@ -34,12 +36,12 @@ public class KickCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<player> <reason>";
+        return "<player> [reason]";
     }
 
     @Override
     public int getMinimumArguments() {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -50,16 +52,24 @@ public class KickCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        AbstractTagObject ato = entry.getArgumentObject(queue, 1);
-        if (queue.shouldShowGood()) {
-            queue.outGood("Kicking " + ColorSet.emphasis + player.debug()
-                    + ColorSet.good + " with reason " + ColorSet.emphasis + ato.debug());
-        }
-        if (ato instanceof FormattedTextTag) {
-            player.getInternal().kick(((FormattedTextTag) ato).getInternal());
+        if (entry.arguments.size() < 2) {
+            if (queue.shouldShowGood()) {
+                queue.outGood("Kicking " + ColorSet.emphasis + player.debug());
+            }
+            player.getInternal().kick();
         }
         else {
-            player.getInternal().kick(Denizen2Sponge.parseColor(ato.toString()));
+            AbstractTagObject ato = entry.getArgumentObject(queue, 1);
+            if (queue.shouldShowGood()) {
+                queue.outGood("Kicking " + ColorSet.emphasis + player.debug()
+                        + ColorSet.good + " with reason " + ColorSet.emphasis + ato.debug());
+            }
+            if (ato instanceof FormattedTextTag) {
+                player.getInternal().kick(((FormattedTextTag) ato).getInternal());
+            }
+            else {
+                player.getInternal().kick(Denizen2Sponge.parseColor(ato.toString()));
+            }
         }
     }
 }
