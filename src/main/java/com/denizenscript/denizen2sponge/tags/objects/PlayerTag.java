@@ -7,12 +7,11 @@ import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.util.blockray.BlockRay;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -81,6 +80,17 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the gamemode of the player.
         // -->
         handlers.put("gamemode", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.gameMode().get().toString()));
+        // <--[tag]
+        // @Name PlayerTag.block_on_cursor[<NumberTag>]
+        // @Updated 2017/03/30
+        // @Group Current Information
+        // @ReturnType LocationTag
+        // @Returns the block the player has their cursor on, up to a maximum distance. If no distance is specified, the default hand-reach distance is used.
+        // -->
+        handlers.put("block_on_cursor", (dat, obj) -> new LocationTag(BlockRay.from(((PlayerTag) obj).internal)
+                .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                (Utilities.getHandReach(((PlayerTag) obj).internal))).build().end().get().getLocation()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

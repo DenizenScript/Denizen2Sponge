@@ -8,11 +8,16 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
@@ -22,7 +27,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player right clicks block
     //
-    // @Updated 2017/03/28
+    // @Updated 2017/03/30
     //
     // @Cancellable true
     //
@@ -36,7 +41,9 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
     // location (LocationTag) returns the location of the block that was right clicked.
-    // intersection (LocationTag) returns the exact point of intersection on the block where it was clicked (When available).
+    // precise_location (LocationTag) returns the exact point that was right clicked in the world.
+    // intersection_point (LocationTag) returns the exact point of intersection relative to the block (When available).
+    // impact_normal (LocationTag) returns the normal vector from the side of the block that was right clicked.
     // hand (TextTag) returns the hand type that triggered the event.
     //
     // @Determinations
@@ -63,7 +70,11 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
     public LocationTag location;
 
-    public LocationTag intersection;
+    public LocationTag precise_location;
+
+    public LocationTag intersection_point;
+
+    public LocationTag impact_normal;
 
     public TextTag hand;
 
@@ -74,7 +85,9 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("player", player);
         defs.put("location", location);
-        defs.put("intersection", intersection);
+        defs.put("precise_location", precise_location);
+        defs.put("intersection_point", intersection_point);
+        defs.put("impact_normal", impact_normal);
         defs.put("hand", hand);
         return defs;
     }
@@ -94,14 +107,20 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         PlayerRightClicksBlockScriptEvent event = (PlayerRightClicksBlockScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
-        if (!evt.getTargetBlock().getLocation().isPresent()) {
-            // Sponge is dumb!
-            return;
+        if (evt.getTargetBlock().getLocation().isPresent()) {
+            event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
+            event.precise_location = new LocationTag(evt.getInteractionPoint().get().add(evt.getTargetBlock().getPosition().toDouble()));
+            event.precise_location.getInternal().world = event.location.getInternal().world;
+            event.intersection_point = new LocationTag(evt.getInteractionPoint().get());
+            event.impact_normal = new LocationTag(evt.getTargetSide().asOffset());
         }
-        event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
-        if (evt.getInteractionPoint().isPresent()) {
-            event.intersection = new LocationTag(evt.getInteractionPoint().get());
-            event.intersection.getInternal().world = event.location.getInternal().world;
+        else {
+            BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(Utilities.getHandReach(player)).build().end().get();
+            event.location = new LocationTag(brh.getLocation());
+            event.precise_location = new LocationTag(brh.getPosition());
+            event.precise_location.getInternal().world = event.location.getInternal().world;
+            event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
+            event.impact_normal = new LocationTag(0, 0, 0);
         }
         event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
