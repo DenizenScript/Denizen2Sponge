@@ -9,6 +9,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.util.blockray.BlockRay;
 
 import java.util.HashMap;
@@ -79,15 +80,16 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("gamemode", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.gameMode().get().toString()));
         // <--[tag]
-        // @Name PlayerTag.block_on_cursor[<NumberTag>]
+        // @Name PlayerTag.block_on_cursor[{4/5}/<NumberTag>]
         // @Updated 2017/03/30
         // @Group Current Information
         // @ReturnType LocationTag
-        // @Returns the target block of the player, within a distance.
+        // @Returns the target block of the player within the specified distance. (the default distance depends on the player's gamemode)
         // -->
         handlers.put("block_on_cursor", (dat, obj) -> new LocationTag(BlockRay.from(((PlayerTag) obj).internal)
                 .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
-                .distanceLimit(NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal()).build().end().get().getLocation()));
+                .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                (((PlayerTag) obj).internal.gameMode().equals(GameModes.CREATIVE) ? 5.0 : 4.0)).build().end().get().getLocation()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

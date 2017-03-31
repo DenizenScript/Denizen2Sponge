@@ -10,6 +10,7 @@ import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
@@ -103,7 +104,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
             event.intersection.getInternal().world = event.location.getInternal().world;
         }
         else {
-            BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(5.0).build().end().get();
+            BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(player.gameMode().equals(GameModes.CREATIVE) ? 5.0 : 4.0).build().end().get();
             event.location = new LocationTag(brh.getLocation());
             event.intersection = new LocationTag(brh.getPosition());
             event.intersection.getInternal().world = event.location.getInternal().world;
