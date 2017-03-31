@@ -13,6 +13,9 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
@@ -22,7 +25,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player right clicks block
     //
-    // @Updated 2017/03/28
+    // @Updated 2017/03/30
     //
     // @Cancellable true
     //
@@ -94,13 +97,15 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         PlayerRightClicksBlockScriptEvent event = (PlayerRightClicksBlockScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
-        if (!evt.getTargetBlock().getLocation().isPresent()) {
-            // Sponge is dumb!
-            return;
+        if (evt.getTargetBlock().getLocation().isPresent()) {
+            event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
+            event.intersection = new LocationTag(evt.getInteractionPoint().get().add(evt.getTargetBlock().getPosition().toDouble()));
+            event.intersection.getInternal().world = event.location.getInternal().world;
         }
-        event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
-        if (evt.getInteractionPoint().isPresent()) {
-            event.intersection = new LocationTag(evt.getInteractionPoint().get());
+        else {
+            BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(5.0).build().end().get();
+            event.location = new LocationTag(brh.getLocation());
+            event.intersection = new LocationTag(brh.getPosition());
             event.intersection.getInternal().world = event.location.getInternal().world;
         }
         event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
