@@ -120,7 +120,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
             event.precise_location = new LocationTag(brh.getPosition());
             event.precise_location.getInternal().world = event.location.getInternal().world;
             event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
-            event.impact_normal = new LocationTag(0,0,0);
+            event.impact_normal = new LocationTag(0, 0, 0);
         }
         event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
