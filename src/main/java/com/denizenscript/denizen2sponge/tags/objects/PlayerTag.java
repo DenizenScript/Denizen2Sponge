@@ -80,11 +80,11 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("gamemode", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.gameMode().get().toString()));
         // <--[tag]
-        // @Name PlayerTag.block_on_cursor[{4/5}/<NumberTag>]
+        // @Name PlayerTag.block_on_cursor[<NumberTag>]
         // @Updated 2017/03/30
         // @Group Current Information
         // @ReturnType LocationTag
-        // @Returns the target block of the player within the specified distance. (the default distance depends on the player's gamemode)
+        // @Returns the block the player has their cursor on, up to a maximum distance. If no distance is specified, the default hand-reach distance is used.
         // -->
         handlers.put("block_on_cursor", (dat, obj) -> new LocationTag(BlockRay.from(((PlayerTag) obj).internal)
                 .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
