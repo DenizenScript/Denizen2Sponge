@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -89,7 +90,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("block_on_cursor", (dat, obj) -> new LocationTag(BlockRay.from(((PlayerTag) obj).internal)
                 .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                 .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
-                (((PlayerTag) obj).internal.gameMode().equals(GameModes.CREATIVE) ? 5.0 : 4.0)).build().end().get().getLocation()));
+                (Utilities.getHandReach(((PlayerTag) obj).internal))).build().end().get().getLocation()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
