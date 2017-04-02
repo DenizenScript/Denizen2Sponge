@@ -24,6 +24,7 @@ public class SetBlockCommand extends AbstractCommand {
     // @Maximum 3
     // @Description
     // Sets a block's type. Physics defaults to enabled.
+    // Related information: <@link explanation Block Types>block types<@/link>.
     // TODO: Explain more!
     // @Example
     // # This example sets the block at a player's location to stone.

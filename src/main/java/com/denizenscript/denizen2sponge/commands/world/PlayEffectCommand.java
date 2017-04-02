@@ -36,6 +36,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // @Named visibility (IntegerTag) Sets the visibility radius of the effect.
     // @Description
     // Plays an effect at certain location. Optionally specify a particle count, offset, velocity and visibility radius.
+    // Related information: <@link explanation Particle Types>particle types<@/link>.
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.

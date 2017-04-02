@@ -40,6 +40,7 @@ public class CastCommand extends AbstractCommand {
     // @Description
     // Casts a potion effect on an entity for the specified duration.
     // Particles are set to true by default, and ambient to false.
+    // Related information: <@link explanation Potion Effect Types>potion effect types<@/link>.
     // @Example
     // # This example casts 'poison' on the player for 5 seconds
     // - cast <player> poison 5s

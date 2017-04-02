@@ -38,6 +38,7 @@ public class HurtCommand extends AbstractCommand {
     // @Named type (TextTag) Sets of what type the damage will be.
     // @Description
     // Damages the entity for the specified amount. This damage is absolute by default.
+    // Related information: <@link explanation Damage Types>damage types<@/link>.
     // @Example
     // # This example hurts the player for 4 points (2 hearts) of damage
     // - hurt <player> 4
