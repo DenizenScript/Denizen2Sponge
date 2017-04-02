@@ -16,12 +16,13 @@ public class SetBlockCommand extends AbstractCommand {
 
     // <--[command]
     // @Name setblock
-    // @Arguments <list of locations> <blocktype> [physics? boolean]
+    // @Arguments <list of locations> <blocktype>
     // @Short sets a block's type.
     // @Updated 2016/11/24
     // @Group World
     // @Minimum 2
-    // @Maximum 3
+    // @Maximum 2
+    // @Named physics (BooleanTag) Sets whether the block will have physics enabled or not.
     // @Description
     // Sets a block's type. Physics defaults to enabled.
     // Related information: <@link explanation Block Types>block types<@/link>.
@@ -41,7 +42,7 @@ public class SetBlockCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<list of locations> <blocktype> [physics? boolean]";
+        return "<list of locations> <blocktype>";
     }
 
     @Override
@@ -51,7 +52,7 @@ public class SetBlockCommand extends AbstractCommand {
 
     @Override
     public int getMaximumArguments() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -59,8 +60,8 @@ public class SetBlockCommand extends AbstractCommand {
         ListTag locs = ListTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         BlockTypeTag type = BlockTypeTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         boolean phys = true;
-        if (entry.arguments.size() > 2) {
-            phys = BooleanTag.getFor(queue.error, entry.getArgumentObject(queue, 2)).getInternal();
+        if (entry.namedArgs.containsKey("physics")) {
+            phys = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "physics")).getInternal();
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Changing location(s) " + ColorSet.emphasis + locs.debug() + ColorSet.good
