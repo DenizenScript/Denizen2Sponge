@@ -21,6 +21,15 @@ public class EntityTypeTag extends AbstractTagObject {
     // @Description Represents an entity type. Identified by entity type ID.
     // -->
 
+    // <--[explanation]
+    // @Name Entity Types
+    // @Group Useful Lists
+    // @Description
+    // A list of all default entity types can be found here:
+    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/entity/EntityTypes.html>entity types list<@/link>
+    // These can be used with the spawn command as well as with some event switches.
+    // -->
+
     private EntityType internal;
 
     public EntityTypeTag(EntityType internal) {

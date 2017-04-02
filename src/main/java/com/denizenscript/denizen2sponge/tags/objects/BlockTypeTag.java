@@ -21,6 +21,15 @@ public class BlockTypeTag extends AbstractTagObject {
     // @Description Represents a block type. Identified by block type ID.
     // -->
 
+    // <--[explanation]
+    // @Name Block Types
+    // @Group Useful Lists
+    // @Description
+    // A list of all default block types can be found here:
+    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/block/BlockTypes.html>block types list<@/link>
+    // These can be used with the setblock command as well as with some event switches.
+    // -->
+
     private BlockType internal;
 
     public BlockTypeTag(BlockType internal) {
