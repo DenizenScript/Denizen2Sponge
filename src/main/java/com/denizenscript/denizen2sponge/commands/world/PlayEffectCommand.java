@@ -13,16 +13,25 @@ import java.util.Optional;
 
 public class PlayEffectCommand extends AbstractCommand {
 
+    // <--[explanation]
+    // @Name Particle Types
+    // @Group Useful Lists
+    // @Description
+    // A list of all default particle types can be found here:
+    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/effect/particle/ParticleTypes.html>particle types list<@/link>
+    // These can be used with the playeffect command.
+    // -->
+
     // <--[command]
     // @Name playeffect
-    // @Arguments <location> <effect> [count] [offset] [motion]
+    // @Arguments <location> <effect> [count] [offset] [motion] [visibility]
     // @Short plays an effect.
-    // @Updated 2016/09/28
+    // @Updated 2017/03/31
     // @Group World
     // @Minimum 2
-    // @Maximum 5
+    // @Maximum 6
     // @Description
-    // Plays an effect.
+    // Plays an effect at certain location. Optionally specify a particle count, offset, velocity and visibility radius.
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.
@@ -46,7 +55,7 @@ public class PlayEffectCommand extends AbstractCommand {
 
     @Override
     public int getMaximumArguments() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -72,7 +81,13 @@ public class PlayEffectCommand extends AbstractCommand {
             LocationTag offset = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 4));
             build.velocity(offset.getInternal().toVector3d());
         }
-        loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
+        if (entry.arguments.size() > 5) {
+            IntegerTag visibility = IntegerTag.getFor(queue.error, entry.getArgumentObject(queue, 5));
+            loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d(), (int) visibility.getInternal());
+        }
+        else {
+            loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
+        }
         if (queue.shouldShowGood()) {
             queue.outGood("Successfully played the specified effect of type: " + type.get().getName());
         }
