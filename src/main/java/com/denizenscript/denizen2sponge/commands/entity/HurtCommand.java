@@ -90,7 +90,7 @@ public class HurtCommand extends AbstractCommand {
             build.type(DamageTypes.GENERIC);
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("hurting " + ColorSet.emphasis + ent.debug() + ColorSet.good
+            queue.outGood("Hurting " + ColorSet.emphasis + ent.debug() + ColorSet.good
                     + " for " + ColorSet.emphasis + dam.debug() + ColorSet.good + " points of damage!");
         }
         ent.getInternal().damage(dam.getInternal(), build.build(), Denizen2Sponge.getGenericCause());
