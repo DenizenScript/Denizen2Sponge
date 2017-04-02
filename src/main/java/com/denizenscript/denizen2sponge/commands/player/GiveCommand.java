@@ -33,6 +33,7 @@ public class GiveCommand extends AbstractCommand {
     // @Maximum 2
     // @Description
     // Gives a player an item.
+    // Related information: <@link explanation Item Types>item types<@/link>.
     // TODO: Explain more!
     // @Example
     // # This example gives the player a stone.

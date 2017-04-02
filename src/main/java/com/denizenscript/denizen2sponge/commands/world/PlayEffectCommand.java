@@ -24,18 +24,23 @@ public class PlayEffectCommand extends AbstractCommand {
 
     // <--[command]
     // @Name playeffect
-    // @Arguments <location> <effect> [count] [offset] [motion] [visibility]
+    // @Arguments <location> <effect>
     // @Short plays an effect.
-    // @Updated 2017/03/31
+    // @Updated 2017/04/01
     // @Group World
     // @Minimum 2
-    // @Maximum 6
+    // @Maximum 2
+    // @Named count (IntegerTag) Sets how many particles will be played.
+    // @Named offset (LocationTag) Sets the offset of the particles.
+    // @Named motion (LocationTag) Sets the motion of the particles.
+    // @Named visibility (IntegerTag) Sets the visibility radius of the effect.
     // @Description
     // Plays an effect at certain location. Optionally specify a particle count, offset, velocity and visibility radius.
+    // Related information: <@link explanation Particle Types>particle types<@/link>.
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.
-    // - playeffect <player.location> heart 50 1,1,1 0,0,0
+    // - playeffect <player.location> heart --count 50 --offset 1,1,1
     // -->
 
     @Override
@@ -45,7 +50,7 @@ public class PlayEffectCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<location> <effect> [offset] [motion]";
+        return "<location> <effect>";
     }
 
     @Override
@@ -55,7 +60,7 @@ public class PlayEffectCommand extends AbstractCommand {
 
     @Override
     public int getMaximumArguments() {
-        return 6;
+        return 2;
     }
 
     @Override
@@ -69,20 +74,20 @@ public class PlayEffectCommand extends AbstractCommand {
             return;
         }
         build.type(type.get());
-        if (entry.arguments.size() > 2) {
-            IntegerTag integer = IntegerTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
+        if (entry.namedArgs.containsKey("count")) {
+            IntegerTag integer = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "count"));
             build.quantity((int) integer.getInternal());
         }
-        if (entry.arguments.size() > 3) {
-            LocationTag offset = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 3));
+        if (entry.namedArgs.containsKey("offset")) {
+            LocationTag offset = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "offset"));
             build.offset(offset.getInternal().toVector3d());
         }
-        if (entry.arguments.size() > 4) {
-            LocationTag offset = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 4));
+        if (entry.namedArgs.containsKey("motion")) {
+            LocationTag offset = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "motion"));
             build.velocity(offset.getInternal().toVector3d());
         }
-        if (entry.arguments.size() > 5) {
-            IntegerTag visibility = IntegerTag.getFor(queue.error, entry.getArgumentObject(queue, 5));
+        if (entry.namedArgs.containsKey("visibility")) {
+            IntegerTag visibility = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "visibility"));
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d(), (int) visibility.getInternal());
         }
         else {
