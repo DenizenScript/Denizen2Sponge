@@ -24,6 +24,9 @@ public class ExecuteCommand  extends AbstractCommand {
     // @Example
     // # This example stops the server.
     // - execute as_server "stop"
+    // @Example
+    // # This example makes the specified player execute 'say hi'.
+    // - execute as_player "say hi" <player>
     // -->
 
     @Override

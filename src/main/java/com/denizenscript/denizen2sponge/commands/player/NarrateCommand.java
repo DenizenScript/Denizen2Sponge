@@ -16,13 +16,14 @@ public class NarrateCommand extends AbstractCommand {
     // <--[command]
     // @Name narrate
     // @Arguments <message>
-    // @Short tells the most relevant player a message.
+    // @Short tells the most relevant player a message. Convenience helper only.
     // @Updated 2017/01/31
     // @Group Player
     // @Minimum 1
     // @Maximum 1
     // @Description
     // Tells the most relevant player a message.
+    // This is a CONVENIENCE HELPER only. The <@link command tell>Tell Command<@/link> should be preferred!
     // TODO: Explain more!
     // @Example
     // # This example tells the current player the message "hello there!" in the chat box.
