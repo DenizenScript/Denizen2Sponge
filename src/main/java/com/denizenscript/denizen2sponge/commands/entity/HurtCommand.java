@@ -28,14 +28,16 @@ public class HurtCommand extends AbstractCommand {
 
     // <--[command]
     // @Name hurt
-    // @Arguments <entity> <amount> [absolute? boolean] [type]
+    // @Arguments <entity> <amount>
     // @Short damages the entity for the specified amount.
-    // @Updated 2017/03/31
+    // @Updated 2017/04/01
     // @Group Entities
     // @Minimum 2
-    // @Maximum 4
+    // @Maximum 2
+    // @Named absolute (BooleanTag) Sets whether the damage is absolute or not.
+    // @Named type (TextTag) Sets of what type the damage will be.
     // @Description
-    // Damages the entity for the specified amount. If no boolean is specified, the damage will be absolute by default.
+    // Damages the entity for the specified amount. This damage is absolute by default.
     // @Example
     // # This example hurts the player for 4 points (2 hearts) of damage
     // - hurt <player> 4
@@ -48,7 +50,7 @@ public class HurtCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<entity> <amount> [absolute? boolean] [type]";
+        return "<entity> <amount>";
     }
 
     @Override
@@ -58,7 +60,7 @@ public class HurtCommand extends AbstractCommand {
 
     @Override
     public int getMaximumArguments() {
-        return 4;
+        return 2;
     }
 
     @Override
@@ -66,8 +68,8 @@ public class HurtCommand extends AbstractCommand {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         NumberTag dam = NumberTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         DamageSource.Builder build = DamageSource.builder();
-        if (entry.arguments.size() > 2) {
-            BooleanTag abs = BooleanTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
+        if (entry.namedArgs.containsKey("absolute")) {
+            BooleanTag abs = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "absolute"));
             if (abs.getInternal()) {
                 build.absolute();
             }
@@ -75,8 +77,8 @@ public class HurtCommand extends AbstractCommand {
         else {
             build.absolute();
         }
-        if (entry.arguments.size() > 3) {
-            String typeName = entry.getArgumentObject(queue, 3).toString().toLowerCase();
+        if (entry.namedArgs.containsKey("type")) {
+            String typeName = entry.getNamedArgumentObject(queue, "type").toString().toLowerCase();
             Optional<DamageType> type = Sponge.getRegistry().getType(DamageType.class, typeName);
             if (!type.isPresent()) {
                 queue.handleError(entry, "Invalid damage type: '" + typeName + "'!");
