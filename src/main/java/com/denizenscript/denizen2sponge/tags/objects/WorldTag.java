@@ -149,9 +149,9 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the time of day of the world.
+        // @Returns the time of day of the world, in seconds. Varies within 0 and 1200.
         // -->
-        handlers.put("time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getWorldTime() / 20));
+        handlers.put("time", (dat, obj) -> new DurationTag((((WorldTag) obj).internal.getProperties().getWorldTime() % 24000) / 20));
         // <--[tag]
         // @Name WorldTag.difficulty
         // @Updated 2017/04/03
@@ -173,7 +173,7 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the remaining rain time in the world.
+        // @Returns the remaining time in seconds before the rain state is toggled to a random value in this world.
         // -->
         handlers.put("rain_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getRainTime() / 20));
         // <--[tag]
@@ -189,7 +189,7 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the remaining thunder time in the world.
+        // @Returns the remaining time in seconds before the thunder state is toggled to a random value in this world.
         // -->
         handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() / 20));
     }
