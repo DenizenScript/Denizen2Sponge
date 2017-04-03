@@ -148,6 +148,42 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x * len, loc.y * len, loc.z * len, loc.world);
         });
         // <--[tag]
+        // @Name LocationTag.rotate_around_x
+        // @Updated 2017/04/03
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns this vector location rotated around the x axis for the specified angle.
+        // -->
+        handlers.put("rotate_around_x", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            double angle = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(loc.x, loc.y * Math.cos(angle) - loc.z * Math.sin(angle), loc.y * Math.sin(angle) + loc.z * Math.cos(angle), loc.world);
+        });
+        // <--[tag]
+        // @Name LocationTag.rotate_around_y
+        // @Updated 2017/04/03
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns this vector location rotated around the y axis for the specified angle.
+        // -->
+        handlers.put("rotate_around_y", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            double angle = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag( loc.z * Math.sin(angle) + loc.x * Math.cos(angle), loc.y, loc.z * Math.cos(angle) - loc.x * Math.sin(angle), loc.world);
+        });
+        // <--[tag]
+        // @Name LocationTag.rotate_around_z
+        // @Updated 2017/04/03
+        // @Group Mathematics
+        // @ReturnType LocationTag
+        // @Returns this vector location rotated around the z axis for the specified angle.
+        // -->
+        handlers.put("rotate_around_z", (dat, obj) -> {
+            UtilLocation loc = ((LocationTag) obj).internal;
+            double angle = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            return new LocationTag(loc.x * Math.cos(angle) - loc.y * Math.sin(angle), loc.x * Math.sin(angle) + loc.y * Math.cos(angle), loc.z, loc.world);
+        });
+        // <--[tag]
         // @Name LocationTag.world
         // @Updated 2016/08/26
         // @Group Identification
