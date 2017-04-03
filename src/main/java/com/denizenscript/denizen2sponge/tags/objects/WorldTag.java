@@ -133,10 +133,10 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType TextTag
-        // @Returns the generator type of the world.
-        // @Example "world" .generator might return "large_biomes".
+        // @Returns the generator type of the world. An unmodified world returns 'default'.
+        // @Example "world" .generator might return "default".
         // -->
-        handlers.put("generator", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getGeneratorType().toString())));
+        handlers.put("generator", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getGeneratorType().getName())));
         // <--[tag]
         // @Name WorldTag.seed
         // @Updated 2017/04/03
@@ -150,7 +150,7 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the time of day of the world. Note: This value can be higher than 1200.
+        // @Returns the time of day of the world. This value is not necessarily within the time span of a single day.
         // -->
         handlers.put("time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getWorldTime() / 20.0));
         // <--[tag]
@@ -166,7 +166,7 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType TextTag
-        // @Returns the difficulty of the world.
+        // @Returns the difficulty of the world. Difficulties include 'peaceful', 'easy', 'normal' and 'hard'.
         // @Example "world" .difficulty might return "easy".
         // -->
         handlers.put("difficulty", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getDifficulty().toString())));
