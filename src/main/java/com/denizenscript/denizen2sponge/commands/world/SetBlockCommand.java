@@ -24,7 +24,7 @@ public class SetBlockCommand extends AbstractCommand {
     // @Maximum 2
     // @Named physics (BooleanTag) Sets whether the block will have physics enabled or not.
     // @Description
-    // Sets a block's type in the specified location. Physics defaults to enabled.
+    // Sets a block's type at the specified location. Physics defaults to enabled.
     // Related information: <@link explanation Block Types>block types<@/link>.
     // TODO: Explain more!
     // @Example

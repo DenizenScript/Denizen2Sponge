@@ -115,8 +115,8 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("list_gamerules", (dat, obj) -> {
             MapTag map = new MapTag();
-            for (Map.Entry<String, String> tuple :((WorldTag) obj).getInternal().getGameRules().entrySet()) {
-                map.getInternal().put(tuple.getKey(), TextTag.getFor(dat.error, tuple.getValue()));
+            for (Map.Entry<String, String> entry :((WorldTag) obj).getInternal().getGameRules().entrySet()) {
+                map.getInternal().put(entry.getKey(), TextTag.getFor(dat.error, entry.getValue()));
             }
             return map;
         });
@@ -127,13 +127,14 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType TextTag
         // @Returns the specified gamerule of the world. Note: rule names are case sensitive!
         // -->
-        handlers.put("gamerule", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getGameRule(dat.getNextModifier().toString()).orElse(null)));
+        handlers.put("gamerule", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getGameRule(dat.getNextModifier().toString()).get()));
         // <--[tag]
         // @Name WorldTag.generator
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType TextTag
         // @Returns the generator type of the world.
+        // @Example "world" .generator might return "large_biomes".
         // -->
         handlers.put("generator", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getGeneratorType().toString())));
         // <--[tag]
@@ -149,15 +150,24 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the time of day of the world, in seconds. Varies within 0 and 1200.
+        // @Returns the time of day of the world. Note: This value can be higher than 1200.
         // -->
-        handlers.put("time", (dat, obj) -> new DurationTag((((WorldTag) obj).internal.getProperties().getWorldTime() % 24000) / 20));
+        handlers.put("time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getWorldTime() / 20.0));
+        // <--[tag]
+        // @Name WorldTag.total_time
+        // @Updated 2017/04/03
+        // @Group Properties
+        // @ReturnType DurationTag
+        // @Returns the total time of the world.
+        // -->
+        handlers.put("total_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getTotalTime() / 20.0));
         // <--[tag]
         // @Name WorldTag.difficulty
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType TextTag
         // @Returns the difficulty of the world.
+        // @Example "world" .difficulty might return "easy".
         // -->
         handlers.put("difficulty", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getDifficulty().toString())));
         // <--[tag]
@@ -173,9 +183,9 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the remaining time in seconds before the rain state is toggled to a random value in this world.
+        // @Returns the remaining time before the rain state is toggled to a random value in this world.
         // -->
-        handlers.put("rain_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getRainTime() / 20));
+        handlers.put("rain_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getRainTime() / 20.0));
         // <--[tag]
         // @Name WorldTag.is_thundering
         // @Updated 2017/04/03
@@ -189,9 +199,9 @@ public class WorldTag extends AbstractTagObject {
         // @Updated 2017/04/03
         // @Group Properties
         // @ReturnType DurationTag
-        // @Returns the remaining time in seconds before the thunder state is toggled to a random value in this world.
+        // @Returns the remaining time before the thunder state is toggled to a random value in this world.
         // -->
-        handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() / 20));
+        handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() / 20.0));
     }
 
     public static WorldTag getFor(Action<String> error, String text) {
