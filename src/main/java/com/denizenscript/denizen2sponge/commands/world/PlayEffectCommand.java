@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.particle.ParticleEffect;
@@ -66,7 +67,7 @@ public class PlayEffectCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String effectName = entry.getArgumentObject(queue, 1).toString().toLowerCase();
+        String effectName = CoreUtilities.toLowerCase(entry.getArgumentObject(queue, 1).toString());
         ParticleEffect.Builder build = ParticleEffect.builder();
         Optional<ParticleType> type = Sponge.getRegistry().getType(ParticleType.class, effectName);
         if (!type.isPresent()) {

@@ -24,15 +24,15 @@ public class SetBlockCommand extends AbstractCommand {
     // @Maximum 2
     // @Named physics (BooleanTag) Sets whether the block will have physics enabled or not.
     // @Description
-    // Sets a block's type. Physics defaults to enabled.
+    // Sets a block's type at the specified location. Physics defaults to enabled.
     // Related information: <@link explanation Block Types>block types<@/link>.
     // TODO: Explain more!
     // @Example
     // # This example sets the block at a player's location to stone.
     // - setblock <player.location> minecraft:stone
     // @Example
-    // # This example sets the block at a player's location to sand that won't fall immediately.
-    // - setblock <player.location> minecraft:sand false
+    // # This example sets the block at a player's location to sand and doesn't update surrounding blocks.
+    // - setblock <player.location> minecraft:sand --physics false
     // -->
 
     @Override
