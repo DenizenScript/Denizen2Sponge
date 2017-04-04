@@ -46,6 +46,22 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("item_type", (dat, obj) -> new ItemTypeTag((((ItemTag) obj).internal.getItem())));
         // <--[tag]
+        // @Name ItemTag.quantity
+        // @Updated 2017/04/04
+        // @Group Identification
+        // @ReturnType IntegerTag
+        // @Returns the amount of items in this stack.
+        // -->
+        handlers.put("quantity", (dat, obj) -> new IntegerTag((((ItemTag) obj).internal.getQuantity())));
+        // <--[tag]
+        // @Name ItemTag.max_stack_quantity
+        // @Updated 2017/04/04
+        // @Group Identification
+        // @ReturnType IntegerTag
+        // @Returns the maximum amount of items of this type in a stack.
+        // -->
+        handlers.put("max_stack_quantity", (dat, obj) -> new IntegerTag((((ItemTag) obj).internal.getMaxStackQuantity())));
+        // <--[tag]
         // @Name ItemTag.data
         // @Updated 2016/11/24
         // @Group General Information
