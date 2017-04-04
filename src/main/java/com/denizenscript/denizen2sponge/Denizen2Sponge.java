@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
+import com.denizenscript.denizen2sponge.commands.world.WeatherCommand;
 import com.denizenscript.denizen2sponge.events.entity.*;
 import com.denizenscript.denizen2sponge.events.player.*;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
@@ -139,6 +140,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EditBlockCommand());
         Denizen2Core.register(new PlayEffectCommand());
         Denizen2Core.register(new SetBlockCommand());
+        Denizen2Core.register(new WeatherCommand());
         // Events: Entity
         Denizen2Core.register(new EntityDamagedScriptEvent());
         Denizen2Core.register(new EntityDiesScriptEvent());

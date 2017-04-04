@@ -127,7 +127,15 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType TextTag
         // @Returns the specified gamerule of the world. Note: rule names are case sensitive!
         // -->
-        handlers.put("gamerule", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getGameRule(dat.getNextModifier().toString()).get()));
+        handlers.put("gamerule", (dat, obj) -> {
+            String gamerule = dat.getNextModifier().toString();
+            Optional<String> opt = ((WorldTag) obj).internal.getGameRule(gamerule);
+            if (!opt.isPresent()) {
+                dat.error.run("Gamerule '" + gamerule + "' does not exist!");
+                return new NullTag();
+            }
+            return TextTag.getFor(dat.error, opt.get());
+        });
         // <--[tag]
         // @Name WorldTag.generator
         // @Updated 2017/04/03
@@ -202,6 +210,31 @@ public class WorldTag extends AbstractTagObject {
         // @Returns the remaining time before the thunder state is toggled to a random value in this world.
         // -->
         handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() / 20.0));
+        // <--[tag]
+        // @Name WorldTag.weather
+        // @Updated 2017/04/03
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the current weather of the world. Weathers include 'clear', 'rain' and 'thunder_storm'.
+        // @Example "world" .weather might return "clear".
+        // -->
+        handlers.put("weather", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getWeather().getName())));
+        // <--[tag]
+        // @Name WorldTag.remaining_weather_time
+        // @Updated 2017/04/03
+        // @Group Properties
+        // @ReturnType DurationTag
+        // @Returns the remaining duration of the current weather in the world.
+        // -->
+        handlers.put("remaining_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRemainingDuration() / 20.0));
+        // <--[tag]
+        // @Name WorldTag.running_weather_time
+        // @Updated 2017/04/03
+        // @Group Properties
+        // @ReturnType DurationTag
+        // @Returns the duration the current weather in the world has been running for.
+        // -->
+        handlers.put("running_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRunningDuration() / 20.0));
     }
 
     public static WorldTag getFor(Action<String> error, String text) {
