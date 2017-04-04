@@ -32,6 +32,14 @@ public class LocationTag extends AbstractTagObject {
     // @Note Can also be "x,y,z" without a world. This is a vector.
     // -->
 
+    // <--[explanation]
+    // @Name Biome Types
+    // @Group Useful Lists
+    // @Description
+    // A list of all default biome types can be found here:
+    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/world/biome/BiomeTypes.html>biome types list<@/link>
+    // -->
+
     private UtilLocation internal = new UtilLocation();
 
     public LocationTag(UtilLocation location) {
@@ -347,6 +355,15 @@ public class LocationTag extends AbstractTagObject {
             }
             return list;
         });
+        // <--[tag]
+        // @Name LocationTag.biome
+        // @Updated 2017/04/04
+        // @Group World Data
+        // @ReturnType TextTag
+        // @Returns the biome type of this location.
+        // Related information: <@link explanation Biome Types>biome types<@/link>
+        // -->
+        handlers.put("biome", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((LocationTag) obj).internal.toLocation().getBiome().getName())));
     }
 
     public static double LengthSquared(Location<World> loc) {
