@@ -112,7 +112,7 @@ public class PlayerTag extends AbstractTagObject {
             Set<EntityUniverse.EntityHit> entHits = source.getWorld().getIntersectingEntities(source, range);
             for (EntityUniverse.EntityHit entHit : entHits) {
                 Entity ent = entHit.getEntity();
-                if (requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) {
+                if ((requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) && !ent.equals(source)) {
                     list.getInternal().add(new EntityTag(ent));
                 }
             }

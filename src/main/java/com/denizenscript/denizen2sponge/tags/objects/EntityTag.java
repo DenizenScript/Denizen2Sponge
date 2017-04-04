@@ -24,6 +24,7 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.equipment.EquipmentType;
 import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.EntityUniverse;
 
@@ -356,6 +357,17 @@ public class EntityTag extends AbstractTagObject {
                 }
             }
             return list;
+        });
+        // <--[tag]
+        // @Name EntityTag.bounding_box
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType CuboidTag
+        // @Returns the bounding box of this entity, as a cuboid.
+        // -->
+        handlers.put("bounding_box", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).getInternal();
+            return new CuboidTag(ent.getBoundingBox().get(), ent.getWorld());
         });
     }
 
