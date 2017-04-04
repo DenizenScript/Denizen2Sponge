@@ -25,6 +25,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.equipment.EquipmentType;
 import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.extent.EntityUniverse;
 
 import java.util.*;
 
@@ -332,7 +333,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("scale", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getScale()));
         // <--[tag]
-        // @Name EntityTag.nearby_entities
+        // @Name EntityTag.nearby_entities[<MapTag>]
         // @Updated 2017/04/04
         // @Group Current Information
         // @ReturnType ListTag

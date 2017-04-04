@@ -2,19 +2,20 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.IntegerTag;
-import com.denizenscript.denizen2core.tags.objects.NumberTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.world.extent.EntityUniverse;
 
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class PlayerTag extends AbstractTagObject {
@@ -91,6 +92,32 @@ public class PlayerTag extends AbstractTagObject {
                 .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                 .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
                 (Utilities.getHandReach(((PlayerTag) obj).internal))).build().end().get().getLocation()));
+        // <--[tag]
+        // @Name PlayerTag.entities_on_cursor[<MapTag>]
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType ListTag
+        // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
+        // the line of sight of the player. Input is type:<EntityTypeTag>|range:<NumberTag>
+        // -->
+        handlers.put("entities_on_cursor", (dat, obj) -> {
+            ListTag list = new ListTag();
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            EntityTypeTag requiredTypeTag = null;
+            if (map.getInternal().containsKey("type")) {
+                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+            }
+            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            Player source = ((PlayerTag) obj).getInternal();
+            Set<EntityUniverse.EntityHit> entHits = source.getWorld().getIntersectingEntities(source, range);
+            for (EntityUniverse.EntityHit entHit : entHits) {
+                Entity ent = entHit.getEntity();
+                if (requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) {
+                    list.getInternal().add(new EntityTag(ent));
+                }
+            }
+            return list;
+        });
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
