@@ -24,11 +24,11 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.equipment.EquipmentType;
 import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.extent.EntityUniverse;
 
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class EntityTag extends AbstractTagObject {
 
@@ -271,6 +271,103 @@ public class EntityTag extends AbstractTagObject {
                 return new NullTag();
             }
             return ato;
+        });
+        // <--[tag]
+        // @Name EntityTag.passenger_of[<EntityTag>]
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether this entity is a passenger of the specified entity or not.
+        // -->
+        handlers.put("passenger_of", (dat,obj) -> new BooleanTag(((EntityTag) obj).internal.hasPassenger(EntityTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // <--[tag]
+        // @Name EntityTag.passengers
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType ListTag
+        // @Returns a list of passengers mounted on this entity.
+        // -->
+        handlers.put("passengers", (dat, obj) -> {
+            ListTag list = new ListTag();
+            List<Entity> ents = ((EntityTag) obj).internal.getPassengers();
+            for (Entity ent : ents) {
+                list.getInternal().add(new EntityTag(ent));
+            }
+            return list;
+        });
+        // <--[tag]
+        // @Name EntityTag.vehicle
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType EntityTag
+        // @Returns the entity that this entity is mounted on, if any.
+        // -->
+        handlers.put("vehicle", (dat, obj) -> {
+            Optional<Entity> opt = ((EntityTag) obj).internal.getVehicle();
+            if (!opt.isPresent()) {
+                return new NullTag();
+            }
+            return new EntityTag(opt.get());
+        });
+        // <--[tag]
+        // @Name EntityTag.base_vehicle
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType EntityTag
+        // @Returns the entity that is the base of the stack that this entity is currently part of.
+        // -->
+        handlers.put("base_vehicle", (dat,obj) -> new EntityTag(((EntityTag) obj).internal.getBaseVehicle()));
+        // <--[tag]
+        // @Name EntityTag.on_ground
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether this entity is on the ground or not.
+        // -->
+        handlers.put("on_ground", (dat,obj) -> new BooleanTag(((EntityTag) obj).internal.isOnGround()));
+        // <--[tag]
+        // @Name EntityTag.scale
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType LocationTag
+        // @Returns the scale of this entity (currently unused).
+        // -->
+        handlers.put("scale", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getScale()));
+        // <--[tag]
+        // @Name EntityTag.nearby_entities[<MapTag>]
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType ListTag
+        // @Returns a list of entities of a specified type (or any type if unspecified) near this entity.
+        // Input is type:<EntityTypeTag>|range:<NumberTag>
+        // -->
+        handlers.put("nearby_entities", (dat, obj) -> {
+            ListTag list = new ListTag();
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            EntityTypeTag requiredTypeTag = null;
+            if (map.getInternal().containsKey("type")) {
+                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+            }
+            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            Entity source = ((EntityTag) obj).getInternal();
+            Collection<Entity> ents = source.getNearbyEntities(range);
+            for (Entity ent : ents) {
+                if (requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) {
+                    list.getInternal().add(new EntityTag(ent));
+                }
+            }
+            return list;
+        });
+        // <--[tag]
+        // @Name EntityTag.bounding_box
+        // @Updated 2017/04/04
+        // @Group Current Information
+        // @ReturnType CuboidTag
+        // @Returns the bounding box of this entity, as a cuboid.
+        // -->
+        handlers.put("bounding_box", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).getInternal();
+            return new CuboidTag(ent.getBoundingBox().get(), ent.getWorld());
         });
     }
 

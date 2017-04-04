@@ -24,7 +24,7 @@ public class EditBlockCommand extends AbstractCommand {
     // @Arguments <location> <map of properties>
     // @Short Edits a block.
     // @Updated 2016/09/29
-    // @Group Entities
+    // @Group World
     // @Minimum 2
     // @Maximum 2
     // @Description

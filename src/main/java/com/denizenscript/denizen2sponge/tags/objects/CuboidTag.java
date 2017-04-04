@@ -12,6 +12,7 @@ import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilCuboid;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -30,6 +31,11 @@ public class CuboidTag extends AbstractTagObject {
     // -->
 
     private UtilCuboid internal;
+
+    public CuboidTag(AABB box, World world) {
+        this(new UtilLocation(box.getMin().getX(), box.getMin().getY(), box.getMin().getZ(), world),
+                new UtilLocation(box.getMax().getX(), box.getMax().getY(), box.getMax().getZ(), world));
+    }
 
     public CuboidTag(UtilLocation a, UtilLocation b) {
         internal = new UtilCuboid(a, b);
