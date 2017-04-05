@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -118,6 +119,22 @@ public class PlayerTag extends AbstractTagObject {
             }
             return list;
         });
+        // <--[tag]
+        // @Name PlayerTag.sneaking
+        // @Updated 2017/04/05
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether the player is sneaking or not.
+        // -->
+        handlers.put("sneaking", (dat, obj) -> new BooleanTag(((PlayerTag) obj).internal.get(Keys.IS_SNEAKING).get()));
+        // <--[tag]
+        // @Name PlayerTag.sprinting
+        // @Updated 2017/04/05
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether the player is sprinting or not.
+        // -->
+        handlers.put("sprinting", (dat, obj) -> new BooleanTag(((PlayerTag) obj).internal.get(Keys.IS_SPRINTING).get()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
