@@ -9,12 +9,15 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.flowpowered.math.vector.Vector3i;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.TeleportHelper;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
@@ -50,6 +53,9 @@ public class LocationTag extends AbstractTagObject {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
     }
 
+    public  LocationTag(Vector3i location, World world){
+        this(location.getX(), location.getY(), location.getZ(), world);
+    }
     public LocationTag(Vector3d location) {
         this(location.getX(), location.getY(), location.getZ());
     }
@@ -364,6 +370,27 @@ public class LocationTag extends AbstractTagObject {
         // Related information: <@link explanation Biome Types>biome types<@/link>
         // -->
         handlers.put("biome", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((LocationTag) obj).internal.toLocation().getBiome().getName())));
+        // <--[tag]
+        // @Name LocationTag.find_safe_location[<MapTag>]
+        // @Updated 2017/04/05
+        // @Group World Data
+        // @ReturnType LocationTag
+        // @Returns a location that entities can safely teleport to within the specified tolerance.
+        // Input is height:<IntegerTag>|width:<IntegerTag>
+        // -->
+        handlers.put("find_safe_location", (dat, obj) -> {
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            int height = map.getInternal().containsKey("height") ?
+                    (int) IntegerTag.getFor(dat.error, map.getInternal().get("height")).getInternal() : TeleportHelper.DEFAULT_HEIGHT;
+            int width = map.getInternal().containsKey("width") ?
+                    (int) IntegerTag.getFor(dat.error, map.getInternal().get("width")).getInternal() : TeleportHelper.DEFAULT_WIDTH;
+            Optional<Location<World>> opt = Sponge.getGame().getTeleportHelper().getSafeLocation(((LocationTag) obj).internal.toLocation(), height, width);
+            if (!opt.isPresent()) {
+                dat.error.run("No safe location found near " + obj.debug() + "!");
+                return new NullTag();
+            }
+            return new LocationTag(opt.get().getBlockPosition(), opt.get().getExtent());
+        });
     }
 
     public static double LengthSquared(Location<World> loc) {
