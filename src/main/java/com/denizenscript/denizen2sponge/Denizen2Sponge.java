@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.*;
 import com.denizenscript.denizen2sponge.commands.player.*;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
+import com.denizenscript.denizen2sponge.commands.server.ShutdownCommand;
 import com.denizenscript.denizen2sponge.commands.world.EditBlockCommand;
 import com.denizenscript.denizen2sponge.commands.world.PlayEffectCommand;
 import com.denizenscript.denizen2sponge.commands.world.SetBlockCommand;
@@ -130,12 +131,14 @@ public class Denizen2Sponge {
         Denizen2Core.register(new UnflagCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
+        Denizen2Core.register(new BanCommand());
         Denizen2Core.register(new GiveCommand());
         Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new TellCommand());
         // Commands: Server
         Denizen2Core.register(new ExecuteCommand());
+        Denizen2Core.register(new ShutdownCommand());
         // Commands: World
         Denizen2Core.register(new EditBlockCommand());
         Denizen2Core.register(new PlayEffectCommand());
@@ -153,6 +156,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerChatsScriptEvent());
         Denizen2Core.register(new PlayerDisconnectsScriptEvent());
         Denizen2Core.register(new PlayerJoinsScriptEvent());
+        Denizen2Core.register(new PlayerLeftClicksBlockScriptEvent());
+        Denizen2Core.register(new PlayerLeftClicksEntityScriptEvent());
         Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
