@@ -17,7 +17,7 @@ public class ShutdownCommand extends AbstractCommand {
     // @Name shutdown
     // @Arguments [reason]
     // @Short stops the server.
-    // @Updated 2016/09/22
+    // @Updated 2017/04/06
     // @Group World
     // @Minimum 0
     // @Maximum 1
@@ -51,14 +51,14 @@ public class ShutdownCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         if (entry.arguments.size() < 1) {
             if (queue.shouldShowGood()) {
-                queue.outGood("Stopping the server");
+                queue.outGood("Stopping the server...");
             }
             Sponge.getServer().shutdown();
         }
         else {
-            AbstractTagObject ato = entry.getArgumentObject(queue, 0    );
+            AbstractTagObject ato = entry.getArgumentObject(queue, 0);
             if (queue.shouldShowGood()) {
-                queue.outGood("Stopping the server with reason " + ColorSet.emphasis + ato.debug());
+                queue.outGood("Stopping the server with reason " + ColorSet.emphasis + ato.debug() + ColorSet.good + "...");
             }
             if (ato instanceof FormattedTextTag) {
                 Sponge.getServer().shutdown(((FormattedTextTag) ato).getInternal());

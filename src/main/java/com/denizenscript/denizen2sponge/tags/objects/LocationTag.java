@@ -53,7 +53,7 @@ public class LocationTag extends AbstractTagObject {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
     }
 
-    public  LocationTag(Vector3i location, World world){
+    public  LocationTag(Vector3i location, World world) {
         this(location.getX(), location.getY(), location.getZ(), world);
     }
     public LocationTag(Vector3d location) {
@@ -374,22 +374,28 @@ public class LocationTag extends AbstractTagObject {
         // @Name LocationTag.find_safe_location[<MapTag>]
         // @Updated 2017/04/05
         // @Group World Data
-        // @ReturnType LocationTag
-        // @Returns a location that entities can safely teleport to within the specified tolerance.
+        // @ReturnType MapTag
+        // @Returns whether a location that entities can safely teleport to within
+        // the specified tolerance exists, and such location.
+        // Output is is_valid:<BooleanTag>|location:<LocationTag>
         // Input is height:<IntegerTag>|width:<IntegerTag>
         // -->
         handlers.put("find_safe_location", (dat, obj) -> {
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
-            int height = map.getInternal().containsKey("height") ?
-                    (int) IntegerTag.getFor(dat.error, map.getInternal().get("height")).getInternal() : TeleportHelper.DEFAULT_HEIGHT;
-            int width = map.getInternal().containsKey("width") ?
-                    (int) IntegerTag.getFor(dat.error, map.getInternal().get("width")).getInternal() : TeleportHelper.DEFAULT_WIDTH;
+            MapTag inputMap = MapTag.getFor(dat.error, dat.getNextModifier());
+            int height = inputMap.getInternal().containsKey("height") ?
+                    (int) IntegerTag.getFor(dat.error, inputMap.getInternal().get("height")).getInternal() : TeleportHelper.DEFAULT_HEIGHT;
+            int width = inputMap.getInternal().containsKey("width") ?
+                    (int) IntegerTag.getFor(dat.error, inputMap.getInternal().get("width")).getInternal() : TeleportHelper.DEFAULT_WIDTH;
             Optional<Location<World>> opt = Sponge.getGame().getTeleportHelper().getSafeLocation(((LocationTag) obj).internal.toLocation(), height, width);
+            MapTag outputMap = new MapTag();
             if (!opt.isPresent()) {
-                dat.error.run("No safe location found near " + obj.debug() + "!");
-                return new NullTag();
+                outputMap.getInternal().put("is_valid", new BooleanTag(false));
+                outputMap.getInternal().put("location", obj);
+                return outputMap;
             }
-            return new LocationTag(opt.get().getBlockPosition(), opt.get().getExtent());
+            outputMap.getInternal().put("is_valid", new BooleanTag(true));
+            outputMap.getInternal().put("location", new LocationTag(opt.get().getBlockPosition(), opt.get().getExtent()));
+            return outputMap;
         });
     }
 

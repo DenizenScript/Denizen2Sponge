@@ -273,14 +273,6 @@ public class EntityTag extends AbstractTagObject {
             return ato;
         });
         // <--[tag]
-        // @Name EntityTag.passenger_of[<EntityTag>]
-        // @Updated 2017/04/04
-        // @Group Current Information
-        // @ReturnType BooleanTag
-        // @Returns whether this entity is a passenger of the specified entity or not.
-        // -->
-        handlers.put("passenger_of", (dat,obj) -> new BooleanTag(((EntityTag) obj).internal.hasPassenger(EntityTag.getFor(dat.error, dat.getNextModifier()).internal)));
-        // <--[tag]
         // @Name EntityTag.passengers
         // @Updated 2017/04/04
         // @Group Current Information
