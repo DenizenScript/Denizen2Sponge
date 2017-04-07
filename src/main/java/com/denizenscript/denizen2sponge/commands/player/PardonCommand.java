@@ -27,6 +27,7 @@ public class PardonCommand extends AbstractCommand {
 
     // <--[command]
     // @Name pardon
+    // @Arguments <player>
     // @Short pardons a player.
     // @Updated 2017/04/07
     // @Group Player
