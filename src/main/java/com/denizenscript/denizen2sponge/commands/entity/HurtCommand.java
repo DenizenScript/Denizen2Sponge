@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
@@ -79,7 +80,7 @@ public class HurtCommand extends AbstractCommand {
             build.absolute();
         }
         if (entry.namedArgs.containsKey("type")) {
-            String typeName = entry.getNamedArgumentObject(queue, "type").toString().toLowerCase();
+            String typeName = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "type").toString());
             Optional<DamageType> type = Sponge.getRegistry().getType(DamageType.class, typeName);
             if (!type.isPresent()) {
                 queue.handleError(entry, "Invalid damage type: '" + typeName + "'!");

@@ -16,7 +16,7 @@ public class WeatherCommand extends AbstractCommand {
 
     // <--[command]
     // @Name weather
-    // @Arguments <world> clear/rain/thunder_storm [duration]
+    // @Arguments <world> 'clear'/'rain'/'thunder_storm' [duration]
     // @Short Sets the weather of the world.
     // @Updated 2017/04/03
     // @Group World

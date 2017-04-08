@@ -273,14 +273,6 @@ public class EntityTag extends AbstractTagObject {
             return ato;
         });
         // <--[tag]
-        // @Name EntityTag.passenger_of[<EntityTag>]
-        // @Updated 2017/04/04
-        // @Group Current Information
-        // @ReturnType BooleanTag
-        // @Returns whether this entity is a passenger of the specified entity or not.
-        // -->
-        handlers.put("passenger_of", (dat,obj) -> new BooleanTag(((EntityTag) obj).internal.hasPassenger(EntityTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
-        // <--[tag]
         // @Name EntityTag.passengers
         // @Updated 2017/04/04
         // @Group Current Information
@@ -349,10 +341,10 @@ public class EntityTag extends AbstractTagObject {
                 requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
             }
             double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
-            Entity source = ((EntityTag) obj).getInternal();
+            Entity source = ((EntityTag) obj).internal;
             Collection<Entity> ents = source.getNearbyEntities(range);
             for (Entity ent : ents) {
-                if (requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) {
+                if ((requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) && !ent.equals(source)) {
                     list.getInternal().add(new EntityTag(ent));
                 }
             }
@@ -366,7 +358,7 @@ public class EntityTag extends AbstractTagObject {
         // @Returns the bounding box of this entity, as a cuboid.
         // -->
         handlers.put("bounding_box", (dat, obj) -> {
-            Entity ent = ((EntityTag) obj).getInternal();
+            Entity ent = ((EntityTag) obj).internal;
             return new CuboidTag(ent.getBoundingBox().get(), ent.getWorld());
         });
     }

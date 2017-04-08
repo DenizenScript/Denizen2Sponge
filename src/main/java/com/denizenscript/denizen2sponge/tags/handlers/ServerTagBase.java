@@ -46,7 +46,7 @@ public class ServerTagBase extends AbstractTagBase {
         // @Updated 2017/01/19
         // @Group Server Lists
         // @ReturnType ListTag
-        // @Returns a list of all worlds on the server.
+        // @Returns a list of all loaded worlds on the server.
         // -->
         handlers.put("worlds", (dat, obj) -> {
             ListTag list = new ListTag();
@@ -55,6 +55,14 @@ public class ServerTagBase extends AbstractTagBase {
             }
             return list;
         });
+        // <--[tag]
+        // @Name ServerBaseTag.tps
+        // @Updated 2017/04/04
+        // @Group Server Information
+        // @ReturnType NumberTag
+        // @Returns the current ticks per second on the server.
+        // -->
+        handlers.put("tps", (dat, obj) -> new NumberTag(Sponge.getServer().getTicksPerSecond()));
         // <--[tag]
         // @Name ServerBaseTag.block_type_is_valid[<ListTag>]
         // @Updated 2016//11/24
