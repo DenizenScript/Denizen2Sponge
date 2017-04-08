@@ -20,7 +20,7 @@ public class PardonCommand extends AbstractCommand {
     // @Name pardon
     // @Arguments
     // @Short pardons a player.
-    // @Updated 2017/04/07
+    // @Updated 2017/04/08
     // @Group Player
     // @Minimum 0
     // @Maximum 0

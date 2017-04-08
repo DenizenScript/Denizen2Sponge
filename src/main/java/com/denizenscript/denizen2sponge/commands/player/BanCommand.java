@@ -30,7 +30,7 @@ public class BanCommand extends AbstractCommand {
     // @Name ban
     // @Arguments [duration] [reason]
     // @Short bans a player.
-    // @Updated 2017/04/07
+    // @Updated 2017/04/08
     // @Group Player
     // @Minimum 0
     // @Maximum 2
