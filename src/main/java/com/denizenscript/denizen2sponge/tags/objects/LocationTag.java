@@ -9,12 +9,15 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.flowpowered.math.vector.Vector3i;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.TeleportHelper;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
@@ -32,6 +35,14 @@ public class LocationTag extends AbstractTagObject {
     // @Note Can also be "x,y,z" without a world. This is a vector.
     // -->
 
+    // <--[explanation]
+    // @Name Biome Types
+    // @Group Useful Lists
+    // @Description
+    // A list of all default biome types can be found here:
+    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/world/biome/BiomeTypes.html>biome types list<@/link>
+    // -->
+
     private UtilLocation internal = new UtilLocation();
 
     public LocationTag(UtilLocation location) {
@@ -42,6 +53,9 @@ public class LocationTag extends AbstractTagObject {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
     }
 
+    public  LocationTag(Vector3i location, World world) {
+        this(location.getX(), location.getY(), location.getZ(), world);
+    }
     public LocationTag(Vector3d location) {
         this(location.getX(), location.getY(), location.getZ());
     }
@@ -346,6 +360,42 @@ public class LocationTag extends AbstractTagObject {
                 }
             }
             return list;
+        });
+        // <--[tag]
+        // @Name LocationTag.biome
+        // @Updated 2017/04/04
+        // @Group World Data
+        // @ReturnType TextTag
+        // @Returns the biome type of this location.
+        // Related information: <@link explanation Biome Types>biome types<@/link>
+        // -->
+        handlers.put("biome", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((LocationTag) obj).internal.toLocation().getBiome().getName())));
+        // <--[tag]
+        // @Name LocationTag.find_safe_location[<MapTag>]
+        // @Updated 2017/04/05
+        // @Group World Data
+        // @ReturnType MapTag
+        // @Returns whether a location that entities can safely teleport to within
+        // the specified tolerance exists, and such location.
+        // Output is is_valid:<BooleanTag>|location:<LocationTag>
+        // Input is height:<IntegerTag>|width:<IntegerTag>
+        // -->
+        handlers.put("find_safe_location", (dat, obj) -> {
+            MapTag inputMap = MapTag.getFor(dat.error, dat.getNextModifier());
+            int height = inputMap.getInternal().containsKey("height") ?
+                    (int) IntegerTag.getFor(dat.error, inputMap.getInternal().get("height")).getInternal() : TeleportHelper.DEFAULT_HEIGHT;
+            int width = inputMap.getInternal().containsKey("width") ?
+                    (int) IntegerTag.getFor(dat.error, inputMap.getInternal().get("width")).getInternal() : TeleportHelper.DEFAULT_WIDTH;
+            Optional<Location<World>> opt = Sponge.getGame().getTeleportHelper().getSafeLocation(((LocationTag) obj).internal.toLocation(), height, width);
+            MapTag outputMap = new MapTag();
+            if (!opt.isPresent()) {
+                outputMap.getInternal().put("is_valid", new BooleanTag(false));
+                outputMap.getInternal().put("location", obj);
+                return outputMap;
+            }
+            outputMap.getInternal().put("is_valid", new BooleanTag(true));
+            outputMap.getInternal().put("location", new LocationTag(opt.get().getBlockPosition(), opt.get().getExtent()));
+            return outputMap;
         });
     }
 

@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.particle.ParticleEffect;
@@ -95,7 +96,8 @@ public class PlayEffectCommand extends AbstractCommand {
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Successfully played the specified effect of type: " + type.get().getName());
+            queue.outGood("Successfully played the specified effect of type: "
+                    + ColorSet.emphasis + type.get().getName() + ColorSet.good + "!");
         }
     }
 }
