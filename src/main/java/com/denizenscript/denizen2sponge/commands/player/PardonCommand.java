@@ -34,7 +34,7 @@ public class PardonCommand extends AbstractCommand {
     // @Minimum 1
     // @Maximum 1
     // @Description
-    // Pardons a player, removing its ban. Note: This does not remove IP bans.
+    // Pardons a player, removing its ban.
     // @Example
     // # This example pardons the current player.
     // - pardon <player>
