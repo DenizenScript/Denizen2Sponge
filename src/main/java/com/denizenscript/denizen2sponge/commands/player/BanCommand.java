@@ -20,7 +20,6 @@ import org.spongepowered.api.util.ban.Ban;
 import org.spongepowered.api.util.ban.BanTypes;
 
 import java.time.Instant;
-import java.util.EmptyStackException;
 
 public class BanCommand extends AbstractCommand {
 
