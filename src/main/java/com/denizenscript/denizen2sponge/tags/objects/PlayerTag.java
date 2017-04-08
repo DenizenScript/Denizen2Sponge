@@ -135,6 +135,14 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player is sprinting or not.
         // -->
         handlers.put("sprinting", (dat, obj) -> new BooleanTag(((PlayerTag) obj).internal.get(Keys.IS_SPRINTING).get()));
+        // <--[tag]
+        // @Name PlayerTag.ip
+        // @Updated 2017/04/08
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the current IP of the player.
+        // -->
+        handlers.put("ip", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getConnection().getAddress().getAddress().getHostName()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
