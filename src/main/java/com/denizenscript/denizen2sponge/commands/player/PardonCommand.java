@@ -62,11 +62,11 @@ public class PardonCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        OfflinePlayerTag player = OfflinePlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        Sponge.getServiceManager().provide(BanService.class).get().pardon(player.getInternal().getProfile());
+        GameProfile profile = OfflinePlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0)).getInternal().getProfile();
         if (queue.shouldShowGood()) {
-            queue.outGood("Pardoning profile of " + ColorSet.emphasis + player.debug() + ColorSet.good
+            queue.outGood("Pardoning " + ColorSet.emphasis + profile.getName().get() + ColorSet.good
                     + "!");
         }
+        Sponge.getServiceManager().provide(BanService.class).get().pardon(profile);
     }
 }
