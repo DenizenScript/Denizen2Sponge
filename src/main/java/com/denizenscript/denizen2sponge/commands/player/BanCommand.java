@@ -28,21 +28,19 @@ public class BanCommand extends AbstractCommand {
 
     // <--[command]
     // @Name ban
-    // @Arguments [duration] [reason]
+    // @Arguments <PlayerTag>/<OfflinePlayerTag>/<IP> [duration] [reason]
     // @Short bans a player.
     // @Updated 2017/04/08
     // @Group Player
-    // @Minimum 0
-    // @Maximum 2
-    // @Named player (PlayerTag) Sets the player that will be banned.
-    // @Named ip (TextTag) Sets the IP that will be banned.
+    // @Minimum 1
+    // @Maximum 3
     // @Named source (TextTag) Sets the source of this ban.
     // @Description
-    // Bans a player for the specified duration, or permanently if no duration
+    // Bans a player or IP for the specified duration, or permanently if no duration
     // is specified. Optionally specify the reason and source of the ban.
-    // Note that you must specify either a player or an IP for this to work.
+    // Note that this command will not automatically kick the player from the server.
     // @Example
-    // # This example bans the current player from the server for 1 hour.
+    // # This example bans the current player for 1 hour.
     // - ban <player> 1h
     // -->
 
@@ -53,22 +51,38 @@ public class BanCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "[duration] [reason]";
+        return "<PlayerTag>/<OfflinePlayerTag>/<IP> [duration] [reason]";
     }
 
     @Override
     public int getMinimumArguments() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getMaximumArguments() {
-        return 2;
+        return 3;
     }
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         Ban.Builder build = Ban.builder().startDate(Instant.now());
+        DurationTag duration = null;
+        if (entry.arguments.size() > 1) {
+            duration = DurationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+            build.expirationDate(Instant.now().plusSeconds((long) duration.getInternal()));
+        }
+        Text reason = null;
+        if (entry.arguments.size() > 2) {
+            AbstractTagObject ato = entry.getArgumentObject(queue, 2);
+            if (ato instanceof FormattedTextTag) {
+                reason = ((FormattedTextTag) ato).getInternal();
+            }
+            else {
+                reason = Denizen2Sponge.parseColor(ato.toString());
+            }
+            build.reason(reason);
+        }
         if (entry.namedArgs.containsKey("source")) {
             AbstractTagObject ato = entry.getNamedArgumentObject(queue, "source");
             if (ato instanceof FormattedTextTag) {
@@ -78,45 +92,29 @@ public class BanCommand extends AbstractCommand {
                 build.source(Denizen2Sponge.parseColor(ato.toString()));
             }
         }
-        DurationTag duration = null;
-        if (entry.arguments.size() > 0) {
-            duration = DurationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-            build.expirationDate(Instant.now().plusSeconds((long) duration.getInternal()));
-        }
-        Text reason = null;
-        if (entry.arguments.size() > 1) {
-            AbstractTagObject ato = entry.getArgumentObject(queue, 1);
-            if (ato instanceof FormattedTextTag) {
-                reason = ((FormattedTextTag) ato).getInternal();
-            }
-            else {
-                reason = Denizen2Sponge.parseColor(ato.toString());
-            }
-            build.reason(reason);
-        }
-        if (entry.namedArgs.containsKey("player")) {
-            AbstractTagObject atoPlayer = entry.getNamedArgumentObject(queue, "player");
+        AbstractTagObject target = entry.getArgumentObject(queue, 0);
+        if (target instanceof PlayerTag || target instanceof  OfflinePlayerTag) {
             GameProfile profile;
-            if (atoPlayer instanceof PlayerTag) {
-                profile = ((PlayerTag) atoPlayer).getInternal().getProfile();
+            if (target instanceof PlayerTag) {
+                profile = ((PlayerTag) target).getInternal().getProfile();
             }
             else {
-                profile = OfflinePlayerTag.getFor(queue.error, atoPlayer).getInternal().getProfile();
+                profile = ((OfflinePlayerTag) target).getInternal().getProfile();
             }
             build.type(BanTypes.PROFILE).profile(profile);
             if (queue.shouldShowGood()) {
                 queue.outGood("Banning player " + ColorSet.emphasis + profile.getName().get() +
                         ((duration == null) ?
-                            (ColorSet.good + " permanently") :
-                            (ColorSet.good + " for " + ColorSet.emphasis + duration.debug() + ColorSet.good + " seconds")) +
+                                (ColorSet.good + " permanently") :
+                                (ColorSet.good + " for " + ColorSet.emphasis + duration.debug() + ColorSet.good + " seconds")) +
                         ((reason == null) ?
-                            (ColorSet.good + "!") :
-                            (ColorSet.good + " with reason " + ColorSet.emphasis + reason.toPlain() + ColorSet.good + "!")));
+                                (ColorSet.good + "!") :
+                                (ColorSet.good + " with reason " + ColorSet.emphasis + reason.toPlain() + ColorSet.good + "!")));
             }
         }
-        else if (entry.namedArgs.containsKey("ip")) {
+        else {
             try {
-                InetAddress address = InetAddress.getByName(entry.getNamedArgumentObject(queue, "ip").toString());
+                InetAddress address = InetAddress.getByName(target.toString());
                 build.type(BanTypes.IP).address(address);
                 if (queue.shouldShowGood()) {
                     queue.outGood("Banning IP " + ColorSet.emphasis + address.getHostName() +
@@ -131,10 +129,6 @@ public class BanCommand extends AbstractCommand {
                 queue.handleError(entry, "Invalid IP address provided!");
                 return;
             }
-        }
-        else {
-            queue.handleError(entry, "You must specify either a player or an IP!");
-            return;
         }
         Sponge.getServiceManager().provide(BanService.class).get().addBan(build.build());
     }
