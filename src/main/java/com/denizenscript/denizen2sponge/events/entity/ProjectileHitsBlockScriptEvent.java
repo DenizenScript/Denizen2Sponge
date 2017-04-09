@@ -11,7 +11,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.CollideBlockEvent;
-import org.spongepowered.api.event.entity.MoveEntityEvent;
 
 import java.util.HashMap;
 
