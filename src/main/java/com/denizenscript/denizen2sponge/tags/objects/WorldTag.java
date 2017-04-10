@@ -69,7 +69,7 @@ public class WorldTag extends AbstractTagObject {
             if (dat.hasNextModifier()) {
                 requiredTypeTag = EntityTypeTag.getFor(dat.error, dat.getNextModifier());
             }
-            for (Entity entity : ((WorldTag) obj).getInternal().getEntities()) {
+            for (Entity entity : ((WorldTag) obj).internal.getEntities()) {
                 if (requiredTypeTag == null || entity.getType().equals(requiredTypeTag.getInternal())) {
                     list.getInternal().add(new EntityTag(entity));
                 }
@@ -93,7 +93,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("players", (dat, obj) -> {
             ListTag list = new ListTag();
-            for (Player player : ((WorldTag) obj).getInternal().getPlayers()) {
+            for (Player player : ((WorldTag) obj).internal.getPlayers()) {
                 list.getInternal().add(new PlayerTag(player));
             }
             return list;
@@ -115,7 +115,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("list_gamerules", (dat, obj) -> {
             MapTag map = new MapTag();
-            for (Map.Entry<String, String> entry :((WorldTag) obj).getInternal().getGameRules().entrySet()) {
+            for (Map.Entry<String, String> entry : ((WorldTag) obj).internal.getGameRules().entrySet()) {
                 map.getInternal().put(entry.getKey(), TextTag.getFor(dat.error, entry.getValue()));
             }
             return map;

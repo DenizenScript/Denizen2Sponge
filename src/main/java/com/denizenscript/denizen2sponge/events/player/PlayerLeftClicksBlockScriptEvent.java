@@ -2,8 +2,6 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
@@ -20,30 +18,28 @@ import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
-public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
+public class PlayerLeftClicksBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // player right clicks block
+    // player left clicks block
     //
-    // @Updated 2017/03/30
+    // @Updated 2017/04/05
     //
     // @Cancellable true
     //
     // @Group Player
     //
-    // @Triggers when a player right clicks a block. Note that this may fire twice per triggering.
+    // @Triggers when a player left clicks a block.
     //
     // @Switch type (BlockTypeTag) checks the entity type.
-    // @Switch hand (TextTag) checks the hand type.
     //
     // @Context
-    // player (PlayerTag) returns the player that did the right clicking.
-    // location (LocationTag) returns the location of the block that was right clicked.
-    // precise_location (LocationTag) returns the exact point that was right clicked in the world.
+    // player (PlayerTag) returns the player that did the left clicking.
+    // location (LocationTag) returns the location of the block that was left clicked.
+    // precise_location (LocationTag) returns the exact point that was left clicked in the world.
     // intersection_point (LocationTag) returns the exact point of intersection relative to the block (When available).
-    // impact_normal (LocationTag) returns the normal vector from the side of the block that was right clicked.
-    // hand (TextTag) returns the hand type that triggered the event.
+    // impact_normal (LocationTag) returns the normal vector from the side of the block that was left clicked.
     //
     // @Determinations
     // None.
@@ -51,18 +47,17 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "PlayerRightClicksBlock";
+        return "PlayerLeftClicksBlock";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("player right clicks block");
+        return data.eventPath.startsWith("player left clicks block");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error)
-                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
+        return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error);
     }
 
     public PlayerTag player;
@@ -75,9 +70,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
     public LocationTag impact_normal;
 
-    public TextTag hand;
-
-    public InteractBlockEvent.Secondary internal;
+    public InteractBlockEvent.Primary internal;
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
@@ -87,7 +80,6 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         defs.put("precise_location", precise_location);
         defs.put("intersection_point", intersection_point);
         defs.put("impact_normal", impact_normal);
-        defs.put("hand", hand);
         return defs;
     }
 
@@ -102,15 +94,20 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onRightClickBlock(InteractBlockEvent.Secondary evt, @Root Player player) {
-        PlayerRightClicksBlockScriptEvent event = (PlayerRightClicksBlockScriptEvent) clone();
+    public void onLeftClickBlock(InteractBlockEvent.Primary evt, @Root Player player) {
+        PlayerLeftClicksBlockScriptEvent event = (PlayerLeftClicksBlockScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
         if (evt.getTargetBlock().getLocation().isPresent()) {
             event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
-            event.precise_location = new LocationTag(evt.getInteractionPoint().get().add(evt.getTargetBlock().getPosition().toDouble()));
+            BlockRayHit<World> brh = BlockRay.from(player).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1)).end().get();
+            event.precise_location = new LocationTag(brh.getPosition());
             event.precise_location.getInternal().world = event.location.getInternal().world;
-            event.intersection_point = new LocationTag(evt.getInteractionPoint().get());
+            event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
+            // event.precise_location = new LocationTag(evt.getInteractionPoint().get().add(evt.getTargetBlock().getPosition().toDouble()));
+            // event.precise_location.getInternal().world = event.location.getInternal().world;
+            // event.intersection_point = new LocationTag(evt.getInteractionPoint().get());
+            // TODO: Switch back to these ^ once Sponge fixes the Interaction Point.
             event.impact_normal = new LocationTag(evt.getTargetSide().asOffset());
         }
         else {
@@ -121,7 +118,6 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
             event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
             event.impact_normal = new LocationTag(0, 0, 0);
         }
-        event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);
