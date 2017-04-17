@@ -18,7 +18,7 @@ public class SetBlockCommand extends AbstractCommand {
     // @Name setblock
     // @Arguments <list of locations> <blocktype>
     // @Short sets a block's type.
-    // @Updated 2016/11/24
+    // @Updated 2017/04/03
     // @Group World
     // @Minimum 2
     // @Maximum 2
