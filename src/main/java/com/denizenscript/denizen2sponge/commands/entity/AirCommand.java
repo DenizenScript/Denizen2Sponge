@@ -73,6 +73,7 @@ public class AirCommand extends AbstractCommand {
                     ent.getInternal().offer(Keys.REMAINING_AIR, (int) (dur.getInternal() * 20));
                     break;
                 case "maximum":
+                    ent.getInternal().offer(Keys.MAX_AIR, (int) (dur.getInternal() * 20));
                     break;
                 default:
                     queue.handleError(entry, "Invalid air level type: '" + type + "'!");
