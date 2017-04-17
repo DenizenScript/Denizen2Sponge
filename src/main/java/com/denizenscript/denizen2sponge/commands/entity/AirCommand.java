@@ -70,10 +70,9 @@ public class AirCommand extends AbstractCommand {
             type = entry.getNamedArgumentObject(queue, "type").toString();
             switch (type) {
                 case "remaining":
-                    ent.getInternal().offer(Keys.REMAINING_AIR, (int) dur.getInternal() * 20);
+                    ent.getInternal().offer(Keys.REMAINING_AIR, (int) (dur.getInternal() * 20));
                     break;
                 case "maximum":
-                    ent.getInternal().offer(Keys.MAX_AIR, (int) dur.getInternal() * 20);
                     break;
                 default:
                     queue.handleError(entry, "Invalid air level type: '" + type + "'!");
@@ -82,7 +81,7 @@ public class AirCommand extends AbstractCommand {
         }
         else {
             type = "remaining";
-            ent.getInternal().offer(Keys.REMAINING_AIR, (int) dur.getInternal() * 20);
+            ent.getInternal().offer(Keys.REMAINING_AIR, (int) (dur.getInternal() * 20));
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Setting the " + ColorSet.emphasis + type + ColorSet.good + " air level of "
