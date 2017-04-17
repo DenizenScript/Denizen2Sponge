@@ -44,7 +44,7 @@ public class ItemTag extends AbstractTagObject {
         // @ReturnType ItemTypeTag
         // @Returns the type of the item.
         // -->
-        handlers.put("item_type", (dat, obj) -> new ItemTypeTag((((ItemTag) obj).internal.getItem())));
+        handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((ItemTag) obj).internal.getItem()));
         // <--[tag]
         // @Name ItemTag.quantity
         // @Updated 2017/04/04
@@ -52,7 +52,7 @@ public class ItemTag extends AbstractTagObject {
         // @ReturnType IntegerTag
         // @Returns the amount of items in this stack.
         // -->
-        handlers.put("quantity", (dat, obj) -> new IntegerTag((((ItemTag) obj).internal.getQuantity())));
+        handlers.put("quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getQuantity()));
         // <--[tag]
         // @Name ItemTag.max_stack_quantity
         // @Updated 2017/04/04
@@ -60,7 +60,7 @@ public class ItemTag extends AbstractTagObject {
         // @ReturnType IntegerTag
         // @Returns the maximum amount of items of this type in a stack.
         // -->
-        handlers.put("max_stack_quantity", (dat, obj) -> new IntegerTag((((ItemTag) obj).internal.getMaxStackQuantity())));
+        handlers.put("max_stack_quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getMaxStackQuantity()));
         // <--[tag]
         // @Name ItemTag.data
         // @Updated 2016/11/24
@@ -201,7 +201,7 @@ public class ItemTag extends AbstractTagObject {
             AbstractTagObject ato = flags.getInternal().get(flagName);
             if (ato == null) {
                 if (!dat.hasFallback()) {
-                    dat.error.run("Invalid flag specified, not present on this entity!");
+                    dat.error.run("Invalid flag specified, not present on this item!");
                 }
                 return new NullTag();
             }

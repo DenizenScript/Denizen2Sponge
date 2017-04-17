@@ -143,6 +143,14 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the current IP of the player.
         // -->
         handlers.put("ip", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getConnection().getAddress().getAddress().getHostName()));
+        // <--[tag]
+        // @Name PlayerTag.latency
+        // @Updated 2017/04/17
+        // @Group Properties
+        // @ReturnType IntegerTag
+        // @Returns the current latency of the player, in milliseconds.
+        // -->
+        handlers.put("latency", (dat, obj) -> new IntegerTag(((PlayerTag) obj).internal.getConnection().getLatency()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

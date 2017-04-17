@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.property.entity.EyeHeightProperty;
 import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.data.type.HandTypes;
@@ -360,6 +361,29 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("bounding_box", (dat, obj) -> {
             Entity ent = ((EntityTag) obj).internal;
             return new CuboidTag(ent.getBoundingBox().get(), ent.getWorld());
+        });
+        // <--[tag]
+        // @Name EntityTag.max_air
+        // @Updated 2017/04/17
+        // @Group Current Information
+        // @ReturnType DurationTag
+        // @Returns the maximum air level this entity can have.
+        // -->
+        handlers.put("max_air", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.MAX_AIR).get() / 20.0));
+        // <--[tag]
+        // @Name EntityTag.remaining_air
+        // @Updated 2017/04/17
+        // @Group Current Information
+        // @ReturnType DurationTag
+        // @Returns the remaining air level this entity can have.
+        // -->
+        handlers.put("remaining_air", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).internal;
+            Optional<Integer> opt = ent.get(Keys.REMAINING_AIR);
+            if (!opt.isPresent()) {
+                return new DurationTag(ent.get(Keys.MAX_AIR).get() / 20.0);
+            }
+            return new DurationTag(opt.get() / 20.0);
         });
     }
 
