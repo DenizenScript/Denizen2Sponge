@@ -3,38 +3,31 @@ package com.denizenscript.denizen2sponge.commands.entity;
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.DurationTag;
-import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
-import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.event.cause.entity.damage.DamageType;
-import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
-import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
-
-import java.util.Optional;
 
 public class AirCommand extends AbstractCommand {
 
     // <--[command]
     // @Name air
     // @Arguments <entity> <duration>
-    // @Short sets the air level of the entity.
-    // @Updated 2017/04/17
+    // @Short changes the air level of the entity.
+    // @Updated 2017/04/19
     // @Group Entities
     // @Minimum 2
     // @Maximum 2
     // @Named type (TextTag) Sets of what type the air level will be.
+    // @Named operation (TextTag) Sets whether the command will add or set the value.
     // @Description
-    // Sets the air level of the entity. Optionally specify a type ('remaining' or 'maximum')
-    // to adjust the specified air level type. Defaults to 'remaining'.
+    // Changes the air level of the entity. Optionally specify a type ('remaining' or 'maximum')
+    // to adjust the specified air level type. Defaults to 'remaining'. Also specify whether
+    // the command will 'add' or 'set' the value. Defaults to 'add'.
     // @Example
     // # This example completely fills the air bar of the player
-    // - air <player> <player.max_air>
+    // - air <player> <player.max_air> --operation set
     // -->
 
     @Override
@@ -60,20 +53,37 @@ public class AirCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        DurationTag dur = DurationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+        DurationTag dt = DurationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         if (!ent.getInternal().supports(Keys.MAX_AIR)) {
             queue.handleError(entry, "This entity does not support air levels!");
             return;
         }
+        String operation;
+        if (entry.namedArgs.containsKey("operation")) {
+            operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
+            if (!(operation.equals("add") || operation.equals("set"))) {
+                queue.handleError(entry, "Invalid operation: '" + operation + "'!");
+                return;
+            }
+        }
+        else {
+            operation = "add";
+        }
         String type;
+        int ticks;
         if (entry.namedArgs.containsKey("type")) {
-            type = entry.getNamedArgumentObject(queue, "type").toString();
+            type = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "type").toString());
             switch (type) {
                 case "remaining":
-                    ent.getInternal().offer(Keys.REMAINING_AIR, (int) (dur.getInternal() * 20));
+                    ticks = operation.equals("add") ? (int) (dt.getInternal() * 20) +
+                            ent.getInternal().get(Keys.REMAINING_AIR).orElseGet(() -> ent.getInternal().get(Keys.MAX_AIR).get()) :
+                            (int) (dt.getInternal() * 20);
+                    ent.getInternal().offer(Keys.REMAINING_AIR, ticks);
                     break;
                 case "maximum":
-                    ent.getInternal().offer(Keys.MAX_AIR, (int) (dur.getInternal() * 20));
+                    ticks = operation.equals("add") ? (int) (dt.getInternal() * 20) +
+                            ent.getInternal().get(Keys.MAX_AIR).get() : (int) (dt.getInternal() * 20);
+                    ent.getInternal().offer(Keys.MAX_AIR, ticks);
                     break;
                 default:
                     queue.handleError(entry, "Invalid air level type: '" + type + "'!");
@@ -82,12 +92,16 @@ public class AirCommand extends AbstractCommand {
         }
         else {
             type = "remaining";
-            ent.getInternal().offer(Keys.REMAINING_AIR, (int) (dur.getInternal() * 20));
+            ticks = operation.equals("add") ? (int) (dt.getInternal() * 20) +
+                    ent.getInternal().get(Keys.REMAINING_AIR).orElseGet(() -> ent.getInternal().get(Keys.MAX_AIR).get()) :
+                    (int) (dt.getInternal() * 20);
+            ent.getInternal().offer(Keys.REMAINING_AIR, ticks);
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Setting the " + ColorSet.emphasis + type + ColorSet.good + " air level of "
-                    + ColorSet.emphasis + ent.debug() + ColorSet.good + " to "
-                    + ColorSet.emphasis + dur.debug() + ColorSet.good + " seconds!");
+            queue.outGood(ColorSet.emphasis + (operation.equals("add") ? "Increasing" : "Setting") +
+                    ColorSet.good + " the " + ColorSet.emphasis + type + ColorSet.good + " air level of " +
+                    ColorSet.emphasis + ent.debug() + ColorSet.good + (operation.equals("add") ? " by " : " to ") +
+                    ColorSet.emphasis + dt.debug() + ColorSet.good + " seconds!");
         }
     }
 }
