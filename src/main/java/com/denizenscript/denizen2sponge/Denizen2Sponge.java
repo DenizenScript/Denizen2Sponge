@@ -136,6 +136,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new BanCommand());
         Denizen2Core.register(new FeedCommand());
         Denizen2Core.register(new GiveCommand());
+        Denizen2Core.register(new HotbarCommand());
         Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
