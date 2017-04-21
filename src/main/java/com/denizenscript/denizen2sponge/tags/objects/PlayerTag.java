@@ -11,6 +11,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.world.extent.EntityUniverse;
 
@@ -151,6 +152,14 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the current latency of the player, in milliseconds.
         // -->
         handlers.put("latency", (dat, obj) -> new IntegerTag(((PlayerTag) obj).internal.getConnection().getLatency()));
+        // <--[tag]
+        // @Name PlayerTag.selected_slot
+        // @Updated 2017/04/20
+        // @Group Properties
+        // @ReturnType IntegerTag
+        // @Returns the index of the hotbar slot that is currently selected by the player.
+        // -->
+        handlers.put("selected_slot", (dat, obj) -> new IntegerTag(((PlayerInventory)((PlayerTag) obj).internal.getInventory()).getHotbar().getSelectedSlotIndex() + 1));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
