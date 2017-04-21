@@ -69,10 +69,10 @@ public class HotbarCommand extends AbstractCommand {
                     break;
                 case "add":
                     index = hotbar.getSelectedSlotIndex() + (int) value.getInternal();
-                    if (index > 9) {
+                    while (index > 9) {
                         index -= 9;
                     }
-                    else if (index < 1) {
+                    while (index < 1) {
                         index += 9;
                     }
                     hotbar.setSelectedSlotIndex(index);
