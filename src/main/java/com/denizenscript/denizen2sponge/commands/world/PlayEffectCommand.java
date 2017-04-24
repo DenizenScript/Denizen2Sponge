@@ -42,7 +42,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.
-    // - playeffect <player.location> heart --count 50 --offset 1,1,1
+    // - playeffect <player.location> minecraft:heart --count 50 --offset 1,1,1
     // -->
 
     @Override
@@ -97,8 +97,9 @@ public class PlayEffectCommand extends AbstractCommand {
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Successfully played the particle effect of type: "
-                    + ColorSet.emphasis + type.get().getName() + ColorSet.good + "!");
+            queue.outGood("Successfully played the particle effect of type '" +
+                    ColorSet.emphasis + type.get().getName() + ColorSet.good + "' at location " +
+                    ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
         }
     }
 }

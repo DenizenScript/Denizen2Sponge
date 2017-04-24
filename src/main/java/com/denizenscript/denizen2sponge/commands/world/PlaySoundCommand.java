@@ -20,7 +20,8 @@ public class PlaySoundCommand extends AbstractCommand {
     // @Description
     // A list of all default sound types can be found here:
     // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/effect/sound/SoundTypes.html>sound types list<@/link>
-    // These can be used with the playsound command.
+    // These can be used with the playsound command, if you replace '_' with '.'.
+    // For example, 'entity.arrow.hit' is a valid sound type.
     // -->
 
     // <--[command]
@@ -39,7 +40,7 @@ public class PlaySoundCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example plays a loud 'entity_arrow_hit' sound at the player's location.
-    // - playsound <player.location> entity_arrow_hit 2
+    // - playsound <player.location> entity.arrow.hit 2
     // -->
 
     @Override
@@ -85,7 +86,8 @@ public class PlaySoundCommand extends AbstractCommand {
                     queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getName() +
                             ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good +
                             ", pitch of " + ColorSet.emphasis + pitch.debug() + ColorSet.good + " and minimum volume of " +
-                            ColorSet.emphasis + min_volume.debug() + ColorSet.good + "!");
+                            ColorSet.emphasis + min_volume.debug() + ColorSet.good + " at location " + ColorSet.emphasis +
+                            loc.debug() + ColorSet.good + "!");
                 }
             }
             else {
@@ -93,7 +95,8 @@ public class PlaySoundCommand extends AbstractCommand {
                 if (queue.shouldShowGood()) {
                     queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getName() +
                             ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good +
-                            " and pitch of " + ColorSet.emphasis + pitch.debug() + ColorSet.good + "!");
+                            " and pitch of " + ColorSet.emphasis + pitch.debug() + ColorSet.good + " at location " +
+                            ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
                 }
             }
         }
@@ -101,7 +104,8 @@ public class PlaySoundCommand extends AbstractCommand {
             loc.getInternal().world.playSound(type.get(), loc.getInternal().toVector3d(), volume.getInternal());
             if (queue.shouldShowGood()) {
                 queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getName() +
-                        ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good + "!");
+                        ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good +
+                        " at location " + ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
             }
         }
 

@@ -4,24 +4,16 @@ import com.denizenscript.denizen2core.tags.AbstractTagBase;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
-import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.CuboidTag;
-import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.format.TextColor;
-import org.spongepowered.api.text.format.TextStyles;
-import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.effect.sound.PitchModulation;
 import org.spongepowered.api.world.World;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class ServerTagBase extends AbstractTagBase {
@@ -72,6 +64,22 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("block_type_is_valid", (dat, obj) -> new BooleanTag(Sponge.getRegistry().getType(
                 BlockType.class, dat.getNextModifier().toString()).isPresent()));
+        // <--[tag]
+        // @Name ServerBaseTag.pitch[<TextTag>]
+        // @Updated 2017//04/24
+        // @Group Sound Helper
+        // @ReturnType NumberTag
+        // @Returns the specified pitch as a NumberTag that can be used with the PlaySound command.
+        // -->
+        handlers.put("pitch", (dat, obj) -> {
+            try {
+                Field f = PitchModulation.class.getField(dat.getNextModifier().toString());
+                return new NumberTag(f.getDouble(null));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                dat.error.run("Invalid pitch specified!");
+                return new NullTag();
+            }
+        });
         // <--[tag]
         // @Name ServerBaseTag.cuboid_wrapping[<ListTag>]
         // @Updated 2016//11/24
