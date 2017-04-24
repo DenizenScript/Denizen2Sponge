@@ -15,20 +15,18 @@ public class TitleCommand extends AbstractCommand {
 
     // <--[command]
     // @Name title
-    // @Arguments <player>
+    // @Arguments <player> [title] [subtitle]
     // @Short sends a title to a player.
     // @Updated 2017/04/24
     // @Group Player
     // @Minimum 1
-    // @Maximum 1
-    // @Named title (FormattedTextTag) Sets the title that will be shown to the player.
-    // @Named subtitle (FormattedTextTag) Sets the subtitle that will be shown to the player.
+    // @Maximum 3
     // @Named action_bar (FormattedTextTag) Sets the message that will be shown to the player in the action bar.
     // @Named fade_in (DurationTag) Sets the fade in time.
     // @Named stay (DurationTag) Sets the stay time.
     // @Named fade_out (DurationTag) Sets the fade out time.
     // @Description
-    // Sends a title to a player. Optionally specify dafe in, stay and fade out times.
+    // Sends a title to a player. Optionally specify fade in, stay and fade out times.
     // These times all default to 1 second.
     // @Example
     // # This example sends the title "hello there!" to the player.
@@ -52,15 +50,15 @@ public class TitleCommand extends AbstractCommand {
 
     @Override
     public int getMaximumArguments() {
-        return 1;
+        return 3;
     }
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Title.Builder build = Title.builder();
-        if (entry.namedArgs.containsKey("title")) {
-            AbstractTagObject ato = entry.getNamedArgumentObject(queue, "title");
+        if (entry.arguments.size() > 1) {
+            AbstractTagObject ato = entry.getArgumentObject(queue, 1);
             if (ato instanceof FormattedTextTag) {
                 build.title(((FormattedTextTag) ato).getInternal());
             }
@@ -68,8 +66,8 @@ public class TitleCommand extends AbstractCommand {
                 build.title(Denizen2Sponge.parseColor(ato.toString()));
             }
         }
-        if (entry.namedArgs.containsKey("subtitle")) {
-            AbstractTagObject ato = entry.getNamedArgumentObject(queue, "subtitle");
+        if (entry.arguments.size() > 2) {
+            AbstractTagObject ato = entry.getArgumentObject(queue, 2);
             if (ato instanceof FormattedTextTag) {
                 build.subtitle(((FormattedTextTag) ato).getInternal());
             }

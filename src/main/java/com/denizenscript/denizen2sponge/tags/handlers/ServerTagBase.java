@@ -65,22 +65,6 @@ public class ServerTagBase extends AbstractTagBase {
         handlers.put("block_type_is_valid", (dat, obj) -> new BooleanTag(Sponge.getRegistry().getType(
                 BlockType.class, dat.getNextModifier().toString()).isPresent()));
         // <--[tag]
-        // @Name ServerBaseTag.pitch[<TextTag>]
-        // @Updated 2017//04/24
-        // @Group Sound Helper
-        // @ReturnType NumberTag
-        // @Returns the specified pitch as a NumberTag that can be used with the PlaySound command.
-        // -->
-        handlers.put("pitch", (dat, obj) -> {
-            try {
-                Field f = PitchModulation.class.getField(dat.getNextModifier().toString());
-                return new NumberTag(f.getDouble(null));
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                dat.error.run("Invalid pitch specified!");
-                return new NullTag();
-            }
-        });
-        // <--[tag]
         // @Name ServerBaseTag.cuboid_wrapping[<ListTag>]
         // @Updated 2016//11/24
         // @Group Mathematics
