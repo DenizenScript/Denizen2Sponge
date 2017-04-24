@@ -21,12 +21,18 @@ public class TitleCommand extends AbstractCommand {
     // @Group Player
     // @Minimum 1
     // @Maximum 1
+    // @Named title (FormattedTextTag) Sets the title that will be shown to the player.
+    // @Named subtitle (FormattedTextTag) Sets the subtitle that will be shown to the player.
+    // @Named action_bar (FormattedTextTag) Sets the message that will be shown to the player in the action bar.
+    // @Named fade_in (DurationTag) Sets the fade in time.
+    // @Named stay (DurationTag) Sets the stay time.
+    // @Named fade_out (DurationTag) Sets the fade out time.
     // @Description
     // Sends a title to a player. Optionally specify dafe in, stay and fade out times.
     // These times all default to 1 second.
     // @Example
-    // # This example tells the current player the message "hello there!" in the chat box.
-    // - tell <player> "hello there!"
+    // # This example sends the title "hello there!" to the player.
+    // - title <player> --title "hello there!"
     // -->
 
     @Override

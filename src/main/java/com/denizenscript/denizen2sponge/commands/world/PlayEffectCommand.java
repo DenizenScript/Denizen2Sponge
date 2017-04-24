@@ -77,8 +77,8 @@ public class PlayEffectCommand extends AbstractCommand {
         }
         build.type(type.get());
         if (entry.namedArgs.containsKey("count")) {
-            IntegerTag integer = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "count"));
-            build.quantity((int) integer.getInternal());
+            IntegerTag count = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "count"));
+            build.quantity((int) count.getInternal());
         }
         if (entry.namedArgs.containsKey("offset")) {
             LocationTag offset = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "offset"));
@@ -88,6 +88,7 @@ public class PlayEffectCommand extends AbstractCommand {
             LocationTag motion = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "motion"));
             build.velocity(motion.getInternal().toVector3d());
         }
+        // TODO: Only show the particles to a list of target players.
         if (entry.namedArgs.containsKey("visibility")) {
             IntegerTag visibility = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "visibility"));
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d(), (int) visibility.getInternal());
@@ -96,7 +97,7 @@ public class PlayEffectCommand extends AbstractCommand {
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Successfully played the specified effect of type: "
+            queue.outGood("Successfully played the particle effect of type: "
                     + ColorSet.emphasis + type.get().getName() + ColorSet.good + "!");
         }
     }
