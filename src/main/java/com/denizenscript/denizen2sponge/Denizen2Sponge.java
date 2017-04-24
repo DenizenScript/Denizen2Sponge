@@ -141,6 +141,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
         Denizen2Core.register(new TellCommand());
+        Denizen2Core.register(new TitleCommand());
         // Commands: Server
         Denizen2Core.register(new ExecuteCommand());
         Denizen2Core.register(new ShutdownCommand());

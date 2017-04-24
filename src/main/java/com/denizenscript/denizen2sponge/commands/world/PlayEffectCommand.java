@@ -85,8 +85,8 @@ public class PlayEffectCommand extends AbstractCommand {
             build.offset(offset.getInternal().toVector3d());
         }
         if (entry.namedArgs.containsKey("motion")) {
-            LocationTag offset = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "motion"));
-            build.velocity(offset.getInternal().toVector3d());
+            LocationTag motion = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "motion"));
+            build.velocity(motion.getInternal().toVector3d());
         }
         if (entry.namedArgs.containsKey("visibility")) {
             IntegerTag visibility = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "visibility"));
