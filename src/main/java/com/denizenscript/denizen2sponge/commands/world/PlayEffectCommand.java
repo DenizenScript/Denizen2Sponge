@@ -42,7 +42,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.
-    // - playeffect <player.location> heart --count 50 --offset 1,1,1
+    // - playeffect <player.location> minecraft:heart --count 50 --offset 1,1,1
     // -->
 
     @Override
@@ -77,17 +77,18 @@ public class PlayEffectCommand extends AbstractCommand {
         }
         build.type(type.get());
         if (entry.namedArgs.containsKey("count")) {
-            IntegerTag integer = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "count"));
-            build.quantity((int) integer.getInternal());
+            IntegerTag count = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "count"));
+            build.quantity((int) count.getInternal());
         }
         if (entry.namedArgs.containsKey("offset")) {
             LocationTag offset = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "offset"));
             build.offset(offset.getInternal().toVector3d());
         }
         if (entry.namedArgs.containsKey("motion")) {
-            LocationTag offset = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "motion"));
-            build.velocity(offset.getInternal().toVector3d());
+            LocationTag motion = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "motion"));
+            build.velocity(motion.getInternal().toVector3d());
         }
+        // TODO: Only show the particles to a list of target players.
         if (entry.namedArgs.containsKey("visibility")) {
             IntegerTag visibility = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "visibility"));
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d(), (int) visibility.getInternal());
@@ -96,8 +97,9 @@ public class PlayEffectCommand extends AbstractCommand {
             loc.getInternal().world.spawnParticles(build.build(), loc.getInternal().toVector3d());
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Successfully played the specified effect of type: "
-                    + ColorSet.emphasis + type.get().getName() + ColorSet.good + "!");
+            queue.outGood("Successfully played the particle effect of type '" +
+                    ColorSet.emphasis + type.get().getName() + ColorSet.good + "' at location " +
+                    ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
         }
     }
 }
