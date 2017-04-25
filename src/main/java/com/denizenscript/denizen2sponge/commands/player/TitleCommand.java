@@ -15,11 +15,11 @@ public class TitleCommand extends AbstractCommand {
 
     // <--[command]
     // @Name title
-    // @Arguments <player> [title] [subtitle]
+    // @Arguments <player> <title> [subtitle]
     // @Short sends a title to a player.
     // @Updated 2017/04/24
     // @Group Player
-    // @Minimum 1
+    // @Minimum 2
     // @Maximum 3
     // @Named action_bar (FormattedTextTag) Sets the message that will be shown to the player in the action bar.
     // @Named fade_in (DurationTag) Sets the fade in time.
@@ -30,7 +30,7 @@ public class TitleCommand extends AbstractCommand {
     // These times all default to 1 second.
     // @Example
     // # This example sends the title "hello there!" to the player.
-    // - title <player> --title "hello there!"
+    // - title <player> "hello there!"
     // -->
 
     @Override
@@ -40,12 +40,12 @@ public class TitleCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<player>";
+        return "<player> <title> [subtitle]";
     }
 
     @Override
     public int getMinimumArguments() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -57,22 +57,20 @@ public class TitleCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Title.Builder build = Title.builder();
-        if (entry.arguments.size() > 1) {
-            AbstractTagObject ato = entry.getArgumentObject(queue, 1);
-            if (ato instanceof FormattedTextTag) {
-                build.title(((FormattedTextTag) ato).getInternal());
-            }
-            else {
-                build.title(Denizen2Sponge.parseColor(ato.toString()));
-            }
+        AbstractTagObject title = entry.getArgumentObject(queue, 1);
+        if (title instanceof FormattedTextTag) {
+            build.title(((FormattedTextTag) title).getInternal());
+        }
+        else {
+            build.title(Denizen2Sponge.parseColor(title.toString()));
         }
         if (entry.arguments.size() > 2) {
-            AbstractTagObject ato = entry.getArgumentObject(queue, 2);
-            if (ato instanceof FormattedTextTag) {
-                build.subtitle(((FormattedTextTag) ato).getInternal());
+            AbstractTagObject subtitle = entry.getArgumentObject(queue, 2);
+            if (subtitle instanceof FormattedTextTag) {
+                build.subtitle(((FormattedTextTag) subtitle).getInternal());
             }
             else {
-                build.subtitle(Denizen2Sponge.parseColor(ato.toString()));
+                build.subtitle(Denizen2Sponge.parseColor(subtitle.toString()));
             }
         }
         if (entry.namedArgs.containsKey("action_bar")) {
