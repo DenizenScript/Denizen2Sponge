@@ -240,6 +240,11 @@ public class ItemTag extends AbstractTagObject {
         return new TextTag(toString());
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "ItemTag";
+    }
     @Override
     public String toString() {
         return internal.getItem().getId() + "/" + internal.getQuantity() + "/" + DataKeys.getAllKeys(internal).toString();

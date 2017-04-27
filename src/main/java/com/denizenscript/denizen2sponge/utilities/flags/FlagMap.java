@@ -21,7 +21,7 @@ public class FlagMap implements DataSerializable {
     @Override
     public DataContainer toContainer() {
         MemoryDataContainer mdc = new MemoryDataContainer();
-        mdc.set(FLAG, flags.toString());
+        mdc.set(FLAG, flags.savable());
         return mdc;
     }
 }

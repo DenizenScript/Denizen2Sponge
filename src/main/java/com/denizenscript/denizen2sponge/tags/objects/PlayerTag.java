@@ -208,6 +208,11 @@ public class PlayerTag extends AbstractTagObject {
         return internal.getUniqueId().toString();
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "PlayerTag";
+    }
     @Override
     public String debug() {
         return toString() + "/" + internal.getName();

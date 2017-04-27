@@ -134,7 +134,7 @@ public class TextsTagBase extends AbstractTagBase {
         return new TextsTagBase.TextsBaseTag().handle(data.shrink());
     }
 
-    public class TextsBaseTag extends AbstractTagObject {
+    public static class TextsBaseTag extends AbstractTagObject {
 
         @Override
         public HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> getHandlers() {
@@ -143,7 +143,12 @@ public class TextsTagBase extends AbstractTagBase {
 
         @Override
         public AbstractTagObject handleElseCase(TagData data) {
-            return new TextTag(getName());
+            return new TextTag("texts");
+        }
+
+        @Override
+        public String getTagTypeName() {
+            return "TextsBaseTag";
         }
     }
 }

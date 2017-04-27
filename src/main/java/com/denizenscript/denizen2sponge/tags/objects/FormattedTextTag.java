@@ -82,6 +82,11 @@ public class FormattedTextTag extends AbstractTagObject {
         return TextSerializers.JSON.serialize(internal);
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "FormattedTextTag";
+    }
     @Override
     public String debug() {
         return "Formatted[" + internal.toPlain() + "]";

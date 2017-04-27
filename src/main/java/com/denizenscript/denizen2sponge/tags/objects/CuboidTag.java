@@ -161,6 +161,11 @@ public class CuboidTag extends AbstractTagObject {
         return new TextTag(toString());
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "CuboidTag";
+    }
     @Override
     public String toString() {
         String s = CoreUtilities.doubleToString(internal.min.x) + ","

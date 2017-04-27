@@ -99,16 +99,21 @@ public class ServerTagBase extends AbstractTagBase {
         return new ServerTagBase.ServerBaseTag().handle(data.shrink());
     }
 
-    public class ServerBaseTag extends AbstractTagObject {
+    public static class ServerBaseTag extends AbstractTagObject {
 
         @Override
         public HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> getHandlers() {
             return handlers;
         }
 
+
+        @Override
+        public String getTagTypeName() {
+            return "ServerBaseTag";
+        }
         @Override
         public AbstractTagObject handleElseCase(TagData data) {
-            return new TextTag(getName());
+            return new TextTag("server");
         }
     }
 }

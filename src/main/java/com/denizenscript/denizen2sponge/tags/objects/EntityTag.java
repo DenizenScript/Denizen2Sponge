@@ -418,6 +418,11 @@ public class EntityTag extends AbstractTagObject {
         return internal.getUniqueId().toString();
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "EntityTag";
+    }
     @Override
     public String debug() {
         return toString() + "/" + internal.getType().getId();

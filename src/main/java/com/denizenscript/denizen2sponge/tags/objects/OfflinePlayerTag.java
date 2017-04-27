@@ -106,6 +106,11 @@ public class OfflinePlayerTag extends AbstractTagObject {
         return internal.getUniqueId().toString();
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "OfflinePlayerTag";
+    }
     @Override
     public String debug() {
         return toString() + "/" + internal.getName();

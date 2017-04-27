@@ -24,6 +24,7 @@ import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
+import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -193,6 +194,20 @@ public class Denizen2Sponge {
         Denizen2Core.register(new WorldTagBase());
         // Sponge Script Types
         Denizen2Core.register("command", GameCommandScript::new);
+        // Tag Types
+        Denizen2Core.customSaveLoaders.put("BlockTypeTag", BlockTypeTag::getFor);
+        Denizen2Core.customSaveLoaders.put("CuboidTag", CuboidTag::getFor);
+        Denizen2Core.customSaveLoaders.put("EntityTag", EntityTag::getFor);
+        Denizen2Core.customSaveLoaders.put("EntityTypeTag", EntityTypeTag::getFor);
+        Denizen2Core.customSaveLoaders.put("FormattedTextTag", FormattedTextTag::getFor);
+        Denizen2Core.customSaveLoaders.put("ItemTag", ItemTag::getFor);
+        Denizen2Core.customSaveLoaders.put("ItemTypeTag", ItemTypeTag::getFor);
+        Denizen2Core.customSaveLoaders.put("LocationTag", LocationTag::getFor);
+        Denizen2Core.customSaveLoaders.put("OfflinePlayerTag", OfflinePlayerTag::getFor);
+        Denizen2Core.customSaveLoaders.put("PlayerTag", PlayerTag::getFor);
+        Denizen2Core.customSaveLoaders.put("WorldTag", WorldTag::getFor);
+        Denizen2Core.customSaveLoaders.put("ServerBaseTag", (e, s) -> new ServerTagBase.ServerBaseTag());
+        Denizen2Core.customSaveLoaders.put("TextsBaseTag", (e, s) -> new TextsTagBase.TextsBaseTag());
         // Sponge Commands
         ExCommand.register();
         // Sponge related Helpers

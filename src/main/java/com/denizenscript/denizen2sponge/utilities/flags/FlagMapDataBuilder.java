@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge.utilities.flags;
 
+import com.denizenscript.denizen2core.Denizen2Core;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.DataView;
@@ -40,7 +41,7 @@ public class FlagMapDataBuilder extends AbstractDataBuilder<FlagMapData> impleme
             return Optional.empty();
         }
         String val = str.get();
-        MapTag mt = MapTag.getFor((e) -> { throw new InvalidDataException("Denizen2: " + e); }, val);
+        MapTag mt = (MapTag) Denizen2Core.loadFromSaved((e) -> { throw new InvalidDataException("Denizen2: " + e); }, val);
         return Optional.of(new FlagMapDataImpl(new FlagMap(mt)));
     }
 }

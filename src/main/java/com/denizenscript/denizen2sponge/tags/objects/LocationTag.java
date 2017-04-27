@@ -429,6 +429,11 @@ public class LocationTag extends AbstractTagObject {
         return new TextTag(toString());
     }
 
+
+    @Override
+    public String getTagTypeName() {
+        return "LocationTag";
+    }
     @Override
     public String toString() {
         String s = CoreUtilities.doubleToString(internal.x) + ","

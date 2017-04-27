@@ -261,6 +261,11 @@ public class WorldTag extends AbstractTagObject {
     }
 
     @Override
+    public String getTagTypeName() {
+        return "WorldTag";
+    }
+
+    @Override
     public String toString() {
         return internal.getName();
     }
