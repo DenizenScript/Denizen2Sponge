@@ -86,16 +86,16 @@ public class D2SpongeEventHelper {
     }
 
     // <--[explanation]
-    // @Name Item Switch For Events
+    // @Name With Item Switch For Events
     // @Group Events
     // @Description
-    // Some events contain an "Item:" switch.
+    // Some events contain an "with_item:" switch.
     // This is a special-case-switch with sub-options!
     //
-    // For example, you would write "item:type:stick" to check if the item is of TYPE stick!
+    // For example, you would write "with_item:type:stick" to check if the item is of TYPE stick!
     //
     // Note that this syntax additionally allows for multiple options, as well as sub-lists for specific potential options.
-    // "item:type:stick&pipestone|quantity:5|flagged:best_stick_or_stone"
+    // "with_item:type:stick&pipestone|quantity:5|flagged:best_stick_or_stone"
     //
     // Options:
     // type: (ItemTypeTag) checks if the item type matches.
@@ -104,7 +104,7 @@ public class D2SpongeEventHelper {
     // -->
 
     public static boolean checkItem(ItemTag itm, ScriptEvent.ScriptEventData data, Action<String> error) {
-        return checkItem(itm, data, error, "item");
+        return checkItem(itm, data, error, "with_item");
     }
 
     public static boolean checkItem(ItemTag itm, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
