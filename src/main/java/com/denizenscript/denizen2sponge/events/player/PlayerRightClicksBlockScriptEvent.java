@@ -40,8 +40,9 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     //
     // @Triggers when a player right clicks a block. Note that this may fire twice per triggering.
     //
-    // @Switch type (BlockTypeTag) checks the entity type.
+    // @Switch type (BlockTypeTag) checks the block type.
     // @Switch hand (TextTag) checks the hand type.
+    // @Switch item (ItemTag) checks the item in hand.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
