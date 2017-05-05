@@ -5,12 +5,16 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
 
@@ -50,7 +54,9 @@ public class PlayerLeftClicksEntityScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
+                && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
+                .getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
     }
 
     public PlayerTag player;

@@ -7,12 +7,16 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
 
@@ -55,7 +59,9 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
-                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
+                .getItemInHand(hInternal).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
     }
 
     public PlayerTag player;
@@ -63,6 +69,8 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     public EntityTag entity;
 
     public TextTag hand;
+
+    public HandType hInternal;
 
     public InteractEntityEvent.Secondary internal;
 
@@ -91,6 +99,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
         event.internal = evt;
         event.player = new PlayerTag(player);
         event.entity = new EntityTag(evt.getTargetEntity());
+        event.hInternal = evt.getHandType();
         event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
         event.run();

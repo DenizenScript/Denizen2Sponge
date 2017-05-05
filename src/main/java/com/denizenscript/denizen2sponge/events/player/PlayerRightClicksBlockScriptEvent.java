@@ -6,14 +6,20 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
+import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
+import com.denizenscript.denizen2sponge.tags.objects.ItemTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.type.HandType;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.World;
@@ -62,7 +68,9 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error)
-                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
+                .getItemInHand(hInternal).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
     }
 
     public PlayerTag player;
@@ -76,6 +84,8 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     public LocationTag impact_normal;
 
     public TextTag hand;
+
+    public HandType hInternal;
 
     public InteractBlockEvent.Secondary internal;
 
@@ -121,6 +131,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
             event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
             event.impact_normal = new LocationTag(0, 0, 0);
         }
+        event.hInternal = evt.getHandType();
         event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
         event.run();
