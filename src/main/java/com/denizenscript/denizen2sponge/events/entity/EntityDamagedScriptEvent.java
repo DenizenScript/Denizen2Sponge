@@ -8,12 +8,10 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
+import org.spongepowered.api.event.cause.entity.damage.DamageFunction;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
-import org.spongepowered.api.util.Tuple;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 public class EntityDamagedScriptEvent extends ScriptEvent {
 
@@ -98,8 +96,8 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
             NumberTag nt = NumberTag.getFor(this::error, value);
             damage = nt;
             internal.setBaseDamage(nt.getInternal());
-            for (Tuple<DamageModifier, Function<? super Double,Double>> tuple : internal.getModifiers()) {
-                internal.setDamage(tuple.getFirst(), (x) -> 0.0);
+            for (DamageFunction tuple : internal.getModifiers()) {
+                internal.setDamage(tuple.getModifier(), (x) -> 0.0);
             }
         }
         else {
