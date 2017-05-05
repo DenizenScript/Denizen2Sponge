@@ -119,6 +119,7 @@ public class Denizen2Sponge {
         // Commands: Entity
         Denizen2Core.register(new AirCommand());
         Denizen2Core.register(new CastCommand());
+        Denizen2Core.register(new DropCommand());
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new EquipCommand());
         Denizen2Core.register(new FlagCommand());
@@ -163,9 +164,11 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerJoinsScriptEvent());
         Denizen2Core.register(new PlayerLeftClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerLeftClicksEntityScriptEvent());
+        Denizen2Core.register(new PlayerLeftClicksScriptEvent());
         Denizen2Core.register(new PlayerPlacesBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
+        Denizen2Core.register(new PlayerRightClicksScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         Denizen2Core.register(new InternalScriptEvent());
