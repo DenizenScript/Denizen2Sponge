@@ -52,7 +52,7 @@ public class WeatherCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         WorldTag world = WorldTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String weather =entry.getArgumentObject(queue, 1).toString();
+        String weather = entry.getArgumentObject(queue, 1).toString();
         Optional<Weather> type = Sponge.getRegistry().getType(Weather.class, weather);
         if (!type.isPresent()) {
             queue.handleError(entry, "Invalid weather type: '" + weather + "'!");

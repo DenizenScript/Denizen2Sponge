@@ -29,7 +29,7 @@ import java.util.Map;
 public class DropCommand extends AbstractCommand {
 
     // <--[command]
-    // @Name spawn
+    // @Name drop
     // @Arguments <item> <location>
     // @Short drops an item.
     // @Updated 2017/05/05

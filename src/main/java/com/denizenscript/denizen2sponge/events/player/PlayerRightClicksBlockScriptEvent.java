@@ -42,7 +42,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     //
     // @Switch type (BlockTypeTag) checks the block type.
     // @Switch hand (TextTag) checks the hand type.
-    // @Switch item (ItemTag) checks the item in hand.
+    // @Switch with_item (ItemTag) checks the item in hand.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.

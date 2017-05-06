@@ -31,7 +31,7 @@ public class PlayerLeftClicksEntityScriptEvent extends ScriptEvent {
     // @Group Player
     //
     // @Switch type (EntityTypeTag) checks the entity type.
-    // @Switch item (ItemTag) checks the item in hand.
+    // @Switch with_item (ItemTag) checks the item in hand.
     //
     // @Triggers when a player left clicks an entity.
     //

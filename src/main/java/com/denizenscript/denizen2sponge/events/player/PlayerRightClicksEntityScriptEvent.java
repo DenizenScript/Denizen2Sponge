@@ -34,7 +34,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     //
     // @Switch type (EntityTypeTag) checks the entity type.
     // @Switch hand (TextTag) checks the hand type.
-    // @Switch item (ItemTag) checks the item in hand.
+    // @Switch with_item (ItemTag) checks the item in hand.
     //
     // @Triggers when a player right clicks an entity. Note that this may fire twice per triggering.
     //
