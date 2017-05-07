@@ -54,7 +54,7 @@ public class PlayerLeftClicksScriptEvent extends ScriptEvent {
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("player left clicks");
+        return data.eventPath.equals("player left clicks");
     }
 
     @Override
