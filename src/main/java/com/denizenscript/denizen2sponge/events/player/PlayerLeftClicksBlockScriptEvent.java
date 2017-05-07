@@ -36,7 +36,8 @@ public class PlayerLeftClicksBlockScriptEvent extends ScriptEvent {
     //
     // @Triggers when a player left clicks a block.
     //
-    // @Switch type (BlockTypeTag) checks the entity type.
+    // @Switch type (BlockTypeTag) checks the block type.
+    // @Switch with_item (ItemTag) checks the item in hand.
     //
     // @Context
     // player (PlayerTag) returns the player that did the left clicking.

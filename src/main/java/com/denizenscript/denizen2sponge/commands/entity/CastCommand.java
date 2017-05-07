@@ -69,12 +69,12 @@ public class CastCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String name = entry.getArgumentObject(queue, 1).toString().toLowerCase();
         if (!ent.getInternal().supports(PotionEffectData.class)) {
             queue.handleError(entry, "This entity type does not support potion effects!");
             return;
         }
         PotionEffectData data = ent.getInternal().getOrCreate(PotionEffectData.class).get();
+        String name = entry.getArgumentObject(queue, 1).toString().toLowerCase();
         Optional<PotionEffectType> type = Sponge.getRegistry().getType(PotionEffectType.class, name);
         if (!type.isPresent()) {
             queue.handleError(entry, "Invalid potion effect name: '" + name + "'!");
@@ -101,7 +101,7 @@ public class CastCommand extends AbstractCommand {
             build.particles(true);
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Casting " + ColorSet.emphasis + name + ColorSet.good
+            queue.outGood("Casting " + ColorSet.emphasis + type.get().getId() + ColorSet.good
                     + " on " + ColorSet.emphasis + ent.debug() + ColorSet.good
                     + " for " + ColorSet.emphasis + dur.debug() + ColorSet.good + " seconds!");
         }

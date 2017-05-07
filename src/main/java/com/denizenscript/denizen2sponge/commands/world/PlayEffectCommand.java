@@ -68,7 +68,7 @@ public class PlayEffectCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String effectName = CoreUtilities.toLowerCase(entry.getArgumentObject(queue, 1).toString());
+        String effectName = entry.getArgumentObject(queue, 1).toString();
         ParticleEffect.Builder build = ParticleEffect.builder();
         Optional<ParticleType> type = Sponge.getRegistry().getType(ParticleType.class, effectName);
         if (!type.isPresent()) {
@@ -98,7 +98,7 @@ public class PlayEffectCommand extends AbstractCommand {
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Successfully played the particle effect of type '" +
-                    ColorSet.emphasis + type.get().getName() + ColorSet.good + "' at location " +
+                    ColorSet.emphasis + type.get().getId() + ColorSet.good + "' at location " +
                     ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
         }
     }

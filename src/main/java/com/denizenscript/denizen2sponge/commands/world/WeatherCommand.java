@@ -36,7 +36,7 @@ public class WeatherCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<world> clear/rain/thunder_storm [duration]";
+        return "<world> 'clear'/'rain'/'thunder_storm' [duration]";
     }
 
     @Override
@@ -52,7 +52,7 @@ public class WeatherCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         WorldTag world = WorldTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String weather = CoreUtilities.toLowerCase(entry.getArgumentObject(queue, 1).toString());
+        String weather = entry.getArgumentObject(queue, 1).toString();
         Optional<Weather> type = Sponge.getRegistry().getType(Weather.class, weather);
         if (!type.isPresent()) {
             queue.handleError(entry, "Invalid weather type: '" + weather + "'!");
@@ -66,7 +66,7 @@ public class WeatherCommand extends AbstractCommand {
             world.getInternal().setWeather(type.get());
         }
         if (queue.shouldShowGood()) {
-            queue.outGood("Changed weather to " + ColorSet.emphasis + weather + ColorSet.good
+            queue.outGood("Changed weather to " + ColorSet.emphasis + type.get().getId() + ColorSet.good
                     + " in world: " + ColorSet.emphasis + world.debug() + ColorSet.good + "!");
         }
     }

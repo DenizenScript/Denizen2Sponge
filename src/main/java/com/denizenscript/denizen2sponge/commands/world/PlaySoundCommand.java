@@ -66,7 +66,7 @@ public class PlaySoundCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        String soundName = CoreUtilities.toLowerCase(entry.getArgumentObject(queue, 1).toString());
+        String soundName = entry.getArgumentObject(queue, 1).toString();
         Optional<SoundType> type = Sponge.getRegistry().getType(SoundType.class, soundName);
         if (!type.isPresent()) {
             queue.handleError(entry, "Invalid sound type: '" + soundName + "'!");
@@ -83,7 +83,7 @@ public class PlaySoundCommand extends AbstractCommand {
                 min_volume = NumberTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "min_volume"));
                 loc.getInternal().world.playSound(type.get(), loc.getInternal().toVector3d(), volume.getInternal(), pitch.getInternal(), min_volume.getInternal());
                 if (queue.shouldShowGood()) {
-                    queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getName() +
+                    queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getId() +
                             ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good +
                             ", pitch of " + ColorSet.emphasis + pitch.debug() + ColorSet.good + " and minimum volume of " +
                             ColorSet.emphasis + min_volume.debug() + ColorSet.good + " at location " + ColorSet.emphasis +
@@ -93,7 +93,7 @@ public class PlaySoundCommand extends AbstractCommand {
             else {
                 loc.getInternal().world.playSound(type.get(), loc.getInternal().toVector3d(), volume.getInternal(), pitch.getInternal());
                 if (queue.shouldShowGood()) {
-                    queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getName() +
+                    queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getId() +
                             ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good +
                             " and pitch of " + ColorSet.emphasis + pitch.debug() + ColorSet.good + " at location " +
                             ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
@@ -103,7 +103,7 @@ public class PlaySoundCommand extends AbstractCommand {
         else {
             loc.getInternal().world.playSound(type.get(), loc.getInternal().toVector3d(), volume.getInternal());
             if (queue.shouldShowGood()) {
-                queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getName() +
+                queue.outGood("Successfully played the sound of type '" + ColorSet.emphasis + type.get().getId() +
                         ColorSet.good + "' with volume of " + ColorSet.emphasis + volume.debug() + ColorSet.good +
                         " at location " + ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
             }

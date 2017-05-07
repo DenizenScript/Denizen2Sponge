@@ -2,46 +2,39 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.type.HandType;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
+public class PlayerRightClicksScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // player right clicks entity
+    // player right clicks
     //
-    // @Updated 2017/03/28
+    // @Updated 2017/05/05
     //
     // @Cancellable true
     //
     // @Group Player
     //
-    // @Switch type (EntityTypeTag) checks the entity type.
-    // @Switch hand (TextTag) checks the hand type.
-    // @Switch with_item (ItemTag) checks the item in hand.
+    // @Triggers when a player right clicks. Note: This does not include right clicking air empty handed.
     //
-    // @Triggers when a player right clicks an entity. Note that this may fire twice per triggering.
+    // @Switch with_item (ItemTag) checks the item in hand.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
-    // entity (EntityTag) returns the entity that was right clicked.
-    // hand (TextTag) returns the hand type that triggered the event.
     //
     // @Determinations
     // None.
@@ -49,38 +42,28 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "PlayerRightClicksEntity";
+        return "PlayerRightClicks";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("player right clicks entity");
+        return data.eventPath.equals("player right clicks");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
-                && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error)
-                && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
-                .getItemInHand(hInternal).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
+        return D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal().
+                getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
     }
 
     public PlayerTag player;
 
-    public EntityTag entity;
-
-    public TextTag hand;
-
-    public HandType hInternal;
-
-    public InteractEntityEvent.Secondary internal;
+    public InteractItemEvent.Secondary internal;
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("player", player);
-        defs.put("entity", entity);
-        defs.put("hand", hand);
         return defs;
     }
 
@@ -95,13 +78,10 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onRightClickEntity(InteractEntityEvent.Secondary evt, @Root Player player) {
-        PlayerRightClicksEntityScriptEvent event = (PlayerRightClicksEntityScriptEvent) clone();
+    public void onRightClick(InteractItemEvent.Secondary evt, @Root Player player) {
+        PlayerRightClicksScriptEvent event = (PlayerRightClicksScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
-        event.entity = new EntityTag(evt.getTargetEntity());
-        event.hInternal = evt.getHandType();
-        event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);
