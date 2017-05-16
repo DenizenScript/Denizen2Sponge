@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2core.utilities.Tuple;
+import com.denizenscript.denizen2sponge.utilities.GameRules;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
@@ -108,7 +109,7 @@ public class WorldTag extends AbstractTagObject {
         handlers.put("spawn", (dat, obj) -> new LocationTag(((WorldTag) obj).internal.getSpawnLocation()));
         // <--[tag]
         // @Name WorldTag.list_gamerules
-        // @Updated 2017/04/03
+        // @Updated 2017/05/16
         // @Group Properties
         // @ReturnType MapTag
         // @Returns the gamerules of the world as a MapTag.
@@ -116,7 +117,13 @@ public class WorldTag extends AbstractTagObject {
         handlers.put("list_gamerules", (dat, obj) -> {
             MapTag map = new MapTag();
             for (Map.Entry<String, String> entry : ((WorldTag) obj).internal.getGameRules().entrySet()) {
-                map.getInternal().put(entry.getKey(), TextTag.getFor(dat.error, entry.getValue()));
+                if (GameRules.MinecraftToSponge.containsKey(entry.getKey())) {
+                    map.getInternal().put(GameRules.MinecraftToSponge.get(entry.getKey()),
+                            TextTag.getFor(dat.error, entry.getValue()));
+                }
+                else {
+                    map.getInternal().put(entry.getKey(), TextTag.getFor(dat.error, entry.getValue()));
+                }
             }
             return map;
         });

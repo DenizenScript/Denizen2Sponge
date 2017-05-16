@@ -25,6 +25,7 @@ import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.utilities.GameRules;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -145,10 +146,15 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ExecuteCommand());
         Denizen2Core.register(new ShutdownCommand());
         // Commands: World
+        Denizen2Core.register(new DeleteWorldCommand());
         Denizen2Core.register(new EditBlockCommand());
+        Denizen2Core.register(new LoadWorldCommand());
         Denizen2Core.register(new PlayEffectCommand());
         Denizen2Core.register(new PlaySoundCommand());
+        Denizen2Core.register(new RemoveGameRuleCommand());
         Denizen2Core.register(new SetBlockCommand());
+        Denizen2Core.register(new SetGameRuleCommand());
+        Denizen2Core.register(new UnloadWorldCommand());
         Denizen2Core.register(new WeatherCommand());
         // Events: Entity
         Denizen2Core.register(new EntityDamagedScriptEvent());
@@ -215,6 +221,7 @@ public class Denizen2Sponge {
         ExCommand.register();
         // Sponge related Helpers
         FlagHelper.register();
+        GameRules.init();
         // Call loading event for sub-plugins registering things
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
