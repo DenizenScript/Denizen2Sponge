@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge.commands.world;
 
+import com.denizenscript.denizen2core.Denizen2Core;
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
@@ -86,6 +87,7 @@ public class DeleteWorldCommand extends AbstractCommand {
             }
         } catch (InterruptedException | ExecutionException e) {
             queue.handleError(entry, "World deletion failed!");
+            Denizen2Core.getImplementation().outputException(e);
         }
     }
 }

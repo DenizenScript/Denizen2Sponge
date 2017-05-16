@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge.utilities;
 
+import com.denizenscript.denizen2core.Denizen2Core;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import org.spongepowered.api.world.gamerule.DefaultGameRules;
 
@@ -20,6 +21,8 @@ public class GameRules {
             }
         }
         catch (IllegalAccessException e) {
+            Denizen2Core.getImplementation().outputError("Failed to initialize the default game rules maps!");
+            Denizen2Core.getImplementation().outputException(e);
         }
     }
 }

@@ -28,7 +28,7 @@ public class RemoveGameRuleCommand extends AbstractCommand {
     // Note: you can't remove default minecraft game rules.
     // @Example
     // # Removes the custom game rules 'xp_multiplier' and
-    // 'currency_multiplier' from world 'Games'.
+    // # 'currency_multiplier' from world 'Games'.
     // - removegamerule Games xp_multiplier|currency_multiplier
     // -->
 
