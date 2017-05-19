@@ -26,6 +26,7 @@ public class ShutdownCommand extends AbstractCommand {
     // @Example
     // # This example stops the server.
     // - shutdown
+    // -->
 
     @Override
     public String getName() {
