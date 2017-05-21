@@ -32,8 +32,8 @@ public class PlaySoundCommand extends AbstractCommand {
     // @Group World
     // @Minimum 2
     // @Maximum 2
-    // @Named pitch (IntegerTag) Sets the pitch of the sound.
-    // @Named min_volume (IntegerTag) Sets the minimum volume of the sound.
+    // @Named pitch (NumberTag) Sets the pitch of the sound.
+    // @Named min_volume (NumberTag) Sets the minimum volume of the sound.
     // @Description
     // Plays a sound at certain location. Optionally specify a pitch and minimum volume.
     // Related information: <@link explanation Sound Types>sound types<@/link>.
