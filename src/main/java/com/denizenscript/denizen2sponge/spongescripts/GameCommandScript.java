@@ -47,6 +47,9 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
     // @Description
     // An in-game command script is a script that handles in-game commands.
     // It is simply identified with the type "command".
+    // Expected keys: name (list or string), description (string), permission (string, optional),
+    // Valid contexts: source (player/block/server), player (PlayerTag, if source=player), location (LocationTag, if source=block)
+    // arguments (ListTag), raw_arguments (TextTag)
     // -->
 
     public GameCommandScript(String name, YAMLConfiguration section) {
