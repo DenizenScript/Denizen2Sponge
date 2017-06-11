@@ -16,6 +16,13 @@ public class UtilLocation {
         // Do nothing.
     }
 
+    public UtilLocation(Vector3i vec, World w) {
+        x = vec.getX();
+        y = vec.getY();
+        z = vec.getZ();
+        world = w;
+    }
+
     public UtilLocation(double _x, double _y, double _z, World _w) {
         x = _x;
         y = _y;

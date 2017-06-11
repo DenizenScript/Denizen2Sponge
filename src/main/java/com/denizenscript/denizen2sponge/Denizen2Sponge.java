@@ -193,6 +193,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntityTagBase());
         Denizen2Core.register(new EntityTypeTagBase());
         Denizen2Core.register(new FormattedTextTagBase());
+        Denizen2Core.register(new InventoryTagBase());
         Denizen2Core.register(new ItemTagBase());
         Denizen2Core.register(new ItemTypeTagBase());
         Denizen2Core.register(new LocationTagBase());
@@ -209,6 +210,7 @@ public class Denizen2Sponge {
         Denizen2Core.customSaveLoaders.put("EntityTag", EntityTag::getFor);
         Denizen2Core.customSaveLoaders.put("EntityTypeTag", EntityTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("FormattedTextTag", FormattedTextTag::getFor);
+        Denizen2Core.customSaveLoaders.put("InventoryTag", InventoryTag::getFor);
         Denizen2Core.customSaveLoaders.put("ItemTag", ItemTag::getFor);
         Denizen2Core.customSaveLoaders.put("ItemTypeTag", ItemTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("LocationTag", LocationTag::getFor);
