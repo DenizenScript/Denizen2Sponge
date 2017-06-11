@@ -6,6 +6,9 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.*;
+import com.denizenscript.denizen2sponge.commands.items.CreateInventoryCommand;
+import com.denizenscript.denizen2sponge.commands.items.ForgetInventoryCommand;
+import com.denizenscript.denizen2sponge.commands.items.RememberInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.player.*;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.server.ShutdownCommand;
@@ -45,6 +48,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 /**
  * Main plugin class for Denizen2Sponge.
@@ -75,6 +79,8 @@ public class Denizen2Sponge {
     public static Text parseColor(String inp) {
         return TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(inp);
     }
+
+    public static HashMap<String, InventoryTag> rememberedInventories = new HashMap<>();
 
     @Inject
     public Logger logger;
@@ -131,6 +137,10 @@ public class Denizen2Sponge {
         Denizen2Core.register(new SpawnCommand());
         Denizen2Core.register(new TeleportCommand());
         Denizen2Core.register(new UnflagCommand());
+        // Commands: Item
+        Denizen2Core.register(new CreateInventoryCommand());
+        Denizen2Core.register(new ForgetInventoryCommand());
+        Denizen2Core.register(new RememberInventoryCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new BanCommand());

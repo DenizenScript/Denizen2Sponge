@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
@@ -31,6 +32,8 @@ public class InventoryTag extends AbstractTagObject {
 
     private Inventory internal;
 
+    public String remAs = null;
+
     public InventoryTag(Inventory player) {
         internal = player;
     }
@@ -50,6 +53,14 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "player/bob" might return "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
+        // @Name InventoryTag.size
+        // @Updated 2017/06/11
+        // @Group General Information
+        // @ReturnType IntegerTag
+        // @Returns the inventory's size (in slots).
+        // @Example "block/0,1,2,world" might return "36".
+        // -->
+        handlers.put("size", (dat, obj) -> new IntegerTag(((InventoryTag) obj).internal.size()));
     }
 
     public static InventoryTag getFor(Action<String> error, String text) {
@@ -77,6 +88,9 @@ public class InventoryTag extends AbstractTagObject {
             LocationTag lt = LocationTag.getFor(error, split.get(1));
             return new InventoryTag(((TileEntityCarrier) lt.getInternal().toLocation().getTileEntity().get()).getInventory());
         }
+        else if (split.get(0).equals("shared")) {
+            return Denizen2Sponge.rememberedInventories.get(split.get(1));
+        }
         else {
             error.run("Inventory type not known to the system: " + split.get(0));
             return null;
@@ -103,11 +117,17 @@ public class InventoryTag extends AbstractTagObject {
     }
 
     public String toString(boolean unks) {
+        if (remAs != null) {
+            return "shared/" + remAs;
+        }
         if (internal instanceof PlayerInventory) {
             return "player/" + ((PlayerInventory) internal).getCarrier().get().getUniqueId().toString();
         }
         else if (internal instanceof CarriedInventory) {
-            Object o = ((CarriedInventory) internal).getCarrier().get();
+            Object o = ((CarriedInventory) internal).getCarrier().orElse(null);
+            if (o == null) {
+                return "((UNKNOWN INVENTORY TYPE))";
+            }
             if (o instanceof Entity) {
                 return "entity/" + ((Entity) o).getUniqueId().toString();
             }
@@ -125,6 +145,10 @@ public class InventoryTag extends AbstractTagObject {
         }
     }
 
+    @Override
+    public String savable() {
+        return getTagTypeName() + saveMark() + toString(false);
+    }
 
     @Override
     public String getTagTypeName() {
