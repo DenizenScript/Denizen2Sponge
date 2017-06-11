@@ -4,11 +4,12 @@ import com.denizenscript.denizen2core.tags.objects.MapTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
 import org.spongepowered.api.data.manipulator.immutable.common.AbstractImmutableSingleData;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 
-public class ImmFlagMapDataImpl extends AbstractImmutableSingleData<FlagMap, ImmutableFlagMapData, FlagMapData> implements ImmutableFlagMapData {
+public class ImmFlagMapDataImpl extends AbstractImmutableSingleData<FlagMap, ImmFlagMapDataImpl, FlagMapDataImpl> implements ImmutableDataManipulator<ImmFlagMapDataImpl, FlagMapDataImpl> {
 
     public ImmFlagMapDataImpl(FlagMap value, Key<? extends BaseValue<FlagMap>> usedKey) {
         super(value, usedKey);
@@ -20,7 +21,7 @@ public class ImmFlagMapDataImpl extends AbstractImmutableSingleData<FlagMap, Imm
     }
 
     @Override
-    public FlagMapData asMutable() {
+    public FlagMapDataImpl asMutable() {
         return new FlagMapDataImpl(this.getValue());
     }
 

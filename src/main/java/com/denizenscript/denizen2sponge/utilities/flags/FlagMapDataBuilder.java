@@ -11,23 +11,23 @@ import org.spongepowered.api.data.persistence.InvalidDataException;
 
 import java.util.Optional;
 
-public class FlagMapDataBuilder extends AbstractDataBuilder<FlagMapData> implements DataManipulatorBuilder<FlagMapData, ImmutableFlagMapData> {
+public class FlagMapDataBuilder extends AbstractDataBuilder<FlagMapDataImpl> implements DataManipulatorBuilder<FlagMapDataImpl, ImmFlagMapDataImpl> {
 
-    protected FlagMapDataBuilder(Class<FlagMapData> requiredClass, int supportedVersion) {
+    protected FlagMapDataBuilder(Class<FlagMapDataImpl> requiredClass, int supportedVersion) {
         super(requiredClass, supportedVersion);
     }
     @Override
-    public FlagMapData create() {
+    public FlagMapDataImpl create() {
         return new FlagMapDataImpl();
     }
 
     @Override
-    public Optional<FlagMapData> createFrom(DataHolder dataHolder) {
+    public Optional<FlagMapDataImpl> createFrom(DataHolder dataHolder) {
         return create().fill(dataHolder);
     }
 
     @Override
-    protected Optional<FlagMapData> buildContent(DataView container) throws InvalidDataException {
+    protected Optional<FlagMapDataImpl> buildContent(DataView container) throws InvalidDataException {
         Integer version = (Integer) container.get(Queries.CONTENT_VERSION).get();
         if (version != 1) {
             return Optional.empty();

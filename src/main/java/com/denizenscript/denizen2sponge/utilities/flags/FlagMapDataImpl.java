@@ -4,13 +4,14 @@ import com.denizenscript.denizen2core.tags.objects.MapTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataHolder;
+import org.spongepowered.api.data.manipulator.DataManipulator;
 import org.spongepowered.api.data.manipulator.mutable.common.AbstractSingleData;
 import org.spongepowered.api.data.merge.MergeFunction;
 import org.spongepowered.api.data.value.mutable.Value;
 
 import java.util.Optional;
 
-public class FlagMapDataImpl extends AbstractSingleData<FlagMap, FlagMapData, ImmutableFlagMapData> implements FlagMapData {
+public class FlagMapDataImpl extends AbstractSingleData<FlagMap, FlagMapDataImpl, ImmFlagMapDataImpl> implements DataManipulator<FlagMapDataImpl, ImmFlagMapDataImpl> {
 
     public FlagMapDataImpl(FlagMap value) {
         super(value, FlagHelper.FLAGMAP);
@@ -40,19 +41,19 @@ public class FlagMapDataImpl extends AbstractSingleData<FlagMap, FlagMapData, Im
     }
 
     @Override
-    public ImmutableFlagMapData asImmutable() {
+    public ImmFlagMapDataImpl asImmutable() {
         return new ImmFlagMapDataImpl(getValue(), FlagHelper.FLAGMAP);
     }
 
     @Override
-    public Optional<FlagMapData> fill(DataHolder dataHolder, MergeFunction overlap) {
-        FlagMapData merged = overlap.merge(this, dataHolder.get(FlagMapData.class).orElse(null));
+    public Optional<FlagMapDataImpl> fill(DataHolder dataHolder, MergeFunction overlap) {
+        FlagMapDataImpl merged = overlap.merge(this, dataHolder.get(FlagMapDataImpl.class).orElse(null));
         setValue(merged.getValue());
         return Optional.of(this);
     }
 
     @Override
-    public Optional<FlagMapData> from(DataContainer container) {
+    public Optional<FlagMapDataImpl> from(DataContainer container) {
         if(container.contains(FlagHelper.FLAGMAP)) {
             // Loads the structure defined in toContainer
             setValue(container.getSerializable(FlagHelper.FLAGMAP.getQuery(), FlagMap.class).get());
@@ -62,7 +63,7 @@ public class FlagMapDataImpl extends AbstractSingleData<FlagMap, FlagMapData, Im
     }
 
     @Override
-    public FlagMapData copy() {
+    public FlagMapDataImpl copy() {
         return new FlagMapDataImpl(getValue());
     }
 

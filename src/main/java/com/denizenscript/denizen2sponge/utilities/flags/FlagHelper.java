@@ -28,10 +28,10 @@ public class FlagHelper {
     public static FlagMapDataBuilder FMDB;
 
     public static void register() {
-        FMDB = new FlagMapDataBuilder(FlagMapData.class, 1);
-        DataRegistration.<FlagMapData, ImmutableFlagMapData>builder()
-                .dataClass(FlagMapData.class)
-                .immutableClass(ImmutableFlagMapData.class)
+        FMDB = new FlagMapDataBuilder(FlagMapDataImpl.class, 1);
+        DataRegistration.<FlagMapDataImpl, ImmFlagMapDataImpl>builder()
+                .dataClass(FlagMapDataImpl.class)
+                .immutableClass(ImmFlagMapDataImpl.class)
                 .builder(FMDB)
                 .manipulatorId("flagmap")
                 .dataName("flagmap")
