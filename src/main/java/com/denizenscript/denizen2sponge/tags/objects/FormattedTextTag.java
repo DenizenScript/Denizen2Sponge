@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextParseException;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -33,6 +34,15 @@ public class FormattedTextTag extends AbstractTagObject {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Name FormattedTextTag.color_codes
+        // @Updated 2017/08/31
+        // @Group Conversion
+        // @ReturnType TextTag
+        // @Returns a color-coded version of this formatted text.
+        // -->
+        handlers.put("color_codes", (dat, obj) -> new TextTag(TextSerializers.formattingCode(Denizen2Sponge.colorChar)
+                .serialize(((FormattedTextTag) obj).internal)));
         // <--[tag]
         // @Name FormattedTextTag.plain
         // @Updated 2016/09/21
