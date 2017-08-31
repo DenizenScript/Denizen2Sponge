@@ -98,7 +98,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Name PlayerTag.entities_on_cursor[<MapTag>]
         // @Updated 2017/04/04
         // @Group Current Information
-        // @ReturnType ListTag
+        // @ReturnType ListTag<EntityTag>
         // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
         // the line of sight of the player. Input is type:<EntityTypeTag>|range:<NumberTag>
         // -->

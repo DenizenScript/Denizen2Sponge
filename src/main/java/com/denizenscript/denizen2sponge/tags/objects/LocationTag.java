@@ -260,7 +260,7 @@ public class LocationTag extends AbstractTagObject {
         // @Name LocationTag.sign_contents
         // @Updated 2017/01/29
         // @Group World Data
-        // @ReturnType ListTag
+        // @ReturnType ListTag<FormattedTextTag>
         // @Returns a list of all text on the sign at this location.
         // @Example "0,2,0,world" .sign_contents might return "First Line||Third Line|".
         // -->
@@ -306,7 +306,7 @@ public class LocationTag extends AbstractTagObject {
         // @Name LocationTag.nearby_entities[<MapTag>]
         // @Updated 2016/08/26
         // @Group World Data
-        // @ReturnType ListTag
+        // @ReturnType ListTag<EntityTag>
         // @Returns a list of entities of a specified type (or any type if unspecified) near the location.
         // Input is type:<EntityTypeTag>|range:<NumberTag>
         // -->
@@ -333,7 +333,7 @@ public class LocationTag extends AbstractTagObject {
         // @Name LocationTag.nearby_blocks[<MapTag>]
         // @Updated 2017/01/29
         // @Group World Data
-        // @ReturnType ListTag
+        // @ReturnType ListTag<LocationTag>
         // @Returns a list of block locations of a specified type (or any type if unspecified) near the location.
         // Input is type:<BlockTypeTag>|range:<NumberTag>
         // -->

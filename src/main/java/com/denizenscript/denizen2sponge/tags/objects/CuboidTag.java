@@ -94,7 +94,7 @@ public class CuboidTag extends AbstractTagObject {
         // @Name CuboidTag.block_locations[<ListTag>]
         // @Updated 2016/11/24
         // @Group Connected Information
-        // @ReturnType ListTag
+        // @ReturnType ListTag<LocationTag>
         // @Returns the location of all block locations in this cuboid. Optionally, specify a list of BlockType's to use.
         // @Note Partially covered blocks are counted.
         // -->
