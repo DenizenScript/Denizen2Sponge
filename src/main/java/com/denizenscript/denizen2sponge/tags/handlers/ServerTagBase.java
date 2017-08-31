@@ -5,12 +5,11 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Function2;
-import com.denizenscript.denizen2sponge.tags.objects.CuboidTag;
-import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
+import com.denizenscript.denizen2sponge.tags.objects.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.effect.sound.PitchModulation;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.lang.reflect.Field;
@@ -37,13 +36,27 @@ public class ServerTagBase extends AbstractTagBase {
         // @Name ServerBaseTag.worlds
         // @Updated 2017/01/19
         // @Group Server Lists
-        // @ReturnType ListTag
+        // @ReturnType ListTag<WorldTag>
         // @Returns a list of all loaded worlds on the server.
         // -->
         handlers.put("worlds", (dat, obj) -> {
             ListTag list = new ListTag();
             for (World world : Sponge.getServer().getWorlds()) {
                 list.getInternal().add(new WorldTag(world));
+            }
+            return list;
+        });
+        // <--[tag]
+        // @Name ServerBaseTag.online_players
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType ListTag<PlayerTag>
+        // @Returns a list of all the current online players on the server.
+        // -->
+        handlers.put("online_players", (dat, obj) -> {
+            ListTag list = new ListTag();
+            for (Player player : (Sponge.getServer().getOnlinePlayers())) {
+                list.getInternal().add(new PlayerTag(player));
             }
             return list;
         });
@@ -55,6 +68,54 @@ public class ServerTagBase extends AbstractTagBase {
         // @Returns the current ticks per second on the server.
         // -->
         handlers.put("tps", (dat, obj) -> new NumberTag(Sponge.getServer().getTicksPerSecond()));
+        // <--[tag]
+        // @Name ServerBaseTag.max_players
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType IntegerTag
+        // @Returns the current maximum players setting on the server.
+        // -->
+        handlers.put("max_players", (dat, obj) -> new IntegerTag(Sponge.getServer().getMaxPlayers()));
+        // <--[tag]
+        // @Name ServerBaseTag.player_idle_timeout
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType IntegerTag
+        // @Returns the current player idle timeout setting on the server.
+        // -->
+        handlers.put("player_idle_timeout", (dat, obj) -> new IntegerTag(Sponge.getServer().getPlayerIdleTimeout()));
+        // <--[tag]
+        // @Name ServerBaseTag.has_whitelist
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType BooleanTag
+        // @Returns whether there is currently an enabled whitelist on the server.
+        // -->
+        handlers.put("has_whitelist", (dat, obj) -> new BooleanTag(Sponge.getServer().hasWhitelist()));
+        // <--[tag]
+        // @Name ServerBaseTag.online_mode
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType BooleanTag
+        // @Returns whether there the server is currently on online mode or not.
+        // -->
+        handlers.put("online_mode", (dat, obj) -> new BooleanTag(Sponge.getServer().getOnlineMode()));
+        // <--[tag]
+        // @Name ServerBaseTag.motd
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType FormattedTextTag
+        // @Returns the current motd (message of the day) on the server.
+        // -->
+        handlers.put("motd", (dat, obj) -> new FormattedTextTag(Sponge.getServer().getMotd()));
+        // <--[tag]
+        // @Name ServerBaseTag.default_world_name
+        // @Updated 2017/08/31
+        // @Group Server Information
+        // @ReturnType TextTag
+        // @Returns the default world name that this server creates and loads.
+        // -->
+        handlers.put("default_world_name", (dat, obj) -> new TextTag(Sponge.getServer().getDefaultWorldName()));
         // <--[tag]
         // @Name ServerBaseTag.block_type_is_valid[<ListTag>]
         // @Updated 2016//11/24

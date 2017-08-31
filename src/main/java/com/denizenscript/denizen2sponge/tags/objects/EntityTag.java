@@ -277,7 +277,7 @@ public class EntityTag extends AbstractTagObject {
         // @Name EntityTag.passengers
         // @Updated 2017/04/04
         // @Group Current Information
-        // @ReturnType ListTag
+        // @ReturnType ListTag<EntityTag>
         // @Returns a list of passengers mounted on this entity.
         // -->
         handlers.put("passengers", (dat, obj) -> {
@@ -330,7 +330,7 @@ public class EntityTag extends AbstractTagObject {
         // @Name EntityTag.nearby_entities[<MapTag>]
         // @Updated 2017/04/04
         // @Group Current Information
-        // @ReturnType ListTag
+        // @ReturnType ListTag<EntityTag>
         // @Returns a list of entities of a specified type (or any type if unspecified) near this entity.
         // Input is type:<EntityTypeTag>|range:<NumberTag>
         // -->

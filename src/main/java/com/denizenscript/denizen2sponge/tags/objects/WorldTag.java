@@ -61,7 +61,7 @@ public class WorldTag extends AbstractTagObject {
         // @Name WorldTag.entities[<EntityTypeTag>]
         // @Updated 2017/01/19
         // @Group Server Lists
-        // @ReturnType ListTag
+        // @ReturnType ListTag<EntityTag>
         // @Returns a list of all entities in the world, optionally with a specific type only.
         // -->
         handlers.put("entities", (dat, obj) -> {
@@ -89,7 +89,7 @@ public class WorldTag extends AbstractTagObject {
         // @Name WorldTag.players
         // @Updated 2017/04/03
         // @Group Server Lists
-        // @ReturnType ListTag
+        // @ReturnType ListTag<PlayerTag>
         // @Returns a list of all the players in the world.
         // -->
         handlers.put("players", (dat, obj) -> {
@@ -111,7 +111,7 @@ public class WorldTag extends AbstractTagObject {
         // @Name WorldTag.list_gamerules
         // @Updated 2017/05/16
         // @Group Properties
-        // @ReturnType MapTag
+        // @ReturnType MapTag<TextTag>
         // @Returns the gamerules of the world as a MapTag.
         // -->
         handlers.put("list_gamerules", (dat, obj) -> {

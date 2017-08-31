@@ -50,7 +50,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Group General Information
         // @ReturnType TextTag
         // @Returns the inventory's name (in English).
-        // @Example "player/bob" might return "Bob".
+        // @Example "player/bob" .name might return "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
         // @Name InventoryTag.size
@@ -58,7 +58,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Group General Information
         // @ReturnType IntegerTag
         // @Returns the inventory's size (in slots).
-        // @Example "block/0,1,2,world" might return "36".
+        // @Example "block/0,1,2,world" .size might return "36".
         // -->
         handlers.put("size", (dat, obj) -> new IntegerTag(((InventoryTag) obj).internal.size()));
     }
