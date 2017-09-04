@@ -100,7 +100,8 @@ public class PlayerTag extends AbstractTagObject {
         // @Group Current Information
         // @ReturnType ListTag<EntityTag>
         // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
-        // the line of sight of the player. Input is type:<EntityTypeTag>|range:<NumberTag>
+        // the line of sight of the player. If no range is specified, it defaults to the player's hand reach.
+        // Input is type:<EntityTypeTag>|range:<NumberTag>
         // -->
         handlers.put("entities_on_cursor", (dat, obj) -> {
             ListTag list = new ListTag();
