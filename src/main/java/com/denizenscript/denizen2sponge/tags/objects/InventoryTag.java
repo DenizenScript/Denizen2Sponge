@@ -2,7 +2,10 @@ package com.denizenscript.denizen2sponge.tags.objects;
 
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.*;
+import com.denizenscript.denizen2core.tags.objects.BooleanTag;
+import com.denizenscript.denizen2core.tags.objects.IntegerTag;
+import com.denizenscript.denizen2core.tags.objects.NullTag;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
@@ -14,8 +17,12 @@ import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
+import org.spongepowered.api.item.inventory.type.OrderedInventory;
 import org.spongepowered.api.world.LocatableBlock;
 import org.spongepowered.api.world.World;
 
@@ -61,6 +68,41 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "block/0,1,2,world" .size might return "36".
         // -->
         handlers.put("size", (dat, obj) -> new IntegerTag(((InventoryTag) obj).internal.size()));
+        // @Name InventoryTag.contains[<ItemTag>]
+        // @Updated 2017/06/17
+        // @Group General Information
+        // @ReturnType BooleanTag
+        // @Returns whether the inventory contains the specified quantity or more of the specified item.
+        // @Example "block/0,1,2,world" .contains[diamond/3] might return "false".
+        // -->
+        handlers.put("contains", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.contains(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // @Name InventoryTag.contains_any[<ItemTag>]
+        // @Updated 2017/06/17
+        // @Group General Information
+        // @ReturnType BooleanTag
+        // @Returns whether the inventory contains any quantity of the specified item.
+        // @Example "block/0,1,2,world" .contains_any[diamond] might return "true".
+        // -->
+        handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // @Name InventoryTag.slot[<IntegerTag>]
+        // @Updated 2017/06/17
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns the item in the inventory's specified slot.
+        // @Example "block/0,1,2,world" .slot[8] might return "diamond".
+        // -->
+        handlers.put("slot", (dat, obj) -> {
+            Inventory inventory = ((InventoryTag) obj).internal;
+            int slot = (int) IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            if (slot < 1 || slot > inventory.capacity()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Invalid slot index specified!");
+                }
+                return new NullTag();
+            }
+            ItemStack item = ((OrderedInventory) inventory.query(OrderedInventory.class)).peek(new SlotIndex(slot - 1)).orElseGet(ItemStack::empty);
+            return new ItemTag(item);
+        });
     }
 
     public static InventoryTag getFor(Action<String> error, String text) {
@@ -120,8 +162,8 @@ public class InventoryTag extends AbstractTagObject {
         if (remAs != null) {
             return "shared/" + remAs;
         }
-        if (internal instanceof PlayerInventory) {
-            return "player/" + ((PlayerInventory) internal).getCarrier().get().getUniqueId().toString();
+        if (internal instanceof MainPlayerInventory) {
+            return "player/" + ((PlayerInventory) (internal).parent()).getCarrier().get().getUniqueId().toString();
         }
         else if (internal instanceof CarriedInventory) {
             Object o = ((CarriedInventory) internal).getCarrier().orElse(null);
