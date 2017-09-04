@@ -10,7 +10,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.world.extent.EntityUniverse;
@@ -100,7 +100,8 @@ public class PlayerTag extends AbstractTagObject {
         // @Group Current Information
         // @ReturnType ListTag<EntityTag>
         // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
-        // the line of sight of the player. Input is type:<EntityTypeTag>|range:<NumberTag>
+        // the line of sight of the player. If no range is specified, it defaults to the player's hand reach.
+        // Input is type:<EntityTypeTag>|range:<NumberTag>
         // -->
         handlers.put("entities_on_cursor", (dat, obj) -> {
             ListTag list = new ListTag();
@@ -109,7 +110,13 @@ public class PlayerTag extends AbstractTagObject {
             if (map.getInternal().containsKey("type")) {
                 requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
             }
-            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            double range;
+            if (map.getInternal().containsKey("range")) {
+                range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            }
+            else {
+                range = (Utilities.getHandReach(((PlayerTag) obj).internal));
+            }
             Player source = ((PlayerTag) obj).getInternal();
             Set<EntityUniverse.EntityHit> entHits = source.getWorld().getIntersectingEntities(source, range);
             for (EntityUniverse.EntityHit entHit : entHits) {
@@ -159,7 +166,15 @@ public class PlayerTag extends AbstractTagObject {
         // @ReturnType IntegerTag
         // @Returns the index of the hotbar slot that is currently selected by the player.
         // -->
-        handlers.put("selected_slot", (dat, obj) -> new IntegerTag(((PlayerInventory)((PlayerTag) obj).internal.getInventory()).getHotbar().getSelectedSlotIndex() + 1));
+        handlers.put("selected_slot", (dat, obj) -> new IntegerTag(((PlayerInventory) ((PlayerTag) obj).internal.getInventory()).getHotbar().getSelectedSlotIndex() + 1));
+        // <--[tag]
+        // @Name PlayerTag.inventory
+        // @Updated 2017/08/31
+        // @Group Properties
+        // @ReturnType InventoryTag
+        // @Returns the inventory this player is carrying. Equipment is not included.
+        // -->
+        handlers.put("inventory", (dat, obj) -> new InventoryTag(((UserInventory) ((PlayerTag) obj).internal.getInventory()).getMain()));
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

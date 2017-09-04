@@ -17,17 +17,12 @@ import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.ArmorEquipable;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.Equipable;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.item.inventory.equipment.EquipmentType;
-import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
-import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.EntityUniverse;
 
 import java.util.*;
 
@@ -385,6 +380,14 @@ public class EntityTag extends AbstractTagObject {
             }
             return new DurationTag(opt.get() / 20.0);
         });
+        // <--[tag]
+        // @Name EntityTag.inventory
+        // @Updated 2017/06/13
+        // @Group Current Information
+        // @ReturnType InventoryTag
+        // @Returns the inventory this entity is carrying.
+        // -->
+        handlers.put("inventory", (dat, obj) -> new InventoryTag(((Carrier) ((EntityTag) obj).internal).getInventory()));
     }
 
     public static EntityTag getFor(Action<String> error, String text) {

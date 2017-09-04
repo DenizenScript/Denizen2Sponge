@@ -1,16 +1,18 @@
 package com.denizenscript.denizen2sponge.tags.objects;
 
-import com.denizenscript.denizen2core.tags.objects.*;
-import com.denizenscript.denizen2sponge.utilities.DataKeys;
-import com.flowpowered.math.vector.Vector3d;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
+import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.tileentity.TileEntity;
+import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
@@ -396,6 +398,23 @@ public class LocationTag extends AbstractTagObject {
             outputMap.getInternal().put("is_valid", new BooleanTag(true));
             outputMap.getInternal().put("location", new LocationTag(opt.get().getBlockPosition(), opt.get().getExtent()));
             return outputMap;
+        });
+        // <--[tag]
+        // @Name LocationTag.inventory
+        // @Updated 2017/08/31
+        // @Group Properties
+        // @ReturnType InventoryTag
+        // @Returns the inventory the tile entity at this location is holding.
+        // -->
+        handlers.put("inventory", (dat, obj) -> {
+            Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
+            if (!te.isPresent()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The block at this location is not a valid tile entity, so it can't contain an inventory!");
+                }
+                return new NullTag();
+            }
+            return new InventoryTag(((TileEntityCarrier) te.get()).getInventory());
         });
     }
 
