@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
@@ -405,7 +406,16 @@ public class LocationTag extends AbstractTagObject {
         // @ReturnType InventoryTag
         // @Returns the inventory the tile entity at this location is holding.
         // -->
-        handlers.put("inventory", (dat, obj) -> new InventoryTag(((TileEntityCarrier) ((LocationTag) obj).internal.toLocation().getTileEntity().get()).getInventory()));
+        handlers.put("inventory", (dat, obj) -> {
+            Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
+            if (!te.isPresent()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The block at this location is not a valid tile entity, so it can't contain an inventory!");
+                }
+                return new NullTag();
+            }
+            return new InventoryTag(((TileEntityCarrier) te.get()).getInventory());
+        });
     }
 
     public static double LengthSquared(Location<World> loc) {
