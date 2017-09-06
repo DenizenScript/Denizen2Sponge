@@ -13,7 +13,10 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ItemTag extends AbstractTagObject {
 
@@ -44,7 +47,7 @@ public class ItemTag extends AbstractTagObject {
         // @ReturnType ItemTypeTag
         // @Returns the type of the item.
         // -->
-        handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((ItemTag) obj).internal.getItem()));
+        handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((ItemTag) obj).internal.getType()));
         // <--[tag]
         // @Name ItemTag.quantity
         // @Updated 2017/04/04
@@ -247,6 +250,6 @@ public class ItemTag extends AbstractTagObject {
     }
     @Override
     public String toString() {
-        return internal.getItem().getId() + "/" + internal.getQuantity() + "/" + DataKeys.getAllKeys(internal).toString();
+        return internal.getType().getId() + "/" + internal.getQuantity() + "/" + DataKeys.getAllKeys(internal).toString();
     }
 }
