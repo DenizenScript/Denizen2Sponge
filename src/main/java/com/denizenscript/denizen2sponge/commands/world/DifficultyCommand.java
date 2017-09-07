@@ -4,42 +4,39 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
-import com.denizenscript.denizen2sponge.utilities.GameRules;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.world.difficulty.Difficulty;
 import org.spongepowered.api.world.storage.WorldProperties;
 
 import java.util.Optional;
 
-public class RemoveGameRuleCommand extends AbstractCommand {
+public class DifficultyCommand extends AbstractCommand {
 
     // <--[command]
-    // @Name removegamerule
-    // @Arguments <world> <list of rules>
-    // @Short removes custom game rules from a world.
-    // @Updated 2017/05/16
+    // @Name difficulty
+    // @Arguments <world> 'peaceful'/'easy'/'normal'/'hard'
+    // @Short sets the difficulty of a world.
+    // @Updated 2017/09/07
     // @Group World
     // @Minimum 2
     // @Maximum 2
     // @Description
-    // Removes the specified custom game rules from a world.
-    // Note: you can't remove default minecraft game rules.
+    // Sets the difficulty of a world. Valid difficulty types are 'peaceful', 'easy', 'normal' and 'hard'.
     // @Example
-    // # Removes the custom game rules 'xp_multiplier' and
-    // # 'currency_multiplier' from world 'Games'.
-    // - removegamerule Games xp_multiplier|currency_multiplier
+    // # Sets the difficulty to 'hard' in world 'Survival'.
+    // - difficulty Survival hard
     // -->
 
     @Override
     public String getName() {
-        return "removegamerule";
+        return "difficulty";
     }
 
     @Override
     public String getArguments() {
-        return "<world> <list of rules>";
+        return "<world> 'peaceful'/'easy'/'normal'/'hard'";
     }
 
     @Override
@@ -67,13 +64,16 @@ public class RemoveGameRuleCommand extends AbstractCommand {
             }
             properties = opt.get();
         }
-        ListTag list = ListTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        for (AbstractTagObject rule : list.getInternal()) {
-            properties.removeGameRule(rule.toString());
+        String difficulty = entry.getArgumentObject(queue, 1).toString();
+        Optional<Difficulty> type = Sponge.getRegistry().getType(Difficulty.class, difficulty);
+        if (!type.isPresent()) {
+            queue.handleError(entry, "Invalid difficulty type: '" + difficulty + "'!");
+            return;
         }
+        properties.setDifficulty(type.get());
         if (queue.shouldShowGood()) {
-            queue.outGood("Removed game rules of world '" + ColorSet.emphasis + properties.getWorldName()
-                    + ColorSet.good + "' according to list: " + ColorSet.emphasis + list.debug() + ColorSet.good + "!");
+            queue.outGood("Set difficulty of world '" + ColorSet.emphasis + properties.getWorldName()
+                    + ColorSet.good + "' to: " + ColorSet.emphasis + difficulty + ColorSet.good + "!");
         }
     }
 }

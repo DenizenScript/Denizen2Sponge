@@ -157,6 +157,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ShutdownCommand());
         // Commands: World
         Denizen2Core.register(new DeleteWorldCommand());
+        Denizen2Core.register(new DifficultyCommand());
         Denizen2Core.register(new EditBlockCommand());
         Denizen2Core.register(new LoadWorldCommand());
         Denizen2Core.register(new PlayEffectCommand());
