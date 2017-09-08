@@ -29,7 +29,7 @@ public class SetGameRuleCommand extends AbstractCommand {
 
     // <--[command]
     // @Name setgamerule
-    // @Arguments <world name> <map of rules>
+    // @Arguments <world> <map of rules>
     // @Short modifies the game rules of a world.
     // @Updated 2017/05/16
     // @Group World
@@ -54,7 +54,7 @@ public class SetGameRuleCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<world name> <map of rules>";
+        return "<world> <map of rules>";
     }
 
     @Override
