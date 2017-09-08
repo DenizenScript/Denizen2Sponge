@@ -16,14 +16,15 @@ public class DifficultyCommand extends AbstractCommand {
 
     // <--[command]
     // @Name difficulty
-    // @Arguments <world> 'peaceful'/'easy'/'normal'/'hard'
+    // @Arguments <world> <difficulty level>
     // @Short sets the difficulty of a world.
     // @Updated 2017/09/07
     // @Group World
     // @Minimum 2
     // @Maximum 2
     // @Description
-    // Sets the difficulty of a world. Valid difficulty types are 'peaceful', 'easy', 'normal' and 'hard'.
+    // Sets the difficulty of a world. The standard set of difficulty levels
+    // is 'peaceful', 'easy', 'normal', and 'hard'.
     // @Example
     // # Sets the difficulty to 'hard' in world 'Survival'.
     // - difficulty Survival hard
@@ -36,7 +37,7 @@ public class DifficultyCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<world> 'peaceful'/'easy'/'normal'/'hard'";
+        return "<world> <difficulty level>";
     }
 
     @Override
@@ -67,7 +68,7 @@ public class DifficultyCommand extends AbstractCommand {
         String difficulty = entry.getArgumentObject(queue, 1).toString();
         Optional<Difficulty> type = Sponge.getRegistry().getType(Difficulty.class, difficulty);
         if (!type.isPresent()) {
-            queue.handleError(entry, "Invalid difficulty type: '" + difficulty + "'!");
+            queue.handleError(entry, "Invalid difficulty level: '" + difficulty + "'!");
             return;
         }
         properties.setDifficulty(type.get());
