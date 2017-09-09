@@ -11,6 +11,8 @@ Discuss on our forums at [http://forum.denizenscript.com/](http://forum.denizens
 
 Discuss in a live IRC chat room at [http://one.denizenscript.com/ircchat_denizen](http://one.denizenscript.com/ircchat_denizen).
 
+Join our Discord server at [https://discord.gg/Q6pZGSR](https://discord.gg/Q6pZGSR).
+
 ### Licensing pre-note:
 
 This is an open source project, provided entirely freely, for everyone to use and contribute to.
