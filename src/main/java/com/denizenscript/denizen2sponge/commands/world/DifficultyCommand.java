@@ -74,7 +74,7 @@ public class DifficultyCommand extends AbstractCommand {
         properties.setDifficulty(type.get());
         if (queue.shouldShowGood()) {
             queue.outGood("Set difficulty of world '" + ColorSet.emphasis + properties.getWorldName()
-                    + ColorSet.good + "' to: " + ColorSet.emphasis + difficulty + ColorSet.good + "!");
+                    + ColorSet.good + "' to: " + ColorSet.emphasis + type.get().getName() + ColorSet.good + "!");
         }
     }
 }
