@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
@@ -20,7 +21,7 @@ public class UnflagCommand extends AbstractCommand {
 
     // <--[command]
     // @Name unflag
-    // @Arguments <entity> <list of flags to remove>
+    // @Arguments <entity>/'server' <list of flags to remove>
     // @Short removes a list of flags from an entity.
     // @Updated 2017/02/15
     // @Group Entities
@@ -41,7 +42,7 @@ public class UnflagCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<entity> <list of flags to remove>";
+        return "<entity>/'server' <list of flags to remove>";
     }
 
     @Override
@@ -56,25 +57,39 @@ public class UnflagCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        Entity entity = entityTag.getInternal();
         ListTag toRemove = ListTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+        Entity entity = null;
+        AbstractTagObject ato = entry.getArgumentObject(queue, 0);
         MapTag basic;
-        Optional<FlagMap> fm = entity.get(FlagHelper.FLAGMAP);
-        if (fm.isPresent()) {
-            basic = fm.get().flags;
+        if (CoreUtilities.toLowerCase(ato.toString()).equals("server")) {
+            basic = Denizen2Sponge.instance.serverFlagMap;
         }
         else {
-            basic = new MapTag();
+            EntityTag entityTag = EntityTag.getFor(queue.error, ato);
+            entity = entityTag.getInternal();
+            Optional<FlagMap> fm = entity.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                basic = fm.get().flags;
+            }
+            else {
+                basic = new MapTag();
+            }
         }
         for (AbstractTagObject dat : toRemove.getInternal()) {
             basic.getInternal().remove(CoreUtilities.toLowerCase(dat.toString()));
         }
-        entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
-        if (queue.shouldShowGood()) {
-            queue.outGood("Removed from the entity "
-                    + ColorSet.emphasis + entityTag.debug() + ColorSet.good
-                    + " the specified flags... (" + toRemove.debug() + ")");
+        if (entity != null) {
+            entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
+            if (queue.shouldShowGood()) {
+                queue.outGood("Removed from the entity "
+                        + ColorSet.emphasis + new EntityTag(entity).debug() + ColorSet.good
+                        + " the specified flags... (" + toRemove.debug() + ")");
+            }
+        }
+        else {
+            if (queue.shouldShowGood()) {
+                queue.outGood("Removed from the server the specified flags... (" + toRemove.debug() + ")");
+            }
         }
     }
 }

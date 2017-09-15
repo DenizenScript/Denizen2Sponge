@@ -189,9 +189,9 @@ public class ItemTag extends AbstractTagObject {
         // @Group Flag Data
         // @ReturnType Dynamic
         // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
+        // Optionally don't specify anything to get the entire flag map.
         // -->
         handlers.put("flag", (dat, obj) -> {
-            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
             MapTag flags;
             ItemStack e = ((ItemTag) obj).internal;
             Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
@@ -201,6 +201,10 @@ public class ItemTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
+            if (!dat.hasNextModifier()) {
+                return flags;
+            }
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
             AbstractTagObject ato = flags.getInternal().get(flagName);
             if (ato == null) {
                 if (!dat.hasFallback()) {

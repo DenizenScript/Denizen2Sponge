@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
@@ -21,7 +22,7 @@ public class FlagCommand extends AbstractCommand {
 
     // <--[command]
     // @Name flag
-    // @Arguments <entity> <map of flags to set>
+    // @Arguments <entity>/'server' <map of flags to set>
     // @Short flags an entity with some data.
     // @Updated 2017/02/15
     // @Group Entities
@@ -42,7 +43,7 @@ public class FlagCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<entity> <map of flags to set>";
+        return "<entity>/'server' <map of flags to set>";
     }
 
     @Override
@@ -57,25 +58,39 @@ public class FlagCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        Entity entity = entityTag.getInternal();
-        MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+        AbstractTagObject ato = entry.getArgumentObject(queue, 0);
         MapTag basic;
-        Optional<FlagMap> fm = entity.get(FlagHelper.FLAGMAP);
-        if (fm.isPresent()) {
-            basic = fm.get().flags;
+        Entity entity = null;
+        if (CoreUtilities.toLowerCase(ato.toString()).equals("server")) {
+            basic = Denizen2Sponge.instance.serverFlagMap;
         }
         else {
-            basic = new MapTag();
+            EntityTag entityTag = EntityTag.getFor(queue.error, ato);
+            entity = entityTag.getInternal();
+            Optional<FlagMap> fm = entity.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                basic = fm.get().flags;
+            }
+            else {
+                basic = new MapTag();
+            }
         }
+        MapTag propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> dat : propertyMap.getInternal().entrySet()) {
             basic.getInternal().put(CoreUtilities.toLowerCase(dat.getKey()), dat.getValue());
         }
-        entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
-        if (queue.shouldShowGood()) {
-            queue.outGood("Flagged the entity "
-                    + ColorSet.emphasis + entityTag.debug() + ColorSet.good
-                    + " with the specified data... (" + propertyMap.debug() + ")");
+        if (entity != null) {
+            entity.offer(new FlagMapDataImpl(new FlagMap(basic)));
+            if (queue.shouldShowGood()) {
+                queue.outGood("Flagged the entity "
+                        + ColorSet.emphasis + new EntityTag(entity).debug() + ColorSet.good
+                        + " with the specified data... (" + propertyMap.debug() + ")");
+            }
+        }
+        else {
+            if (queue.shouldShowGood()) {
+                queue.outGood("Flagged the server with the specified data... (" + propertyMap.debug() + ")");
+            }
         }
     }
 }

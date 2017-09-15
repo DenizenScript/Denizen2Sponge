@@ -1,6 +1,7 @@
 package com.denizenscript.denizen2sponge;
 
 import com.denizenscript.denizen2core.Denizen2Core;
+import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
@@ -11,6 +12,7 @@ import com.denizenscript.denizen2sponge.commands.items.ForgetInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.items.RememberInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.player.*;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
+import com.denizenscript.denizen2sponge.commands.server.SaveDataCommand;
 import com.denizenscript.denizen2sponge.commands.server.ShutdownCommand;
 import com.denizenscript.denizen2sponge.commands.world.*;
 import com.denizenscript.denizen2sponge.events.entity.*;
@@ -43,11 +45,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -74,7 +72,7 @@ public class Denizen2Sponge {
 
     public static Cause getGenericCause() {
         // TODO: Decipher new cause system, make a nice generic cause
-        return Cause.builder().build(EventContext.empty());
+        return Cause.builder().append(plugin).build(EventContext.empty());
     }
 
     public static Text parseColor(String inp) {
@@ -156,6 +154,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new TitleCommand());
         // Commands: Server
         Denizen2Core.register(new ExecuteCommand());
+        Denizen2Core.register(new SaveDataCommand());
         Denizen2Core.register(new ShutdownCommand());
         // Commands: World
         Denizen2Core.register(new DeleteWorldCommand());
@@ -238,6 +237,8 @@ public class Denizen2Sponge {
         // Sponge related Helpers
         FlagHelper.register();
         GameRules.init();
+        // Server Flags
+        loadServerFlags();
         // Call loading event for sub-plugins registering things
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
@@ -255,12 +256,52 @@ public class Denizen2Sponge {
 
     @Listener
     public void onServerStop(GameStoppedEvent event) {
+        // Save server data
+        saveServerFlags();
         // Disable Denizen2
         Denizen2Core.unload();
     }
 
     public File getConfigFile() {
         return new File(getMainDirectory(), "./config/config.yml");
+    }
+
+    public void loadServerFlags() {
+        try {
+            if (!getServerFlagsFile().exists()) {
+                serverFlagMap = new MapTag();
+                return;
+            }
+            InputStream is = new FileInputStream(getServerFlagsFile());
+            String str = CoreUtilities.streamToString(is);
+            is.close();
+            serverFlagMap = (MapTag) Denizen2Core.loadFromSaved(Debug::error, str);
+        }
+        catch (Exception e) {
+            Debug.exception(e);
+        }
+    }
+
+    public void saveServerFlags() {
+        try {
+            String flags = serverFlagMap.savable();
+            OutputStream os = new FileOutputStream(getServerFlagsFile(), false);
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            osw.write(flags);
+            osw.flush();
+            os.flush();
+            osw.close();
+            os.close();
+        }
+        catch (Exception e) {
+            Debug.exception(e);
+        }
+    }
+
+    public MapTag serverFlagMap = new MapTag();
+
+    public File getServerFlagsFile() {
+        return new File(getMainDirectory(), "./server_flags.yml");
     }
 
     private void saveDefaultConfig() {

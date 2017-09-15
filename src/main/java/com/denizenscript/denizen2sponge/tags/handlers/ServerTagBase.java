@@ -4,16 +4,22 @@ import com.denizenscript.denizen2core.tags.AbstractTagBase;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.effect.sound.PitchModulation;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class ServerTagBase extends AbstractTagBase {
 
@@ -152,6 +158,41 @@ public class ServerTagBase extends AbstractTagBase {
                 ct.getInternal().max.z = Math.max(ct.getInternal().max.z, c.getInternal().z);
             }
             return ct;
+        });
+        // <--[tag]
+        // @Name ServerBaseTag.has_flag[<TextTag>]
+        // @Updated 2017/09/15
+        // @Group Flag Data
+        // @ReturnType BooleanTag
+        // @Returns whether the entity has a flag with the specified key.
+        // -->
+        handlers.put("has_flag", (dat, obj) -> {
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            MapTag flags = Denizen2Sponge.instance.serverFlagMap;
+            return new BooleanTag(flags.getInternal().containsKey(flagName));
+        });
+        // <--[tag]
+        // @Name ServerBaseTag.flag[<TextTag>]
+        // @Updated 2017/09/15
+        // @Group Flag Data
+        // @ReturnType Dynamic
+        // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
+        // Optionally don't specify anything to get the entire flag map.
+        // -->
+        handlers.put("flag", (dat, obj) -> {
+            MapTag flags = Denizen2Sponge.instance.serverFlagMap;
+            if (!dat.hasNextModifier()) {
+                return flags;
+            }
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            AbstractTagObject ato = flags.getInternal().get(flagName);
+            if (ato == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Invalid flag specified, not present on the server!");
+                }
+                return new NullTag();
+            }
+            return ato;
         });
     }
 
