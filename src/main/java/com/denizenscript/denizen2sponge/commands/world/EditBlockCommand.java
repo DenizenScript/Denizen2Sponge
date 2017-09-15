@@ -68,7 +68,7 @@ public class EditBlockCommand extends AbstractCommand {
             }
             bs = (BlockState) DataKeys.with(bs, found, mapEntry.getValue(), queue.error);
         }
-        loc.setBlock(bs, BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
+        loc.setBlock(bs, BlockChangeFlag.NONE);
         if (queue.shouldShowGood()) {
             queue.outGood("Edited the location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good
                     + " to have the new following properties: " + propertyMap.debug());

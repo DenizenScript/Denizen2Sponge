@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
@@ -16,7 +17,6 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
 import java.util.Map;
@@ -97,8 +97,7 @@ public class SpawnCommand extends AbstractCommand {
                     + " with the following properties: " + ColorSet.emphasis + propertyMap.debug()
                     + " at location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "...");
         }
-        boolean passed = location.world.spawnEntity(entity, Cause.source(EntitySpawnCause.builder()
-                .entity(entity).type(SpawnTypes.PLUGIN)).build());
+        boolean passed = location.world.spawnEntity(entity);
         // TODO: "Cause" argument!
         if (queue.shouldShowGood()) {
             queue.outGood("Spawning " + (passed ? "succeeded" : "was blocked") + "!");

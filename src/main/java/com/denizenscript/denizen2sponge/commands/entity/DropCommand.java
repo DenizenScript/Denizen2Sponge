@@ -21,7 +21,6 @@ import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
 import java.util.Map;
@@ -76,7 +75,7 @@ public class DropCommand extends AbstractCommand {
         }
         Entity entity = location.world.createEntity(EntityTypes.ITEM, location.toVector3d());
         entity.offer(Keys.REPRESENTED_ITEM, item.getInternal().createSnapshot());
-        location.world.spawnEntity(entity, Denizen2Sponge.getGenericCause());
+        location.world.spawnEntity(entity);
         if (queue.shouldShowGood()) {
             queue.outGood("Dropped item " + ColorSet.emphasis + item.debug() + ColorSet.good
                     + " at location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "!");

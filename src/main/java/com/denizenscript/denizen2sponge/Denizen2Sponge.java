@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.NamedCause;
+import org.spongepowered.api.event.cause.EventContext;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -73,7 +73,8 @@ public class Denizen2Sponge {
     public static char colorChar = '\u00A7';
 
     public static Cause getGenericCause() {
-        return Cause.of(NamedCause.of("plugin", plugin));
+        // TODO: Decipher new cause system, make a nice generic cause
+        return Cause.builder().build(EventContext.empty());
     }
 
     public static Text parseColor(String inp) {

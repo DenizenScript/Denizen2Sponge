@@ -96,11 +96,14 @@ public class InternalScriptEvent extends ScriptEvent {
         else {
             event.cancelled = false;
         }
-        Map<String, Object> causes = evt.getCause().getNamedCauses();
+        // TODO: Decipher cause system, allow cause tracking here
+        /*
+        Map<String, Object> causes = evt.getCause().getContext().;
         event.cause = new MapTag();
         for (Map.Entry<String, Object> tc : causes.entrySet()) {
             event.cause.getInternal().put(tc.getKey(), new TextTag(tc.getValue().toString()));
         }
+        */
         event.run();
         if (evt instanceof Cancellable) {
             ((Cancellable) evt).setCancelled(event.cancelled);

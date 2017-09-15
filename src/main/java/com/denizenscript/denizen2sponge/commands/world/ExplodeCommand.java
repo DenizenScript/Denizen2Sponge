@@ -76,7 +76,7 @@ public class ExplodeCommand extends AbstractCommand {
             BooleanTag smoke = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "smoke"));
             build.shouldPlaySmoke(smoke.getInternal());
         }
-        loc.getInternal().world.triggerExplosion(build.build(), Denizen2Sponge.getGenericCause());
+        loc.getInternal().world.triggerExplosion(build.build());
         if (queue.shouldShowGood()) {
             queue.outGood("Successfully created an explosion at location " +
                     ColorSet.emphasis + loc.debug() + ColorSet.good + "!");

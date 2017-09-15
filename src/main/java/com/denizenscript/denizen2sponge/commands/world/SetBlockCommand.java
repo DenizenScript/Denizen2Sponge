@@ -71,7 +71,7 @@ public class SetBlockCommand extends AbstractCommand {
         for (AbstractTagObject ato : locs.getInternal()) {
             LocationTag loc = LocationTag.getFor(queue.error, ato);
             loc.getInternal().world.setBlockType(loc.getInternal().toVector3i(), type.getInternal(),
-                    phys ? BlockChangeFlag.ALL : BlockChangeFlag.NONE, Denizen2Sponge.getGenericCause());
+                    phys ? BlockChangeFlag.ALL : BlockChangeFlag.NONE);
         }
         // TODO: "Cause" argument!
     }
