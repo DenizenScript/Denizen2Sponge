@@ -80,10 +80,10 @@ public class NarrateCommand extends AbstractCommand {
                     + ColorSet.good + ": " + ColorSet.emphasis + ato.debug());
         }
         if (ato instanceof FormattedTextTag) {
-            player.getInternal().sendMessage(((FormattedTextTag) ato).getInternal());
+            player.getOnline(queue.error).sendMessage(((FormattedTextTag) ato).getInternal());
         }
         else {
-            player.getInternal().sendMessage(Denizen2Sponge.parseColor(ato.toString()));
+            player.getOnline(queue.error).sendMessage(Denizen2Sponge.parseColor(ato.toString()));
         }
     }
 }

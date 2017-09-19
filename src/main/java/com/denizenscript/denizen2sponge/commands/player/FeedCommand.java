@@ -70,17 +70,17 @@ public class FeedCommand extends AbstractCommand {
             type = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "type").toString());
             switch (type) {
                 case "hunger":
-                    int food_level = player.getInternal().foodLevel().transform(operation.equals("add") ?
+                    int food_level = player.getOnline(queue.error).foodLevel().transform(operation.equals("add") ?
                             x -> x + (int) amount.getInternal() : x -> (int) amount.getInternal()).get();
                     player.getInternal().offer(Keys.FOOD_LEVEL, food_level);
                     break;
                 case "saturation":
-                    double saturation = player.getInternal().saturation().transform(operation.equals("add") ?
+                    double saturation = player.getOnline(queue.error).saturation().transform(operation.equals("add") ?
                             x -> x + amount.getInternal() : x -> amount.getInternal()).get();
                     player.getInternal().offer(Keys.SATURATION, saturation);
                     break;
                 case "exhaustion":
-                    double exhaustion = player.getInternal().exhaustion().transform(operation.equals("add") ?
+                    double exhaustion = player.getOnline(queue.error).exhaustion().transform(operation.equals("add") ?
                             x -> x + amount.getInternal() : x -> amount.getInternal()).get();
                     player.getInternal().offer(Keys.EXHAUSTION, exhaustion);
                     break;
@@ -91,7 +91,7 @@ public class FeedCommand extends AbstractCommand {
         }
         else {
             type = "hunger";
-            int food_level = player.getInternal().foodLevel().transform(operation.equals("add") ?
+            int food_level = player.getOnline(queue.error).foodLevel().transform(operation.equals("add") ?
                     x -> x + (int) amount.getInternal() : x -> (int) amount.getInternal()).get();
             player.getInternal().offer(Keys.FOOD_LEVEL, food_level);
         }

@@ -10,6 +10,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.util.blockray.BlockRay;
@@ -26,16 +27,17 @@ public class PlayerTag extends AbstractTagObject {
     // @Type PlayerTag
     // @SubType EntityTag
     // @Group Entities
-    // @Description Represents an online player on the server. Identified by UUID.
+    // @Description Represents an online or offline player on the server. Identified by UUID.
+    // @Note Sub-type becomes TextTag if not online!
     // -->
 
-    private Player internal;
+    private User internal;
 
-    public PlayerTag(Player player) {
+    public PlayerTag(User player) {
         internal = player;
     }
 
-    public Player getInternal() {
+    public User getInternal() {
         return internal;
     }
 
@@ -56,44 +58,74 @@ public class PlayerTag extends AbstractTagObject {
         // @Updated 2017/03/24
         // @Group Properties
         // @ReturnType IntegerTag
-        // @Returns the food level of the player.
+        // @Returns the food level of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("food_level", (dat, obj) -> new IntegerTag(((PlayerTag) obj).internal.foodLevel().get()));
+        handlers.put("food_level", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new IntegerTag(pl.foodLevel().get());
+        });
         // <--[tag]
         // @Name PlayerTag.exhaustion
         // @Updated 2017/03/24
         // @Group Properties
         // @ReturnType NumberTag
-        // @Returns the exhaustion of the player.
+        // @Returns the exhaustion of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("exhaustion", (dat, obj) -> new NumberTag(((PlayerTag) obj).internal.exhaustion().get()));
+        handlers.put("exhaustion", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new NumberTag(pl.exhaustion().get());
+        });
         // <--[tag]
         // @Name PlayerTag.saturation
         // @Updated 2017/03/24
         // @Group Properties
         // @ReturnType NumberTag
-        // @Returns the saturation of the player.
+        // @Returns the saturation of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("saturation", (dat, obj) -> new NumberTag(((PlayerTag) obj).internal.saturation().get()));
+        handlers.put("saturation", (dat, obj) ->{
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new NumberTag(pl.saturation().get());
+        });
         // <--[tag]
         // @Name PlayerTag.gamemode
         // @Updated 2017/03/28
         // @Group Properties
         // @ReturnType TextTag
-        // @Returns the gamemode of the player.
+        // @Returns the gamemode of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("gamemode", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.gameMode().get().toString()));
+        handlers.put("gamemode", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new TextTag(pl.gameMode().get().toString());
+        });
         // <--[tag]
         // @Name PlayerTag.block_on_cursor[<NumberTag>]
         // @Updated 2017/03/30
         // @Group Current Information
         // @ReturnType LocationTag
-        // @Returns the block the player has their cursor on, up to a maximum distance. If no distance is specified, the default hand-reach distance is used.
+        // @Returns the block the player has their cursor on, up to a maximum distance. If no distance is specified, the default hand-reach distance is used. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("block_on_cursor", (dat, obj) -> new LocationTag(BlockRay.from(((PlayerTag) obj).internal)
-                .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
-                .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
-                (Utilities.getHandReach(((PlayerTag) obj).internal))).build().end().get().getLocation()));
+        handlers.put("block_on_cursor", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new LocationTag(BlockRay.from(pl)
+                    .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                            (Utilities.getHandReach(pl))).build().end().get().getLocation());
+        });
         // <--[tag]
         // @Name PlayerTag.entities_on_cursor[<MapTag>]
         // @Updated 2017/04/04
@@ -102,8 +134,13 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
         // the line of sight of the player. If no range is specified, it defaults to the player's hand reach.
         // Input is type:<EntityTypeTag>|range:<NumberTag>
+        // ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("entities_on_cursor", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
             ListTag list = new ListTag();
             MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
             EntityTypeTag requiredTypeTag = null;
@@ -115,9 +152,9 @@ public class PlayerTag extends AbstractTagObject {
                 range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
             }
             else {
-                range = (Utilities.getHandReach(((PlayerTag) obj).internal));
+                range = (Utilities.getHandReach(pl));
             }
-            Player source = ((PlayerTag) obj).getInternal();
+            Player source = pl;
             Set<EntityUniverse.EntityHit> entHits = source.getWorld().getIntersectingEntities(source, range);
             for (EntityUniverse.EntityHit entHit : entHits) {
                 Entity ent = entHit.getEntity();
@@ -132,33 +169,57 @@ public class PlayerTag extends AbstractTagObject {
         // @Updated 2017/04/05
         // @Group Properties
         // @ReturnType BooleanTag
-        // @Returns whether the player is sneaking or not.
+        // @Returns whether the player is sneaking or not. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("sneaking", (dat, obj) -> new BooleanTag(((PlayerTag) obj).internal.get(Keys.IS_SNEAKING).get()));
+        handlers.put("sneaking", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new BooleanTag(pl.get(Keys.IS_SNEAKING).get());
+        });
         // <--[tag]
         // @Name PlayerTag.sprinting
         // @Updated 2017/04/05
         // @Group Properties
         // @ReturnType BooleanTag
-        // @Returns whether the player is sprinting or not.
+        // @Returns whether the player is sprinting or not. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("sprinting", (dat, obj) -> new BooleanTag(((PlayerTag) obj).internal.get(Keys.IS_SPRINTING).get()));
+        handlers.put("sprinting", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new BooleanTag(pl.get(Keys.IS_SPRINTING).get());
+        });
         // <--[tag]
         // @Name PlayerTag.ip
         // @Updated 2017/04/08
         // @Group Properties
         // @ReturnType TextTag
-        // @Returns the current IP of the player.
+        // @Returns the current IP of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("ip", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getConnection().getAddress().getAddress().getHostName()));
+        handlers.put("ip", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new TextTag(pl.getConnection().getAddress().getAddress().getHostName());
+        });
         // <--[tag]
         // @Name PlayerTag.latency
         // @Updated 2017/04/17
         // @Group Properties
         // @ReturnType IntegerTag
-        // @Returns the current latency of the player, in milliseconds.
+        // @Returns the current latency of the player, in milliseconds. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("latency", (dat, obj) -> new IntegerTag(((PlayerTag) obj).internal.getConnection().getLatency()));
+        handlers.put("latency", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new IntegerTag(pl.getConnection().getLatency());
+        });
         // <--[tag]
         // @Name PlayerTag.selected_slot
         // @Updated 2017/04/20
@@ -196,15 +257,28 @@ public class PlayerTag extends AbstractTagObject {
         }
     }
 
-    public void checkValid(Action<String> error) {
-        if (!internal.isOnline()) {
-            error.run("That player is no longer online!");
-            throw new RuntimeException("That player is no longer online!"); // Just in case
-        }
-    }
-
     public static PlayerTag getFor(Action<String> error, AbstractTagObject text) {
         return (text instanceof PlayerTag) ? (PlayerTag) text : getFor(error, text.toString());
+    }
+
+    public Player getOnline(Action<String> error) {
+        Optional<Player> pl = internal.getPlayer();
+        if (pl.isPresent()) {
+            return pl.get();
+        }
+        error.run("Player is not online, tag is not valid!");
+        return null;
+    }
+
+    public Player getOnline(TagData data) {
+        Optional<Player> pl = internal.getPlayer();
+        if (pl.isPresent()) {
+            return pl.get();
+        }
+        if (data.hasFallback()) {
+            data.error.run("Player is not online, tag is not valid!");
+        }
+        return null;
     }
 
     @Override
@@ -214,8 +288,12 @@ public class PlayerTag extends AbstractTagObject {
 
     @Override
     public AbstractTagObject handleElseCase(TagData data) {
-        checkValid(data.error);
-        return new EntityTag(internal);
+        Optional<Player> pl = internal.getPlayer();
+        if (pl.isPresent()) {
+            return new EntityTag(pl.get());
+        }
+        // Might be odd. Perhaps worthwhile to drop a warning here...
+        return new TextTag(toString());
     }
 
     @Override

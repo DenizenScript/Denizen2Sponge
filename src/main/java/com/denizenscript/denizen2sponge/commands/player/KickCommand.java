@@ -54,7 +54,7 @@ public class KickCommand extends AbstractCommand {
             if (queue.shouldShowGood()) {
                 queue.outGood("Kicking " + ColorSet.emphasis + player.debug());
             }
-            player.getInternal().kick();
+            player.getOnline(queue.error).kick();
         }
         else {
             AbstractTagObject ato = entry.getArgumentObject(queue, 1);
@@ -63,10 +63,10 @@ public class KickCommand extends AbstractCommand {
                         + ColorSet.good + " with reason " + ColorSet.emphasis + ato.debug());
             }
             if (ato instanceof FormattedTextTag) {
-                player.getInternal().kick(((FormattedTextTag) ato).getInternal());
+                player.getOnline(queue.error).kick(((FormattedTextTag) ato).getInternal());
             }
             else {
-                player.getInternal().kick(Denizen2Sponge.parseColor(ato.toString()));
+                player.getOnline(queue.error).kick(Denizen2Sponge.parseColor(ato.toString()));
             }
         }
     }

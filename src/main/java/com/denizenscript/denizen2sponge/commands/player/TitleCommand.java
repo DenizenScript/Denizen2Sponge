@@ -110,6 +110,6 @@ public class TitleCommand extends AbstractCommand {
                     ColorSet.emphasis + build.getSubtitle().get().toPlain() + ColorSet.good : "") +
                     "' to player:" + ColorSet.emphasis + player.debug() + ColorSet.good + "!");
         }
-        player.getInternal().sendTitle(build.build());
+        player.getOnline(queue.error).sendTitle(build.build());
     }
 }

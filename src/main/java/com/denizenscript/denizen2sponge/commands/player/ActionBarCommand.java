@@ -57,10 +57,10 @@ public class ActionBarCommand extends AbstractCommand {
             queue.outGood("Telling " + ColorSet.emphasis + player.debug() + ColorSet.good + ": " + ColorSet.emphasis + ato.debug());
         }
         if (ato instanceof FormattedTextTag) {
-            player.getInternal().sendMessage(ChatTypes.ACTION_BAR, ((FormattedTextTag) ato).getInternal());
+            player.getOnline(queue.error).sendMessage(ChatTypes.ACTION_BAR, ((FormattedTextTag) ato).getInternal());
         }
         else {
-            player.getInternal().sendMessage(ChatTypes.ACTION_BAR, Denizen2Sponge.parseColor(ato.toString()));
+            player.getOnline(queue.error).sendMessage(ChatTypes.ACTION_BAR, Denizen2Sponge.parseColor(ato.toString()));
         }
     }
 }

@@ -5,7 +5,7 @@ import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
-import com.denizenscript.denizen2sponge.tags.objects.OfflinePlayerTag;
+import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.service.ban.BanService;
@@ -53,8 +53,8 @@ public class PardonCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         AbstractTagObject target = entry.getArgumentObject(queue, 0);
-        if (target instanceof  OfflinePlayerTag) {
-            GameProfile profile = ((OfflinePlayerTag) target).getInternal().getProfile();
+        if (target instanceof PlayerTag) {
+            GameProfile profile = ((PlayerTag) target).getInternal().getProfile();
             if (queue.shouldShowGood()) {
                 queue.outGood("Pardoning player " + ColorSet.emphasis + profile.getName().get() + ColorSet.good + "!");
             }

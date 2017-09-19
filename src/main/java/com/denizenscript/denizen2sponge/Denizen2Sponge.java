@@ -210,7 +210,6 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ItemTagBase());
         Denizen2Core.register(new ItemTypeTagBase());
         Denizen2Core.register(new LocationTagBase());
-        Denizen2Core.register(new OfflinePlayerTagBase());
         Denizen2Core.register(new PlayerTagBase());
         Denizen2Core.register(new ServerTagBase());
         Denizen2Core.register(new TextsTagBase());
@@ -227,7 +226,6 @@ public class Denizen2Sponge {
         Denizen2Core.customSaveLoaders.put("ItemTag", ItemTag::getFor);
         Denizen2Core.customSaveLoaders.put("ItemTypeTag", ItemTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("LocationTag", LocationTag::getFor);
-        Denizen2Core.customSaveLoaders.put("OfflinePlayerTag", OfflinePlayerTag::getFor);
         Denizen2Core.customSaveLoaders.put("PlayerTag", PlayerTag::getFor);
         Denizen2Core.customSaveLoaders.put("WorldTag", WorldTag::getFor);
         Denizen2Core.customSaveLoaders.put("ServerBaseTag", (e, s) -> new ServerTagBase.ServerBaseTag());

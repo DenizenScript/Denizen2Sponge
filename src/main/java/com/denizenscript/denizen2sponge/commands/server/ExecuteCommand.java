@@ -61,7 +61,7 @@ public class ExecuteCommand  extends AbstractCommand {
         }
         else if (mode.equals("as_player")) {
             PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
-            Sponge.getCommandManager().process(player.getInternal(), cmd);
+            Sponge.getCommandManager().process(player.getOnline(queue.error), cmd);
             if (queue.shouldShowGood()) {
                 queue.outGood("Executed " + ColorSet.emphasis + cmd + ColorSet.good + " as the player: "
                         + ColorSet.emphasis + player.debug());
