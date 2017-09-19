@@ -6,7 +6,6 @@ import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.ArmorEquipable;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
 
 import java.util.HashMap;
 

@@ -11,7 +11,6 @@ import org.spongepowered.api.event.Event;
 import org.spongepowered.api.event.Listener;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class InternalScriptEvent extends ScriptEvent {
 

@@ -154,11 +154,10 @@ public class PlayerTag extends AbstractTagObject {
             else {
                 range = (Utilities.getHandReach(pl));
             }
-            Player source = pl;
-            Set<EntityUniverse.EntityHit> entHits = source.getWorld().getIntersectingEntities(source, range);
+            Set<EntityUniverse.EntityHit> entHits = pl.getWorld().getIntersectingEntities(pl, range);
             for (EntityUniverse.EntityHit entHit : entHits) {
                 Entity ent = entHit.getEntity();
-                if ((requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) && !ent.equals(source)) {
+                if ((requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) && !ent.equals(pl)) {
                     list.getInternal().add(new EntityTag(ent));
                 }
             }

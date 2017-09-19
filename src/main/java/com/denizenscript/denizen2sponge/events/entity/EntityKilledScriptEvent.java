@@ -8,12 +8,9 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.damage.DamageModifier;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
-import org.spongepowered.api.util.Tuple;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 public class EntityKilledScriptEvent extends ScriptEvent {
 

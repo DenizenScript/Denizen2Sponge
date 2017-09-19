@@ -4,7 +4,6 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
-import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
 
 public class ForgetInventoryCommand extends AbstractCommand {
 

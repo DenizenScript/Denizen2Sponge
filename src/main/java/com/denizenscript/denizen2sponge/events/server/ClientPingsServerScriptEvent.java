@@ -11,7 +11,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.server.ClientPingServerEvent;
 import org.spongepowered.api.network.status.StatusClient;
-import org.spongepowered.api.text.Text;
 
 import java.util.HashMap;
 import java.util.Optional;

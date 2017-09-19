@@ -6,7 +6,6 @@ import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
-import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.world.explosion.Explosion;
 

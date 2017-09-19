@@ -7,7 +7,6 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 
 public class MountCommand extends AbstractCommand {
 

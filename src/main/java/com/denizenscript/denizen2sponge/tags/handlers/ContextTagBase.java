@@ -5,7 +5,6 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.NullTag;
-import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 
 public class ContextTagBase extends AbstractTagBase {
 

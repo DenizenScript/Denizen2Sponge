@@ -2,7 +2,6 @@ package com.denizenscript.denizen2sponge.utilities.flags;
 
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.google.common.reflect.TypeToken;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.data.key.Key;

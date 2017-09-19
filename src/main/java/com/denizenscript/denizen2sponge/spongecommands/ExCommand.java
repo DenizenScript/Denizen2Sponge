@@ -1,7 +1,5 @@
 package com.denizenscript.denizen2sponge.spongecommands;
 
-import com.denizenscript.denizen2core.tags.objects.IntegerTag;
-import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
@@ -11,7 +9,6 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.AbstractSender;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.utilities.PlayerSender;
-import com.denizenscript.denizen2sponge.utilities.flags.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -25,7 +22,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class ExCommand implements CommandExecutor {
 

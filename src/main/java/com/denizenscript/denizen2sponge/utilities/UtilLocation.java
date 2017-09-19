@@ -39,6 +39,6 @@ public class UtilLocation {
     }
 
     public Location<World> toLocation() {
-        return new Location<World>(world, x, y, z);
+        return new Location<>(world, x, y, z);
     }
 }

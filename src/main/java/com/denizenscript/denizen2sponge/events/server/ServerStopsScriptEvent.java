@@ -2,20 +2,13 @@ package com.denizenscript.denizen2sponge.events.server;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.IntegerTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
-import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
-import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
-import org.spongepowered.api.event.server.ClientPingServerEvent;
-import org.spongepowered.api.network.status.StatusClient;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 public class ServerStopsScriptEvent extends ScriptEvent {
 
@@ -57,8 +50,7 @@ public class ServerStopsScriptEvent extends ScriptEvent {
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
-        HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
-        return defs;
+        return super.getDefinitions(data);
     }
 
     @Override

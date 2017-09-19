@@ -7,7 +7,6 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
-import com.denizenscript.denizen2sponge.utilities.GameRules;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.world.storage.WorldProperties;
 

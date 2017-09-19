@@ -9,7 +9,6 @@ import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryArchetype;
-import org.spongepowered.api.item.inventory.InventoryArchetypes;
 
 public class CreateInventoryCommand extends AbstractCommand {
 

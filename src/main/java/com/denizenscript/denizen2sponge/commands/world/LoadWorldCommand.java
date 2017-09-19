@@ -132,7 +132,7 @@ public class LoadWorldCommand extends AbstractCommand {
             }
             gameMode = gameModeOpt.get();
         }
-        Collection<WorldGeneratorModifier> modifiers = new ArrayList<WorldGeneratorModifier>();
+        Collection<WorldGeneratorModifier> modifiers = new ArrayList<>();
         if (entry.namedArgs.containsKey("modifiers")) {
             List<AbstractTagObject> modifiersList = ListTag.getFor(queue.error,
                     entry.getNamedArgumentObject(queue, "gamemode")).getInternal();

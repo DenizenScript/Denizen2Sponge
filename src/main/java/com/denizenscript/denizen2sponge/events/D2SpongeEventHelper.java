@@ -13,7 +13,6 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.entity.EntityType;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.world.World;
 
 import java.util.List;
@@ -122,7 +121,7 @@ public class D2SpongeEventHelper {
             if (t.equals("type")) {
                 boolean poss = false;
                 for (AbstractTagObject ato_sub : ListTag.getFor(error, v).getInternal()) {
-                    if (itm.getInternal().getItem().equals(ItemTypeTag.getFor(error, ato_sub).getInternal())) {
+                    if (itm.getInternal().getType().equals(ItemTypeTag.getFor(error, ato_sub).getInternal())) {
                         poss = true;
                     }
                 }

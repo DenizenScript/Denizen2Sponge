@@ -8,18 +8,12 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.*;
-import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
-import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.effect.sound.PitchModulation;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Optional;
 
 public class ServerTagBase extends AbstractTagBase {
 

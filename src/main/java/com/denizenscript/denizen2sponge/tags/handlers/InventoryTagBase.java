@@ -4,7 +4,6 @@ import com.denizenscript.denizen2core.tags.AbstractTagBase;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
-import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 
 public class InventoryTagBase extends AbstractTagBase {
 

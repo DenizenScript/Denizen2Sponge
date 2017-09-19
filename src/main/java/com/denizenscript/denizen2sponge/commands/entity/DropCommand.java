@@ -3,27 +3,13 @@ package com.denizenscript.denizen2sponge.commands.entity;
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
-import com.denizenscript.denizen2core.tags.AbstractTagObject;
-import com.denizenscript.denizen2core.tags.objects.BooleanTag;
-import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
-import com.denizenscript.denizen2sponge.Denizen2Sponge;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
-import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
-import org.spongepowered.api.entity.Item;
-import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
-
-import java.util.Map;
 
 public class DropCommand extends AbstractCommand {
 

@@ -116,7 +116,7 @@ public class CuboidTag extends AbstractTagObject {
             for (int x = (int)Math.floor(ct.internal.min.x); x < maxx; x++) {
                 for (int y = (int)Math.floor(ct.internal.min.y); y < maxy; y++) {
                     for (int z = (int)Math.floor(ct.internal.min.z); z < maxz; z++) {
-                        Location<World> loc = new Location<World>(ct.internal.min.world, x, y, z);
+                        Location<World> loc = new Location<>(ct.internal.min.world, x, y, z);
                         if (valids == null || valids.contains(loc.getBlockType())) {
                             lt.getInternal().add(new LocationTag(loc));
                         }
@@ -168,13 +168,12 @@ public class CuboidTag extends AbstractTagObject {
     }
     @Override
     public String toString() {
-        String s = CoreUtilities.doubleToString(internal.min.x) + ","
+        return CoreUtilities.doubleToString(internal.min.x) + ","
                 + CoreUtilities.doubleToString(internal.min.y) + ","
                 + CoreUtilities.doubleToString(internal.min.z) + "/"
                 + CoreUtilities.doubleToString(internal.max.x) + ","
                 + CoreUtilities.doubleToString(internal.max.y) + ","
                 + CoreUtilities.doubleToString(internal.max.z) + "/"
                 + internal.min.world.getName();
-        return s;
     }
 }
