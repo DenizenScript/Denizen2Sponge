@@ -207,6 +207,7 @@ public class ServerTagBase extends AbstractTagBase {
         public String getTagTypeName() {
             return "ServerBaseTag";
         }
+
         @Override
         public AbstractTagObject handleElseCase(TagData data) {
             return new TextTag("server");

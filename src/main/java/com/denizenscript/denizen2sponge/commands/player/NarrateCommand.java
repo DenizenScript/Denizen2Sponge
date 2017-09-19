@@ -52,7 +52,7 @@ public class NarrateCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = null;
-        if (queue.commandStack.peek().hasDefinition("player")){
+        if (queue.commandStack.peek().hasDefinition("player")) {
             AbstractTagObject ato = queue.commandStack.peek().getDefinition("player");
             if (ato instanceof PlayerTag) {
                 player = (PlayerTag) ato;

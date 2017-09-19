@@ -93,6 +93,7 @@ public class ItemTypeTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "ItemTypeTag";
     }
+
     @Override
     public String toString() {
         return internal.getId();

@@ -54,7 +54,7 @@ public class FlagMapDataImpl extends AbstractSingleData<FlagMap, FlagMapDataImpl
 
     @Override
     public Optional<FlagMapDataImpl> from(DataContainer container) {
-        if(container.contains(FlagHelper.FLAGMAP)) {
+        if (container.contains(FlagHelper.FLAGMAP)) {
             // Loads the structure defined in toContainer
             setValue(container.getSerializable(FlagHelper.FLAGMAP.getQuery(), FlagMap.class).get());
             return Optional.of(this);

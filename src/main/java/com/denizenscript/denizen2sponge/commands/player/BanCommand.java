@@ -115,7 +115,8 @@ public class BanCommand extends AbstractCommand {
                                     (ColorSet.good + "!") :
                                     (ColorSet.good + " with reason " + ColorSet.emphasis + reason.toPlain() + ColorSet.good + "!")));
                 }
-            } catch (UnknownHostException e) {
+            }
+            catch (UnknownHostException e) {
                 queue.handleError(entry, "Invalid IP address provided!");
                 return;
             }

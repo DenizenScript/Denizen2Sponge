@@ -145,7 +145,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("with_quantity", (dat, obj) -> {
             ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
-            its.setQuantity((int)IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal());
+            its.setQuantity((int) IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal());
             return new ItemTag(its);
         });
         // <--[tag]
@@ -221,7 +221,7 @@ public class ItemTag extends AbstractTagObject {
         ItemTypeTag type = ItemTypeTag.getFor(error, split.get(0));
         int q = 1;
         if (split.size() > 1) {
-            q = (int)IntegerTag.getFor(error, split.get(1)).getInternal();
+            q = (int) IntegerTag.getFor(error, split.get(1)).getInternal();
         }
         ItemStack its = ItemStack.of(type.getInternal(), q);
         if (split.size() > 2) {
@@ -252,6 +252,7 @@ public class ItemTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "ItemTag";
     }
+
     @Override
     public String toString() {
         return internal.getType().getId() + "/" + internal.getQuantity() + "/" + DataKeys.getAllKeys(internal).toString();

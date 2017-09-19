@@ -46,7 +46,7 @@ public class UnloadWorldCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        WorldTag world  = WorldTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
+        WorldTag world = WorldTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         if (queue.shouldShowGood()) {
             queue.outGood("Attempting to unload world '" + ColorSet.emphasis + world.debug() + ColorSet.good + "'...");
         }

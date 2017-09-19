@@ -196,6 +196,7 @@ public class InventoryTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "InventoryTag";
     }
+
     @Override
     public String debug() {
         return toString();

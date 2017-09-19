@@ -97,6 +97,7 @@ public class FormattedTextTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "FormattedTextTag";
     }
+
     @Override
     public String debug() {
         return "Formatted[" + internal.toPlain() + "]";

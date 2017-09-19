@@ -171,7 +171,7 @@ public class DataKeys {
             }
         }
         if (Boolean.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder)  entity.with(key, BooleanTag.getFor(error, value).getInternal()).get();
+            return (ImmutableDataHolder) entity.with(key, BooleanTag.getFor(error, value).getInternal()).get();
         }
         else if (CatalogType.class.isAssignableFrom(clazz)) {
             String val = value.toString();

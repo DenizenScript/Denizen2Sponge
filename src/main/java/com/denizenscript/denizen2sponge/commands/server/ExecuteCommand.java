@@ -8,7 +8,7 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 
-public class ExecuteCommand  extends AbstractCommand {
+public class ExecuteCommand extends AbstractCommand {
 
     // <--[command]
     // @Name execute

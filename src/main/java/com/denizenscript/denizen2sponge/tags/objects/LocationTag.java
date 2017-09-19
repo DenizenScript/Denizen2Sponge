@@ -55,9 +55,10 @@ public class LocationTag extends AbstractTagObject {
         this(location.getX(), location.getY(), location.getZ(), location.getExtent());
     }
 
-    public  LocationTag(Vector3i location, World world) {
+    public LocationTag(Vector3i location, World world) {
         this(location.getX(), location.getY(), location.getZ(), world);
     }
+
     public LocationTag(Vector3d location) {
         this(location.getX(), location.getY(), location.getZ());
     }
@@ -348,8 +349,8 @@ public class LocationTag extends AbstractTagObject {
             }
             double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
             UtilLocation loc = ((LocationTag) obj).getInternal();
-            int low = (int)Math.floor(-range);
-            int high = (int)Math.ceil(range);
+            int low = (int) Math.floor(-range);
+            int high = (int) Math.ceil(range);
             for (int x = low; x < high; x++) {
                 for (int y = low; y < high; y++) {
                     for (int z = low; z < high; z++) {
@@ -453,6 +454,7 @@ public class LocationTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "LocationTag";
     }
+
     @Override
     public String toString() {
         String s = CoreUtilities.doubleToString(internal.x) + ","

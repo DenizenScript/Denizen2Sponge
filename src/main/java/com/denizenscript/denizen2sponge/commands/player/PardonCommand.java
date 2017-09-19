@@ -67,7 +67,8 @@ public class PardonCommand extends AbstractCommand {
                     queue.outGood("Pardoning IP " + ColorSet.emphasis + address.getHostName() + ColorSet.good + "!");
                 }
                 Sponge.getServiceManager().provide(BanService.class).get().pardon(address);
-            } catch (UnknownHostException e) {
+            }
+            catch (UnknownHostException e) {
                 queue.handleError(entry, "Invalid IP address provided!");
             }
         }

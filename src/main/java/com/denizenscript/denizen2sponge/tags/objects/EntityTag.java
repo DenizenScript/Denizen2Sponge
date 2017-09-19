@@ -308,7 +308,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType EntityTag
         // @Returns the entity that is the base of the stack that this entity is currently part of.
         // -->
-        handlers.put("base_vehicle", (dat,obj) -> new EntityTag(((EntityTag) obj).internal.getBaseVehicle()));
+        handlers.put("base_vehicle", (dat, obj) -> new EntityTag(((EntityTag) obj).internal.getBaseVehicle()));
         // <--[tag]
         // @Name EntityTag.on_ground
         // @Updated 2017/04/04
@@ -316,7 +316,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether this entity is on the ground or not.
         // -->
-        handlers.put("on_ground", (dat,obj) -> new BooleanTag(((EntityTag) obj).internal.isOnGround()));
+        handlers.put("on_ground", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.isOnGround()));
         // <--[tag]
         // @Name EntityTag.scale
         // @Updated 2017/04/04
@@ -430,6 +430,7 @@ public class EntityTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "EntityTag";
     }
+
     @Override
     public String debug() {
         return toString() + "/" + internal.getType().getId();

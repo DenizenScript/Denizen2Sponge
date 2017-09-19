@@ -99,7 +99,7 @@ public class TextsTagBase extends AbstractTagBase {
                     else if (str.equals("underline")) {
                         build.style(TextStyles.UNDERLINE);
                     }
-                    else  if (str.equals("strike")) {
+                    else if (str.equals("strike")) {
                         build.style(TextStyles.STRIKETHROUGH);
                     }
                 }

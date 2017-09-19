@@ -85,7 +85,8 @@ public class DeleteWorldCommand extends AbstractCommand {
             if (queue.shouldShowGood()) {
                 queue.outGood("World '" + ColorSet.emphasis + worldName + ColorSet.good + "' was deleted successfully!");
             }
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             queue.handleError(entry, "World deletion failed!");
             Denizen2Core.getImplementation().outputException(e);
         }

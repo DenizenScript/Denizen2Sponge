@@ -88,7 +88,7 @@ public class PlayerTag extends AbstractTagObject {
         // @ReturnType NumberTag
         // @Returns the saturation of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("saturation", (dat, obj) ->{
+        handlers.put("saturation", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
                 return new NullTag();
@@ -305,6 +305,7 @@ public class PlayerTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "PlayerTag";
     }
+
     @Override
     public String debug() {
         return toString() + "/" + internal.getName();

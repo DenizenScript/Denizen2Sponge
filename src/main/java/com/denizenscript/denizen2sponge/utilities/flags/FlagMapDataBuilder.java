@@ -16,6 +16,7 @@ public class FlagMapDataBuilder extends AbstractDataBuilder<FlagMapDataImpl> imp
     protected FlagMapDataBuilder(Class<FlagMapDataImpl> requiredClass, int supportedVersion) {
         super(requiredClass, supportedVersion);
     }
+
     @Override
     public FlagMapDataImpl create() {
         return new FlagMapDataImpl();
@@ -41,7 +42,9 @@ public class FlagMapDataBuilder extends AbstractDataBuilder<FlagMapDataImpl> imp
             return Optional.empty();
         }
         String val = str.get();
-        MapTag mt = (MapTag) Denizen2Core.loadFromSaved((e) -> { throw new InvalidDataException("Denizen2: " + e); }, val);
+        MapTag mt = (MapTag) Denizen2Core.loadFromSaved((e) -> {
+            throw new InvalidDataException("Denizen2: " + e);
+        }, val);
         return Optional.of(new FlagMapDataImpl(new FlagMap(mt)));
     }
 }

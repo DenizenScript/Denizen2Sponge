@@ -110,12 +110,12 @@ public class CuboidTag extends AbstractTagObject {
             }
             CuboidTag ct = (CuboidTag) obj;
             ListTag lt = new ListTag();
-            int maxx = (int)Math.ceil(ct.internal.max.x + 0.01);
-            int maxy = (int)Math.ceil(ct.internal.max.y + 0.01);
-            int maxz = (int)Math.ceil(ct.internal.max.z + 0.01);
-            for (int x = (int)Math.floor(ct.internal.min.x); x < maxx; x++) {
-                for (int y = (int)Math.floor(ct.internal.min.y); y < maxy; y++) {
-                    for (int z = (int)Math.floor(ct.internal.min.z); z < maxz; z++) {
+            int maxx = (int) Math.ceil(ct.internal.max.x + 0.01);
+            int maxy = (int) Math.ceil(ct.internal.max.y + 0.01);
+            int maxz = (int) Math.ceil(ct.internal.max.z + 0.01);
+            for (int x = (int) Math.floor(ct.internal.min.x); x < maxx; x++) {
+                for (int y = (int) Math.floor(ct.internal.min.y); y < maxy; y++) {
+                    for (int z = (int) Math.floor(ct.internal.min.z); z < maxz; z++) {
                         Location<World> loc = new Location<>(ct.internal.min.world, x, y, z);
                         if (valids == null || valids.contains(loc.getBlockType())) {
                             lt.getInternal().add(new LocationTag(loc));
@@ -166,6 +166,7 @@ public class CuboidTag extends AbstractTagObject {
     public String getTagTypeName() {
         return "CuboidTag";
     }
+
     @Override
     public String toString() {
         return CoreUtilities.doubleToString(internal.min.x) + ","
