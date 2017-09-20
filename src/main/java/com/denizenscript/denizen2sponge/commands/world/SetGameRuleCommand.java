@@ -21,7 +21,7 @@ public class SetGameRuleCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default game rules can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/world/gamerule/DefaultGameRules.html>default game rule list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/world/gamerule/DefaultGameRules.html>default game rule list<@/link>
     // These can be used with the setgamerule command. Note: these Sponge game rule
     // ids are used by Denizen2, but they don't match the Minecraft ones. For example,
     // 'keepInventory' in Minecraft becomes 'keep_inventory' in Sponge/Denizen2.

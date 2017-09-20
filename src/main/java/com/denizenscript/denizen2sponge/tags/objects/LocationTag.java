@@ -42,7 +42,7 @@ public class LocationTag extends AbstractTagObject {
     // @Group Useful Lists
     // @Description
     // A list of all default biome types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/world/biome/BiomeTypes.html>biome types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/world/biome/BiomeTypes.html>biome types list<@/link>
     // -->
 
     private UtilLocation internal = new UtilLocation();

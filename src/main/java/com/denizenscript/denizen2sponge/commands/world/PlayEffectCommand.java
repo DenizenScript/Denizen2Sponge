@@ -19,7 +19,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default particle types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/effect/particle/ParticleTypes.html>particle types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/effect/particle/ParticleTypes.html>particle types list<@/link>
     // These can be used with the playeffect command.
     // -->
 

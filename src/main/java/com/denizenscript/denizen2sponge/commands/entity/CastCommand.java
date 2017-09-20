@@ -22,7 +22,7 @@ public class CastCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default potion effect types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/effect/potion/PotionEffectTypes.html>potion effect types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/effect/potion/PotionEffectTypes.html>potion effect types list<@/link>
     // These can be used with the cast command.
     // -->
 

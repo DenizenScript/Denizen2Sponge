@@ -18,7 +18,7 @@ public class PlaySoundCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default sound types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/effect/sound/SoundTypes.html>sound types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/effect/sound/SoundTypes.html>sound types list<@/link>
     // These can be used with the playsound command, if you replace '_' with '.'.
     // For example, 'entity.arrow.hit' is a valid sound type.
     // -->

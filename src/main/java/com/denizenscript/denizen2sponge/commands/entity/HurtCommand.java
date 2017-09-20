@@ -22,7 +22,7 @@ public class HurtCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default damage types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/event/cause/entity/damage/DamageTypes.html>damage types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/event/cause/entity/damage/DamageTypes.html>damage types list<@/link>
     // These can be used with the hurt command.
     // -->
 

@@ -32,6 +32,15 @@ public class PlayerTag extends AbstractTagObject {
     // @Note Sub-type becomes TextTag if not online!
     // -->
 
+    // <--[explanation]
+    // @Name Default Statistics
+    // @Group Useful Lists
+    // @Description
+    // A list of all default statistics can be found here:
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/statistic/Statistics.html>default statistic list<@/link>
+    // These can be used with the statistic tag for player objects.
+    // -->
+
     private User internal;
 
     public PlayerTag(User player) {
