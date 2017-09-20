@@ -18,7 +18,7 @@ public class DropCommand extends AbstractCommand {
     // @Arguments <item> <location>
     // @Short drops an item.
     // @Updated 2017/05/05
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Tag <[drop_entity]> (EntityTag) returns the item entity that was dropped.

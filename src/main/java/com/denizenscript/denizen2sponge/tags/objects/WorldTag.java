@@ -139,7 +139,7 @@ public class WorldTag extends AbstractTagObject {
                 dat.error.run("Gamerule '" + gamerule + "' does not exist!");
                 return new NullTag();
             }
-            return TextTag.getFor(dat.error, opt.get());
+            return new TextTag(opt.get());
         });
         // <--[tag]
         // @Name WorldTag.generator

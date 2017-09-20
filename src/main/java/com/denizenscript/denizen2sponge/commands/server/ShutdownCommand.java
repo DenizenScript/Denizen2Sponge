@@ -16,7 +16,7 @@ public class ShutdownCommand extends AbstractCommand {
     // @Arguments [reason]
     // @Short stops the server.
     // @Updated 2017/04/06
-    // @Group World
+    // @Group Server
     // @Minimum 0
     // @Maximum 1
     // @Description

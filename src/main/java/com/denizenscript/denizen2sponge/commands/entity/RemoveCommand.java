@@ -15,7 +15,7 @@ public class RemoveCommand extends AbstractCommand {
     // @Arguments <entity list>
     // @Short removes a list of entities.
     // @Updated 2017/04/02
-    // @Group Entities
+    // @Group Entity
     // @Minimum 1
     // @Maximum 1
     // @Description

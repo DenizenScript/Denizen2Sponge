@@ -21,7 +21,7 @@ public class EditEntityCommand extends AbstractCommand {
     // @Arguments <entity> <map of properties>
     // @Short edits an entity.
     // @Updated 2016/09/26
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Description

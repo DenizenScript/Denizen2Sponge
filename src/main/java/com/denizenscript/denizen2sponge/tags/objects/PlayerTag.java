@@ -13,6 +13,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
+import org.spongepowered.api.statistic.Statistic;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.world.extent.EntityUniverse;
 
@@ -29,6 +30,15 @@ public class PlayerTag extends AbstractTagObject {
     // @Group Entities
     // @Description Represents an online or offline player on the server. Identified by UUID.
     // @Note Sub-type becomes TextTag if not online!
+    // -->
+
+    // <--[explanation]
+    // @Name Default Statistics
+    // @Group Useful Lists
+    // @Description
+    // A list of all default statistics can be found here:
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/statistic/Statistics.html>default statistic list<@/link>
+    // These can be used with the statistic tag for player objects.
     // -->
 
     private User internal;
@@ -235,6 +245,26 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the inventory this player is carrying. Equipment is not included.
         // -->
         handlers.put("inventory", (dat, obj) -> new InventoryTag(((UserInventory) ((PlayerTag) obj).internal.getInventory()).getMain()));
+        // <--[tag]
+        // @Name PlayerTag.statistic[<TextTag>]
+        // @Updated 2017/09/20
+        // @Group Properties
+        // @ReturnType IntegerTag
+        // @Returns the current value of the player's specified statistic.
+        // -->
+        handlers.put("statistic", (dat, obj) -> {
+            User pl = ((PlayerTag) obj).getInternal();
+            String statistic = TextTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            Optional<Statistic> opt = Sponge.getRegistry().getType(Statistic.class, statistic);
+            if (!opt.isPresent()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The specified statistic does not exist!");
+                }
+                return new NullTag();
+            }
+            // TODO: Implement statistic modifiers for specific entity/block/item types once they are supported
+            return new IntegerTag(pl.getStatisticData().get(opt.get()).orElse((long) 0));
+        });
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {

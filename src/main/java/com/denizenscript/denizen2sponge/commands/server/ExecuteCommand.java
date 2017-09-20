@@ -15,7 +15,7 @@ public class ExecuteCommand extends AbstractCommand {
     // @Arguments 'as_server'/'as_player' <command> [source]
     // @Short executes a command as the specified command sender.
     // @Updated 2016/09/22
-    // @Group World
+    // @Group Server
     // @Minimum 2
     // @Maximum 3
     // @Description

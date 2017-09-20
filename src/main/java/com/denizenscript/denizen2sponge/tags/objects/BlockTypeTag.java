@@ -26,7 +26,7 @@ public class BlockTypeTag extends AbstractTagObject {
     // @Group Useful Lists
     // @Description
     // A list of all default block types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/block/BlockTypes.html>block types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/block/BlockTypes.html>block types list<@/link>
     // These can be used with the setblock command as well as with some event switches.
     // -->
 

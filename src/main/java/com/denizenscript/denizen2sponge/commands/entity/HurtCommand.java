@@ -22,7 +22,7 @@ public class HurtCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default damage types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/event/cause/entity/damage/DamageTypes.html>damage types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/event/cause/entity/damage/DamageTypes.html>damage types list<@/link>
     // These can be used with the hurt command.
     // -->
 
@@ -31,7 +31,7 @@ public class HurtCommand extends AbstractCommand {
     // @Arguments <entity> <amount>
     // @Short damages the entity for the specified amount.
     // @Updated 2017/04/01
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Named absolute (BooleanTag) Sets whether the damage is absolute or not.

@@ -22,7 +22,7 @@ public class CastCommand extends AbstractCommand {
     // @Group Useful Lists
     // @Description
     // A list of all default potion effect types can be found here:
-    // <@link url https://jd.spongepowered.org/6.0.0-SNAPSHOT/org/spongepowered/api/effect/potion/PotionEffectTypes.html>potion effect types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/effect/potion/PotionEffectTypes.html>potion effect types list<@/link>
     // These can be used with the cast command.
     // -->
 
@@ -31,7 +31,7 @@ public class CastCommand extends AbstractCommand {
     // @Arguments <entity> <effect> <duration>
     // @Short casts a potion effect on an entity.
     // @Updated 2017/04/01
-    // @Group Entities
+    // @Group Entity
     // @Minimum 3
     // @Maximum 3
     // @Named amplifier (IntegerTag) Sets the potion effect amplifier.

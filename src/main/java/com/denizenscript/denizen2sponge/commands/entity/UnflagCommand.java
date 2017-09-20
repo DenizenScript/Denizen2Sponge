@@ -24,7 +24,7 @@ public class UnflagCommand extends AbstractCommand {
     // @Arguments <entity>/'server' <list of flags to remove>
     // @Short removes a list of flags from an entity.
     // @Updated 2017/02/15
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Description

@@ -16,11 +16,14 @@ import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.Carrier;
+import org.spongepowered.api.item.inventory.EmptyInventory;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
+import org.spongepowered.api.item.inventory.slot.FuelSlot;
+import org.spongepowered.api.item.inventory.slot.OutputSlot;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.item.inventory.type.OrderedInventory;
 import org.spongepowered.api.world.LocatableBlock;
@@ -85,14 +88,20 @@ public class InventoryTag extends AbstractTagObject {
         // -->
         handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
         // @Name InventoryTag.slot[<IntegerTag>]
-        // @Updated 2017/06/17
+        // @Updated 2017/09/05
         // @Group General Information
         // @ReturnType ItemTag
         // @Returns the item in the inventory's specified slot.
         // @Example "block/0,1,2,world" .slot[8] might return "diamond".
         // -->
         handlers.put("slot", (dat, obj) -> {
-            Inventory inventory = ((InventoryTag) obj).internal;
+            Inventory inventory = ((InventoryTag) obj).internal.query(OrderedInventory.class);
+            if (inventory instanceof EmptyInventory) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This inventory does not contain slots ordered by index!");
+                }
+                return new NullTag();
+            }
             int slot = (int) IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal();
             if (slot < 1 || slot > inventory.capacity()) {
                 if (!dat.hasFallback()) {
@@ -100,7 +109,43 @@ public class InventoryTag extends AbstractTagObject {
                 }
                 return new NullTag();
             }
-            ItemStack item = ((OrderedInventory) inventory.query(OrderedInventory.class)).peek(new SlotIndex(slot - 1)).orElseGet(ItemStack::empty);
+            ItemStack item = ((OrderedInventory) inventory).peek(new SlotIndex(slot - 1)).orElse(ItemStack.empty());
+            return new ItemTag(item);
+        });
+        // @Name InventoryTag.fuel
+        // @Updated 2017/09/05
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns the item in the fuel slot of a furnace inventory.
+        // @Example "block/0,1,2,world" .fuel might return "coal".
+        // -->
+        handlers.put("fuel", (dat, obj) -> {
+            Inventory inventory = ((InventoryTag) obj).internal.query(FuelSlot.class);
+            if (inventory instanceof EmptyInventory) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This inventory does not contain any fuel slots!");
+                }
+                return new NullTag();
+            }
+            ItemStack item = inventory.peek().orElse(ItemStack.empty());
+            return new ItemTag(item);
+        });
+        // @Name InventoryTag.result
+        // @Updated 2017/09/05
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns the item in the result slot of a furnace inventory.
+        // @Example "block/0,1,2,world" .result might return "iron_ingot".
+        // -->
+        handlers.put("result", (dat, obj) -> {
+            Inventory inventory = ((InventoryTag) obj).internal.query(OutputSlot.class);
+            if (inventory instanceof EmptyInventory) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This inventory does not contain any result slots!");
+                }
+                return new NullTag();
+            }
+            ItemStack item = inventory.peek().orElse(ItemStack.empty());
             return new ItemTag(item);
         });
     }
