@@ -24,7 +24,7 @@ public class FlagCommand extends AbstractCommand {
     // @Arguments <entity>/'server' <map of flags to set>
     // @Short flags an entity with some data.
     // @Updated 2017/02/15
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Description

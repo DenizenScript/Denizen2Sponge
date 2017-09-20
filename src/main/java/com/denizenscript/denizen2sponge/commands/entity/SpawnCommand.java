@@ -25,7 +25,7 @@ public class SpawnCommand extends AbstractCommand {
     // @Arguments <entity type> <location> [map of properties]
     // @Short spawns a new entity.
     // @Updated 2016/09/26
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 3
     // @Tag <[spawn_success]> (BooleanTag) returns whether the spawn passed.

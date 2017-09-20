@@ -12,7 +12,7 @@ public class SaveDataCommand extends AbstractCommand {
     // @Arguments
     // @Short saves extra D2 data.
     // @Updated 2017/09/15
-    // @Group World
+    // @Group Server
     // @Minimum 0
     // @Maximum 0
     // @Description

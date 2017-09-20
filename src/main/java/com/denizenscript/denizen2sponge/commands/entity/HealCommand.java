@@ -17,7 +17,7 @@ public class HealCommand extends AbstractCommand {
     // @Arguments <entity> <amount>
     // @Short changes the health of the entity.
     // @Updated 2017/04/19
-    // @Group Player
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Named type (TextTag) Sets of what type the health will be.

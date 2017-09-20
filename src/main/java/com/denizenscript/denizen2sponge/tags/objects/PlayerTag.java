@@ -262,6 +262,7 @@ public class PlayerTag extends AbstractTagObject {
                 }
                 return new NullTag();
             }
+            // TODO: Implement statistic modifiers for specific entity/block/item types once they are supported
             return new IntegerTag(pl.getStatisticData().get(opt.get()).orElse((long) 0));
         });
     }

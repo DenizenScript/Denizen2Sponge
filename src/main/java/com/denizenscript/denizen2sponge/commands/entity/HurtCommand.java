@@ -31,7 +31,7 @@ public class HurtCommand extends AbstractCommand {
     // @Arguments <entity> <amount>
     // @Short damages the entity for the specified amount.
     // @Updated 2017/04/01
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Named absolute (BooleanTag) Sets whether the damage is absolute or not.

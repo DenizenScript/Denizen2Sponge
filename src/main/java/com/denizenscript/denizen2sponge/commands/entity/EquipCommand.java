@@ -22,7 +22,7 @@ public class EquipCommand extends AbstractCommand {
     // @Arguments <entity> <equipment map>
     // @Short equips an entity according to a given equipment map.
     // @Updated 2017/03/03
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Description

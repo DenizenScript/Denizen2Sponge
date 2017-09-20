@@ -16,7 +16,7 @@ public class AirCommand extends AbstractCommand {
     // @Arguments <entity> <duration>
     // @Short changes the air level of the entity.
     // @Updated 2017/04/19
-    // @Group Entities
+    // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Named type (TextTag) Sets of what type the air level will be.

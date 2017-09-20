@@ -31,7 +31,7 @@ public class CastCommand extends AbstractCommand {
     // @Arguments <entity> <effect> <duration>
     // @Short casts a potion effect on an entity.
     // @Updated 2017/04/01
-    // @Group Entities
+    // @Group Entity
     // @Minimum 3
     // @Maximum 3
     // @Named amplifier (IntegerTag) Sets the potion effect amplifier.
