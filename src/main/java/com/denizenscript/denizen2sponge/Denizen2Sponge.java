@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.commands.items.CreateInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.items.ForgetInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.items.RememberInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.player.*;
+import com.denizenscript.denizen2sponge.commands.server.AnnounceCommand;
 import com.denizenscript.denizen2sponge.commands.server.ExecuteCommand;
 import com.denizenscript.denizen2sponge.commands.server.SaveDataCommand;
 import com.denizenscript.denizen2sponge.commands.server.ShutdownCommand;
@@ -153,6 +154,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new TellCommand());
         Denizen2Core.register(new TitleCommand());
         // Commands: Server
+        Denizen2Core.register(new AnnounceCommand());
         Denizen2Core.register(new ExecuteCommand());
         Denizen2Core.register(new SaveDataCommand());
         Denizen2Core.register(new ShutdownCommand());
