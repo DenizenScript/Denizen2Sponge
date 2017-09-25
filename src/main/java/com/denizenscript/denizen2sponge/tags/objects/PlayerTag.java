@@ -13,7 +13,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
-import org.spongepowered.api.statistic.Statistic;
+import org.spongepowered.api.statistic.*;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.world.extent.EntityUniverse;
 
@@ -36,9 +36,12 @@ public class PlayerTag extends AbstractTagObject {
     // @Name Default Statistics
     // @Group Useful Lists
     // @Description
-    // A list of all default statistics can be found here:
-    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/statistic/Statistics.html>default statistic list<@/link>
-    // These can be used with the statistic tag for player objects.
+    // A list of all default general statistics can be found here:
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/statistic/Statistics.html>default general statistic list<@/link>
+    // These can be used alone in the statistic tag for player objects.
+    // A list of all default statistic types can be found here:
+    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/statistic/StatisticTypes.html>default statistic type list <@/link>
+    // These can be used with a modifier in the statistic tag.
     // -->
 
     private User internal;
@@ -246,24 +249,66 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("inventory", (dat, obj) -> new InventoryTag(((UserInventory) ((PlayerTag) obj).internal.getInventory()).getMain()));
         // <--[tag]
-        // @Name PlayerTag.statistic[<TextTag>]
-        // @Updated 2017/09/20
+        // @Name PlayerTag.statistic[<MapTag>]
+        // @Updated 2017/09/25
         // @Group Properties
         // @ReturnType IntegerTag
-        // @Returns the current value of the player's specified statistic.
+        // @Returns the current value of the player's specified statistic. It also accepts
+        // statistic types with an entity, block or item as a modifier. Note that the statistics
+        // that accept modifiers are in a different list than the general ones.
+        // Input is type:<TextTag> for general statistics and
+        // type:<TextTag>|entity:<EntityTypeTag>/block:<BlockTypeTag>/item:<ItemTypeTag>
+        // for specific ones, choosing the correct modifier.
         // -->
         handlers.put("statistic", (dat, obj) -> {
-            User pl = ((PlayerTag) obj).getInternal();
-            String statistic = TextTag.getFor(dat.error, dat.getNextModifier()).getInternal();
-            Optional<Statistic> opt = Sponge.getRegistry().getType(Statistic.class, statistic);
-            if (!opt.isPresent()) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("The specified statistic does not exist!");
+            User pl = ((PlayerTag) obj).internal;
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            String name = TextTag.getFor(dat.error, map.getInternal().get("type")).getInternal();
+            Statistic statistic;
+            if (map.getInternal().containsKey("entity")) {
+                Optional<StatisticType> type = Sponge.getRegistry().getType(StatisticType.class, name);
+                if (!type.isPresent()) {
+                    if (!dat.hasFallback()) {
+                        dat.error.run("The specified statistic type does not exist!");
+                    }
+                    return new NullTag();
                 }
-                return new NullTag();
+                EntityTypeTag ent = EntityTypeTag.getFor(dat.error, map.getInternal().get("entity"));
+                statistic = Sponge.getRegistry().getEntityStatistic(type.get(), ent.getInternal()).get();
             }
-            // TODO: Implement statistic modifiers for specific entity/block/item types once they are supported
-            return new IntegerTag(pl.getStatisticData().get(opt.get()).orElse((long) 0));
+            else if (map.getInternal().containsKey("block")) {
+                Optional<StatisticType> type = Sponge.getRegistry().getType(StatisticType.class, name);
+                if (!type.isPresent()) {
+                    if (!dat.hasFallback()) {
+                        dat.error.run("The specified statistic type does not exist!");
+                    }
+                    return new NullTag();
+                }
+                BlockTypeTag block = BlockTypeTag.getFor(dat.error, map.getInternal().get("block"));
+                statistic = Sponge.getRegistry().getBlockStatistic(type.get(), block.getInternal()).get();
+            }
+            else if (map.getInternal().containsKey("item")) {
+                Optional<StatisticType> type = Sponge.getRegistry().getType(StatisticType.class, name);
+                if (!type.isPresent()) {
+                    if (!dat.hasFallback()) {
+                        dat.error.run("The specified statistic type does not exist!");
+                    }
+                    return new NullTag();
+                }
+                ItemTypeTag item = ItemTypeTag.getFor(dat.error, map.getInternal().get("item"));
+                statistic = Sponge.getRegistry().getItemStatistic(type.get(), item.getInternal()).get();
+            }
+            else {
+                Optional<Statistic> opt = Sponge.getRegistry().getType(Statistic.class, name);
+                if (!opt.isPresent()) {
+                    if (!dat.hasFallback()) {
+                        dat.error.run("The specified general statistic does not exist!");
+                    }
+                    return new NullTag();
+                }
+                statistic = opt.get();
+            }
+            return new IntegerTag(pl.getStatisticData().get(statistic).orElse((long) 0));
         });
     }
 
