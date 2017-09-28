@@ -57,9 +57,7 @@ public class AnnounceCommand extends AbstractCommand {
         else {
             text = Denizen2Sponge.parseColor(message.toString());
         }
-        for (Player player : Sponge.getServer().getOnlinePlayers()) {
-            player.sendMessage(text);
-        }
+        Sponge.getServer().getBroadcastChannel().send(text);
         if (queue.shouldShowGood()) {
             queue.outGood("Announcing to all players: " + ColorSet.emphasis + message.debug());
         }
