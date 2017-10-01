@@ -15,10 +15,15 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.property.entity.EyeHeightProperty;
 import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.data.type.HandTypes;
-import org.spongepowered.api.entity.ArmorEquipable;
-import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.*;
+import org.spongepowered.api.entity.explosive.Explosive;
+import org.spongepowered.api.entity.hanging.Hanging;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.source.BlockProjectileSource;
+import org.spongepowered.api.entity.projectile.source.ProjectileSource;
+import org.spongepowered.api.entity.vehicle.Boat;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -392,6 +397,150 @@ public class EntityTag extends AbstractTagObject {
         // @Returns the inventory this entity is carrying.
         // -->
         handlers.put("inventory", (dat, obj) -> new InventoryTag(((Carrier) ((EntityTag) obj).internal).getInventory()));
+        // <--[tag]
+        // @Name EntityTag.explosion_radius
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns the radius in blocks that the explosion will affect. Explosive entities only.
+        // -->
+        handlers.put("explosion_radius", (dat, obj) -> new IntegerTag(((Explosive) ((EntityTag) obj).internal).explosionRadius().get().get()));
+        // <--[tag]
+        // @Name EntityTag.falling_block
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType BlockTypeTag
+        // @Returns the block this falling block is representing. Falling block entities only.
+        // -->
+        handlers.put("falling_block", (dat, obj) -> new BlockTypeTag(((FallingBlock) ((EntityTag) obj).internal).blockState().get().getType()));
+        // <--[tag]
+        // @Name EntityTag.can_drop_as_item
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether this falling block can drop as an item if it can't be placed when it lands. Falling block entities only.
+        // -->
+        handlers.put("can_drop_as_item", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canDropAsItem().get()));
+        // <--[tag]
+        // @Name EntityTag.can_place_as_block
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether this falling block can place as a block when it lands. Falling block entities only.
+        // -->
+        handlers.put("can_place_as_block", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canPlaceAsBlock().get()));
+        // <--[tag]
+        // @Name EntityTag.can_hurt_entities
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether this falling block can hurt entities if it lands on them. Falling block entities only.
+        // -->
+        handlers.put("can_hurt_entities", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canHurtEntities().get()));
+        // <--[tag]
+        // @Name EntityTag.fall_damage_per_block
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns how much damage the falling block will deal per block fallen. Falling block entities only.
+        // -->
+        handlers.put("fall_damage_per_block", (dat, obj) -> new NumberTag(((FallingBlock) ((EntityTag) obj).internal).fallDamagePerBlock().get()));
+        // <--[tag]
+        // @Name EntityTag.fall_time
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns how long the block has been falling. Falling block entities only.
+        // -->
+        handlers.put("fall_time", (dat, obj) -> new IntegerTag(((FallingBlock) ((EntityTag) obj).internal).fallTime().get()));
+        // <--[tag]
+        // @Name EntityTag.max_fall_damage
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the maximum damage this falling block can deal to entities when it lands on them. Falling block entities only.
+        // -->
+        handlers.put("max_fall_damage", (dat, obj) -> new NumberTag(((FallingBlock) ((EntityTag) obj).internal).maxFallDamage().get()));
+        // <--[tag]
+        // @Name EntityTag.experience_held
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns how much experience this experience orb holds. Experience orb entities only.
+        // -->
+        handlers.put("experience_held", (dat, obj) -> new IntegerTag(((ExperienceOrb) ((EntityTag) obj).internal).experience().get()));
+        // <--[tag]
+        // @Name EntityTag.hanging_direction
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType TextTag
+        // @Returns the current direction this hanging is facing. Hanging entities only.
+        // -->
+        handlers.put("hanging_direction", (dat, obj) -> new TextTag(((Hanging) ((EntityTag) obj).internal).direction().get().name()));
+        // <--[tag]
+        // @Name EntityTag.item
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType ItemTag
+        // @Returns the item this dropped item is representing. Dropped item entities only.
+        // -->
+        handlers.put("item", (dat, obj) -> new ItemTag(((Item) ((EntityTag) obj).internal).item().get().createStack()));
+        // <--[tag]
+        // @Name EntityTag.shooter
+        // @Updated 2017/09/28
+        // @Group Current Information
+        // @ReturnType EntityTag/LocationTag
+        // @Returns the shooter source of this projectile. Projectile entities only.
+        // -->
+        handlers.put("shooter", (dat, obj) -> {
+            ProjectileSource source = ((Projectile) ((EntityTag) obj).internal).getShooter();
+            if (source instanceof BlockProjectileSource) {
+                return new LocationTag(((BlockProjectileSource) source).getLocation());
+            }
+            else {
+                return new EntityTag(((Entity) source));
+            }
+        });
+        // <--[tag]
+        // @Name EntityTag.max_speed
+        // @Updated 2017/09/30
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the maximum speed that this boat is allowed to travel at. Boat entities only.
+        // -->
+        handlers.put("max_speed", (dat, obj) -> new NumberTag(((Boat) ((EntityTag) obj).internal).getMaxSpeed()));
+        // <--[tag]
+        // @Name EntityTag.occupied_deceleration
+        // @Updated 2017/09/30
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the rate at which occupied boats decelerate. Boat entities only.
+        // -->
+        handlers.put("occupied_deceleration", (dat, obj) -> new NumberTag(((Boat) ((EntityTag) obj).internal).getOccupiedDeceleration()));
+        // <--[tag]
+        // @Name EntityTag.unoccupied_deceleration
+        // @Updated 2017/09/30
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the rate at which unoccupied boats decelerate. Boat entities only.
+        // -->
+        handlers.put("unoccupied_deceleration", (dat, obj) -> new NumberTag(((Boat) ((EntityTag) obj).internal).getUnoccupiedDeceleration()));
+        // <--[tag]
+        // @Name EntityTag.move_on_land
+        // @Updated 2017/09/30
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether the boat is able to move freely on land or not. Boat entities only.
+        // -->
+        handlers.put("can_move_on_land", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).canMoveOnLand()));
+        // <--[tag]
+        // @Name EntityTag.in_water
+        // @Updated 2017/09/30
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether the boat is currently in water or not. Boat entities only.
+        // -->
+        handlers.put("in_water", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).isInWater()));
     }
 
     public static EntityTag getFor(Action<String> error, String text) {
