@@ -132,6 +132,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new FlagCommand());
         Denizen2Core.register(new HealCommand());
         Denizen2Core.register(new HurtCommand());
+        Denizen2Core.register(new LookAtCommand());
         Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new RemoveCommand());
         Denizen2Core.register(new SpawnCommand());
