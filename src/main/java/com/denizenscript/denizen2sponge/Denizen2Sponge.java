@@ -21,10 +21,7 @@ import com.denizenscript.denizen2sponge.events.player.*;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ServerStopsScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.BlockFadesScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.WorldLoadsScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.WorldUnloadsScriptEvent;
+import com.denizenscript.denizen2sponge.events.world.*;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
@@ -198,6 +195,7 @@ public class Denizen2Sponge {
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         Denizen2Core.register(new BlockFadesScriptEvent());
+        Denizen2Core.register(new ExplosionDetonatesScriptEvent());
         Denizen2Core.register(new WorldLoadsScriptEvent());
         Denizen2Core.register(new WorldUnloadsScriptEvent());
         // Tag Handlers: Sponge Basics
