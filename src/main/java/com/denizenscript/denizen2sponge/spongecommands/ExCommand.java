@@ -37,6 +37,8 @@ public class ExCommand implements CommandExecutor {
     // specifically with the -q flag.
     // To run multiple commands, simply separate them with dashes. EG: /ex command - command - command
     //
+    // You can use definitions: source (returns TextTag of player, block, or server), player (for source==player), or location (for source==block).
+    //
     // This can be used for such quick helpers as: /ex reload
     // TODO: Explain better
     // -->
