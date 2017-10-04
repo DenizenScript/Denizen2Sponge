@@ -31,6 +31,7 @@ import org.spongepowered.api.entity.vehicle.Boat;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.util.Color;
 import org.spongepowered.api.world.World;
 
 import java.util.*;
@@ -572,12 +573,21 @@ public class EntityTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Name EntityTag.leashed_entity
-        // @Updated 2017/10/02
+        // @Updated 2017/10/04
         // @Group Current Information
         // @ReturnType EntityTag
         // @Returns the entity currently leashed by this hitch. Leash hitch entities only.
         // -->
-        handlers.put("leashed_entity", (dat, obj) -> new EntityTag(((LeashHitch) ((EntityTag) obj).internal).getLeashedEntity()));
+        handlers.put("leashed_entity", (dat, obj) -> {
+            Entity ent = ((LeashHitch) ((EntityTag) obj).internal).getLeashedEntity();
+            if (ent == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This hitch has no leashed entity!");
+                }
+                return new NullTag();
+            }
+            return new EntityTag(ent);
+        });
         // <--[tag]
         // @Name EntityTag.application_delay
         // @Updated 2017/10/02
@@ -588,12 +598,15 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("application_delay", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).applicationDelay().get()));
         // <--[tag]
         // @Name EntityTag.cloud_color
-        // @Updated 2017/10/02
+        // @Updated 2017/10/04
         // @Group Current Information
         // @ReturnType TextTag
         // @Returns the color of this cloud. Area effect cloud entities only.
         // -->
-        handlers.put("cloud_color", (dat, obj) -> new TextTag(((AreaEffectCloud) ((EntityTag) obj).internal).color().get().toString()));
+        handlers.put("cloud_color", (dat, obj) -> {
+            Color color = ((AreaEffectCloud) ((EntityTag) obj).internal).color().get();
+            return new LocationTag(color.getRed(), color.getGreen(), color.getBlue());
+        });
         // <--[tag]
         // @Name EntityTag.duration
         // @Updated 2017/10/02
