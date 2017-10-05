@@ -19,12 +19,10 @@ import com.denizenscript.denizen2sponge.commands.world.*;
 import com.denizenscript.denizen2sponge.events.entity.*;
 import com.denizenscript.denizen2sponge.events.player.*;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
+import com.denizenscript.denizen2sponge.events.server.CommandSentScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ServerStopsScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.BlockChangeScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.BlockFadesScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.WorldLoadsScriptEvent;
-import com.denizenscript.denizen2sponge.events.world.WorldUnloadsScriptEvent;
+import com.denizenscript.denizen2sponge.events.world.*;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
@@ -132,6 +130,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new FlagCommand());
         Denizen2Core.register(new HealCommand());
         Denizen2Core.register(new HurtCommand());
+        Denizen2Core.register(new LookAtCommand());
         Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new RemoveCommand());
         Denizen2Core.register(new SpawnCommand());
@@ -192,11 +191,13 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
+        Denizen2Core.register(new CommandSentScriptEvent());
         Denizen2Core.register(new InternalScriptEvent());
         Denizen2Core.register(new ServerStopsScriptEvent());
         // Events: World
         Denizen2Core.register(new BlockChangeScriptEvent());
         Denizen2Core.register(new BlockFadesScriptEvent());
+        Denizen2Core.register(new ExplosionDetonatesScriptEvent());
         Denizen2Core.register(new WorldLoadsScriptEvent());
         Denizen2Core.register(new WorldUnloadsScriptEvent());
         // Tag Handlers: Sponge Basics

@@ -14,10 +14,14 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.property.entity.EyeHeightProperty;
 import org.spongepowered.api.data.property.entity.EyeLocationProperty;
+import org.spongepowered.api.data.type.Art;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.entity.explosive.Explosive;
 import org.spongepowered.api.entity.hanging.Hanging;
+import org.spongepowered.api.entity.hanging.LeashHitch;
+import org.spongepowered.api.entity.hanging.Painting;
+import org.spongepowered.api.entity.living.Ageable;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.Projectile;
@@ -27,6 +31,7 @@ import org.spongepowered.api.entity.vehicle.Boat;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.util.Color;
 import org.spongepowered.api.world.World;
 
 import java.util.*;
@@ -497,8 +502,14 @@ public class EntityTag extends AbstractTagObject {
             if (source instanceof BlockProjectileSource) {
                 return new LocationTag(((BlockProjectileSource) source).getLocation());
             }
-            else {
+            else if (source instanceof  Entity) {
                 return new EntityTag(((Entity) source));
+            }
+            else {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The projectile source is unknown!");
+                }
+                return new NullTag();
             }
         });
         // <--[tag]
@@ -541,6 +552,147 @@ public class EntityTag extends AbstractTagObject {
         // @Returns whether the boat is currently in water or not. Boat entities only.
         // -->
         handlers.put("in_water", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).isInWater()));
+        // <--[tag]
+        // @Name EntityTag.art_name
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType TextTag
+        // @Returns the name of the art this painting holds. Painting entities only.
+        // -->
+        handlers.put("art_name", (dat, obj) -> new TextTag(((Painting) ((EntityTag) obj).internal).art().get().getName()));
+        // <--[tag]
+        // @Name EntityTag.art_size
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType LocationTag
+        // @Returns how many blocks this art spans horizontally (X) and vertically (Y). Painting entities only.
+        // -->
+        handlers.put("art_size", (dat, obj) -> {
+            Art art = ((Painting) ((EntityTag) obj).internal).art().get();
+            return new LocationTag(art.getWidth(), art.getHeight(), 0);
+        });
+        // <--[tag]
+        // @Name EntityTag.leashed_entity
+        // @Updated 2017/10/04
+        // @Group Current Information
+        // @ReturnType EntityTag
+        // @Returns the entity currently leashed by this hitch. Leash hitch entities only.
+        // -->
+        handlers.put("leashed_entity", (dat, obj) -> {
+            Entity ent = ((LeashHitch) ((EntityTag) obj).internal).getLeashedEntity();
+            if (ent == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This hitch has no leashed entity!");
+                }
+                return new NullTag();
+            }
+            return new EntityTag(ent);
+        });
+        // <--[tag]
+        // @Name EntityTag.application_delay
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns the application delay of this cloud. Area effect cloud entities only.
+        // -->
+        handlers.put("application_delay", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).applicationDelay().get()));
+        // <--[tag]
+        // @Name EntityTag.cloud_color
+        // @Updated 2017/10/04
+        // @Group Current Information
+        // @ReturnType TextTag
+        // @Returns the color of this cloud. Area effect cloud entities only.
+        // -->
+        handlers.put("cloud_color", (dat, obj) -> {
+            Color color = ((AreaEffectCloud) ((EntityTag) obj).internal).color().get();
+            return new LocationTag(color.getRed(), color.getGreen(), color.getBlue());
+        });
+        // <--[tag]
+        // @Name EntityTag.duration
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns the current duration of this cloud. Area effect cloud entities only.
+        // -->
+        handlers.put("duration", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).duration().get()));
+        // <--[tag]
+        // @Name EntityTag.duration_on_use
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns how much duration the cloud will lose after applying its effect to an entity. Area effect cloud entities only.
+        // -->
+        handlers.put("duration_on_use", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).durationOnUse().get()));
+        // <--[tag]
+        // @Name EntityTag.particle_type
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType TextTag
+        // @Returns the particle type of this cloud. Area effect cloud entities only.
+        // -->
+        handlers.put("particle_type", (dat, obj) -> new TextTag(((AreaEffectCloud) ((EntityTag) obj).internal).particleType().get().getName()));
+        // <--[tag]
+        // @Name EntityTag.radius
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns the current radius of this cloud. Area effect cloud entities only.
+        // -->
+        handlers.put("radius", (dat, obj) -> new NumberTag(((AreaEffectCloud) ((EntityTag) obj).internal).radius().get()));
+        // <--[tag]
+        // @Name EntityTag.radius_on_use
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns how much radius the cloud will lose after applying its effect to an entity. Area effect cloud entities only.
+        // -->
+        handlers.put("radius_on_use", (dat, obj) -> new NumberTag(((AreaEffectCloud) ((EntityTag) obj).internal).radiusOnUse().get()));
+        // <--[tag]
+        // @Name EntityTag.radius_per_tick
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType NumberTag
+        // @Returns how much radius the cloud will lose every tick. Area effect cloud entities only.
+        // -->
+        handlers.put("radius_per_tick", (dat, obj) -> new NumberTag(((AreaEffectCloud) ((EntityTag) obj).internal).radiusPerTick().get()));
+        // <--[tag]
+        // @Name EntityTag.wait_time
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns how long until this cloud will affect entities with its effect. Area effect cloud entities only.
+        // -->
+        handlers.put("wait_time", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).waitTime().get()));
+        // <--[tag]
+        // @Name EntityTag.age
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType IntegerTag
+        // @Returns the current age of this entity. Works with area effect cloud entities too.
+        // -->
+        handlers.put("age", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).internal;
+            if (ent instanceof AreaEffectCloud) {
+                return new IntegerTag(((AreaEffectCloud) ent).age().get());
+            }
+            else if (ent instanceof Ageable) {
+                return new IntegerTag(((Ageable) ent).age().get());
+            }
+            else {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This entity doesn't have an age property!");
+                }
+                return new NullTag();
+            }
+        });
+        // <--[tag]
+        // @Name EntityTag.is_adult
+        // @Updated 2017/10/02
+        // @Group Current Information
+        // @ReturnType BooleanTag
+        // @Returns whether this entity is an adult or not.
+        // -->
+        handlers.put("is_adult", (dat, obj) -> new BooleanTag(((Ageable) ((EntityTag) obj).internal).adult().get()));
     }
 
     public static EntityTag getFor(Action<String> error, String text) {
