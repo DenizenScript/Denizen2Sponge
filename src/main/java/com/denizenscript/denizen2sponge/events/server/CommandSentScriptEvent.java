@@ -87,9 +87,15 @@ public class CommandSentScriptEvent extends ScriptEvent {
         defs.put("args", args);
         defs.put("raw_args", raw_args);
         defs.put("source", source);
-        defs.put("player", player);
-        defs.put("location", location);
-        defs.put("entity", entity);
+        if (player != null) {
+            defs.put("player", player);
+        }
+        if (location != null) {
+            defs.put("location", location);
+        }
+        if (entity != null) {
+            defs.put("entity", entity);
+        }
         return defs;
     }
 
