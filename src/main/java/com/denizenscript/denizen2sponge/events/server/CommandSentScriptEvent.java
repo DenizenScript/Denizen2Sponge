@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
@@ -63,12 +64,7 @@ public class CommandSentScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        if (data.switches.containsKey("command")) {
-            if (!data.switches.get("command").equalsIgnoreCase(command.getInternal())) {
-                return false;
-            }
-        }
-        return true;
+        return D2SpongeEventHelper.checkString(command.getInternal(), data, this::error, "command");
     }
 
     public TextTag command;

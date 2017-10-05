@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Event;
@@ -52,12 +53,7 @@ public class InternalScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        if (data.switches.containsKey("event_type")) {
-            if (!data.switches.get("event_type").equalsIgnoreCase(event_type.getInternal())) {
-                return false;
-            }
-        }
-        return true;
+        return D2SpongeEventHelper.checkString(event_type.getInternal(), data, this::error, "event_type");
     }
 
     public TextTag event_type;
