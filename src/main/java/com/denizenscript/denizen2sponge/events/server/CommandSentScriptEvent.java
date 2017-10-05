@@ -16,7 +16,9 @@ import org.spongepowered.api.entity.vehicle.minecart.CommandBlockMinecart;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.command.SendCommandEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CommandSentScriptEvent extends ScriptEvent {
 
@@ -78,8 +80,6 @@ public class CommandSentScriptEvent extends ScriptEvent {
 
     public SendCommandEvent internal;
 
-    // TODO: Thread safety!
-
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
@@ -109,14 +109,41 @@ public class CommandSentScriptEvent extends ScriptEvent {
         Sponge.getEventManager().unregisterListeners(this);
     }
 
+    public static List<String> splitArguments(String input) {
+        input += " ";
+        List<String> outp = new ArrayList<>();
+        int start = 0;
+        boolean quoted = false;
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (!quoted && c == '\"' && i > 0 && input.charAt(i - 1) == ' ') {
+                start = i + 1;
+                quoted = true;
+            }
+            else if (quoted && c == '\"' && (i >= input.length() || input.charAt(i + 1) == ' ')) {
+                quoted = false;
+                if (i > start) {
+                    outp.add(input.substring(start, i));
+                }
+                start = i + 2;
+            }
+            else if (!quoted && c == ' ') {
+                if (i > start) {
+                    outp.add(input.substring(start, i));
+                }
+                start = i + 1;
+            }
+        }
+        return outp;
+    }
+
     @Listener
     public void onCommandSent(SendCommandEvent evt) {
         CommandSentScriptEvent event = (CommandSentScriptEvent) clone();
         event.internal = evt;
         event.command = new TextTag(evt.getCommand());
-        // TODO: Improve splitting (quoted arguments)
         ListTag list = new ListTag();
-        for (String arg : evt.getArguments().split(" ")) {
+        for (String arg : splitArguments(evt.getArguments())) {
             list.getInternal().add(new TextTag(arg));
         }
         event.args = list;
@@ -160,11 +187,10 @@ public class CommandSentScriptEvent extends ScriptEvent {
             internal.setArguments(string);
         }
         else if (determination.equals("raw_args")) {
-            TextTag tt = TextTag.getFor(this::error, value);
+            TextTag tt = new TextTag(value.toString());
             raw_args = tt;
-            // TODO: Improve splitting (quoted arguments)
             ListTag list = new ListTag();
-            for (String arg : tt.getInternal().split(" ")) {
+            for (String arg : splitArguments(tt.getInternal())) {
                 list.getInternal().add(new TextTag(arg));
             }
             args = list;
