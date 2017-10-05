@@ -1,24 +1,26 @@
 package com.denizenscript.denizen2sponge.spongecommands;
 
-import com.denizenscript.denizen2sponge.Denizen2Sponge;
-import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import com.denizenscript.denizen2core.Denizen2Core;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.AbstractSender;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import com.denizenscript.denizen2sponge.utilities.PlayerSender;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.tileentity.CommandBlock;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.source.CommandBlockSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.vehicle.minecart.CommandBlockMinecart;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
@@ -37,7 +39,8 @@ public class ExCommand implements CommandExecutor {
     // specifically with the -q flag.
     // To run multiple commands, simply separate them with dashes. EG: /ex command - command - command
     //
-    // You can use definitions: source (returns TextTag of player, block, or server), player (for source==player), or location (for source==block).
+    // You can use definitions: source (returns TextTag of player, block, minecart, or server),
+    // player (for source==player), location (for source==block), or entity (for source==minecart).
     //
     // This can be used for such quick helpers as: /ex reload
     // TODO: Explain better
@@ -69,9 +72,13 @@ public class ExCommand implements CommandExecutor {
             defs.getInternal().put("player", new PlayerTag((Player) commandSource));
             send = new PlayerSender((Player) commandSource);
         }
-        else if (commandSource instanceof CommandBlockSource) {
+        else if (commandSource instanceof CommandBlock) {
             defs.getInternal().put("source", new TextTag("block"));
-            defs.getInternal().put("location", new LocationTag(((CommandBlockSource) commandSource).getLocation()));
+            defs.getInternal().put("location", new LocationTag(((CommandBlock) commandSource).getLocation()));
+        }
+        else if (commandSource instanceof CommandBlockMinecart) {
+            defs.getInternal().put("source", new TextTag("minecart"));
+            defs.getInternal().put("entity", new EntityTag((CommandBlockMinecart) commandSource));
         }
         else {
             defs.getInternal().put("source", new TextTag("server"));

@@ -19,6 +19,7 @@ import com.denizenscript.denizen2sponge.commands.world.*;
 import com.denizenscript.denizen2sponge.events.entity.*;
 import com.denizenscript.denizen2sponge.events.player.*;
 import com.denizenscript.denizen2sponge.events.server.ClientPingsServerScriptEvent;
+import com.denizenscript.denizen2sponge.events.server.CommandSentScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.InternalScriptEvent;
 import com.denizenscript.denizen2sponge.events.server.ServerStopsScriptEvent;
 import com.denizenscript.denizen2sponge.events.world.*;
@@ -190,6 +191,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
+        Denizen2Core.register(new CommandSentScriptEvent());
         Denizen2Core.register(new InternalScriptEvent());
         Denizen2Core.register(new ServerStopsScriptEvent());
         // Events: World
