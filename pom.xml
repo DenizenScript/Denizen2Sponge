@@ -7,7 +7,7 @@
     <groupId>com.denizenscript</groupId>
     <artifactId>denizen2sponge</artifactId>
     <packaging>jar</packaging>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <name>Denizen2Sponge</name>
     <description>Denizen 2 for Sponge Minecraft</description>
 
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.denizenscript</groupId>
             <artifactId>denizen2core</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
     </dependencies>
 
