@@ -52,7 +52,7 @@ public class InternalScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        if (data.switches.containsKey("type")) {
+        if (data.switches.containsKey("event_type")) {
             if (!data.switches.get("event_type").equalsIgnoreCase(event_type.getInternal())) {
                 return false;
             }

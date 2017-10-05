@@ -34,6 +34,8 @@ public class CommandSentScriptEvent extends ScriptEvent {
     //
     // @Triggers when a command is used by any source.
     //
+    // @Switch command (TextTag) checks the command name.
+    //
     // @Context
     // command (TextTag) returns the main command that was used.
     // args (ListTag<TextTag>) returns a list of the arguments used.
@@ -61,6 +63,11 @@ public class CommandSentScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
+        if (data.switches.containsKey("command")) {
+            if (!data.switches.get("command").equalsIgnoreCase(command.getInternal())) {
+                return false;
+            }
+        }
         return true;
     }
 
