@@ -69,6 +69,9 @@ public class EntityEntersAreaScriptEvent extends ScriptEvent {
                 }
             }
         }*/
+        else {
+            error("Please specify an area!");
+        }
         return toArea && D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
     }
 
