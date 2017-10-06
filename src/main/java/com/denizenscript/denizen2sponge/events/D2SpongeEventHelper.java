@@ -9,6 +9,7 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.block.BlockType;
@@ -29,7 +30,7 @@ public class D2SpongeEventHelper {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            if ((BlockTypeTag.getFor(error, ato)).getInternal().equals(btype)) {
+            if (BlockTypeTag.getFor(error, ato).getInternal().equals(btype)) {
                 return true;
             }
         }
@@ -45,7 +46,7 @@ public class D2SpongeEventHelper {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            if ((EntityTypeTag.getFor(error, ato)).getInternal().equals(etype)) {
+            if (EntityTypeTag.getFor(error, ato).getInternal().equals(etype)) {
                 return true;
             }
         }
@@ -61,7 +62,7 @@ public class D2SpongeEventHelper {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            if ((WorldTag.getFor(error, ato)).getInternal().equals(world)) {
+            if (WorldTag.getFor(error, ato).getInternal().equals(world)) {
                 return true;
             }
         }
@@ -78,6 +79,22 @@ public class D2SpongeEventHelper {
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
             if (!CoreUtilities.toLowerCase((TextTag.getFor(error, ato)).getInternal()).equals(inpStr)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkCuboid(UtilLocation location, ScriptEvent.ScriptEventData data, Action<String> error) {
+        return checkCuboid(location, data, error, "cuboid");
+    }
+
+    public static boolean checkCuboid(UtilLocation location, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            if (CuboidTag.getFor(error, ato).contains(location)) {
                 return true;
             }
         }

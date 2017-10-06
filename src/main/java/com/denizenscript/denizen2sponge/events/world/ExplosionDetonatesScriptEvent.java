@@ -57,7 +57,8 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error);
+        return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
     }
 
     public LocationTag location;
@@ -102,7 +103,7 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
         event.blocks = locs;
         ListTag ents = new ListTag();
         for (Entity ent : evt.getEntities()) {
-            locs.getInternal().add(new EntityTag(ent));
+            ents.getInternal().add(new EntityTag(ent));
         }
         event.entities = ents;
         Explosion exp = evt.getExplosion();
@@ -125,7 +126,7 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
             blocks = lt;
             ArrayList<Location<World>> locs = new ArrayList<>();
             for (AbstractTagObject loc : lt.getInternal()) {
-                locs.add(((LocationTag) loc).getInternal().toLocation());
+                locs.add(LocationTag.getFor(this::error, loc).getInternal().toLocation());
             }
             internal.getAffectedLocations().clear();
             internal.getAffectedLocations().addAll(locs);
@@ -135,7 +136,7 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
             entities = lt;
             ArrayList<Entity> ents = new ArrayList<>();
             for (AbstractTagObject ent : lt.getInternal()) {
-                ents.add(((EntityTag) ent).getInternal());
+                ents.add(EntityTag.getFor(this::error, ent).getInternal());
             }
             internal.getEntities().clear();
             internal.getEntities().addAll(ents);

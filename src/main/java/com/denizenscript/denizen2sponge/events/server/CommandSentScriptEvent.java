@@ -184,7 +184,13 @@ public class CommandSentScriptEvent extends ScriptEvent {
             args = lt;
             String string = "";
             for (AbstractTagObject arg : lt.getInternal()) {
-                string += " " + ((TextTag) arg).getInternal();
+                String text = ((TextTag) arg).getInternal();
+                if (text.contains(" ")) {
+                    string += " \"" + text + "\"";
+                }
+                else {
+                    string += " " + text;
+                }
             }
             raw_args = new TextTag(string);
             internal.setArguments(string);
