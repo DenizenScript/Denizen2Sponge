@@ -14,13 +14,13 @@ import org.spongepowered.api.event.block.ChangeBlockEvent;
 
 import java.util.HashMap;
 
-public class BlockChangeScriptEvent extends ScriptEvent {
+public class BlockChangesScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
     // block changes
     //
-    // @Updated 2017/03/24
+    // @Updated 2017/10/05
     //
     // @Group World
     //
@@ -53,7 +53,8 @@ public class BlockChangeScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type")
-                && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type");
+                && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type")
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error);
 
     }
 
@@ -87,7 +88,7 @@ public class BlockChangeScriptEvent extends ScriptEvent {
     @Listener
     public void onBlockChanged(ChangeBlockEvent evt) {
         for (Transaction<BlockSnapshot> block : evt.getTransactions()) {
-            BlockChangeScriptEvent event = (BlockChangeScriptEvent) clone();
+            BlockChangesScriptEvent event = (BlockChangesScriptEvent) clone();
             event.internal = evt;
             event.location = new LocationTag(block.getFinal().getLocation().get());
             event.new_material = new BlockTypeTag(block.getFinal().getState().getType());

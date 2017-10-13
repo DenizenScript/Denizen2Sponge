@@ -173,7 +173,9 @@ public class Denizen2Sponge {
         // Events: Entity
         Denizen2Core.register(new EntityDamagedScriptEvent());
         Denizen2Core.register(new EntityDiesScriptEvent());
+        Denizen2Core.register(new EntityEntersAreaScriptEvent());
         Denizen2Core.register(new EntityKilledScriptEvent());
+        Denizen2Core.register(new EntityLeavesAreaScriptEvent());
         Denizen2Core.register(new EntityMovesScriptEvent());
         Denizen2Core.register(new EntitySpawnScriptEvent());
         Denizen2Core.register(new ProjectileHitsBlockScriptEvent());
@@ -189,13 +191,14 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
         Denizen2Core.register(new PlayerRightClicksScriptEvent());
+        Denizen2Core.register(new StatisticChangesScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         Denizen2Core.register(new CommandSentScriptEvent());
         Denizen2Core.register(new InternalScriptEvent());
         Denizen2Core.register(new ServerStopsScriptEvent());
         // Events: World
-        Denizen2Core.register(new BlockChangeScriptEvent());
+        Denizen2Core.register(new BlockChangesScriptEvent());
         Denizen2Core.register(new BlockFadesScriptEvent());
         Denizen2Core.register(new ExplosionDetonatesScriptEvent());
         Denizen2Core.register(new WorldLoadsScriptEvent());

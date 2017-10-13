@@ -175,7 +175,7 @@ public class CommandSentScriptEvent extends ScriptEvent {
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
         if (determination.equals("command")) {
-            TextTag tt = TextTag.getFor(this::error, value);
+            TextTag tt = new TextTag(value.toString());
             command = tt;
             internal.setCommand(tt.getInternal());
         }
@@ -184,7 +184,13 @@ public class CommandSentScriptEvent extends ScriptEvent {
             args = lt;
             String string = "";
             for (AbstractTagObject arg : lt.getInternal()) {
-                string += " " + ((TextTag) arg).getInternal();
+                String text = ((TextTag) arg).getInternal();
+                if (text.contains(" ")) {
+                    string += " \"" + text + "\"";
+                }
+                else {
+                    string += " " + text;
+                }
             }
             raw_args = new TextTag(string);
             internal.setArguments(string);

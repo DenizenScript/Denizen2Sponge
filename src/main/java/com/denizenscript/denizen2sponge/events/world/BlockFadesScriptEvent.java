@@ -20,7 +20,7 @@ public class BlockFadesScriptEvent extends ScriptEvent {
     // @Events
     // block fades
     //
-    // @Updated 2017/03/24
+    // @Updated 2017/10/05
     //
     // @Group World
     //
@@ -50,7 +50,8 @@ public class BlockFadesScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error);
+        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error);
     }
 
     public LocationTag location;

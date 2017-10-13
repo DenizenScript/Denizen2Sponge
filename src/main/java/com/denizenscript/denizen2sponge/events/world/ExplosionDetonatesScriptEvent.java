@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
@@ -26,7 +27,7 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
     // @Events
     // explosion detonates
     //
-    // @Updated 2017/10/03
+    // @Updated 2017/10/05
     //
     // @Group World
     //
@@ -56,10 +57,13 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return true;
+        return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
     }
 
-    public ListTag locations;
+    public LocationTag location;
+
+    public ListTag blocks;
 
     public ListTag entities;
 
@@ -70,7 +74,8 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
-        defs.put("locations", locations);
+        defs.put("location", location);
+        defs.put("blocks", blocks);
         defs.put("entities", entities);
         defs.put("explosion_data", explosion_data);
         return defs;
@@ -90,14 +95,15 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
     public void onExplosionDetonates(ExplosionEvent.Detonate evt) {
         ExplosionDetonatesScriptEvent event = (ExplosionDetonatesScriptEvent) clone();
         event.internal = evt;
+        event.location = new LocationTag(evt.getExplosion().getLocation());
         ListTag locs = new ListTag();
         for (Location<World> loc : evt.getAffectedLocations()) {
             locs.getInternal().add(new LocationTag(loc));
         }
-        event.locations = locs;
+        event.blocks = locs;
         ListTag ents = new ListTag();
         for (Entity ent : evt.getEntities()) {
-            locs.getInternal().add(new EntityTag(ent));
+            ents.getInternal().add(new EntityTag(ent));
         }
         event.entities = ents;
         Explosion exp = evt.getExplosion();
@@ -115,12 +121,12 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
 
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
-        if (determination.equals("locations")) {
+        if (determination.equals("blocks")) {
             ListTag lt = ListTag.getFor(this::error, value);
-            locations = lt;
+            blocks = lt;
             ArrayList<Location<World>> locs = new ArrayList<>();
             for (AbstractTagObject loc : lt.getInternal()) {
-                locs.add(((LocationTag) loc).getInternal().toLocation());
+                locs.add(LocationTag.getFor(this::error, loc).getInternal().toLocation());
             }
             internal.getAffectedLocations().clear();
             internal.getAffectedLocations().addAll(locs);
@@ -130,7 +136,7 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
             entities = lt;
             ArrayList<Entity> ents = new ArrayList<>();
             for (AbstractTagObject ent : lt.getInternal()) {
-                ents.add(((EntityTag) ent).getInternal());
+                ents.add(EntityTag.getFor(this::error, ent).getInternal());
             }
             internal.getEntities().clear();
             internal.getEntities().addAll(ents);
