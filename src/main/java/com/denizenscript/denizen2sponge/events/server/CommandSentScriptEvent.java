@@ -175,7 +175,7 @@ public class CommandSentScriptEvent extends ScriptEvent {
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
         if (determination.equals("command")) {
-            TextTag tt = TextTag.getFor(this::error, value);
+            TextTag tt = new TextTag(value.toString());
             command = tt;
             internal.setCommand(tt.getInternal());
         }

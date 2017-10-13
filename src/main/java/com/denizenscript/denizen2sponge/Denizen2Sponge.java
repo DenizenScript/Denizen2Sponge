@@ -191,6 +191,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
         Denizen2Core.register(new PlayerRightClicksScriptEvent());
+        Denizen2Core.register(new StatisticChangesScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());
         Denizen2Core.register(new CommandSentScriptEvent());

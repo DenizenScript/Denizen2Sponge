@@ -78,7 +78,7 @@ public class D2SpongeEventHelper {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            if (!CoreUtilities.toLowerCase((TextTag.getFor(error, ato)).getInternal()).equals(inpStr)) {
+            if (CoreUtilities.toLowerCase((TextTag.getFor(error, ato)).getInternal()).equals(inpStr)) {
                 return true;
             }
         }
