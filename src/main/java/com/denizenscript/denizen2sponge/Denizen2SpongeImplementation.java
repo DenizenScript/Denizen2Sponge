@@ -55,7 +55,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
         Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode(Denizen2Sponge.colorChar)
                 .deserialize(("   " + e.getClass().getCanonicalName() + ": " + e.getMessage())));
         for (StackTraceElement ste : e.getStackTrace()) {
-            Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(("     " + ste.toString())));
+            Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(("     at " + ste.toString())));
         }
         if (e.getCause() != e) {
             trace(e.getCause());

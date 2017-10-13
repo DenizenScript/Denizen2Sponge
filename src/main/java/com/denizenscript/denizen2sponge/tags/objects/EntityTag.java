@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
@@ -236,7 +237,7 @@ public class EntityTag extends AbstractTagObject {
         // @Updated 2016/10/26
         // @Group Flag Data
         // @ReturnType BooleanTag
-        // @Returns whether the entity has a flag with the specified key.
+        // @Returns whether the entity has a flag with the specified key. (And it is not expired).
         // -->
         handlers.put("has_flag", (dat, obj) -> {
             String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
@@ -249,15 +250,16 @@ public class EntityTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
-            return new BooleanTag(flags.getInternal().containsKey(flagName));
+            return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
         // @Name EntityTag.flag[<TextTag>]
         // @Updated 2016/10/26
         // @Group Flag Data
         // @ReturnType Dynamic
-        // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
+        // @Returns the flag of the specified key from the entity. (And it is not expired).
         // Optionally don't specify anything to get the entire flag map.
+        // Note that flag map uses a s
         // -->
         handlers.put("flag", (dat, obj) -> {
             MapTag flags;
@@ -270,17 +272,30 @@ public class EntityTag extends AbstractTagObject {
                 flags = new MapTag();
             }
             if (!dat.hasNextModifier()) {
-                return flags;
+                MapTag valid = new MapTag();
+                for (Map.Entry<String, AbstractTagObject> flag : flags.getInternal().entrySet()) {
+                    if (Utilities.flagIsValidAndNotExpired(dat.error, flags, flag.getKey())) {
+                        MapTag mt = MapTag.getFor(dat.error, flag.getKey());
+                        valid.getInternal().put(flag.getKey(), mt.getInternal().get("value"));
+                    }
+                }
+                return valid;
             }
             String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
-            AbstractTagObject ato = flags.getInternal().get(flagName);
-            if (ato == null) {
+            if (!Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName)) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on this entity!");
                 }
                 return new NullTag();
             }
-            return ato;
+            MapTag smap = MapTag.getFor(dat.error, flags.getInternal().get(flagName));
+            if (smap == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Invalid flag specified, not present on this entity!");
+                }
+                return new NullTag();
+            }
+            return smap.getInternal().get("value");
         });
         // <--[tag]
         // @Name EntityTag.passengers

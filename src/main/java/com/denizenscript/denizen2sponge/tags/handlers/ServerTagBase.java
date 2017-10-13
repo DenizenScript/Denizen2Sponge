@@ -8,12 +8,14 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ServerTagBase extends AbstractTagBase {
 
@@ -163,7 +165,7 @@ public class ServerTagBase extends AbstractTagBase {
         handlers.put("has_flag", (dat, obj) -> {
             String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
             MapTag flags = Denizen2Sponge.instance.serverFlagMap;
-            return new BooleanTag(flags.getInternal().containsKey(flagName));
+            return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
         // @Name ServerBaseTag.flag[<TextTag>]
@@ -176,17 +178,30 @@ public class ServerTagBase extends AbstractTagBase {
         handlers.put("flag", (dat, obj) -> {
             MapTag flags = Denizen2Sponge.instance.serverFlagMap;
             if (!dat.hasNextModifier()) {
-                return flags;
+                MapTag valid = new MapTag();
+                for (Map.Entry<String, AbstractTagObject> flag : flags.getInternal().entrySet()) {
+                    if (Utilities.flagIsValidAndNotExpired(dat.error, flags, flag.getKey())) {
+                        MapTag mt = MapTag.getFor(dat.error, flag.getKey());
+                        valid.getInternal().put(flag.getKey(), mt.getInternal().get("value"));
+                    }
+                }
+                return valid;
             }
             String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
-            AbstractTagObject ato = flags.getInternal().get(flagName);
-            if (ato == null) {
+            if (!Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName)) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on the server!");
                 }
                 return new NullTag();
             }
-            return ato;
+            MapTag smap = MapTag.getFor(dat.error, flags.getInternal().get(flagName));
+            if (smap == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Invalid flag specified, not present on the server!");
+                }
+                return new NullTag();
+            }
+            return smap.getInternal().get("value");
         });
     }
 
