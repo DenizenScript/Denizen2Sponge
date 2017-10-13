@@ -234,7 +234,7 @@ public class EntityTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Name EntityTag.has_flag[<TextTag>]
-        // @Updated 2016/10/26
+        // @Updated 2017/10/13
         // @Group Flag Data
         // @ReturnType BooleanTag
         // @Returns whether the entity has a flag with the specified key. (And it is not expired).
@@ -253,13 +253,37 @@ public class EntityTag extends AbstractTagObject {
             return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
+        // @Name EntityTag.dead_flags
+        // @Updated 2017/10/13
+        // @Group Flag Data
+        // @ReturnType ListTag
+        // @Returns the list of invalid (expired) flags on this entity.
+        // -->
+        handlers.put("dead_flags", (dat, obj) -> {
+            MapTag flags;
+            Entity e = ((EntityTag) obj).internal;
+            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                flags = fm.get().flags;
+            }
+            else {
+                flags = new MapTag();
+            }
+            ListTag invalid = new ListTag();
+            for (Map.Entry<String, AbstractTagObject> flag : flags.getInternal().entrySet()) {
+                if (!Utilities.flagIsValidAndNotExpired(dat.error, flags, flag.getKey())) {
+                    invalid.getInternal().add(new TextTag(flag.getKey()));
+                }
+            }
+            return invalid;
+        });
+        // <--[tag]
         // @Name EntityTag.flag[<TextTag>]
-        // @Updated 2016/10/26
+        // @Updated 2017/10/13
         // @Group Flag Data
         // @ReturnType Dynamic
         // @Returns the flag of the specified key from the entity. (And it is not expired).
         // Optionally don't specify anything to get the entire flag map.
-        // Note that flag map uses a s
         // -->
         handlers.put("flag", (dat, obj) -> {
             MapTag flags;

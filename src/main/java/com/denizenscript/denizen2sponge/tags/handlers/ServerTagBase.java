@@ -9,13 +9,17 @@ import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ServerTagBase extends AbstractTagBase {
 
@@ -157,7 +161,7 @@ public class ServerTagBase extends AbstractTagBase {
         });
         // <--[tag]
         // @Name ServerBaseTag.has_flag[<TextTag>]
-        // @Updated 2017/09/15
+        // @Updated 2017/10/13
         // @Group Flag Data
         // @ReturnType BooleanTag
         // @Returns whether the entity has a flag with the specified key.
@@ -168,8 +172,25 @@ public class ServerTagBase extends AbstractTagBase {
             return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
+        // @Name ServerBaseTag.dead_flags
+        // @Updated 2017/10/13
+        // @Group Flag Data
+        // @ReturnType ListTag
+        // @Returns the list of invalid (expired) flags on the server.
+        // -->
+        handlers.put("dead_flags", (dat, obj) -> {
+            MapTag flags = Denizen2Sponge.instance.serverFlagMap;
+            ListTag invalid = new ListTag();
+            for (Map.Entry<String, AbstractTagObject> flag : flags.getInternal().entrySet()) {
+                if (!Utilities.flagIsValidAndNotExpired(dat.error, flags, flag.getKey())) {
+                    invalid.getInternal().add(new TextTag(flag.getKey()));
+                }
+            }
+            return invalid;
+        });
+        // <--[tag]
         // @Name ServerBaseTag.flag[<TextTag>]
-        // @Updated 2017/09/15
+        // @Updated 2017/10/13
         // @Group Flag Data
         // @ReturnType Dynamic
         // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
