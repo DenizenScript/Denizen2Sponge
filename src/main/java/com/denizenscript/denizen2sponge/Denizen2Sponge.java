@@ -183,7 +183,9 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());
         Denizen2Core.register(new PlayerDisconnectsScriptEvent());
+        Denizen2Core.register(new PlayerFinishesUsingItemScriptEvent());
         Denizen2Core.register(new PlayerJoinsScriptEvent());
+        Denizen2Core.register(new PlayerKeepsUsingItemScriptEvent());
         Denizen2Core.register(new PlayerLeftClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerLeftClicksEntityScriptEvent());
         Denizen2Core.register(new PlayerLeftClicksScriptEvent());
@@ -191,6 +193,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PlayerRightClicksBlockScriptEvent());
         Denizen2Core.register(new PlayerRightClicksEntityScriptEvent());
         Denizen2Core.register(new PlayerRightClicksScriptEvent());
+        Denizen2Core.register(new PlayerStartsUsingItemScriptEvent());
+        Denizen2Core.register(new PlayerStopsUsingItemScriptEvent());
         Denizen2Core.register(new StatisticChangesScriptEvent());
         // Events: Server
         Denizen2Core.register(new ClientPingsServerScriptEvent());

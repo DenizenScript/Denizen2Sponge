@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
@@ -18,7 +19,7 @@ public class EntityKilledScriptEvent extends ScriptEvent {
     // @Events
     // entity killed
     //
-    // @Updated 2017/03/24
+    // @Updated 2017/10/14
     //
     // @Group Entity
     //
@@ -27,6 +28,8 @@ public class EntityKilledScriptEvent extends ScriptEvent {
     // @Triggers when an entity is killed.
     //
     // @Switch type (EntityTypeTag) checks the entity type.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // entity (EntityTag) returns the entity that was killed.
@@ -48,7 +51,10 @@ public class EntityKilledScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
+                .getLocation())).getInternal(), data, this::error);
     }
 
     public EntityTag entity;

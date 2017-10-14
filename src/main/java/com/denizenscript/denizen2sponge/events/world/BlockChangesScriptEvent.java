@@ -20,7 +20,7 @@ public class BlockChangesScriptEvent extends ScriptEvent {
     // @Events
     // block changes
     //
-    // @Updated 2017/10/05
+    // @Updated 2017/10/14
     //
     // @Group World
     //
@@ -30,6 +30,8 @@ public class BlockChangesScriptEvent extends ScriptEvent {
     //
     // @Switch new_type (BlockTypeTag) checks the new block type.
     // @Switch old_type (BlockTypeTag) checks the old block type.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // location (LocationTag) returns the location of the changed block.
@@ -54,7 +56,8 @@ public class BlockChangesScriptEvent extends ScriptEvent {
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type")
                 && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type")
-                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error);
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
 
     }
 

@@ -30,7 +30,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player right clicks block
     //
-    // @Updated 2017/03/30
+    // @Updated 2017/10/14
     //
     // @Cancellable true
     //
@@ -41,6 +41,8 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
     // @Switch type (BlockTypeTag) checks the block type.
     // @Switch hand (TextTag) checks the hand type.
     // @Switch with_item (ItemTag) checks the item in hand.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // player (PlayerTag) returns the player that did the right clicking.
@@ -69,7 +71,9 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error)
                 && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
-                .getItemInHand(hInternal).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
+                .getItemInHand(hInternal).orElse(ItemStack.empty())), data, this::error)
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
     }
 
     public PlayerTag player;

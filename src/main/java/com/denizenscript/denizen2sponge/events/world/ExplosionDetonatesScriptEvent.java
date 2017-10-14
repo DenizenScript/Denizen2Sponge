@@ -35,6 +35,9 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
     //
     // @Triggers when an explosion detonates and is calculating the affected locations and entities.
     //
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
+    //
     // @Context
     // locations (ListTag<LocationTag>) returns the locations affected by the explosion.
     // entities (ListTag<EntityTag>) returns the entities affected by the explosion.

@@ -2,68 +2,73 @@ package com.denizenscript.denizen2sponge.events.player;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.DurationTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.Root;
-import org.spongepowered.api.event.item.inventory.InteractItemEvent;
-import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 
 import java.util.HashMap;
 
-public class PlayerLeftClicksScriptEvent extends ScriptEvent {
+public class PlayerKeepsUsingItemScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // player left clicks
+    // player keeps using item
     //
-    // @Updated 2017/05/05
+    // @Updated 2017/10/14
     //
     // @Cancellable true
     //
     // @Group Player
     //
-    // @Triggers when a player left clicks.
+    // @Triggers when a player uses an item for a tick.
     //
-    // @Switch with_item (ItemTag) checks the item in hand.
+    // @Switch item (ItemTag) checks the item used.
     //
     // @Context
-    // player (PlayerTag) returns the player that did the left clicking.
+    // player (PlayerTag) returns the player that is using the item.
+    // item (ItemTag) returns the used item.
+    // duration (DurationTag) returns the maximum duration the item will be used for.
     //
     // @Determinations
-    // None.
+    // duration (DurationTag) sets the maximum duration the item will be used for.
     // -->
 
     @Override
     public String getName() {
-        return "PlayerLeftClicks";
+        return "PlayerKeepsUsingItem";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.equals("player left clicks");
+        return data.eventPath.startsWith("player keeps using item");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal().
-                getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())), data, this::error);
+        return D2SpongeEventHelper.checkItem(item, data, this::error, "item");
     }
 
     public PlayerTag player;
 
-    public InteractItemEvent.Primary internal;
+    public ItemTag item;
+
+    public DurationTag duration;
+
+    public UseItemStackEvent.Tick internal;
 
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("player", player);
+        defs.put("item", item);
+        defs.put("duration", duration);
         return defs;
     }
 
@@ -78,10 +83,12 @@ public class PlayerLeftClicksScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onLeftClick(InteractItemEvent.Primary evt, @Root Player player) {
-        PlayerLeftClicksScriptEvent event = (PlayerLeftClicksScriptEvent) clone();
+    public void onPlayerKeepsUsingItem(UseItemStackEvent.Tick evt, @Root Player player) {
+        PlayerKeepsUsingItemScriptEvent event = (PlayerKeepsUsingItemScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
+        event.item = new ItemTag(evt.getItemStackInUse().createStack());
+        event.duration = new DurationTag(evt.getRemainingDuration() / 20.0);
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);
@@ -89,6 +96,13 @@ public class PlayerLeftClicksScriptEvent extends ScriptEvent {
 
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
-        super.applyDetermination(errors, determination, value);
+        if (determination.equals("duration")) {
+            DurationTag dt = DurationTag.getFor(this::error, value);
+            duration = dt;
+            internal.setRemainingDuration((int) (dt.getInternal() * 20));
+        }
+        else {
+            super.applyDetermination(errors, determination, value);
+        }
     }
 }

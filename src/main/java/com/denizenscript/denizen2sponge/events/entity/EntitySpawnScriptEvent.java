@@ -5,6 +5,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
@@ -18,13 +19,15 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
     // @Events
     // entity spawns
     //
-    // @Updated 2016/09/23
+    // @Updated 2017/10/14
     //
     // @Group Entity
     //
     // @Cancellable true
     //
     // @Switch type (EntityTypeTag) checks the entity type.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Triggers when an entity spawns in the world (non players).
     //
@@ -47,7 +50,10 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEvent.ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
+                .getLocation())).getInternal(), data, this::error);
     }
 
     public EntityTag entity;

@@ -167,7 +167,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the helmet currently worn by the entity.
         // -->
-        handlers.put("helmet", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getHelmet().orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("helmet", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getHelmet().orElse(ItemStack.empty())));
         // <--[tag]
         // @Name EntityTag.chestplate
         // @Updated 2017/03/03
@@ -175,7 +175,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the chestplate currently worn by the entity.
         // -->
-        handlers.put("chestplate", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getChestplate().orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("chestplate", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getChestplate().orElse(ItemStack.empty())));
         // <--[tag]
         // @Name EntityTag.leggings
         // @Updated 2017/03/03
@@ -183,7 +183,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the leggings currently worn by the entity.
         // -->
-        handlers.put("leggings", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getLeggings().orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("leggings", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getLeggings().orElse(ItemStack.empty())));
         // <--[tag]
         // @Name EntityTag.boots
         // @Updated 2017/03/03
@@ -191,7 +191,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the boots currently worn by the entity.
         // -->
-        handlers.put("boots", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getBoots().orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("boots", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getBoots().orElse(ItemStack.empty())));
         // <--[tag]
         // @Name EntityTag.held_item
         // @Updated 2017/03/03
@@ -199,7 +199,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the item currently held the entity in its main hand.
         // -->
-        handlers.put("held_item", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("held_item", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())));
         // <--[tag]
         // @Name EntityTag.held_item_offhand
         // @Updated 2017/03/03
@@ -207,7 +207,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType ItemTag
         // @Returns the item currently held the entity in its off hand.
         // -->
-        handlers.put("held_item_offhand", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.OFF_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))));
+        handlers.put("held_item_offhand", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.OFF_HAND).orElse(ItemStack.empty())));
         // <--[tag]
         // @Name EntityTag.data
         // @Updated 2016/08/28

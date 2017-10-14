@@ -5,15 +5,18 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
+import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
 
@@ -23,7 +26,7 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player breaks block
     //
-    // @Updated 2016/09/22
+    // @Updated 2017/10/14
     //
     // @Cancellable true
     //
@@ -32,6 +35,9 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
     // @Triggers when a player breaks a block.
     //
     // @Switch type (BlockTypeTag) checks the block type.
+    // @Switch with_item (ItemTag) checks the item in hand.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // player (PlayerTag) returns the player that broke the block.
@@ -54,7 +60,11 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error);
+        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
+                .getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())), data, this::error)
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
     }
 
     public PlayerTag player;

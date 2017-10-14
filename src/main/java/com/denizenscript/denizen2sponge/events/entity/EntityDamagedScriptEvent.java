@@ -19,7 +19,7 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     // @Events
     // entity damaged
     //
-    // @Updated 2017/03/24
+    // @Updated 2017/10/14
     //
     // @Group Entity
     //
@@ -28,6 +28,8 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     // @Triggers when an entity is damaged.
     //
     // @Switch type (EntityTypeTag) checks the entity type.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // entity (EntityTag) returns the entity that was damaged.
@@ -49,7 +51,10 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
+                .getLocation())).getInternal(), data, this::error);
     }
 
     public EntityTag entity;
