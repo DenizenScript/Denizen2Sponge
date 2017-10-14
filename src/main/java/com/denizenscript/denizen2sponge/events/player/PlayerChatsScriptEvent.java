@@ -3,7 +3,9 @@ package com.denizenscript.denizen2sponge.events.player;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -19,13 +21,16 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
     // @Events
     // player chats
     //
-    // @Updated 2017/03/22
+    // @Updated 2017/10/14
     //
     // @Cancellable true
     //
     // @Group Player
     //
     // @Triggers when a player sends a chat message.
+    //
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // player (PlayerTag) returns the player that sent the message.
@@ -47,7 +52,9 @@ public class PlayerChatsScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return true;
+        return D2SpongeEventHelper.checkWorld(player.getOnline(this::error).getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(player.getOnline(this::error)
+                .getLocation())).getInternal(), data, this::error);
     }
 
     public PlayerTag player;

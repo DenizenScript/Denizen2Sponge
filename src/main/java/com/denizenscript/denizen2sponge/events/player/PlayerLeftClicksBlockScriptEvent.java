@@ -28,7 +28,7 @@ public class PlayerLeftClicksBlockScriptEvent extends ScriptEvent {
     // @Events
     // player left clicks block
     //
-    // @Updated 2017/04/05
+    // @Updated 2017/10/14
     //
     // @Cancellable true
     //
@@ -38,6 +38,8 @@ public class PlayerLeftClicksBlockScriptEvent extends ScriptEvent {
     //
     // @Switch type (BlockTypeTag) checks the block type.
     // @Switch with_item (ItemTag) checks the item in hand.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
     //
     // @Context
     // player (PlayerTag) returns the player that did the left clicking.
@@ -64,7 +66,9 @@ public class PlayerLeftClicksBlockScriptEvent extends ScriptEvent {
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(location.getInternal().toLocation().getBlock().getType(), data, this::error)
                 && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
-                .getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
+                .getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())), data, this::error)
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
     }
 
     public PlayerTag player;

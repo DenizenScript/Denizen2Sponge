@@ -53,7 +53,7 @@ public class PlayerLeftClicksScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal().
-                getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
+                getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())), data, this::error);
     }
 
     public PlayerTag player;

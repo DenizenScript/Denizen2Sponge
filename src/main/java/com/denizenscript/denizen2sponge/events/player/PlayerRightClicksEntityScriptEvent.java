@@ -62,7 +62,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
                 && D2SpongeEventHelper.checkHandType(hand.getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkItem(new ItemTag(player.getInternal()
-                .getItemInHand(hInternal).orElse(ItemStack.of(ItemTypes.NONE, 1))), data, this::error);
+                .getItemInHand(hInternal).orElse(ItemStack.empty())), data, this::error);
     }
 
     public PlayerTag player;
