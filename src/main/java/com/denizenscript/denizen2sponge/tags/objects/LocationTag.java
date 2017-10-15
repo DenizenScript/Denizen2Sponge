@@ -11,10 +11,12 @@ import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.tileentity.Skull;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.AABB;
@@ -416,6 +418,40 @@ public class LocationTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new InventoryTag(((TileEntityCarrier) te.get()).getInventory());
+        });
+        // <--[tag]
+        // @Name LocationTag.skull_type
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the type of skull that this location is holding.
+        // -->
+        handlers.put("skull_type", (dat, obj) -> {
+            Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
+            if (!te.isPresent() || !(te.get() instanceof Skull)) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The block at this location is not a skull tile entity!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(((Skull) te.get()).skullType().get().getId());
+        });
+        // <--[tag]
+        // @Name LocationTag.represented_player
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player of the skull that this location is holding.
+        // -->
+        handlers.put("represented_player", (dat, obj) -> {
+            Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
+            if (!te.isPresent() || !(te.get() instanceof Skull) || ((Skull) te.get()).skullType().get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The block at this location is not a player skull tile entity!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getName().get());
         });
     }
 

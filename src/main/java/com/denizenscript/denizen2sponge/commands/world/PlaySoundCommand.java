@@ -81,7 +81,7 @@ public class PlaySoundCommand extends AbstractCommand {
         else {
             Optional<SoundType> opt = Sponge.getRegistry().getType(SoundType.class, soundName);
             if (!opt.isPresent()) {
-                queue.handleError(entry, "Vanilla sound type not found: '" + soundName + "'!");
+                queue.handleError(entry, "Default sound type not found: '" + soundName + "'!");
                 return;
             }
             sound = opt.get();

@@ -11,6 +11,9 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.SkullType;
+import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -213,6 +216,42 @@ public class ItemTag extends AbstractTagObject {
                 return new NullTag();
             }
             return ato;
+        });
+        // <--[tag]
+        // @Name ItemTag.skull_type
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the type of skull this item is.
+        // -->
+        handlers.put("skull_type", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a skull!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(type.get().getId());
+        });
+        // <--[tag]
+        // @Name ItemTag.represented_player
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player of this skull item.
+        // -->
+        handlers.put("represented_player", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a player skull!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getName().get());
         });
     }
 
