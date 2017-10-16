@@ -15,6 +15,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SkullType;
 import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.profile.property.ProfileProperty;
 
 import java.util.HashMap;
 import java.util.List;
@@ -236,13 +237,13 @@ public class ItemTag extends AbstractTagObject {
             return new TextTag(type.get().getId());
         });
         // <--[tag]
-        // @Name ItemTag.represented_player
+        // @Name ItemTag.represented_player_name
         // @Updated 2017/10/15
         // @Group Properties
         // @ReturnType TextTag
-        // @Returns the represented player of this skull item.
+        // @Returns the represented player's name of this skull item.
         // -->
-        handlers.put("represented_player", (dat, obj) -> {
+        handlers.put("represented_player_name", (dat, obj) -> {
             ItemStack item = ((ItemTag) obj).internal;
             Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
             if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
@@ -252,6 +253,43 @@ public class ItemTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getName().get());
+        });
+        // <--[tag]
+        // @Name ItemTag.represented_player_uuid
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's unique id of this skull item.
+        // -->
+        handlers.put("represented_player_uuid", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a player skull!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
+        });
+        // <--[tag]
+        // @Name ItemTag.represented_player_skin
+        // @Updated 2017/10/16
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's skin of this skull item.
+        // -->
+        handlers.put("represented_player_skin", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a player skull!");
+                }
+                return new NullTag();
+            }
+            ProfileProperty p = item.get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
+            return new TextTag(p.getValue() + "|" + p.getSignature().get());
         });
     }
 
