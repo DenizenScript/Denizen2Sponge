@@ -33,7 +33,10 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.Color;
+import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.extent.EntityUniverse;
 
 import java.util.*;
 
@@ -732,6 +735,80 @@ public class EntityTag extends AbstractTagObject {
         // @Returns whether this entity is an adult or not.
         // -->
         handlers.put("is_adult", (dat, obj) -> new BooleanTag(((Ageable) ((EntityTag) obj).internal).adult().get()));
+        // <--[tag]
+        // @Name EntityTag.target_block[<NumberTag>]
+        // @Updated 2017/10/17
+        // @Group Entity Target
+        // @ReturnType LocationTag
+        // @Returns the block the entity is looking at, up to a maximum distance.
+        // If no distance is specified, the default hand-reach distance is used.
+        // -->
+        handlers.put("target_block", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).getInternal();
+            return new LocationTag(BlockRay.from(ent)
+                    .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                            (Utilities.getHandReach(ent))).build().end().get().getLocation());
+        });
+        // <--[tag]
+        // @Name EntityTag.precise_target_location[<NumberTag>]
+        // @Updated 2017/10/17
+        // @Group Entity Target
+        // @ReturnType LocationTag
+        // @Returns the exact location the entity is looking at, up to a maximum distance.
+        // If no distance is specified, the default hand-reach distance is used.
+        // -->
+        handlers.put("precise_target_location", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).getInternal();
+            BlockRayHit hit = BlockRay.from(ent).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                            (Utilities.getHandReach(ent))).build().end().get();
+            return new LocationTag(hit.getX(), hit.getY(), hit.getZ(),(World) hit.getExtent());
+        });
+        // <--[tag]
+        // @Name EntityTag.precise_target_normal[<NumberTag>]
+        // @Updated 2017/10/17
+        // @Group Entity Target
+        // @ReturnType LocationTag
+        // @Returns the direction of the face of the block the entity is looking at, up to a maximum distance.
+        // If no distance is specified, the default hand-reach distance is used.
+        // -->
+        handlers.put("precise_target_normal", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).getInternal();
+            return new LocationTag(BlockRay.from(ent)
+                    .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                            (Utilities.getHandReach(ent))).build().end().get().getNormal());
+        });
+        // <--[tag]
+        // @Name EntityTagTag.target_entities[<MapTag>]
+        // @Updated 2017/10/17
+        // @Group Entity Target
+        // @ReturnType ListTag<EntityTag>
+        // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
+        // the line of sight of the source entity. If no range is specified, it defaults to the hand reach.
+        // Input is type:<EntityTypeTag>|range:<NumberTag>
+        // -->
+        handlers.put("target_entities", (dat, obj) -> {
+            Entity ent = ((EntityTag) obj).getInternal();
+            ListTag list = new ListTag();
+            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            EntityTypeTag requiredTypeTag = null;
+            if (map.getInternal().containsKey("type")) {
+                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+            }
+            Set<EntityUniverse.EntityHit> entHits = ent.getWorld()
+                    .getIntersectingEntities(ent, map.getInternal().containsKey("range") ?
+                            NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal() :
+                            (Utilities.getHandReach(ent)));
+            for (EntityUniverse.EntityHit entHit : entHits) {
+                Entity hit = entHit.getEntity();
+                if ((requiredTypeTag == null || hit.getType().equals(requiredTypeTag.getInternal())) && !hit.equals(ent)) {
+                    list.getInternal().add(new EntityTag(hit));
+                }
+            }
+            return list;
+        });
     }
 
     public static EntityTag getFor(Action<String> error, String text) {

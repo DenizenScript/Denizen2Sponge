@@ -18,6 +18,7 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.profile.property.ProfileProperty;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.Location;
@@ -437,13 +438,13 @@ public class LocationTag extends AbstractTagObject {
             return new TextTag(((Skull) te.get()).skullType().get().getId());
         });
         // <--[tag]
-        // @Name LocationTag.represented_player
+        // @Name LocationTag.represented_player_name
         // @Updated 2017/10/15
         // @Group Properties
         // @ReturnType TextTag
-        // @Returns the represented player of the skull that this location is holding.
+        // @Returns the represented player's name of the skull that this location is holding.
         // -->
-        handlers.put("represented_player", (dat, obj) -> {
+        handlers.put("represented_player_name", (dat, obj) -> {
             Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
             if (!te.isPresent() || !(te.get() instanceof Skull) || ((Skull) te.get()).skullType().get() != SkullTypes.PLAYER) {
                 if (!dat.hasFallback()) {
@@ -452,6 +453,41 @@ public class LocationTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getName().get());
+        });
+        // <--[tag]
+        // @Name LocationTag.represented_player_uuid
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's unique id of the skull that this location is holding.
+        // -->
+        handlers.put("represented_player_uuid", (dat, obj) -> {
+            Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
+            if (!te.isPresent() || !(te.get() instanceof Skull) || ((Skull) te.get()).skullType().get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The block at this location is not a player skull tile entity!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
+        });
+        // <--[tag]
+        // @Name LocationTag.represented_player_skin
+        // @Updated 2017/10/16
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's skin of the skull that this location is holding.
+        // -->
+        handlers.put("represented_player_skin", (dat, obj) -> {
+            Optional<TileEntity> te = ((LocationTag) obj).internal.toLocation().getTileEntity();
+            if (!te.isPresent() || !(te.get() instanceof Skull) || ((Skull) te.get()).skullType().get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The block at this location is not a player skull tile entity!");
+                }
+                return new NullTag();
+            }
+            ProfileProperty p = te.get().get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
+            return new TextTag(p.getValue() + "|" + p.getSignature().get());
         });
     }
 

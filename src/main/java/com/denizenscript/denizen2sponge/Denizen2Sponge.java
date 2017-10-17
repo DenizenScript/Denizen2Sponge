@@ -180,6 +180,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntitySpawnScriptEvent());
         Denizen2Core.register(new ProjectileHitsBlockScriptEvent());
         // Events: Player
+        Denizen2Core.register(new ExperienceChangesScriptEvent());
+        Denizen2Core.register(new LevelChangesScriptEvent());
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());
         Denizen2Core.register(new PlayerDisconnectsScriptEvent());
@@ -205,6 +207,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new BlockChangesScriptEvent());
         Denizen2Core.register(new BlockFadesScriptEvent());
         Denizen2Core.register(new ExplosionDetonatesScriptEvent());
+        Denizen2Core.register(new PortalFormedScriptEvent());
+        Denizen2Core.register(new WeatherChangesScriptEvent());
         Denizen2Core.register(new WorldLoadsScriptEvent());
         Denizen2Core.register(new WorldUnloadsScriptEvent());
         // Tag Handlers: Sponge Basics

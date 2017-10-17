@@ -15,6 +15,8 @@ import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.statistic.*;
 import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.EntityUniverse;
 
 import java.util.HashMap;
@@ -121,60 +123,6 @@ public class PlayerTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new TextTag(pl.gameMode().get().toString());
-        });
-        // <--[tag]
-        // @Name PlayerTag.block_on_cursor[<NumberTag>]
-        // @Updated 2017/03/30
-        // @Group Current Information
-        // @ReturnType LocationTag
-        // @Returns the block the player has their cursor on, up to a maximum distance. If no distance is specified, the default hand-reach distance is used. ONLINE-PLAYERS-ONLY.
-        // -->
-        handlers.put("block_on_cursor", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
-            if (pl == null) {
-                return new NullTag();
-            }
-            return new LocationTag(BlockRay.from(pl)
-                    .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
-                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
-                            (Utilities.getHandReach(pl))).build().end().get().getLocation());
-        });
-        // <--[tag]
-        // @Name PlayerTag.entities_on_cursor[<MapTag>]
-        // @Updated 2017/04/04
-        // @Group Current Information
-        // @ReturnType ListTag<EntityTag>
-        // @Returns a list of entities of a specified type (or any type if unspecified) intersecting with
-        // the line of sight of the player. If no range is specified, it defaults to the player's hand reach.
-        // Input is type:<EntityTypeTag>|range:<NumberTag>
-        // ONLINE-PLAYERS-ONLY.
-        // -->
-        handlers.put("entities_on_cursor", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
-            if (pl == null) {
-                return new NullTag();
-            }
-            ListTag list = new ListTag();
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
-            EntityTypeTag requiredTypeTag = null;
-            if (map.getInternal().containsKey("type")) {
-                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
-            }
-            double range;
-            if (map.getInternal().containsKey("range")) {
-                range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
-            }
-            else {
-                range = (Utilities.getHandReach(pl));
-            }
-            Set<EntityUniverse.EntityHit> entHits = pl.getWorld().getIntersectingEntities(pl, range);
-            for (EntityUniverse.EntityHit entHit : entHits) {
-                Entity ent = entHit.getEntity();
-                if ((requiredTypeTag == null || ent.getType().equals(requiredTypeTag.getInternal())) && !ent.equals(pl)) {
-                    list.getInternal().add(new EntityTag(ent));
-                }
-            }
-            return list;
         });
         // <--[tag]
         // @Name PlayerTag.sneaking

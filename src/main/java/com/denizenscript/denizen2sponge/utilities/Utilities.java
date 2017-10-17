@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.utilities;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.TimeTag;
 import com.denizenscript.denizen2core.utilities.Action;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 
@@ -11,8 +12,13 @@ import java.time.ZoneId;
 
 public class Utilities {
 
-    public static double getHandReach(Player player) {
-        return player.gameMode().equals(GameModes.CREATIVE) ? 5.0 : 4.0;
+    public static double getHandReach(Entity entity) {
+        if (entity instanceof Player) {
+            return ((Player) entity).gameMode().equals(GameModes.CREATIVE) ? 5.0 : 4.0;
+        }
+        else {
+            return 5.0;
+        }
     }
 
     public static boolean flagIsValidAndNotExpired(Action<String> error, MapTag flags, String flagName) {
