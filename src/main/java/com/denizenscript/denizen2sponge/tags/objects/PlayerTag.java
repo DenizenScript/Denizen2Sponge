@@ -15,6 +15,8 @@ import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.statistic.*;
 import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.EntityUniverse;
 
 import java.util.HashMap;
@@ -138,6 +140,23 @@ public class PlayerTag extends AbstractTagObject {
                     .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(pl))).build().end().get().getLocation());
+        });
+        // <--[tag]
+        // @Name PlayerTag.precise_location_on_cursor[<NumberTag>]
+        // @Updated 2017/10/17
+        // @Group Current Information
+        // @ReturnType LocationTag
+        // @Returns the exact location the player has their cursor on, up to a maximum distance. If no distance is specified, the default hand-reach distance is used. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("precise_location_on_cursor", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            BlockRayHit hit = BlockRay.from(pl).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                            (Utilities.getHandReach(pl))).build().end().get();
+            return new LocationTag(hit.getX(), hit.getY(), hit.getZ(),(World) hit.getExtent());
         });
         // <--[tag]
         // @Name PlayerTag.entities_on_cursor[<MapTag>]
