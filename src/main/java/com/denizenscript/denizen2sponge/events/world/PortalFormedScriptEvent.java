@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.events.world;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
@@ -26,6 +27,10 @@ public class PortalFormedScriptEvent extends ScriptEvent {
     //
     // @Warning This event does not trigger in Sponge during last testing.
     //
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
+    //
     // @Context
     // location (LocationTag) returns the location of the created portal.
     //
@@ -45,7 +50,9 @@ public class PortalFormedScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return true;
+        return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(location.getInternal().world.getWeather().getId(), data, this::error);
     }
 
     public LocationTag location;

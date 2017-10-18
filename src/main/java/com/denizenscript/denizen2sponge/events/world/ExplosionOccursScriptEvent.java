@@ -21,11 +21,11 @@ import org.spongepowered.api.world.explosion.Explosion;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExplosionDetonatesScriptEvent extends ScriptEvent {
+public class ExplosionOccursScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
-    // explosion detonates
+    // explosion occurs
     //
     // @Updated 2017/10/05
     //
@@ -33,10 +33,11 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
     //
     // @Cancellable true
     //
-    // @Triggers when an explosion detonates and is calculating the affected locations and entities.
+    // @Triggers when an explosion occurs and is calculating the affected locations and entities.
     //
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // locations (ListTag<LocationTag>) returns the locations affected by the explosion.
@@ -50,18 +51,19 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "ExplosionDetonates";
+        return "ExplosionOccurs";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("explosion detonates");
+        return data.eventPath.startsWith("explosion occurs");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(location.getInternal().world.getWeather().getId(), data, this::error);
     }
 
     public LocationTag location;
@@ -95,8 +97,8 @@ public class ExplosionDetonatesScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onExplosionDetonates(ExplosionEvent.Detonate evt) {
-        ExplosionDetonatesScriptEvent event = (ExplosionDetonatesScriptEvent) clone();
+    public void onExplosionOccurs(ExplosionEvent.Detonate evt) {
+        ExplosionOccursScriptEvent event = (ExplosionOccursScriptEvent) clone();
         event.internal = evt;
         event.location = new LocationTag(evt.getExplosion().getLocation());
         ListTag locs = new ListTag();

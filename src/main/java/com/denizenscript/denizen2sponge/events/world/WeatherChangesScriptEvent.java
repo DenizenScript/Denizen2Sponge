@@ -58,8 +58,8 @@ public class WeatherChangesScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkString(new_weather.getInternal(), data, this::error, "new_weather")
-                && D2SpongeEventHelper.checkString(old_weather.getInternal(), data, this::error, "old_weather")
+        return D2SpongeEventHelper.checkWeather(new_weather.getInternal(), data, this::error, "new_weather")
+                && D2SpongeEventHelper.checkWeather(old_weather.getInternal(), data, this::error, "old_weather")
                 && D2SpongeEventHelper.checkWorld(world.getInternal(), data, this::error);
     }
 
@@ -120,7 +120,7 @@ public class WeatherChangesScriptEvent extends ScriptEvent {
                 this.error("Invalid weather type: '" + tt.debug() + "'!");
                 return;
             }
-            new_weather = tt;
+            new_weather = new TextTag(type.get().getId());
             internal.setWeather(type.get());
         }
         else {

@@ -763,7 +763,7 @@ public class EntityTag extends AbstractTagObject {
             BlockRayHit hit = BlockRay.from(ent).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(ent))).build().end().get();
-            return new LocationTag(hit.getX(), hit.getY(), hit.getZ(),(World) hit.getExtent());
+            return new LocationTag(hit.getX(), hit.getY(), hit.getZ(), (World) hit.getExtent());
         });
         // <--[tag]
         // @Name EntityTag.precise_target_normal[<NumberTag>]

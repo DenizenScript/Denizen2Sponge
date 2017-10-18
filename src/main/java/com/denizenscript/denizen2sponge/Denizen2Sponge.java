@@ -206,7 +206,7 @@ public class Denizen2Sponge {
         // Events: World
         Denizen2Core.register(new BlockChangesScriptEvent());
         Denizen2Core.register(new BlockFadesScriptEvent());
-        Denizen2Core.register(new ExplosionDetonatesScriptEvent());
+        Denizen2Core.register(new ExplosionOccursScriptEvent());
         Denizen2Core.register(new PortalFormedScriptEvent());
         Denizen2Core.register(new WeatherChangesScriptEvent());
         Denizen2Core.register(new WorldLoadsScriptEvent());

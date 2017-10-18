@@ -31,6 +31,7 @@ public class BlockFadesScriptEvent extends ScriptEvent {
     // @Switch type (BlockTypeTag) checks the block type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // location (LocationTag) returns the location of the faded block.
@@ -54,7 +55,8 @@ public class BlockFadesScriptEvent extends ScriptEvent {
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(location.getInternal().world.getWeather().getId(), data, this::error);
     }
 
     public LocationTag location;

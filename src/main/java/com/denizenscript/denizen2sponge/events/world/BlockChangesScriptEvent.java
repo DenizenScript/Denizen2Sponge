@@ -32,6 +32,7 @@ public class BlockChangesScriptEvent extends ScriptEvent {
     // @Switch old_type (BlockTypeTag) checks the old block type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // location (LocationTag) returns the location of the changed block.
@@ -57,7 +58,8 @@ public class BlockChangesScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type")
                 && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type")
                 && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(location.getInternal().world.getWeather().getId(), data, this::error);
 
     }
 
