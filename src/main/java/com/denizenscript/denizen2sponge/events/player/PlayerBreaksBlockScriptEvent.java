@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
@@ -66,7 +67,8 @@ public class PlayerBreaksBlockScriptEvent extends ScriptEvent {
                 .getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())), data, this::error)
                 && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
                 && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
-                && D2SpongeEventHelper.checkWeather(location.getInternal().world.getWeather().getId(), data, this::error);
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        location.getInternal().world.getWeather().getId()), data, this::error);
     }
 
     public PlayerTag player;

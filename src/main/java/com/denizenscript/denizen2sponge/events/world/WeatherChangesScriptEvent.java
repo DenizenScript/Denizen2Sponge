@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.WorldTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.world.ChangeWorldWeatherEvent;
@@ -98,9 +99,9 @@ public class WeatherChangesScriptEvent extends ScriptEvent {
         WeatherChangesScriptEvent event = (WeatherChangesScriptEvent) clone();
         event.internal = evt;
         event.world = new WorldTag(evt.getTargetWorld());
-        event.duration = new DurationTag(evt.getDuration() / 20.0);
-        event.new_weather = new TextTag(evt.getWeather().getId());
-        event.old_weather = new TextTag(evt.getInitialWeather().getId());
+        event.duration = new DurationTag(evt.getDuration() * (1.0 / 20.0));
+        event.new_weather = new TextTag(Utilities.getIdWithoutDefaultPrefix(evt.getWeather().getId()));
+        event.old_weather = new TextTag(Utilities.getIdWithoutDefaultPrefix(evt.getInitialWeather().getId()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);
@@ -120,7 +121,7 @@ public class WeatherChangesScriptEvent extends ScriptEvent {
                 this.error("Invalid weather type: '" + tt.debug() + "'!");
                 return;
             }
-            new_weather = new TextTag(type.get().getId());
+            new_weather = new TextTag(Utilities.getIdWithoutDefaultPrefix(type.get().getId()));
             internal.setWeather(type.get());
         }
         else {

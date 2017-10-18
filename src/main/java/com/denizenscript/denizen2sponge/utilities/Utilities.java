@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.utilities;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.TimeTag;
 import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -34,5 +35,9 @@ public class Utilities {
                 }
             }
         return b;
+    }
+
+    public static String getIdWithoutDefaultPrefix(String id) {
+        return id.startsWith("minecraft:") ? CoreUtilities.after(id, "minecraft:") : id;
     }
 }

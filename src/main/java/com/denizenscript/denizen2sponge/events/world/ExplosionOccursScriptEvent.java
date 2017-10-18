@@ -10,6 +10,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
@@ -63,7 +64,8 @@ public class ExplosionOccursScriptEvent extends ScriptEvent {
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
                 && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
-                && D2SpongeEventHelper.checkWeather(location.getInternal().world.getWeather().getId(), data, this::error);
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        location.getInternal().world.getWeather().getId()), data, this::error);
     }
 
     public LocationTag location;

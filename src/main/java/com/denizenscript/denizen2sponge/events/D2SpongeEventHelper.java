@@ -10,8 +10,10 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
+import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.type.HandType;
@@ -105,20 +107,7 @@ public class D2SpongeEventHelper {
     }
 
     public static boolean checkWeather(String weather, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
-        if (!data.switches.containsKey(tname)) {
-            return true;
-        }
-        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            Optional<Weather> type = Sponge.getRegistry().getType(Weather.class, ato.toString());
-            if (!type.isPresent()) {
-                error.run("Invalid weather type: '" + ato.debug() + "'!");
-                return false;
-            }
-            else if (type.get().getId().equals(weather)) {
-                return true;
-            }
-        }
-        return false;
+        return checkCatalogType(Weather.class, weather, data, error, tname);
     }
 
     public static boolean checkHandType(String hand, ScriptEvent.ScriptEventData data, Action<String> error) {
@@ -126,16 +115,20 @@ public class D2SpongeEventHelper {
     }
 
     public static boolean checkHandType(String hand, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        return checkCatalogType(HandType.class, hand, data, error, tname);
+    }
+
+    public static boolean checkCatalogType(Class clazz, String type, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
         if (!data.switches.containsKey(tname)) {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            Optional<HandType> type = Sponge.getRegistry().getType(HandType.class, ato.toString());
-            if (!type.isPresent()) {
-                error.run("Invalid hand type: '" + ato.debug() + "'!");
+            Optional<CatalogType> opt = Sponge.getRegistry().getType(clazz, ato.toString());
+            if (!opt.isPresent()) {
+                error.run("Invalid " + clazz.getSimpleName() + " type: '" + ato.debug() + "'!");
                 return false;
             }
-            else if (type.get().getId().equals(hand)) {
+            else if (Utilities.getIdWithoutDefaultPrefix(opt.get().getId()).equals(type)) {
                 return true;
             }
         }
