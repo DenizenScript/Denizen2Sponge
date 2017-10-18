@@ -24,15 +24,16 @@ public class SpawnCommand extends AbstractCommand {
     // @Name spawn
     // @Arguments <entity type> <location> [map of properties]
     // @Short spawns a new entity.
-    // @Updated 2016/09/26
+    // @Updated 2017/10/18
     // @Group Entity
     // @Minimum 2
     // @Maximum 3
+    // @Named rotation (LocationTag) Sets the entity's rotation.
     // @Tag <[spawn_success]> (BooleanTag) returns whether the spawn passed.
     // @Tag <[spawn_entity]> (EntityTag) returns the entity that was spawned (only if the spawn passed).
     // @Description
-    // Spawns an entity at the specified location. Optionally, specify a MapTag of properties
-    // to spawn the entity with those values automatically set on it.
+    // Spawns an entity at the specified location. Optionally, specify rotation and a
+    // MapTag of properties to spawn the entity with those values automatically set on it.
     // Related information: <@link explanation Entity Types>entity types<@/link>.
     // @Example
     // # Spawns a sheep that feels the burn.
@@ -88,11 +89,24 @@ public class SpawnCommand extends AbstractCommand {
                 }
             }
         }
-        if (queue.shouldShowGood()) {
-            queue.outGood("Spawning an entity of type "
-                    + ColorSet.emphasis + entityType.getId() + ColorSet.good
-                    + " with the following properties: " + ColorSet.emphasis + propertyMap.debug()
-                    + " at location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "...");
+        if (entry.namedArgs.containsKey("rotation")) {
+            LocationTag rot = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "rotation"));
+            entity.setTransform(entity.getTransform().setRotation(rot.getInternal().toVector3d()));
+            if (queue.shouldShowGood()) {
+                queue.outGood("Spawning an entity of type " + ColorSet.emphasis + entityType.getId()
+                        + ColorSet.good + " with the following properties: " + ColorSet.emphasis
+                        + propertyMap.debug() + ColorSet.good + " at location " + ColorSet.emphasis
+                        + locationTag.debug() + ColorSet.good + " and rotation " + ColorSet.emphasis
+                        + rot.debug() + ColorSet.good + "...");
+            }
+        }
+        else {
+            if (queue.shouldShowGood()) {
+                queue.outGood("Spawning an entity of type " + ColorSet.emphasis + entityType.getId()
+                        + ColorSet.good + " with the following properties: " + ColorSet.emphasis
+                        + propertyMap.debug() + ColorSet.good + " at location " + ColorSet.emphasis
+                        + locationTag.debug() + ColorSet.good + "...");
+            }
         }
         boolean passed = location.world.spawnEntity(entity);
         // TODO: "Cause" argument!

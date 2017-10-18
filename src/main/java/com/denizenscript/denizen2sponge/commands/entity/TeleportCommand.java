@@ -13,12 +13,13 @@ public class TeleportCommand extends AbstractCommand {
     // @Name teleport
     // @Arguments <entity> <location>
     // @Short teleports the entity to a location.
-    // @Updated 2016/09/05
+    // @Updated 2017/10/18
     // @Group Entity
     // @Minimum 2
     // @Maximum 2
+    // @Named rotation (LocationTag) Sets the entity's rotation.
     // @Description
-    // Teleports the entity to a location.
+    // Teleports the entity to a location. Optionally specify a rotation.
     // TODO: Explain more!
     // @Example
     // # This example teleports the player five blocks upward
@@ -49,10 +50,24 @@ public class TeleportCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        if (queue.shouldShowGood()) {
-            queue.outGood("Teleporting " + ColorSet.emphasis + ent.debug() + ColorSet.good
-                    + " to " + ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
+        if (entry.namedArgs.containsKey("rotation")) {
+            LocationTag rot = LocationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "rotation"));
+            ent.getInternal().setTransform(ent.getInternal().getTransform()
+                    .setLocation(loc.getInternal().toLocation())
+                    .setRotation(rot.getInternal().toVector3d())); // TODO: use the returned boolean?
+            if (queue.shouldShowGood()) {
+                queue.outGood("Teleporting " + ColorSet.emphasis + ent.debug() + ColorSet.good
+                        + " to location " + ColorSet.emphasis + loc.debug() + ColorSet.good
+                        + " and rotation " + ColorSet.emphasis + rot.debug() + "!");
+            }
         }
-        ent.getInternal().setLocation(loc.getInternal().toLocation()); // TODO: use the returned boolean?
+        else {
+            ent.getInternal().setLocation(loc.getInternal().toLocation()); // TODO: use the returned boolean?
+            if (queue.shouldShowGood()) {
+                queue.outGood("Teleporting " + ColorSet.emphasis + ent.debug() + ColorSet.good
+                        + " to location " + ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
+            }
+        }
+
     }
 }
