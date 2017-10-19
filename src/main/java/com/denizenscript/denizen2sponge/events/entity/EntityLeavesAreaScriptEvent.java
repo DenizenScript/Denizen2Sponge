@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.CuboidTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
@@ -30,6 +31,7 @@ public class EntityLeavesAreaScriptEvent extends ScriptEvent {
     //
     // @Switch type (EntityTypeTag) checks the entity type.
     // @Switch cuboid (CuboidTag) checks the cuboid that was left.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // entity (EntityTag) returns the entity that left the area.
@@ -72,7 +74,9 @@ public class EntityLeavesAreaScriptEvent extends ScriptEvent {
         else {
             error("Please specify an area!");
         }
-        return fromArea && D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error);
+        return fromArea && D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;

@@ -10,11 +10,16 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
+import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.weather.Weather;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,16 +74,12 @@ public class D2SpongeEventHelper {
         return false;
     }
 
-    public static boolean checkHandType(String htype, ScriptEvent.ScriptEventData data, Action<String> error) {
-        return checkString(htype, data, error, "hand");
-    }
-
     public static boolean checkString(String inpStr, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
         if (!data.switches.containsKey(tname)) {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            if (CoreUtilities.toLowerCase((TextTag.getFor(error, ato)).getInternal()).equals(inpStr)) {
+            if (CoreUtilities.toLowerCase(ato.toString()).equals(inpStr)) {
                 return true;
             }
         }
@@ -95,6 +96,39 @@ public class D2SpongeEventHelper {
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
             if (CuboidTag.getFor(error, ato).contains(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkWeather(String weather, ScriptEvent.ScriptEventData data, Action<String> error) {
+        return checkWeather(weather, data, error, "weather");
+    }
+
+    public static boolean checkWeather(String weather, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        return checkCatalogType(Weather.class, weather, data, error, tname);
+    }
+
+    public static boolean checkHandType(String hand, ScriptEvent.ScriptEventData data, Action<String> error) {
+        return checkHandType(hand, data, error, "hand");
+    }
+
+    public static boolean checkHandType(String hand, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        return checkCatalogType(HandType.class, hand, data, error, tname);
+    }
+
+    public static boolean checkCatalogType(Class clazz, String type, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            Optional<CatalogType> opt = Sponge.getRegistry().getType(clazz, ato.toString());
+            if (!opt.isPresent()) {
+                error.run("Invalid " + clazz.getSimpleName() + " type: '" + ato.debug() + "'!");
+                return false;
+            }
+            else if (Utilities.getIdWithoutDefaultPrefix(opt.get().getId()).equals(type)) {
                 return true;
             }
         }

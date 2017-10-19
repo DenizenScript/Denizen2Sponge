@@ -420,7 +420,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the maximum air level this entity can have.
         // -->
-        handlers.put("max_air", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.MAX_AIR).get() / 20.0));
+        handlers.put("max_air", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.MAX_AIR).get() * (1.0 / 20.0)));
         // <--[tag]
         // @Name EntityTag.remaining_air
         // @Updated 2017/04/17
@@ -432,9 +432,9 @@ public class EntityTag extends AbstractTagObject {
             Entity ent = ((EntityTag) obj).internal;
             Optional<Integer> opt = ent.get(Keys.REMAINING_AIR);
             if (!opt.isPresent()) {
-                return new DurationTag(ent.get(Keys.MAX_AIR).get() / 20.0);
+                return new DurationTag(ent.get(Keys.MAX_AIR).get() * (1.0 / 20.0));
             }
-            return new DurationTag(opt.get() / 20.0);
+            return new DurationTag(opt.get() * (1.0 / 20.0));
         });
         // <--[tag]
         // @Name EntityTag.inventory
@@ -496,10 +496,10 @@ public class EntityTag extends AbstractTagObject {
         // @Name EntityTag.fall_time
         // @Updated 2017/09/28
         // @Group Current Information
-        // @ReturnType IntegerTag
+        // @ReturnType DurationTag
         // @Returns how long the block has been falling. Falling block entities only.
         // -->
-        handlers.put("fall_time", (dat, obj) -> new IntegerTag(((FallingBlock) ((EntityTag) obj).internal).fallTime().get()));
+        handlers.put("fall_time", (dat, obj) -> new DurationTag(((FallingBlock) ((EntityTag) obj).internal).fallTime().get() * (1.0 / 20.0)));
         // <--[tag]
         // @Name EntityTag.max_fall_damage
         // @Updated 2017/09/28
@@ -634,10 +634,10 @@ public class EntityTag extends AbstractTagObject {
         // @Name EntityTag.application_delay
         // @Updated 2017/10/02
         // @Group Current Information
-        // @ReturnType IntegerTag
+        // @ReturnType DurationTag
         // @Returns the application delay of this cloud. Area effect cloud entities only.
         // -->
-        handlers.put("application_delay", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).applicationDelay().get()));
+        handlers.put("application_delay", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).applicationDelay().get() * (1.0 / 20.0)));
         // <--[tag]
         // @Name EntityTag.cloud_color
         // @Updated 2017/10/04
@@ -653,18 +653,18 @@ public class EntityTag extends AbstractTagObject {
         // @Name EntityTag.duration
         // @Updated 2017/10/02
         // @Group Current Information
-        // @ReturnType IntegerTag
+        // @ReturnType DurationTag
         // @Returns the current duration of this cloud. Area effect cloud entities only.
         // -->
-        handlers.put("duration", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).duration().get()));
+        handlers.put("duration", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).duration().get() * (1.0 / 20.0)));
         // <--[tag]
         // @Name EntityTag.duration_on_use
         // @Updated 2017/10/02
         // @Group Current Information
-        // @ReturnType IntegerTag
+        // @ReturnType DurationTag
         // @Returns how much duration the cloud will lose after applying its effect to an entity. Area effect cloud entities only.
         // -->
-        handlers.put("duration_on_use", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).durationOnUse().get()));
+        handlers.put("duration_on_use", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).durationOnUse().get() * (1.0 / 20.0)));
         // <--[tag]
         // @Name EntityTag.particle_type
         // @Updated 2017/10/02
@@ -701,10 +701,10 @@ public class EntityTag extends AbstractTagObject {
         // @Name EntityTag.wait_time
         // @Updated 2017/10/02
         // @Group Current Information
-        // @ReturnType IntegerTag
+        // @ReturnType DurationTag
         // @Returns how long until this cloud will affect entities with its effect. Area effect cloud entities only.
         // -->
-        handlers.put("wait_time", (dat, obj) -> new IntegerTag(((AreaEffectCloud) ((EntityTag) obj).internal).waitTime().get()));
+        handlers.put("wait_time", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).waitTime().get() * (1.0 / 20.0)));
         // <--[tag]
         // @Name EntityTag.age
         // @Updated 2017/10/02
@@ -763,7 +763,7 @@ public class EntityTag extends AbstractTagObject {
             BlockRayHit hit = BlockRay.from(ent).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(ent))).build().end().get();
-            return new LocationTag(hit.getX(), hit.getY(), hit.getZ(),(World) hit.getExtent());
+            return new LocationTag(hit.getX(), hit.getY(), hit.getZ(), (World) hit.getExtent());
         });
         // <--[tag]
         // @Name EntityTag.precise_target_normal[<NumberTag>]

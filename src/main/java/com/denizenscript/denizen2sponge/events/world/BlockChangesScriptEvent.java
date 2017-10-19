@@ -6,6 +6,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
@@ -32,6 +33,7 @@ public class BlockChangesScriptEvent extends ScriptEvent {
     // @Switch old_type (BlockTypeTag) checks the old block type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // location (LocationTag) returns the location of the changed block.
@@ -57,7 +59,9 @@ public class BlockChangesScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkBlockType(new_material.getInternal(), data, this::error, "new_type")
                 && D2SpongeEventHelper.checkBlockType(old_material.getInternal(), data, this::error, "old_type")
                 && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error);
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        location.getInternal().world.getWeather().getId()), data, this::error);
 
     }
 

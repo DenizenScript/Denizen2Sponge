@@ -5,7 +5,9 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -31,6 +33,8 @@ public class LevelChangesScriptEvent extends ScriptEvent {
     // @Warning This event does not trigger in Sponge during last testing.
     //
     // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // player (PlayerTag) returns the player that changed level.
@@ -53,7 +57,11 @@ public class LevelChangesScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkWorld(player.getOnline(this::error).getLocation().getExtent(), data, this::error);
+        return D2SpongeEventHelper.checkWorld(player.getOnline(this::error).getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(player.getOnline(this::error)
+                .getLocation())).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        player.getOnline(this::error).getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public PlayerTag player;

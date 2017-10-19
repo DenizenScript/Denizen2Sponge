@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.DamageFunction;
@@ -30,6 +31,7 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
     // @Switch type (EntityTypeTag) checks the entity type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // entity (EntityTag) returns the entity that was damaged.
@@ -54,7 +56,9 @@ public class EntityDamagedScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
                 && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
                 && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
-                .getLocation())).getInternal(), data, this::error);
+                .getLocation())).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;

@@ -7,6 +7,7 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
@@ -32,6 +33,9 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
     // @Triggers when a player places a block.
     //
     // @Switch type (BlockTypeTag) checks the block type.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // player (PlayerTag) returns the player that broke the block.
@@ -55,7 +59,11 @@ public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEvent.ScriptEventData data) {
-        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error);
+        return D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        location.getInternal().world.getWeather().getId()), data, this::error);
     }
 
     public PlayerTag player;

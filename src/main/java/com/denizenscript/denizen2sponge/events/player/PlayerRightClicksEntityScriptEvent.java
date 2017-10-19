@@ -9,6 +9,7 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
@@ -101,7 +102,7 @@ public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
         event.player = new PlayerTag(player);
         event.entity = new EntityTag(evt.getTargetEntity());
         event.hInternal = evt.getHandType();
-        event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
+        event.hand = new TextTag(Utilities.getIdWithoutDefaultPrefix(evt.getHandType().getId()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);

@@ -135,7 +135,7 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
             event.impact_normal = new LocationTag(0, 0, 0);
         }
         event.hInternal = evt.getHandType();
-        event.hand = new TextTag(CoreUtilities.toLowerCase(evt.getHandType().toString()));
+        event.hand = new TextTag(Utilities.getIdWithoutDefaultPrefix(evt.getHandType().getId()));
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);

@@ -6,6 +6,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
@@ -13,7 +14,7 @@ import org.spongepowered.api.event.entity.SpawnEntityEvent;
 
 import java.util.HashMap;
 
-public class EntitySpawnScriptEvent extends ScriptEvent {
+public class EntitySpawnsScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Events
@@ -28,6 +29,7 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
     // @Switch type (EntityTypeTag) checks the entity type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Triggers when an entity spawns in the world (non players).
     //
@@ -53,7 +55,9 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
                 && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
                 && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
-                .getLocation())).getInternal(), data, this::error);
+                .getLocation())).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;
@@ -80,7 +84,7 @@ public class EntitySpawnScriptEvent extends ScriptEvent {
     @Listener
     public void onEntiySpawns(SpawnEntityEvent evt) {
         for (Entity ent : evt.getEntities()) {
-            EntitySpawnScriptEvent event = (EntitySpawnScriptEvent) clone();
+            EntitySpawnsScriptEvent event = (EntitySpawnsScriptEvent) clone();
             event.internal = evt;
             event.entity = new EntityTag(ent);
             event.cancelled = evt.isCancelled();

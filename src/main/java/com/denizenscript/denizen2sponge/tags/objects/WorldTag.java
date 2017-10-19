@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.GameRules;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
@@ -165,7 +166,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the time of day of the world. This value is not necessarily within the time span of a single day.
         // -->
-        handlers.put("time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getWorldTime() / 20.0));
+        handlers.put("time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getWorldTime() * (1.0 / 20.0)));
         // <--[tag]
         // @Name WorldTag.total_time
         // @Updated 2017/04/03
@@ -173,7 +174,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the total time of the world.
         // -->
-        handlers.put("total_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getTotalTime() / 20.0));
+        handlers.put("total_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getTotalTime() * (1.0 / 20.0)));
         // <--[tag]
         // @Name WorldTag.difficulty
         // @Updated 2017/04/03
@@ -182,7 +183,7 @@ public class WorldTag extends AbstractTagObject {
         // @Returns the difficulty of the world. Difficulties include 'peaceful', 'easy', 'normal' and 'hard'.
         // @Example "world" .difficulty might return "easy".
         // -->
-        handlers.put("difficulty", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getDifficulty().toString())));
+        handlers.put("difficulty", (dat, obj) -> new TextTag(Utilities.getIdWithoutDefaultPrefix(((WorldTag) obj).internal.getProperties().getDifficulty().getId())));
         // <--[tag]
         // @Name WorldTag.is_raining
         // @Updated 2017/04/03
@@ -198,7 +199,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the remaining time before the rain state is toggled to a random value in this world.
         // -->
-        handlers.put("rain_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getRainTime() / 20.0));
+        handlers.put("rain_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getRainTime() * (1.0 / 20.0)));
         // <--[tag]
         // @Name WorldTag.is_thundering
         // @Updated 2017/04/03
@@ -214,7 +215,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the remaining time before the thunder state is toggled to a random value in this world.
         // -->
-        handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() / 20.0));
+        handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() * (1.0 / 20.0)));
         // <--[tag]
         // @Name WorldTag.weather
         // @Updated 2017/04/03
@@ -223,7 +224,7 @@ public class WorldTag extends AbstractTagObject {
         // @Returns the current weather of the world. Weathers include 'clear', 'rain' and 'thunder_storm'.
         // @Example "world" .weather might return "clear".
         // -->
-        handlers.put("weather", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getWeather().getName())));
+        handlers.put("weather", (dat, obj) -> new TextTag(Utilities.getIdWithoutDefaultPrefix(((WorldTag) obj).internal.getWeather().getId())));
         // <--[tag]
         // @Name WorldTag.remaining_weather_time
         // @Updated 2017/04/03
@@ -231,7 +232,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the remaining duration of the current weather in the world.
         // -->
-        handlers.put("remaining_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRemainingDuration() / 20.0));
+        handlers.put("remaining_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRemainingDuration() * (1.0 / 20.0)));
         // <--[tag]
         // @Name WorldTag.running_weather_time
         // @Updated 2017/04/03
@@ -239,7 +240,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType DurationTag
         // @Returns the duration the current weather in the world has been running for.
         // -->
-        handlers.put("running_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRunningDuration() / 20.0));
+        handlers.put("running_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRunningDuration() * (1.0 / 20.0)));
     }
 
     public static WorldTag getFor(Action<String> error, String text) {
