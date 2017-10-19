@@ -7,6 +7,7 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
@@ -30,6 +31,9 @@ public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
     //
     // @Switch entity_type (EntityTypeTag) checks the entity type.
     // @Switch block_type (BlockTypeTag) checks the block type.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
     //
     // @Context
     // entity (EntityTag) returns the entity that hit the block.
@@ -52,7 +56,12 @@ public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptEventData data) {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type")
-                && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type");
+                && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type")
+                && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
+                .getLocation())).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                        entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;

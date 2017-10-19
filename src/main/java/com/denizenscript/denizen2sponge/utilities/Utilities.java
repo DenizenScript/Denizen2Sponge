@@ -38,6 +38,6 @@ public class Utilities {
     }
 
     public static String getIdWithoutDefaultPrefix(String id) {
-        return id.startsWith("minecraft:") ? CoreUtilities.after(id, "minecraft:") : id;
+        return id.startsWith("minecraft:") ? id.substring("minecraft:".length()) : id;
     }
 }
