@@ -28,6 +28,7 @@ import java.util.Optional;
 public class LoadWorldCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name loadworld
     // @Arguments <world name> <template>
     // @Short loads an existing world, or creates a new one.

@@ -9,6 +9,7 @@ import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
 public class RememberInventoryCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name rememberinventory
     // @Arguments <inventory> <name>
     // @Short remembers an inventory until shutdown.

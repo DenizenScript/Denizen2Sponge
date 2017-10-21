@@ -13,6 +13,7 @@ import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 public class NarrateCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name narrate
     // @Arguments <message>
     // @Short tells the most relevant player a message. Convenience helper only.

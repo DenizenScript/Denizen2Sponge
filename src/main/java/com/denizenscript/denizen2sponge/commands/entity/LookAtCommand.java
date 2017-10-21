@@ -12,6 +12,7 @@ import org.spongepowered.api.entity.living.Living;
 public class LookAtCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name lookat
     // @Arguments <entity> <location>
     // @Short makes an entity look at a location.

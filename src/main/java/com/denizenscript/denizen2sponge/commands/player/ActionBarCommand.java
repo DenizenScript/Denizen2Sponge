@@ -13,6 +13,7 @@ import org.spongepowered.api.text.chat.ChatTypes;
 public class ActionBarCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name actionbar
     // @Arguments <player> <message>
     // @Short sends an actionbar message to a player a message.

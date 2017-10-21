@@ -12,6 +12,7 @@ import org.spongepowered.api.data.key.Keys;
 public class AirCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name air
     // @Arguments <entity> <duration>
     // @Short changes the air level of the entity.

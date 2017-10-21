@@ -14,6 +14,7 @@ import org.spongepowered.api.text.title.Title;
 public class TitleCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name title
     // @Arguments <player> <title> [subtitle]
     // @Short sends a title to a player.

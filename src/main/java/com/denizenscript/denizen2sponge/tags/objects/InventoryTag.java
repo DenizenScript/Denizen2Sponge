@@ -34,6 +34,7 @@ import java.util.*;
 public class InventoryTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type InventoryTag
     // @SubType TextTag
     // @Group Items

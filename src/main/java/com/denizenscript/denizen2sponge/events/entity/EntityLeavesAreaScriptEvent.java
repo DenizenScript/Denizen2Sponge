@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class EntityLeavesAreaScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // entity leaves area
     //

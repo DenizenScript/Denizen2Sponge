@@ -10,6 +10,7 @@ import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 public class PlayerTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base player[<PlayerTag>]
     // @Group Sponge Base Types
     // @Modifier optional

@@ -12,6 +12,7 @@ import org.spongepowered.api.world.explosion.Explosion;
 public class ExplodeCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name explode
     // @Arguments <location> <radius>
     // @Short creates an explosion.

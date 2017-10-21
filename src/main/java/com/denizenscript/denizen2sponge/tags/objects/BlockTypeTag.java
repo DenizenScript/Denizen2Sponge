@@ -15,6 +15,7 @@ import java.util.Optional;
 public class BlockTypeTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type BlockTypeTag
     // @SubType TextTag
     // @Group Items
@@ -22,6 +23,7 @@ public class BlockTypeTag extends AbstractTagObject {
     // -->
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Block Types
     // @Group Useful Lists
     // @Description
@@ -44,6 +46,7 @@ public class BlockTypeTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name BlockTypeTag.id
         // @Updated 2016/08/26
         // @Group Identification
@@ -53,6 +56,7 @@ public class BlockTypeTag extends AbstractTagObject {
         // -->
         handlers.put("id", (dat, obj) -> new TextTag(((BlockTypeTag) obj).internal.getId()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name BlockTypeTag.item_type
         // @Updated 2016/08/26
         // @Group Identification
@@ -64,6 +68,7 @@ public class BlockTypeTag extends AbstractTagObject {
             return null;
         })));
         // <--[tag]
+        // @Since 0.3.0
         // @Name BlockTypeTag.name
         // @Updated 2016/08/26
         // @Group Identification

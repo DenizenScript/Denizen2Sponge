@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 public class EntityTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base entity[<EntityTag>]
     // @Group Sponge Base Types
     // @ReturnType EntityTag

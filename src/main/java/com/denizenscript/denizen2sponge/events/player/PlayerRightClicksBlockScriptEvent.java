@@ -27,6 +27,7 @@ import java.util.HashMap;
 public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // player right clicks block
     //

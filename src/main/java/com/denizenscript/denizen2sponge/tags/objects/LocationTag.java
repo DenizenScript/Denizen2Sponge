@@ -33,6 +33,7 @@ import java.util.Set;
 public class LocationTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type LocationTag
     // @SubType TextTag
     // @Group Mathematics
@@ -41,6 +42,7 @@ public class LocationTag extends AbstractTagObject {
     // -->
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Biome Types
     // @Group Useful Lists
     // @Description
@@ -85,6 +87,7 @@ public class LocationTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.block_type
         // @Updated 2017/02/07
         // @Group World Data
@@ -94,6 +97,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("block_type", (dat, obj) -> new BlockTypeTag(((LocationTag) obj).internal.toLocation().getBlockType()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.block
         // @Updated 2017/02/12
         // @Group Identification
@@ -104,6 +108,7 @@ public class LocationTag extends AbstractTagObject {
                 Math.floor(((LocationTag) obj).internal.y), Math.floor(((LocationTag) obj).internal.z),
                 ((LocationTag) obj).internal.world));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.x
         // @Updated 2016/08/26
         // @Group Identification
@@ -113,6 +118,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("x", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.x));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.y
         // @Updated 2016/08/26
         // @Group Identification
@@ -122,6 +128,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("y", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.y));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.z
         // @Updated 2016/08/26
         // @Group Identification
@@ -131,6 +138,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("z", (dat, obj) -> new NumberTag(((LocationTag) obj).internal.z));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.vector_length
         // @Updated 2017/01/19
         // @Group Mathematics
@@ -143,6 +151,7 @@ public class LocationTag extends AbstractTagObject {
             return new NumberTag(Math.sqrt(loc.x * loc.x + loc.y * loc.y + loc.z * loc.z));
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.vector_length_squared
         // @Updated 2017/01/19
         // @Group Mathematics
@@ -155,6 +164,7 @@ public class LocationTag extends AbstractTagObject {
             return new NumberTag(loc.x * loc.x + loc.y * loc.y + loc.z * loc.z);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.normalized
         // @Updated 2017/01/29
         // @Group Mathematics
@@ -168,7 +178,8 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x * len, loc.y * len, loc.z * len, loc.world);
         });
         // <--[tag]
-        // @Name LocationTag.rotate_around_x
+        // @Since 0.3.0
+        // @Name LocationTag.rotate_around_x[<NumberTag>]
         // @Updated 2017/04/03
         // @Group Mathematics
         // @ReturnType LocationTag
@@ -180,7 +191,8 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x, loc.y * Math.cos(angle) - loc.z * Math.sin(angle), loc.y * Math.sin(angle) + loc.z * Math.cos(angle), loc.world);
         });
         // <--[tag]
-        // @Name LocationTag.rotate_around_y
+        // @Since 0.3.0
+        // @Name LocationTag.rotate_around_y[<NumberTag>]
         // @Updated 2017/04/03
         // @Group Mathematics
         // @ReturnType LocationTag
@@ -192,7 +204,8 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.z * Math.sin(angle) + loc.x * Math.cos(angle), loc.y, loc.z * Math.cos(angle) - loc.x * Math.sin(angle), loc.world);
         });
         // <--[tag]
-        // @Name LocationTag.rotate_around_z
+        // @Since 0.3.0
+        // @Name LocationTag.rotate_around_z[<NumberTag>]
         // @Updated 2017/04/03
         // @Group Mathematics
         // @ReturnType LocationTag
@@ -204,6 +217,7 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x * Math.cos(angle) - loc.y * Math.sin(angle), loc.x * Math.sin(angle) + loc.y * Math.cos(angle), loc.z, loc.world);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.world
         // @Updated 2016/08/26
         // @Group Identification
@@ -213,6 +227,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((LocationTag) obj).internal.world));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.add[<LocationTag>]
         // @Updated 2016/11/24
         // @Group Mathematics
@@ -225,6 +240,7 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(t.x + a.x, t.y + a.y, t.z + a.z, t.world);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.subtract[<LocationTag>]
         // @Updated 2017/02/07
         // @Group Mathematics
@@ -237,6 +253,7 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(t.x - a.x, t.y - a.y, t.z - a.z, t.world);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.multiply[<NumberTag>]
         // @Updated 2017/01/19
         // @Group Mathematics
@@ -250,6 +267,7 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.divide[<NumberTag>]
         // @Updated 2017/01/19
         // @Group Mathematics
@@ -263,6 +281,7 @@ public class LocationTag extends AbstractTagObject {
             return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.sign_contents
         // @Updated 2017/01/29
         // @Group World Data
@@ -285,6 +304,7 @@ public class LocationTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.data
         // @Updated 2016/08/28
         // @Group World Data
@@ -293,6 +313,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((LocationTag) obj).internal.toLocation()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.get[<TextTag>]
         // @Updated 2016/08/28
         // @Group World Data
@@ -309,6 +330,7 @@ public class LocationTag extends AbstractTagObject {
             return DataKeys.getValue(((LocationTag) obj).internal.toLocation(), key, dat.error);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.nearby_entities[<MapTag>]
         // @Updated 2016/08/26
         // @Group World Data
@@ -336,6 +358,7 @@ public class LocationTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.nearby_blocks[<MapTag>]
         // @Updated 2017/01/29
         // @Group World Data
@@ -368,6 +391,7 @@ public class LocationTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.biome
         // @Updated 2017/04/04
         // @Group World Data
@@ -377,6 +401,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("biome", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((LocationTag) obj).internal.toLocation().getBiome().getName())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.find_safe_location[<MapTag>]
         // @Updated 2017/04/05
         // @Group World Data
@@ -404,6 +429,7 @@ public class LocationTag extends AbstractTagObject {
             return outputMap;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.inventory
         // @Updated 2017/08/31
         // @Group Properties
@@ -421,6 +447,7 @@ public class LocationTag extends AbstractTagObject {
             return new InventoryTag(((TileEntityCarrier) te.get()).getInventory());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.skull_type
         // @Updated 2017/10/15
         // @Group Properties
@@ -438,6 +465,7 @@ public class LocationTag extends AbstractTagObject {
             return new TextTag(((Skull) te.get()).skullType().get().getId());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.represented_player_name
         // @Updated 2017/10/15
         // @Group Properties
@@ -455,6 +483,7 @@ public class LocationTag extends AbstractTagObject {
             return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getName().get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.represented_player_uuid
         // @Updated 2017/10/15
         // @Group Properties
@@ -472,6 +501,7 @@ public class LocationTag extends AbstractTagObject {
             return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name LocationTag.represented_player_skin
         // @Updated 2017/10/16
         // @Group Properties

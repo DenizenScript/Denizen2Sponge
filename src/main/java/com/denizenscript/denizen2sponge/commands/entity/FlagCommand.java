@@ -25,6 +25,7 @@ import java.util.Optional;
 public class FlagCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name flag
     // @Arguments <entity>/'server' <map of flags to set>
     // @Short flags an entity with some data.

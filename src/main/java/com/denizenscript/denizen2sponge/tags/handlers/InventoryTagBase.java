@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
 public class InventoryTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base inventory[<InventoryTag>]
     // @Group Sponge Base Types
     // @ReturnType InventoryTag

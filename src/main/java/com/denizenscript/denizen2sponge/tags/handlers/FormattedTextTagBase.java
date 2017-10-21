@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 public class FormattedTextTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base formatted_text[<FormattedTextTag>]
     // @Group Sponge Base Types
     // @ReturnType FormattedTextTag

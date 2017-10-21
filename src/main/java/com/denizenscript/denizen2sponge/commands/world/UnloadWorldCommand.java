@@ -10,6 +10,7 @@ import org.spongepowered.api.Sponge;
 public class UnloadWorldCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name unloadworld
     // @Arguments <world>
     // @Short unloads a world.

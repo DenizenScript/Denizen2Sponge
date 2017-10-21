@@ -13,6 +13,7 @@ import org.spongepowered.api.entity.living.Living;
 public class HealCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name heal
     // @Arguments <entity> <amount>
     // @Short changes the health of the entity.

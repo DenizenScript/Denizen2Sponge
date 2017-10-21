@@ -20,6 +20,7 @@ import java.util.Optional;
 public class UnflagCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name unflag
     // @Arguments <entity>/'server' <list of flags to remove>
     // @Short removes a list of flags from an entity.

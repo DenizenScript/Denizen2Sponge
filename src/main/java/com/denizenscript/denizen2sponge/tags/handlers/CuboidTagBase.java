@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.tags.objects.CuboidTag;
 public class CuboidTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base cuboid[<CuboidTag>]
     // @Group Sponge Base Types
     // @ReturnType CuboidTag

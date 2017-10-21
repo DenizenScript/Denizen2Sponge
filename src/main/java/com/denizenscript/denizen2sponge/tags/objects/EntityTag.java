@@ -43,6 +43,7 @@ import java.util.*;
 public class EntityTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type EntityTag
     // @SubType TextTag
     // @Group Entities
@@ -72,6 +73,7 @@ public class EntityTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.entity_type
         // @Updated 2017/02/07
         // @Group Identification
@@ -80,6 +82,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("entity_type", (dat, obj) -> new EntityTypeTag(((EntityTag) obj).internal.getType()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.friendly_name
         // @Updated 2016/08/26
         // @Group Identification
@@ -88,6 +91,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("friendly_name", (dat, obj) -> new TextTag(((EntityTag) obj).friendlyName()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.uuid
         // @Updated 2016/08/26
         // @Group Identification
@@ -96,6 +100,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("uuid", (dat, obj) -> new TextTag(((EntityTag) obj).internal.getUniqueId().toString()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.location
         // @Updated 2016/08/26
         // @Group Current Information
@@ -104,6 +109,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("location", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getLocation()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.rotation
         // @Updated 2017/02/09
         // @Group Current Information
@@ -112,6 +118,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("rotation", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getRotation()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.velocity
         // @Updated 2016/08/26
         // @Group Current Information
@@ -120,6 +127,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("velocity", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getVelocity()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.eye_height
         // @Updated 2017/03/03
         // @Group Current Information
@@ -128,6 +136,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("eye_height", (dat, obj) -> new NumberTag((((EntityTag) obj).internal.getProperty(EyeHeightProperty.class).get().getValue())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.eye_location
         // @Updated 2017/03/03
         // @Group Current Information
@@ -136,6 +145,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("eye_location", (dat, obj) -> new LocationTag((((EntityTag) obj).internal.getProperty(EyeLocationProperty.class).get().getValue())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.health
         // @Updated 2017/03/03
         // @Group Current Information
@@ -144,6 +154,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("health", (dat, obj) -> new NumberTag(((Living) ((EntityTag) obj).internal).health().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.max_health
         // @Updated 2017/03/03
         // @Group Current Information
@@ -153,6 +164,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("max_health", (dat, obj) -> new NumberTag(((Living) ((EntityTag) obj).internal).maxHealth().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.health_percentage
         // @Updated 2017/03/03
         // @Group Current Information
@@ -164,6 +176,7 @@ public class EntityTag extends AbstractTagObject {
             return new NumberTag(ent.health().get() / ent.maxHealth().get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.helmet
         // @Updated 2017/03/03
         // @Group Equipment
@@ -172,6 +185,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("helmet", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getHelmet().orElse(ItemStack.empty())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.chestplate
         // @Updated 2017/03/03
         // @Group Equipment
@@ -180,6 +194,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("chestplate", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getChestplate().orElse(ItemStack.empty())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.leggings
         // @Updated 2017/03/03
         // @Group Equipment
@@ -188,6 +203,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("leggings", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getLeggings().orElse(ItemStack.empty())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.boots
         // @Updated 2017/03/03
         // @Group Equipment
@@ -196,6 +212,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("boots", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getBoots().orElse(ItemStack.empty())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.held_item
         // @Updated 2017/03/03
         // @Group Equipment
@@ -204,6 +221,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("held_item", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.MAIN_HAND).orElse(ItemStack.empty())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.held_item_offhand
         // @Updated 2017/03/03
         // @Group Equipment
@@ -212,6 +230,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("held_item_offhand", (dat, obj) -> new ItemTag(((ArmorEquipable) ((EntityTag) obj).internal).getItemInHand(HandTypes.OFF_HAND).orElse(ItemStack.empty())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.data
         // @Updated 2016/08/28
         // @Group Current Information
@@ -220,6 +239,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((EntityTag) obj).internal));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.get[<TextTag>]
         // @Updated 2016/08/28
         // @Group Current Information
@@ -236,6 +256,7 @@ public class EntityTag extends AbstractTagObject {
             return DataKeys.getValue(((EntityTag) obj).internal, key, dat.error);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.has_flag[<TextTag>]
         // @Updated 2017/10/13
         // @Group Flag Data
@@ -256,6 +277,7 @@ public class EntityTag extends AbstractTagObject {
             return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.dead_flags
         // @Updated 2017/10/13
         // @Group Flag Data
@@ -281,6 +303,7 @@ public class EntityTag extends AbstractTagObject {
             return invalid;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.flag[<TextTag>]
         // @Updated 2017/10/13
         // @Group Flag Data
@@ -325,6 +348,7 @@ public class EntityTag extends AbstractTagObject {
             return smap.getInternal().get("value");
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.passengers
         // @Updated 2017/04/04
         // @Group Current Information
@@ -340,6 +364,7 @@ public class EntityTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.vehicle
         // @Updated 2017/04/04
         // @Group Current Information
@@ -354,6 +379,7 @@ public class EntityTag extends AbstractTagObject {
             return new EntityTag(opt.get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.base_vehicle
         // @Updated 2017/04/04
         // @Group Current Information
@@ -362,6 +388,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("base_vehicle", (dat, obj) -> new EntityTag(((EntityTag) obj).internal.getBaseVehicle()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.on_ground
         // @Updated 2017/04/04
         // @Group Current Information
@@ -370,6 +397,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("on_ground", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.isOnGround()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.scale
         // @Updated 2017/04/04
         // @Group Current Information
@@ -378,6 +406,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("scale", (dat, obj) -> new LocationTag(((EntityTag) obj).internal.getScale()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.nearby_entities[<MapTag>]
         // @Updated 2017/04/04
         // @Group Current Information
@@ -403,6 +432,7 @@ public class EntityTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.bounding_box
         // @Updated 2017/04/04
         // @Group Current Information
@@ -414,6 +444,7 @@ public class EntityTag extends AbstractTagObject {
             return new CuboidTag(ent.getBoundingBox().get(), ent.getWorld());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.max_air
         // @Updated 2017/04/17
         // @Group Current Information
@@ -422,6 +453,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("max_air", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.MAX_AIR).get() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.remaining_air
         // @Updated 2017/04/17
         // @Group Current Information
@@ -437,6 +469,7 @@ public class EntityTag extends AbstractTagObject {
             return new DurationTag(opt.get() * (1.0 / 20.0));
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.inventory
         // @Updated 2017/06/13
         // @Group Current Information
@@ -445,6 +478,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("inventory", (dat, obj) -> new InventoryTag(((Carrier) ((EntityTag) obj).internal).getInventory()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.explosion_radius
         // @Updated 2017/09/28
         // @Group Current Information
@@ -453,6 +487,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("explosion_radius", (dat, obj) -> new IntegerTag(((Explosive) ((EntityTag) obj).internal).explosionRadius().get().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.falling_block
         // @Updated 2017/09/28
         // @Group Current Information
@@ -461,6 +496,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("falling_block", (dat, obj) -> new BlockTypeTag(((FallingBlock) ((EntityTag) obj).internal).blockState().get().getType()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.can_drop_as_item
         // @Updated 2017/09/28
         // @Group Current Information
@@ -469,6 +505,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("can_drop_as_item", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canDropAsItem().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.can_place_as_block
         // @Updated 2017/09/28
         // @Group Current Information
@@ -477,6 +514,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("can_place_as_block", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canPlaceAsBlock().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.can_hurt_entities
         // @Updated 2017/09/28
         // @Group Current Information
@@ -485,6 +523,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("can_hurt_entities", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canHurtEntities().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.fall_damage_per_block
         // @Updated 2017/09/28
         // @Group Current Information
@@ -493,6 +532,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("fall_damage_per_block", (dat, obj) -> new NumberTag(((FallingBlock) ((EntityTag) obj).internal).fallDamagePerBlock().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.fall_time
         // @Updated 2017/09/28
         // @Group Current Information
@@ -501,6 +541,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("fall_time", (dat, obj) -> new DurationTag(((FallingBlock) ((EntityTag) obj).internal).fallTime().get() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.max_fall_damage
         // @Updated 2017/09/28
         // @Group Current Information
@@ -509,6 +550,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("max_fall_damage", (dat, obj) -> new NumberTag(((FallingBlock) ((EntityTag) obj).internal).maxFallDamage().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.experience_held
         // @Updated 2017/09/28
         // @Group Current Information
@@ -517,6 +559,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("experience_held", (dat, obj) -> new IntegerTag(((ExperienceOrb) ((EntityTag) obj).internal).experience().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.hanging_direction
         // @Updated 2017/09/28
         // @Group Current Information
@@ -525,6 +568,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("hanging_direction", (dat, obj) -> new TextTag(((Hanging) ((EntityTag) obj).internal).direction().get().name()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.item
         // @Updated 2017/09/28
         // @Group Current Information
@@ -533,6 +577,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("item", (dat, obj) -> new ItemTag(((Item) ((EntityTag) obj).internal).item().get().createStack()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.shooter
         // @Updated 2017/09/28
         // @Group Current Information
@@ -555,6 +600,7 @@ public class EntityTag extends AbstractTagObject {
             }
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.max_speed
         // @Updated 2017/09/30
         // @Group Current Information
@@ -563,6 +609,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("max_speed", (dat, obj) -> new NumberTag(((Boat) ((EntityTag) obj).internal).getMaxSpeed()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.occupied_deceleration
         // @Updated 2017/09/30
         // @Group Current Information
@@ -571,6 +618,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("occupied_deceleration", (dat, obj) -> new NumberTag(((Boat) ((EntityTag) obj).internal).getOccupiedDeceleration()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.unoccupied_deceleration
         // @Updated 2017/09/30
         // @Group Current Information
@@ -579,6 +627,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("unoccupied_deceleration", (dat, obj) -> new NumberTag(((Boat) ((EntityTag) obj).internal).getUnoccupiedDeceleration()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.move_on_land
         // @Updated 2017/09/30
         // @Group Current Information
@@ -587,6 +636,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("can_move_on_land", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).canMoveOnLand()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.in_water
         // @Updated 2017/09/30
         // @Group Current Information
@@ -595,6 +645,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("in_water", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).isInWater()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.art_name
         // @Updated 2017/10/02
         // @Group Current Information
@@ -603,6 +654,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("art_name", (dat, obj) -> new TextTag(((Painting) ((EntityTag) obj).internal).art().get().getName()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.art_size
         // @Updated 2017/10/02
         // @Group Current Information
@@ -614,6 +666,7 @@ public class EntityTag extends AbstractTagObject {
             return new LocationTag(art.getWidth(), art.getHeight(), 0);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.leashed_entity
         // @Updated 2017/10/04
         // @Group Current Information
@@ -631,6 +684,7 @@ public class EntityTag extends AbstractTagObject {
             return new EntityTag(ent);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.application_delay
         // @Updated 2017/10/02
         // @Group Current Information
@@ -639,6 +693,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("application_delay", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).applicationDelay().get() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.cloud_color
         // @Updated 2017/10/04
         // @Group Current Information
@@ -650,6 +705,7 @@ public class EntityTag extends AbstractTagObject {
             return new LocationTag(color.getRed(), color.getGreen(), color.getBlue());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.duration
         // @Updated 2017/10/02
         // @Group Current Information
@@ -658,6 +714,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("duration", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).duration().get() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.duration_on_use
         // @Updated 2017/10/02
         // @Group Current Information
@@ -666,6 +723,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("duration_on_use", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).durationOnUse().get() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.particle_type
         // @Updated 2017/10/02
         // @Group Current Information
@@ -674,6 +732,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("particle_type", (dat, obj) -> new TextTag(((AreaEffectCloud) ((EntityTag) obj).internal).particleType().get().getName()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.radius
         // @Updated 2017/10/02
         // @Group Current Information
@@ -682,6 +741,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("radius", (dat, obj) -> new NumberTag(((AreaEffectCloud) ((EntityTag) obj).internal).radius().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.radius_on_use
         // @Updated 2017/10/02
         // @Group Current Information
@@ -690,6 +750,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("radius_on_use", (dat, obj) -> new NumberTag(((AreaEffectCloud) ((EntityTag) obj).internal).radiusOnUse().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.radius_per_tick
         // @Updated 2017/10/02
         // @Group Current Information
@@ -698,6 +759,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("radius_per_tick", (dat, obj) -> new NumberTag(((AreaEffectCloud) ((EntityTag) obj).internal).radiusPerTick().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.wait_time
         // @Updated 2017/10/02
         // @Group Current Information
@@ -706,6 +768,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("wait_time", (dat, obj) -> new DurationTag(((AreaEffectCloud) ((EntityTag) obj).internal).waitTime().get() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.age
         // @Updated 2017/10/02
         // @Group Current Information
@@ -728,6 +791,7 @@ public class EntityTag extends AbstractTagObject {
             }
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.is_adult
         // @Updated 2017/10/02
         // @Group Current Information
@@ -736,6 +800,7 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("is_adult", (dat, obj) -> new BooleanTag(((Ageable) ((EntityTag) obj).internal).adult().get()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.target_block[<NumberTag>]
         // @Updated 2017/10/17
         // @Group Entity Target
@@ -751,6 +816,7 @@ public class EntityTag extends AbstractTagObject {
                             (Utilities.getHandReach(ent))).build().end().get().getLocation());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.precise_target_location[<NumberTag>]
         // @Updated 2017/10/17
         // @Group Entity Target
@@ -766,6 +832,7 @@ public class EntityTag extends AbstractTagObject {
             return new LocationTag(hit.getX(), hit.getY(), hit.getZ(), (World) hit.getExtent());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTag.precise_target_normal[<NumberTag>]
         // @Updated 2017/10/17
         // @Group Entity Target
@@ -781,6 +848,7 @@ public class EntityTag extends AbstractTagObject {
                             (Utilities.getHandReach(ent))).build().end().get().getNormal());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTagTag.target_entities[<MapTag>]
         // @Updated 2017/10/17
         // @Group Entity Target

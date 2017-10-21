@@ -18,6 +18,7 @@ import java.util.Optional;
 public class CastCommand extends AbstractCommand {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Potion Effect Types
     // @Group Useful Lists
     // @Description
@@ -27,6 +28,7 @@ public class CastCommand extends AbstractCommand {
     // -->
 
     // <--[command]
+    // @Since 0.3.0
     // @Name cast
     // @Arguments <entity> <effect> <duration>
     // @Short casts a potion effect on an entity.

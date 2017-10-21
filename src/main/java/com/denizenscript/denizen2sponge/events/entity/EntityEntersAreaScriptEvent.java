@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class EntityEntersAreaScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // entity enters area
     //

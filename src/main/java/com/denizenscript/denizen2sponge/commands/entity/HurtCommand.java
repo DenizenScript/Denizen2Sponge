@@ -18,6 +18,7 @@ import java.util.Optional;
 public class HurtCommand extends AbstractCommand {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Damage Types
     // @Group Useful Lists
     // @Description
@@ -27,6 +28,7 @@ public class HurtCommand extends AbstractCommand {
     // -->
 
     // <--[command]
+    // @Since 0.3.0
     // @Name hurt
     // @Arguments <entity> <amount>
     // @Short damages the entity for the specified amount.

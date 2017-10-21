@@ -12,6 +12,7 @@ import org.spongepowered.api.item.inventory.transaction.InventoryTransactionResu
 public class GiveCommand extends AbstractCommand {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Item Types
     // @Group Useful Lists
     // @Description
@@ -21,6 +22,7 @@ public class GiveCommand extends AbstractCommand {
     // -->
 
     // <--[command]
+    // @Since 0.3.0
     // @Name give
     // @Arguments <player> <item>
     // @Short gives a player an item.

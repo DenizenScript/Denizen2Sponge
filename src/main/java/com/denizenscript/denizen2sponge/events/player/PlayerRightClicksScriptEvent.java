@@ -20,6 +20,7 @@ import java.util.HashMap;
 public class PlayerRightClicksScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // player right clicks
     //

@@ -15,6 +15,7 @@ import java.util.Optional;
 public class PlaySoundCommand extends AbstractCommand {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Default Sound Types
     // @Group Useful Lists
     // @Description
@@ -25,6 +26,7 @@ public class PlaySoundCommand extends AbstractCommand {
     // -->
 
     // <--[command]
+    // @Since 0.3.0
     // @Name playsound
     // @Arguments <location> <sound> <volume>
     // @Short plays a sound.

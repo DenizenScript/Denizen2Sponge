@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.tags.TagData;
 public class BlockTypeTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base block_type[<BlockTypeTag>]
     // @Group Sponge Base Types
     // @ReturnType BlockTypeTag

@@ -21,6 +21,7 @@ import java.util.Map;
 public class SpawnCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name spawn
     // @Arguments <entity type> <location> [map of properties]
     // @Short spawns a new entity.

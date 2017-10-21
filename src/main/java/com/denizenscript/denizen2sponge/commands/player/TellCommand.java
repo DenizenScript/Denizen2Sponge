@@ -14,6 +14,7 @@ import org.spongepowered.api.text.Text;
 public class TellCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name tell
     // @Arguments <player list> <message>
     // @Short tells a list of players a message.

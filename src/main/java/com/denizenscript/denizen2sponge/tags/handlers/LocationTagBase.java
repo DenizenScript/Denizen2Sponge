@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.tags.TagData;
 public class LocationTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base location[<LocationTag>]
     // @Group Sponge Base Types
     // @ReturnType LocationTag

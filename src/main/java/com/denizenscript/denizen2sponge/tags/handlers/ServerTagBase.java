@@ -24,6 +24,7 @@ import java.util.Optional;
 public class ServerTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base server
     // @Group Sponge Helper Types
     // @ReturnType ServerBaseTag
@@ -39,6 +40,7 @@ public class ServerTagBase extends AbstractTagBase {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.worlds
         // @Updated 2017/01/19
         // @Group Server Lists
@@ -53,6 +55,7 @@ public class ServerTagBase extends AbstractTagBase {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.online_players
         // @Updated 2017/08/31
         // @Group Server Information
@@ -67,6 +70,7 @@ public class ServerTagBase extends AbstractTagBase {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.tps
         // @Updated 2017/04/04
         // @Group Server Information
@@ -75,6 +79,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("tps", (dat, obj) -> new NumberTag(Sponge.getServer().getTicksPerSecond()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.max_players
         // @Updated 2017/08/31
         // @Group Server Information
@@ -83,6 +88,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("max_players", (dat, obj) -> new IntegerTag(Sponge.getServer().getMaxPlayers()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.player_idle_timeout
         // @Updated 2017/08/31
         // @Group Server Information
@@ -91,6 +97,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("player_idle_timeout", (dat, obj) -> new IntegerTag(Sponge.getServer().getPlayerIdleTimeout()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.has_whitelist
         // @Updated 2017/08/31
         // @Group Server Information
@@ -99,6 +106,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("has_whitelist", (dat, obj) -> new BooleanTag(Sponge.getServer().hasWhitelist()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.online_mode
         // @Updated 2017/08/31
         // @Group Server Information
@@ -107,6 +115,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("online_mode", (dat, obj) -> new BooleanTag(Sponge.getServer().getOnlineMode()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.motd
         // @Updated 2017/08/31
         // @Group Server Information
@@ -115,6 +124,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("motd", (dat, obj) -> new FormattedTextTag(Sponge.getServer().getMotd()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.default_world_name
         // @Updated 2017/08/31
         // @Group Server Information
@@ -123,6 +133,7 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("default_world_name", (dat, obj) -> new TextTag(Sponge.getServer().getDefaultWorldName()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.block_type_is_valid[<ListTag>]
         // @Updated 2016//11/24
         // @Group Data Safety
@@ -132,6 +143,7 @@ public class ServerTagBase extends AbstractTagBase {
         handlers.put("block_type_is_valid", (dat, obj) -> new BooleanTag(Sponge.getRegistry().getType(
                 BlockType.class, dat.getNextModifier().toString()).isPresent()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.cuboid_wrapping[<ListTag>]
         // @Updated 2016//11/24
         // @Group Mathematics
@@ -160,6 +172,7 @@ public class ServerTagBase extends AbstractTagBase {
             return ct;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.has_flag[<TextTag>]
         // @Updated 2017/10/13
         // @Group Flag Data
@@ -172,6 +185,7 @@ public class ServerTagBase extends AbstractTagBase {
             return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.dead_flags
         // @Updated 2017/10/13
         // @Group Flag Data
@@ -189,6 +203,7 @@ public class ServerTagBase extends AbstractTagBase {
             return invalid;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ServerBaseTag.flag[<TextTag>]
         // @Updated 2017/10/13
         // @Group Flag Data

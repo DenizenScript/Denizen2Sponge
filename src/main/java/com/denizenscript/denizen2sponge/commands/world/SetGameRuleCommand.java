@@ -17,6 +17,7 @@ import java.util.Optional;
 public class SetGameRuleCommand extends AbstractCommand {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Default Game Rules
     // @Group Useful Lists
     // @Description
@@ -28,6 +29,7 @@ public class SetGameRuleCommand extends AbstractCommand {
     // -->
 
     // <--[command]
+    // @Since 0.3.0
     // @Name setgamerule
     // @Arguments <world> <map of rules>
     // @Short modifies the game rules of a world.

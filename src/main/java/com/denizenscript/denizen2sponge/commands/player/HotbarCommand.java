@@ -13,6 +13,7 @@ import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 public class HotbarCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name hotbar
     // @Arguments <player> <value>
     // @Short changes the hotbar slot currently selected by the player.

@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class ExperienceChangesScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // experience changes
     //

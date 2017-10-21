@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class WorldUnloadsScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // world unloads
     //

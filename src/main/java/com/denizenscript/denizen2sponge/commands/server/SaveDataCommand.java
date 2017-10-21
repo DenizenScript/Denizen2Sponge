@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 public class SaveDataCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name savedata
     // @Arguments
     // @Short saves extra D2 data.

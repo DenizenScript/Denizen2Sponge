@@ -24,6 +24,7 @@ import java.util.HashMap;
 public class PlayerRightClicksEntityScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // player right clicks entity
     //

@@ -41,6 +41,7 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
     }
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name In-Game Command Scripts
     // @Group Script Types
     // @Description

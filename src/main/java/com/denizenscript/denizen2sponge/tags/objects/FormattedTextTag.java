@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class FormattedTextTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type FormattedTextTag
     // @SubType TextTag
     // @Group Sponge Base Types
@@ -35,6 +36,7 @@ public class FormattedTextTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name FormattedTextTag.color_codes
         // @Updated 2017/08/31
         // @Group Conversion
@@ -44,6 +46,7 @@ public class FormattedTextTag extends AbstractTagObject {
         handlers.put("color_codes", (dat, obj) -> new TextTag(TextSerializers.formattingCode(Denizen2Sponge.colorChar)
                 .serialize(((FormattedTextTag) obj).internal)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name FormattedTextTag.plain
         // @Updated 2016/09/21
         // @Group Conversion
@@ -52,6 +55,7 @@ public class FormattedTextTag extends AbstractTagObject {
         // -->
         handlers.put("plain", (dat, obj) -> new TextTag(((FormattedTextTag) obj).internal.toPlain()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name FormattedTextTag.append[<FormattedTextTag>]
         // @Updated 2016/09/21
         // @Group Modification

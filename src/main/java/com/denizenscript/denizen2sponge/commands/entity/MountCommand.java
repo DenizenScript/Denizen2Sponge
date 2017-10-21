@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 public class MountCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name mount
     // @Arguments <entity> <entity list>
     // @Short mounts all the entities in the list onto the given entity.

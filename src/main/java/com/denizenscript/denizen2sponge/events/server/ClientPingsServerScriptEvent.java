@@ -18,6 +18,7 @@ import java.util.Optional;
 public class ClientPingsServerScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // client pings server
     //

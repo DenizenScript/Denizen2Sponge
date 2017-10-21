@@ -25,6 +25,7 @@ import java.util.Optional;
 public class ItemTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type ItemTag
     // @SubType TextTag
     // @Group Items
@@ -45,6 +46,7 @@ public class ItemTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.item_type
         // @Updated 2016/11/24
         // @Group Identification
@@ -53,6 +55,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((ItemTag) obj).internal.getType()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.quantity
         // @Updated 2017/04/04
         // @Group Identification
@@ -61,6 +64,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getQuantity()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.max_stack_quantity
         // @Updated 2017/04/04
         // @Group Identification
@@ -69,6 +73,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("max_stack_quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getMaxStackQuantity()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.data
         // @Updated 2016/11/24
         // @Group General Information
@@ -77,6 +82,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((ItemTag) obj).internal));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.get[<TextTag>]
         // @Updated 2016/11/24
         // @Group General Information
@@ -93,6 +99,7 @@ public class ItemTag extends AbstractTagObject {
             return DataKeys.getValue(((ItemTag) obj).internal, key, dat.error);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.without_flags[<ListTag>]
         // @Updated 2017/02/13
         // @Group General Information
@@ -118,6 +125,7 @@ public class ItemTag extends AbstractTagObject {
             return new ItemTag(its);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.with_flags[<MapTag>]
         // @Updated 2016/12/04
         // @Group General Information
@@ -141,6 +149,7 @@ public class ItemTag extends AbstractTagObject {
             return new ItemTag(its);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.with_quantity[<IntegerTag>]
         // @Updated 2016/12/04
         // @Group General Information
@@ -153,6 +162,7 @@ public class ItemTag extends AbstractTagObject {
             return new ItemTag(its);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.with[<MapTag>]
         // @Updated 2016/11/24
         // @Group General Information
@@ -168,6 +178,7 @@ public class ItemTag extends AbstractTagObject {
             return new ItemTag(its);
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.has_flag[<TextTag>]
         // @Updated 2016/11/24
         // @Group Flag Data
@@ -188,6 +199,7 @@ public class ItemTag extends AbstractTagObject {
             return new BooleanTag(flags.getInternal().containsKey(flagName));
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.flag[<TextTag>]
         // @Updated 2016/11/24
         // @Group Flag Data
@@ -219,6 +231,7 @@ public class ItemTag extends AbstractTagObject {
             return ato;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.skull_type
         // @Updated 2017/10/15
         // @Group Properties
@@ -237,6 +250,7 @@ public class ItemTag extends AbstractTagObject {
             return new TextTag(type.get().getId());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.represented_player_name
         // @Updated 2017/10/15
         // @Group Properties
@@ -255,6 +269,7 @@ public class ItemTag extends AbstractTagObject {
             return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getName().get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.represented_player_uuid
         // @Updated 2017/10/15
         // @Group Properties
@@ -273,6 +288,7 @@ public class ItemTag extends AbstractTagObject {
             return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTag.represented_player_skin
         // @Updated 2017/10/16
         // @Group Properties

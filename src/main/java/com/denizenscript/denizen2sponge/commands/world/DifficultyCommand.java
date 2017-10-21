@@ -15,6 +15,7 @@ import java.util.Optional;
 public class DifficultyCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name difficulty
     // @Arguments <world> <difficulty level>
     // @Short sets the difficulty of a world.

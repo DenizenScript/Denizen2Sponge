@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class BlockChangesScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // block changes
     //

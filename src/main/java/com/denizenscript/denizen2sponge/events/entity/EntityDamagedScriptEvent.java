@@ -17,6 +17,7 @@ import java.util.HashMap;
 public class EntityDamagedScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // entity damaged
     //

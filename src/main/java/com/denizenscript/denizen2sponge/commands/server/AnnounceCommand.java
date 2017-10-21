@@ -13,6 +13,7 @@ import org.spongepowered.api.text.Text;
 public class AnnounceCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name announce
     // @Arguments <message>
     // @Short announces a message to all online players.

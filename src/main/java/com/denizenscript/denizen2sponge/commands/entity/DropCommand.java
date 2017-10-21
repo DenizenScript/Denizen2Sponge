@@ -14,6 +14,7 @@ import org.spongepowered.api.entity.EntityTypes;
 public class DropCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name drop
     // @Arguments <item> <location>
     // @Short drops an item.

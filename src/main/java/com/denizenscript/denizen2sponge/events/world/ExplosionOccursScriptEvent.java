@@ -25,6 +25,7 @@ import java.util.HashMap;
 public class ExplosionOccursScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // explosion occurs
     //

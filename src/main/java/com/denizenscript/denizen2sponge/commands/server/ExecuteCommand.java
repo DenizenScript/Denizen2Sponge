@@ -11,6 +11,7 @@ import org.spongepowered.api.Sponge;
 public class ExecuteCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name execute
     // @Arguments 'as_server'/'as_player' <command> [source]
     // @Short executes a command as the specified command sender.

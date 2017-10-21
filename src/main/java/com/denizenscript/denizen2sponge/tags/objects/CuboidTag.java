@@ -23,6 +23,7 @@ import java.util.List;
 public class CuboidTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type CuboidTag
     // @SubType TextTag
     // @Group Mathematics
@@ -54,6 +55,7 @@ public class CuboidTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name CuboidTag.min
         // @Updated 2016/11/24
         // @Group Identification
@@ -63,6 +65,7 @@ public class CuboidTag extends AbstractTagObject {
         // -->
         handlers.put("min", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.min));
         // <--[tag]
+        // @Since 0.3.0
         // @Name CuboidTag.max
         // @Updated 2016/11/24
         // @Group Identification
@@ -72,6 +75,7 @@ public class CuboidTag extends AbstractTagObject {
         // -->
         handlers.put("max", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.max));
         // <--[tag]
+        // @Since 0.3.0
         // @Name CuboidTag.world
         // @Updated 2016/11/24
         // @Group Identification
@@ -81,6 +85,7 @@ public class CuboidTag extends AbstractTagObject {
         // -->
         handlers.put("world", (dat, obj) -> new WorldTag(((CuboidTag) obj).internal.min.world));
         // <--[tag]
+        // @Since 0.3.0
         // @Name CuboidTag.contains[<LocationTag>]
         // @Updated 2016/11/24
         // @Group Mathematics
@@ -91,6 +96,7 @@ public class CuboidTag extends AbstractTagObject {
         handlers.put("contains", (dat, obj) -> new BooleanTag(((CuboidTag) obj).contains(
                 LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name CuboidTag.block_locations[<ListTag>]
         // @Updated 2016/11/24
         // @Group Connected Information

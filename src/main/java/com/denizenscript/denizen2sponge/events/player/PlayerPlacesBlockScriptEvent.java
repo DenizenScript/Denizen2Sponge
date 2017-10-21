@@ -21,6 +21,7 @@ import java.util.HashMap;
 public class PlayerPlacesBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // player places block
     //

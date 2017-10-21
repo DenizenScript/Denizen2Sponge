@@ -20,6 +20,7 @@ import java.util.Optional;
 public class WorldTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type WorldTag
     // @SubType TextTag
     // @Group Areas
@@ -40,6 +41,7 @@ public class WorldTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.name
         // @Updated 2016/08/26
         // @Group Identification
@@ -49,6 +51,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getName()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.uuid
         // @Updated 2016/08/26
         // @Group Identification
@@ -57,6 +60,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("uuid", (dat, obj) -> new TextTag(((WorldTag) obj).internal.getUniqueId().toString()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.entities[<EntityTypeTag>]
         // @Updated 2017/01/19
         // @Group Server Lists
@@ -77,6 +81,7 @@ public class WorldTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.dimension
         // @Updated 2017/04/03
         // @Group Properties
@@ -85,6 +90,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("dimension", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getDimension().getType().toString())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.players
         // @Updated 2017/04/03
         // @Group Server Lists
@@ -99,6 +105,7 @@ public class WorldTag extends AbstractTagObject {
             return list;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.spawn
         // @Updated 2017/04/03
         // @Group Properties
@@ -107,6 +114,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("spawn", (dat, obj) -> new LocationTag(((WorldTag) obj).internal.getSpawnLocation()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.list_gamerules
         // @Updated 2017/05/16
         // @Group Properties
@@ -127,6 +135,7 @@ public class WorldTag extends AbstractTagObject {
             return map;
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.gamerule[<TextTag>]
         // @Updated 2017/04/03
         // @Group Properties
@@ -143,6 +152,7 @@ public class WorldTag extends AbstractTagObject {
             return new TextTag(opt.get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.generator
         // @Updated 2017/04/03
         // @Group Properties
@@ -152,6 +162,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("generator", (dat, obj) -> new TextTag(CoreUtilities.toLowerCase(((WorldTag) obj).internal.getProperties().getGeneratorType().getName())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.seed
         // @Updated 2017/04/03
         // @Group Properties
@@ -160,6 +171,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("seed", (dat, obj) -> new IntegerTag(((WorldTag) obj).internal.getProperties().getSeed()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.time
         // @Updated 2017/04/03
         // @Group Properties
@@ -168,6 +180,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getWorldTime() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.total_time
         // @Updated 2017/04/03
         // @Group Properties
@@ -176,6 +189,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("total_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getTotalTime() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.difficulty
         // @Updated 2017/04/03
         // @Group Properties
@@ -185,6 +199,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("difficulty", (dat, obj) -> new TextTag(Utilities.getIdWithoutDefaultPrefix(((WorldTag) obj).internal.getProperties().getDifficulty().getId())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.is_raining
         // @Updated 2017/04/03
         // @Group Properties
@@ -193,6 +208,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("is_raining", (dat, obj) -> new BooleanTag(((WorldTag) obj).internal.getProperties().isRaining()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.rain_time
         // @Updated 2017/04/03
         // @Group Properties
@@ -201,6 +217,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("rain_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getRainTime() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.is_thundering
         // @Updated 2017/04/03
         // @Group Properties
@@ -209,6 +226,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("is_thundering", (dat, obj) -> new BooleanTag(((WorldTag) obj).internal.getProperties().isThundering()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.thunder_time
         // @Updated 2017/04/03
         // @Group Properties
@@ -217,6 +235,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("thunder_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getProperties().getThunderTime() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.weather
         // @Updated 2017/04/03
         // @Group Properties
@@ -226,6 +245,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("weather", (dat, obj) -> new TextTag(Utilities.getIdWithoutDefaultPrefix(((WorldTag) obj).internal.getWeather().getId())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.remaining_weather_time
         // @Updated 2017/04/03
         // @Group Properties
@@ -234,6 +254,7 @@ public class WorldTag extends AbstractTagObject {
         // -->
         handlers.put("remaining_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRemainingDuration() * (1.0 / 20.0)));
         // <--[tag]
+        // @Since 0.3.0
         // @Name WorldTag.running_weather_time
         // @Updated 2017/04/03
         // @Group Properties

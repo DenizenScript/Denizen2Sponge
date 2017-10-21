@@ -17,6 +17,7 @@ import java.util.HashMap;
 public class EntitySpawnsScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // entity spawns
     //

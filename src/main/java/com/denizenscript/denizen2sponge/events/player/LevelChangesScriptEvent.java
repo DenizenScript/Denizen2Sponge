@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class LevelChangesScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // level changes
     //

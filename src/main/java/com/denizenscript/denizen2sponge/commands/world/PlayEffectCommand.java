@@ -15,6 +15,7 @@ import java.util.Optional;
 public class PlayEffectCommand extends AbstractCommand {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Particle Types
     // @Group Useful Lists
     // @Description
@@ -24,6 +25,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // -->
 
     // <--[command]
+    // @Since 0.3.0
     // @Name playeffect
     // @Arguments <location> <effect>
     // @Short plays an effect.

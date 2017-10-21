@@ -12,6 +12,7 @@ import org.spongepowered.api.Sponge;
 public class ShutdownCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name shutdown
     // @Arguments [reason]
     // @Short stops the server.

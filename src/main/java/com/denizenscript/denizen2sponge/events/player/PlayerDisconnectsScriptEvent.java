@@ -17,6 +17,7 @@ import java.util.HashMap;
 public class PlayerDisconnectsScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // player disconnects
     //

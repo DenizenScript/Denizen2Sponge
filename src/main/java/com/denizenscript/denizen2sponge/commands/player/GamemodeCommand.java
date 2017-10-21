@@ -14,6 +14,7 @@ import java.util.Optional;
 public class GamemodeCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name gamemode
     // @Arguments <player> <gamemode>
     // @Short sets gamemode of a player.

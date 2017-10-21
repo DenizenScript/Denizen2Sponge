@@ -19,6 +19,7 @@ import java.util.Optional;
 public class WeatherChangesScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // weather changes
     //

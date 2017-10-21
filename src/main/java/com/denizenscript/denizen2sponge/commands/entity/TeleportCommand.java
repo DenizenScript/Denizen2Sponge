@@ -10,6 +10,7 @@ import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 public class TeleportCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name teleport
     // @Arguments <entity> <location>
     // @Short teleports the entity to a location.

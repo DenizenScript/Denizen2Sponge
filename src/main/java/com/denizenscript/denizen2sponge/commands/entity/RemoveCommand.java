@@ -11,6 +11,7 @@ import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 public class RemoveCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name remove
     // @Arguments <entity list>
     // @Short removes a list of entities.

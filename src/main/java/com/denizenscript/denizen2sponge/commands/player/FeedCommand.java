@@ -12,6 +12,7 @@ import org.spongepowered.api.data.key.Keys;
 public class FeedCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name feed
     // @Arguments <player> <amount>
     // @Short changes the food level of the player.

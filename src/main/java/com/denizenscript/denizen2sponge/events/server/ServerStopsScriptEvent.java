@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class ServerStopsScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // server stops
     //

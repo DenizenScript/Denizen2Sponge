@@ -24,6 +24,7 @@ import java.util.List;
 public class CommandSentScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // command sent
     //

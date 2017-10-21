@@ -9,6 +9,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 public class ColorTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base color[<TextTag>]
     // @Group Sponge Helper Types
     // @ReturnType TextTag

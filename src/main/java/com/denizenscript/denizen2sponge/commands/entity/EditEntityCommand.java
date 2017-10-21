@@ -17,6 +17,7 @@ import java.util.Map;
 public class EditEntityCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name editentity
     // @Arguments <entity> <map of properties>
     // @Short edits an entity.

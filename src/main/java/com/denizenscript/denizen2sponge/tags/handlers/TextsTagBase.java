@@ -22,6 +22,7 @@ import java.util.HashMap;
 public class TextsTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base texts
     // @Group Sponge Helper Types
     // @ReturnType TextsBaseTag
@@ -37,6 +38,7 @@ public class TextsTagBase extends AbstractTagBase {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name TextsBaseTag.for_plain[<TextTag>]
         // @Updated 2016/09/21
         // @Group Text Formatting
@@ -45,6 +47,7 @@ public class TextsTagBase extends AbstractTagBase {
         // -->
         handlers.put("for_plain", (dat, obj) -> new FormattedTextTag(Text.of(dat.getNextModifier().toString())));
         // <--[tag]
+        // @Since 0.3.0
         // @Name TextsBaseTag.for_old_colors[<TextTag>]
         // @Updated 2016/09/21
         // @Group Text Formatting
@@ -54,6 +57,7 @@ public class TextsTagBase extends AbstractTagBase {
         handlers.put("for_old_colors", (dat, obj) -> new FormattedTextTag(
                 TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize((dat.getNextModifier().toString()))));
         // <--[tag]
+        // @Since 0.3.0
         // @Name TextsBaseTag.for_input[<MapTag>]
         // @Updated 2016/09/21
         // @Group Text Formatting

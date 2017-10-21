@@ -15,6 +15,7 @@ import java.util.Optional;
 public class EntityTypeTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type EntityTypeTag
     // @SubType TextTag
     // @Group Items
@@ -22,6 +23,7 @@ public class EntityTypeTag extends AbstractTagObject {
     // -->
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Entity Types
     // @Group Useful Lists
     // @Description
@@ -44,6 +46,7 @@ public class EntityTypeTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTypeTag.id
         // @Updated 2016/08/26
         // @Group Identification
@@ -53,6 +56,7 @@ public class EntityTypeTag extends AbstractTagObject {
         // -->
         handlers.put("id", (dat, obj) -> new TextTag(((EntityTypeTag) obj).internal.getId()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name EntityTypeTag.name
         // @Updated 2016/08/26
         // @Group Identification

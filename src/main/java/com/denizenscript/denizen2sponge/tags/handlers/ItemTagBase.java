@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 public class ItemTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base item[<ItemTag>]
     // @Group Sponge Base Types
     // @ReturnType ItemTag

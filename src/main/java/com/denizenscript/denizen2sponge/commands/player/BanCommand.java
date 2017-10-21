@@ -23,6 +23,7 @@ import java.time.Instant;
 public class BanCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name ban
     // @Arguments <PlayerTag>/<OfflinePlayerTag>/<IP> [duration] [reason]
     // @Short bans a player.

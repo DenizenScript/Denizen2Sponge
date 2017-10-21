@@ -14,6 +14,7 @@ import java.util.Optional;
 public class WeatherCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name weather
     // @Arguments <world> 'clear'/'rain'/'thunder_storm' [duration]
     // @Short Sets the weather of the world.

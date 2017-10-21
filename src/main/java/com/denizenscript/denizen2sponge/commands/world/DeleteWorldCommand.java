@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 public class DeleteWorldCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name deleteworld
     // @Arguments <world name>
     // @Short deletes an existing world.

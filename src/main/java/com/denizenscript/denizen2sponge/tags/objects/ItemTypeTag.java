@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ItemTypeTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type ItemTypeTag
     // @SubType TextTag
     // @Group Items
@@ -35,6 +36,7 @@ public class ItemTypeTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTypeTag.block_type
         // @Updated 2016/08/26
         // @Group Identification
@@ -46,6 +48,7 @@ public class ItemTypeTag extends AbstractTagObject {
             return null;
         })));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTypeTag.id
         // @Updated 2016/08/26
         // @Group Identification
@@ -55,6 +58,7 @@ public class ItemTypeTag extends AbstractTagObject {
         // -->
         handlers.put("id", (dat, obj) -> new TextTag(((ItemTypeTag) obj).internal.getId()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name ItemTypeTag.name
         // @Updated 2016/08/26
         // @Group Identification

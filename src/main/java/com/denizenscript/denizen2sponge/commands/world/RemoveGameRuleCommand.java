@@ -15,6 +15,7 @@ import java.util.Optional;
 public class RemoveGameRuleCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name removegamerule
     // @Arguments <world> <list of rules>
     // @Short removes custom game rules from a world.

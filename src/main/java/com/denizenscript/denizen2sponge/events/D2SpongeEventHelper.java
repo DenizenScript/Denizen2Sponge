@@ -136,6 +136,7 @@ public class D2SpongeEventHelper {
     }
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name With Item Switch For Events
     // @Group Events
     // @Description

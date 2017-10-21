@@ -27,6 +27,7 @@ import java.util.UUID;
 public class PlayerTag extends AbstractTagObject {
 
     // <--[object]
+    // @Since 0.3.0
     // @Type PlayerTag
     // @SubType EntityTag
     // @Group Entities
@@ -35,6 +36,7 @@ public class PlayerTag extends AbstractTagObject {
     // -->
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name Default Statistics
     // @Group Useful Lists
     // @Description
@@ -60,6 +62,7 @@ public class PlayerTag extends AbstractTagObject {
 
     static {
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.name
         // @Updated 2016/08/26
         // @Group Identification
@@ -69,6 +72,7 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.food_level
         // @Updated 2017/03/24
         // @Group Properties
@@ -83,6 +87,7 @@ public class PlayerTag extends AbstractTagObject {
             return new IntegerTag(pl.foodLevel().get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.exhaustion
         // @Updated 2017/03/24
         // @Group Properties
@@ -97,6 +102,7 @@ public class PlayerTag extends AbstractTagObject {
             return new NumberTag(pl.exhaustion().get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.saturation
         // @Updated 2017/03/24
         // @Group Properties
@@ -111,6 +117,7 @@ public class PlayerTag extends AbstractTagObject {
             return new NumberTag(pl.saturation().get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.gamemode
         // @Updated 2017/03/28
         // @Group Properties
@@ -125,6 +132,7 @@ public class PlayerTag extends AbstractTagObject {
             return new TextTag(pl.gameMode().get().toString());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.sneaking
         // @Updated 2017/04/05
         // @Group Properties
@@ -139,6 +147,7 @@ public class PlayerTag extends AbstractTagObject {
             return new BooleanTag(pl.get(Keys.IS_SNEAKING).get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.sprinting
         // @Updated 2017/04/05
         // @Group Properties
@@ -153,6 +162,7 @@ public class PlayerTag extends AbstractTagObject {
             return new BooleanTag(pl.get(Keys.IS_SPRINTING).get());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.ip
         // @Updated 2017/04/08
         // @Group Properties
@@ -167,6 +177,7 @@ public class PlayerTag extends AbstractTagObject {
             return new TextTag(pl.getConnection().getAddress().getAddress().getHostName());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.latency
         // @Updated 2017/04/17
         // @Group Properties
@@ -181,6 +192,7 @@ public class PlayerTag extends AbstractTagObject {
             return new IntegerTag(pl.getConnection().getLatency());
         });
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.selected_slot
         // @Updated 2017/04/20
         // @Group Properties
@@ -189,6 +201,7 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("selected_slot", (dat, obj) -> new IntegerTag(((PlayerInventory) ((PlayerTag) obj).internal.getInventory()).getHotbar().getSelectedSlotIndex() + 1));
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.inventory
         // @Updated 2017/08/31
         // @Group Properties
@@ -197,6 +210,7 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("inventory", (dat, obj) -> new InventoryTag(((UserInventory) ((PlayerTag) obj).internal.getInventory()).getMain()));
         // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.statistic[<MapTag>]
         // @Updated 2017/09/25
         // @Group Properties

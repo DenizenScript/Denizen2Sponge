@@ -18,6 +18,7 @@ import java.util.Map;
 public class EquipCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name equip
     // @Arguments <entity> <equipment map>
     // @Short equips an entity according to a given equipment map.

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class ExCommand implements CommandExecutor {
 
     // <--[explanation]
+    // @Since 0.3.0
     // @Name The Ex Command
     // @Group Sponge Commands
     // @Description

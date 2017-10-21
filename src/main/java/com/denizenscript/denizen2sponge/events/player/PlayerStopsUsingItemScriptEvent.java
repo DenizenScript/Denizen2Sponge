@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class PlayerStopsUsingItemScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // player stops using item
     //

@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class ProjectileHitsBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
+    // @Since 0.3.0
     // @Events
     // projectile hits block
     //

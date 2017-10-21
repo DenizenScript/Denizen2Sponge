@@ -8,6 +8,7 @@ import com.denizenscript.denizen2core.tags.TagData;
 public class WorldTagBase extends AbstractTagBase {
 
     // <--[tagbase]
+    // @Since 0.3.0
     // @Base world[<WorldTag>]
     // @Group Sponge Base Types
     // @ReturnType WorldTag

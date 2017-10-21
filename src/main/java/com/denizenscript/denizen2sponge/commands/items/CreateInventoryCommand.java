@@ -13,6 +13,7 @@ import org.spongepowered.api.item.inventory.InventoryArchetype;
 public class CreateInventoryCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name createinventory
     // @Arguments <type>
     // @Short creates a new inventory.

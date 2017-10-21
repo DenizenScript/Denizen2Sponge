@@ -14,6 +14,7 @@ import org.spongepowered.api.world.BlockChangeFlag;
 public class SetBlockCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name setblock
     // @Arguments <list of locations> <blocktype>
     // @Short sets a block's type.

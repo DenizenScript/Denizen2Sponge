@@ -19,6 +19,7 @@ import java.util.Map;
 public class EditBlockCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name editblock
     // @Arguments <location> <map of properties>
     // @Short Edits a block.

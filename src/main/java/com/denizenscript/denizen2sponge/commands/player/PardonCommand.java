@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 public class PardonCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name pardon
     // @Arguments <OfflinePlayerTag>/<IP>
     // @Short pardons a player.

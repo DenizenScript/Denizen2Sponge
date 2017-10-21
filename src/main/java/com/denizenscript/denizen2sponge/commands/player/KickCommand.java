@@ -12,6 +12,7 @@ import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 public class KickCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name kick
     // @Arguments <player> [reason]
     // @Short kicks a player with the specified reason.

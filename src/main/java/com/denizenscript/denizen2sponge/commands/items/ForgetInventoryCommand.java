@@ -8,6 +8,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 public class ForgetInventoryCommand extends AbstractCommand {
 
     // <--[command]
+    // @Since 0.3.0
     // @Name forgetinventory
     // @Arguments <name>
     // @Short forgets a remembered inventory.
