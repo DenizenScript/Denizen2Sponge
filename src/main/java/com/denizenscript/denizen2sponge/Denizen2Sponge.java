@@ -178,7 +178,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntityLeavesAreaScriptEvent());
         Denizen2Core.register(new EntityMovesScriptEvent());
         Denizen2Core.register(new EntitySpawnsScriptEvent());
-        Denizen2Core.register(new ProjectileHitsBlockScriptEvent());
+        Denizen2Core.register(new ProjectileImpactsBlockScriptEvent());
+        Denizen2Core.register(new ProjectileImpactsEntityScriptEvent());
         // Events: Player
         Denizen2Core.register(new ExperienceChangesScriptEvent());
         Denizen2Core.register(new LevelChangesScriptEvent());
