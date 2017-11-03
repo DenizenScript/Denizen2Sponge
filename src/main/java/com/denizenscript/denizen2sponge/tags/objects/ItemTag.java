@@ -47,33 +47,6 @@ public class ItemTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Since 0.3.0
-        // @Name ItemTag.item_type
-        // @Updated 2016/11/24
-        // @Group Identification
-        // @ReturnType ItemTypeTag
-        // @Returns the type of the item.
-        // -->
-        handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((ItemTag) obj).internal.getType()));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.quantity
-        // @Updated 2017/04/04
-        // @Group Identification
-        // @ReturnType IntegerTag
-        // @Returns the amount of items in this stack.
-        // -->
-        handlers.put("quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getQuantity()));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.max_stack_quantity
-        // @Updated 2017/04/04
-        // @Group Identification
-        // @ReturnType IntegerTag
-        // @Returns the maximum amount of items of this type in a stack.
-        // -->
-        handlers.put("max_stack_quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getMaxStackQuantity()));
-        // <--[tag]
-        // @Since 0.3.0
         // @Name ItemTag.data
         // @Updated 2016/11/24
         // @Group General Information
@@ -81,6 +54,38 @@ public class ItemTag extends AbstractTagObject {
         // @Returns a list of all data keys and their values for the entity.
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((ItemTag) obj).internal));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.flag[<TextTag>]
+        // @Updated 2016/11/24
+        // @Group Flag Data
+        // @ReturnType Dynamic
+        // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
+        // Optionally don't specify anything to get the entire flag map.
+        // -->
+        handlers.put("flag", (dat, obj) -> {
+            MapTag flags;
+            ItemStack e = ((ItemTag) obj).internal;
+            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
+            if (fm.isPresent()) {
+                flags = fm.get().flags;
+            }
+            else {
+                flags = new MapTag();
+            }
+            if (!dat.hasNextModifier()) {
+                return flags;
+            }
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            AbstractTagObject ato = flags.getInternal().get(flagName);
+            if (ato == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Invalid flag specified, not present on this item!");
+                }
+                return new NullTag();
+            }
+            return ato;
+        });
         // <--[tag]
         // @Since 0.3.0
         // @Name ItemTag.get[<TextTag>]
@@ -100,29 +105,128 @@ public class ItemTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Since 0.3.0
-        // @Name ItemTag.without_flags[<ListTag>]
-        // @Updated 2017/02/13
-        // @Group General Information
-        // @ReturnType ItemTag
-        // @Returns a copy of the item, with the specified flags removed.
+        // @Name ItemTag.has_flag[<TextTag>]
+        // @Updated 2016/11/24
+        // @Group Flag Data
+        // @ReturnType BooleanTag
+        // @Returns whether the entity has a flag with the specified key.
         // -->
-        handlers.put("without_flags", (dat, obj) -> {
+        handlers.put("has_flag", (dat, obj) -> {
+            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
             MapTag flags;
             ItemStack e = ((ItemTag) obj).internal;
             Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
             if (fm.isPresent()) {
-                flags = new MapTag(fm.get().flags.getInternal());
+                flags = fm.get().flags;
             }
             else {
                 flags = new MapTag();
             }
-            ListTag toRemove = ListTag.getFor(dat.error, dat.getNextModifier());
-            for (AbstractTagObject k : toRemove.getInternal()) {
-                flags.getInternal().remove(k.toString());
+            return new BooleanTag(flags.getInternal().containsKey(flagName));
+        });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.item_type
+        // @Updated 2016/11/24
+        // @Group Identification
+        // @ReturnType ItemTypeTag
+        // @Returns the type of the item.
+        // -->
+        handlers.put("item_type", (dat, obj) -> new ItemTypeTag(((ItemTag) obj).internal.getType()));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.max_stack_quantity
+        // @Updated 2017/04/04
+        // @Group Identification
+        // @ReturnType IntegerTag
+        // @Returns the maximum amount of items of this type in a stack.
+        // -->
+        handlers.put("max_stack_quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getMaxStackQuantity()));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.quantity
+        // @Updated 2017/04/04
+        // @Group Identification
+        // @ReturnType IntegerTag
+        // @Returns the amount of items in this stack.
+        // -->
+        handlers.put("quantity", (dat, obj) -> new IntegerTag(((ItemTag) obj).internal.getQuantity()));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.represented_player_name
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's name of this skull item.
+        // -->
+        handlers.put("represented_player_name", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a player skull!");
+                }
+                return new NullTag();
             }
-            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
-            its.offer(new FlagMapDataImpl(new FlagMap(flags)));
-            return new ItemTag(its);
+            return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getName().get());
+        });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.represented_player_skin
+        // @Updated 2017/10/16
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's skin of this skull item.
+        // -->
+        handlers.put("represented_player_skin", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a player skull!");
+                }
+                return new NullTag();
+            }
+            ProfileProperty p = item.get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
+            return new TextTag(p.getValue() + "|" + p.getSignature().get());
+        });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.represented_player_uuid
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the represented player's unique id of this skull item.
+        // -->
+        handlers.put("represented_player_uuid", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a player skull!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
+        });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.skull_type
+        // @Updated 2017/10/15
+        // @Group Properties
+        // @ReturnType TextTag
+        // @Returns the type of skull this item is.
+        // -->
+        handlers.put("skull_type", (dat, obj) -> {
+            ItemStack item = ((ItemTag) obj).internal;
+            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
+            if (!type.isPresent()) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This item is not a skull!");
+                }
+                return new NullTag();
+            }
+            return new TextTag(type.get().getId());
         });
         // <--[tag]
         // @Since 0.3.0
@@ -179,133 +283,29 @@ public class ItemTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Since 0.3.0
-        // @Name ItemTag.has_flag[<TextTag>]
-        // @Updated 2016/11/24
-        // @Group Flag Data
-        // @ReturnType BooleanTag
-        // @Returns whether the entity has a flag with the specified key.
+        // @Name ItemTag.without_flags[<ListTag>]
+        // @Updated 2017/02/13
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns a copy of the item, with the specified flags removed.
         // -->
-        handlers.put("has_flag", (dat, obj) -> {
-            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+        handlers.put("without_flags", (dat, obj) -> {
             MapTag flags;
             ItemStack e = ((ItemTag) obj).internal;
             Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
             if (fm.isPresent()) {
-                flags = fm.get().flags;
+                flags = new MapTag(fm.get().flags.getInternal());
             }
             else {
                 flags = new MapTag();
             }
-            return new BooleanTag(flags.getInternal().containsKey(flagName));
-        });
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.flag[<TextTag>]
-        // @Updated 2016/11/24
-        // @Group Flag Data
-        // @ReturnType Dynamic
-        // @Returns the flag of the specified key from the entity. May become TextTag regardless of input original type.
-        // Optionally don't specify anything to get the entire flag map.
-        // -->
-        handlers.put("flag", (dat, obj) -> {
-            MapTag flags;
-            ItemStack e = ((ItemTag) obj).internal;
-            Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
-            if (fm.isPresent()) {
-                flags = fm.get().flags;
+            ListTag toRemove = ListTag.getFor(dat.error, dat.getNextModifier());
+            for (AbstractTagObject k : toRemove.getInternal()) {
+                flags.getInternal().remove(k.toString());
             }
-            else {
-                flags = new MapTag();
-            }
-            if (!dat.hasNextModifier()) {
-                return flags;
-            }
-            String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
-            AbstractTagObject ato = flags.getInternal().get(flagName);
-            if (ato == null) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("Invalid flag specified, not present on this item!");
-                }
-                return new NullTag();
-            }
-            return ato;
-        });
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.skull_type
-        // @Updated 2017/10/15
-        // @Group Properties
-        // @ReturnType TextTag
-        // @Returns the type of skull this item is.
-        // -->
-        handlers.put("skull_type", (dat, obj) -> {
-            ItemStack item = ((ItemTag) obj).internal;
-            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
-            if (!type.isPresent()) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("This item is not a skull!");
-                }
-                return new NullTag();
-            }
-            return new TextTag(type.get().getId());
-        });
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.represented_player_name
-        // @Updated 2017/10/15
-        // @Group Properties
-        // @ReturnType TextTag
-        // @Returns the represented player's name of this skull item.
-        // -->
-        handlers.put("represented_player_name", (dat, obj) -> {
-            ItemStack item = ((ItemTag) obj).internal;
-            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
-            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("This item is not a player skull!");
-                }
-                return new NullTag();
-            }
-            return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getName().get());
-        });
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.represented_player_uuid
-        // @Updated 2017/10/15
-        // @Group Properties
-        // @ReturnType TextTag
-        // @Returns the represented player's unique id of this skull item.
-        // -->
-        handlers.put("represented_player_uuid", (dat, obj) -> {
-            ItemStack item = ((ItemTag) obj).internal;
-            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
-            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("This item is not a player skull!");
-                }
-                return new NullTag();
-            }
-            return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
-        });
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name ItemTag.represented_player_skin
-        // @Updated 2017/10/16
-        // @Group Properties
-        // @ReturnType TextTag
-        // @Returns the represented player's skin of this skull item.
-        // -->
-        handlers.put("represented_player_skin", (dat, obj) -> {
-            ItemStack item = ((ItemTag) obj).internal;
-            Optional<SkullType> type = item.get(Keys.SKULL_TYPE);
-            if (!type.isPresent() || type.get() != SkullTypes.PLAYER) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("This item is not a player skull!");
-                }
-                return new NullTag();
-            }
-            ProfileProperty p = item.get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
-            return new TextTag(p.getValue() + "|" + p.getSignature().get());
+            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            its.offer(new FlagMapDataImpl(new FlagMap(flags)));
+            return new ItemTag(its);
         });
     }
 
