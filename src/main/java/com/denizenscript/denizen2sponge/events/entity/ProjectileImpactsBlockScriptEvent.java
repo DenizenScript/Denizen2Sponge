@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class ProjectileImpactsBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
-    // @Since 0.3.0
+    // @Since 0.3.2
     // @Events
     // projectile impacts block
     //

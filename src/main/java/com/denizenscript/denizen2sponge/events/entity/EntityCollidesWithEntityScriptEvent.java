@@ -2,6 +2,7 @@ package com.denizenscript.denizen2sponge.events.entity;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
@@ -14,31 +15,28 @@ import org.spongepowered.api.event.entity.CollideEntityEvent;
 
 import java.util.HashMap;
 
-public class ProjectileImpactsEntityScriptEvent extends ScriptEvent {
+public class EntityCollidesWithEntityScriptEvent extends ScriptEvent {
 
     // <--[event]
     // @Since 0.3.2
     // @Events
-    // projectile impacts entity
+    // entity collides with entity
     //
-    // @Updated 2017/10/27
+    // @Updated 2017/11/03
     //
     // @Group Entity
     //
     // @Cancellable true
     //
-    // @Triggers when a projectile impacts an entity.
+    // @Triggers when an entity collides with another entity. Note: this event may fire very rapidly.
     //
-    // @Switch type (EntityTypeTag) checks the projectile type.
-    // @Switch other_type (EntityTypeTag) checks the other entity type.
+    // @Switch type (EntityTypeTag) checks the first entity type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
     // @Switch weather (TextTag) checks the weather.
     //
     // @Context
-    // entity (EntityTag) returns the projectile entity that impacted the other entity.
-    // other_entity (EntityTag) returns the entity that was impacted.
-    // impact_point (LocationTag) returns the precise impact location.
+    // entities (EntityTag) returns the entities that collided.
     //
     // @Determinations
     // None.
@@ -46,31 +44,26 @@ public class ProjectileImpactsEntityScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "ProjectileImpactsEntity";
+        return "EntityCollidesWithEntity";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("projectile impacts entity");
+        return data.eventPath.startsWith("entity collides with entity");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "type")
-                && D2SpongeEventHelper.checkEntityType(other_entity.getInternal().getType(), data, this::error, "other_type")
-                && D2SpongeEventHelper.checkWorld(impact_point.getInternal().world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid(impact_point.getInternal(), data, this::error)
+        return D2SpongeEventHelper.checkEntityType(((EntityTag) entities.getInternal().get(0)).getInternal().getType(), data, this::error, "type")
+                && D2SpongeEventHelper.checkWorld(((EntityTag) entities.getInternal().get(0)).getInternal().getLocation().getExtent(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid(new LocationTag(((EntityTag) entities.getInternal().get(0)).getInternal().getLocation()).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        impact_point.getInternal().world.getWeather().getId()), data, this::error);
+                        ((EntityTag) entities.getInternal().get(0)).getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
-    public EntityTag entity;
+    public ListTag entities;
 
-    public EntityTag other_entity;
-
-    public LocationTag impact_point;
-
-    public CollideEntityEvent.Impact internal;
+    public CollideEntityEvent internal;
 
     @Override
     public void enable() {
@@ -85,21 +78,19 @@ public class ProjectileImpactsEntityScriptEvent extends ScriptEvent {
     @Override
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
-        defs.put("entity", entity);
-        defs.put("other_entity", other_entity);
-        defs.put("impact_point", impact_point);
+        defs.put("entities", entities);
         return defs;
     }
 
     @Listener
-    public void onEntityImpactsEntity(CollideEntityEvent.Impact evt) {
-        ProjectileImpactsEntityScriptEvent event = (ProjectileImpactsEntityScriptEvent) clone();
+    public void onEntityCollidesWithEntity(CollideEntityEvent evt) {
+        EntityCollidesWithEntityScriptEvent event = (EntityCollidesWithEntityScriptEvent) clone();
         event.internal = evt;
-        Entity projectile = (Entity) evt.getSource();
-        event.entity = new EntityTag(projectile);
-        evt.getEntities().remove(projectile);
-        event.other_entity = new EntityTag(evt.getEntities().iterator().next());
-        event.impact_point = new LocationTag(evt.getImpactPoint());
+        ListTag list = new ListTag();
+        for (Entity ent : evt.getEntities()) {
+            list.getInternal().add(new EntityTag(ent));
+        }
+        event.entities = list;
         event.cancelled = evt.isCancelled();
         event.run();
         evt.setCancelled(event.cancelled);
