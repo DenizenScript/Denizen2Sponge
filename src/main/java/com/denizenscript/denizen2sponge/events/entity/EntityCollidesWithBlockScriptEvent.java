@@ -4,44 +4,44 @@ import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
+import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.MoveEntityEvent;
-import org.spongepowered.api.world.Location;
+import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
-public class EntityMovesScriptEvent extends ScriptEvent {
+public class EntityCollidesWithBlockScriptEvent extends ScriptEvent {
 
     // <--[event]
-    // @Since 0.3.0
+    // @Since 0.3.2
     // @Events
-    // entity moves
+    // entity collides with block
     //
-    // @Updated 2016/10/25
+    // @Updated 2017/10/27
     //
     // @Group Entity
     //
     // @Cancellable true
     //
-    // @Triggers when an entity moves.
+    // @Triggers when an entity collides with a block. Note: this event may fire very rapidly.
     //
-    // @Switch type (EntityTypeTag) checks the entity type.
+    // @Switch entity_type (EntityTypeTag) checks the entity type.
+    // @Switch block_type (BlockTypeTag) checks the block type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
     // @Switch weather (TextTag) checks the weather.
     //
     // @Context
-    // entity (EntityTag) returns the entity that moved.
-    // to_position (LocationTag) returns the position the entity moved to.
-    // to_rotation (LocationTag) returns the rotation the entity moved to.
-    // from_position (LocationTag) returns the position the entity moved from.
-    // from_rotation (LocationTag) returns the rotation the entity moved from.
+    // entity (EntityTag) returns the entity that collided with the block.
+    // location (LocationTag) returns the location of the colliding block.
+    // impact_normal (LocationTag) returns the impact normal of the collision.
     //
     // @Determinations
     // None.
@@ -49,37 +49,35 @@ public class EntityMovesScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "EntityMoves";
+        return "EntityCollidesWithBlock";
     }
 
     @Override
     public boolean couldMatch(ScriptEventData data) {
-        return data.eventPath.startsWith("entity moves");
+        return data.eventPath.startsWith("entity collides with block");
     }
 
     @Override
     public boolean matches(ScriptEventData data) {
-        Entity ent = entity.getInternal();
-        Location<World> loc = ent.getLocation();
-        World world = loc.getExtent();
-        return D2SpongeEventHelper.checkEntityType(ent.getType(), data, this::error)
+        UtilLocation loc = location.getInternal();
+        World world = loc.world;
+        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type")
+                && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type")
                 && D2SpongeEventHelper.checkWorld(world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid((new LocationTag(loc)).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid(loc, data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
                         world.getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;
 
-    public LocationTag fromPosition;
+    public BlockTypeTag material;
 
-    public LocationTag fromRotation;
+    public LocationTag location;
 
-    public LocationTag toPosition;
+    public LocationTag impact_normal;
 
-    public LocationTag toRotation;
-
-    public MoveEntityEvent internal;
+    public CollideBlockEvent internal;
 
     @Override
     public void enable() {
@@ -95,26 +93,21 @@ public class EntityMovesScriptEvent extends ScriptEvent {
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("entity", entity);
-        defs.put("to_position", toPosition);
-        defs.put("to_rotation", toRotation);
-        defs.put("from_position", fromPosition);
-        defs.put("from_rotation", fromRotation);
+        defs.put("location", location);
+        defs.put("impact_normal", impact_normal);
         return defs;
     }
 
     @Listener
-    public void onEntityMoves(MoveEntityEvent evt) {
-        EntityMovesScriptEvent event = (EntityMovesScriptEvent) clone();
+    public void onEntityCollidesWithBlock(CollideBlockEvent evt) {
+        EntityCollidesWithBlockScriptEvent event = (EntityCollidesWithBlockScriptEvent) clone();
         event.internal = evt;
-        event.entity = new EntityTag(evt.getTargetEntity());
-        event.toPosition = new LocationTag(evt.getToTransform().getLocation());
-        event.toRotation = new LocationTag(evt.getToTransform().getRotation());
-        event.fromPosition = new LocationTag(evt.getFromTransform().getLocation());
-        event.fromRotation = new LocationTag(evt.getFromTransform().getRotation());
+        event.entity = new EntityTag((Entity) evt.getSource());
+        event.material = new BlockTypeTag(evt.getTargetBlock().getType());
+        event.location = new LocationTag(evt.getTargetLocation());
+        event.impact_normal = new LocationTag(evt.getTargetSide().asOffset());
         event.cancelled = evt.isCancelled();
-        // TODO: Cause viewing
         event.run();
-        // TODO: Set To Transform determinations.
         evt.setCancelled(event.cancelled);
     }
 

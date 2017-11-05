@@ -63,31 +63,6 @@ public class PlayerTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Since 0.3.0
-        // @Name PlayerTag.name
-        // @Updated 2016/08/26
-        // @Group Identification
-        // @ReturnType TextTag
-        // @Returns the name of the player.
-        // @Example "Bob" .name returns "Bob".
-        // -->
-        handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name PlayerTag.food_level
-        // @Updated 2017/03/24
-        // @Group Properties
-        // @ReturnType IntegerTag
-        // @Returns the food level of the player. ONLINE-PLAYERS-ONLY.
-        // -->
-        handlers.put("food_level", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
-            if (pl == null) {
-                return new NullTag();
-            }
-            return new IntegerTag(pl.foodLevel().get());
-        });
-        // <--[tag]
-        // @Since 0.3.0
         // @Name PlayerTag.exhaustion
         // @Updated 2017/03/24
         // @Group Properties
@@ -103,18 +78,18 @@ public class PlayerTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Since 0.3.0
-        // @Name PlayerTag.saturation
+        // @Name PlayerTag.food_level
         // @Updated 2017/03/24
         // @Group Properties
-        // @ReturnType NumberTag
-        // @Returns the saturation of the player. ONLINE-PLAYERS-ONLY.
+        // @ReturnType IntegerTag
+        // @Returns the food level of the player. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("saturation", (dat, obj) -> {
+        handlers.put("food_level", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
                 return new NullTag();
             }
-            return new NumberTag(pl.saturation().get());
+            return new IntegerTag(pl.foodLevel().get());
         });
         // <--[tag]
         // @Since 0.3.0
@@ -133,34 +108,13 @@ public class PlayerTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Since 0.3.0
-        // @Name PlayerTag.sneaking
-        // @Updated 2017/04/05
+        // @Name PlayerTag.inventory
+        // @Updated 2017/08/31
         // @Group Properties
-        // @ReturnType BooleanTag
-        // @Returns whether the player is sneaking or not. ONLINE-PLAYERS-ONLY.
+        // @ReturnType InventoryTag
+        // @Returns the inventory this player is carrying. Equipment is not included.
         // -->
-        handlers.put("sneaking", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
-            if (pl == null) {
-                return new NullTag();
-            }
-            return new BooleanTag(pl.get(Keys.IS_SNEAKING).get());
-        });
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name PlayerTag.sprinting
-        // @Updated 2017/04/05
-        // @Group Properties
-        // @ReturnType BooleanTag
-        // @Returns whether the player is sprinting or not. ONLINE-PLAYERS-ONLY.
-        // -->
-        handlers.put("sprinting", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
-            if (pl == null) {
-                return new NullTag();
-            }
-            return new BooleanTag(pl.get(Keys.IS_SPRINTING).get());
-        });
+        handlers.put("inventory", (dat, obj) -> new InventoryTag(((UserInventory) ((PlayerTag) obj).internal.getInventory()).getMain()));
         // <--[tag]
         // @Since 0.3.0
         // @Name PlayerTag.ip
@@ -193,6 +147,31 @@ public class PlayerTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Since 0.3.0
+        // @Name PlayerTag.name
+        // @Updated 2016/08/26
+        // @Group Identification
+        // @ReturnType TextTag
+        // @Returns the name of the player.
+        // @Example "Bob" .name returns "Bob".
+        // -->
+        handlers.put("name", (dat, obj) -> new TextTag(((PlayerTag) obj).internal.getName()));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name PlayerTag.saturation
+        // @Updated 2017/03/24
+        // @Group Properties
+        // @ReturnType NumberTag
+        // @Returns the saturation of the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("saturation", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new NumberTag(pl.saturation().get());
+        });
+        // <--[tag]
+        // @Since 0.3.0
         // @Name PlayerTag.selected_slot
         // @Updated 2017/04/20
         // @Group Properties
@@ -202,13 +181,34 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("selected_slot", (dat, obj) -> new IntegerTag(((PlayerInventory) ((PlayerTag) obj).internal.getInventory()).getHotbar().getSelectedSlotIndex() + 1));
         // <--[tag]
         // @Since 0.3.0
-        // @Name PlayerTag.inventory
-        // @Updated 2017/08/31
+        // @Name PlayerTag.sneaking
+        // @Updated 2017/04/05
         // @Group Properties
-        // @ReturnType InventoryTag
-        // @Returns the inventory this player is carrying. Equipment is not included.
+        // @ReturnType BooleanTag
+        // @Returns whether the player is sneaking or not. ONLINE-PLAYERS-ONLY.
         // -->
-        handlers.put("inventory", (dat, obj) -> new InventoryTag(((UserInventory) ((PlayerTag) obj).internal.getInventory()).getMain()));
+        handlers.put("sneaking", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new BooleanTag(pl.get(Keys.IS_SNEAKING).get());
+        });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name PlayerTag.sprinting
+        // @Updated 2017/04/05
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether the player is sprinting or not. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("sprinting", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new BooleanTag(pl.get(Keys.IS_SPRINTING).get());
+        });
         // <--[tag]
         // @Since 0.3.0
         // @Name PlayerTag.statistic[<MapTag>]

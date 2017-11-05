@@ -37,6 +37,16 @@ public class FormattedTextTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Since 0.3.0
+        // @Name FormattedTextTag.append[<FormattedTextTag>]
+        // @Updated 2016/09/21
+        // @Group Modification
+        // @ReturnType TextTag
+        // @Returns the text followed by another piece of text.
+        // -->
+        handlers.put("append", (dat, obj) -> new FormattedTextTag(Text.join(((FormattedTextTag) obj).internal,
+                FormattedTextTag.getFor(dat.error, dat.getNextModifier()).internal)));
+        // <--[tag]
+        // @Since 0.3.0
         // @Name FormattedTextTag.color_codes
         // @Updated 2017/08/31
         // @Group Conversion
@@ -54,16 +64,6 @@ public class FormattedTextTag extends AbstractTagObject {
         // @Returns a plain version of this formatted text.
         // -->
         handlers.put("plain", (dat, obj) -> new TextTag(((FormattedTextTag) obj).internal.toPlain()));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name FormattedTextTag.append[<FormattedTextTag>]
-        // @Updated 2016/09/21
-        // @Group Modification
-        // @ReturnType TextTag
-        // @Returns the text followed by another piece of text.
-        // -->
-        handlers.put("append", (dat, obj) -> new FormattedTextTag(Text.join(((FormattedTextTag) obj).internal,
-                FormattedTextTag.getFor(dat.error, dat.getNextModifier()).internal)));
     }
 
     public static FormattedTextTag getFor(Action<String> error, String text) {

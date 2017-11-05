@@ -2,6 +2,7 @@ package com.denizenscript.denizen2sponge.events.entity;
 
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
@@ -10,34 +11,34 @@ import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.SpawnEntityEvent;
+import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
-public class EntitySpawnsScriptEvent extends ScriptEvent {
+public class EntityCollidesWithEntityScriptEvent extends ScriptEvent {
 
     // <--[event]
-    // @Since 0.3.0
+    // @Since 0.3.2
     // @Events
-    // entity spawns
+    // entity collides with entity
     //
-    // @Updated 2017/10/14
+    // @Updated 2017/11/03
     //
     // @Group Entity
     //
     // @Cancellable true
     //
-    // @Switch type (EntityTypeTag) checks the entity type.
+    // @Triggers when an entity collides with another entity. Note: this event may fire very rapidly.
+    //
+    // @Switch type (EntityTypeTag) checks the first entity type.
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
     // @Switch weather (TextTag) checks the weather.
     //
-    // @Triggers when an entity spawns in the world (non players).
-    //
     // @Context
-    // entity (EntityTag) returns the entity that is attempting to spawn.
+    // entities (EntityTag) returns the entities that collided.
     //
     // @Determinations
     // None.
@@ -45,36 +46,29 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
 
     @Override
     public String getName() {
-        return "EntitySpawns";
+        return "EntityCollidesWithEntity";
     }
 
     @Override
-    public boolean couldMatch(ScriptEvent.ScriptEventData data) {
-        return data.eventPath.startsWith("entity spawns");
+    public boolean couldMatch(ScriptEventData data) {
+        return data.eventPath.startsWith("entity collides with entity");
     }
 
     @Override
-    public boolean matches(ScriptEvent.ScriptEventData data) {
-        Entity ent = entity.getInternal();
+    public boolean matches(ScriptEventData data) {
+        Entity ent = ((EntityTag) entities.getInternal().get(0)).getInternal();
         Location<World> loc = ent.getLocation();
         World world = loc.getExtent();
-        return D2SpongeEventHelper.checkEntityType(ent.getType(), data, this::error)
+        return D2SpongeEventHelper.checkEntityType(ent.getType(), data, this::error, "type")
                 && D2SpongeEventHelper.checkWorld(world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid((new LocationTag(loc)).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkCuboid(new LocationTag(loc).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
                         world.getWeather().getId()), data, this::error);
     }
 
-    public EntityTag entity;
+    public ListTag entities;
 
-    public SpawnEntityEvent internal;
-
-    @Override
-    public HashMap<String, AbstractTagObject> getDefinitions(ScriptEvent.ScriptEventData data) {
-        HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
-        defs.put("entity", entity);
-        return defs;
-    }
+    public CollideEntityEvent internal;
 
     @Override
     public void enable() {
@@ -86,16 +80,25 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
         Sponge.getEventManager().unregisterListeners(this);
     }
 
+    @Override
+    public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
+        HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
+        defs.put("entities", entities);
+        return defs;
+    }
+
     @Listener
-    public void onEntiySpawns(SpawnEntityEvent evt) {
+    public void onEntityCollidesWithEntity(CollideEntityEvent evt) {
+        EntityCollidesWithEntityScriptEvent event = (EntityCollidesWithEntityScriptEvent) clone();
+        event.internal = evt;
+        ListTag list = new ListTag();
         for (Entity ent : evt.getEntities()) {
-            EntitySpawnsScriptEvent event = (EntitySpawnsScriptEvent) clone();
-            event.internal = evt;
-            event.entity = new EntityTag(ent);
-            event.cancelled = evt.isCancelled();
-            event.run();
-            evt.setCancelled(event.cancelled);
+            list.getInternal().add(new EntityTag(ent));
         }
+        event.entities = list;
+        event.cancelled = evt.isCancelled();
+        event.run();
+        evt.setCancelled(event.cancelled);
     }
 
     @Override
@@ -103,4 +106,3 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
         super.applyDetermination(errors, determination, value);
     }
 }
-

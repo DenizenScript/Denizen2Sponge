@@ -9,8 +9,11 @@ import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
@@ -54,12 +57,14 @@ public class EntityKilledScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
-                && D2SpongeEventHelper.checkWorld(entity.getInternal().getLocation().getExtent(), data, this::error)
-                && D2SpongeEventHelper.checkCuboid((new LocationTag(entity.getInternal()
-                .getLocation())).getInternal(), data, this::error)
+        Entity ent = entity.getInternal();
+        Location<World> loc = ent.getLocation();
+        World world = loc.getExtent();
+        return D2SpongeEventHelper.checkEntityType(ent.getType(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid((new LocationTag(loc)).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
+                        world.getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;

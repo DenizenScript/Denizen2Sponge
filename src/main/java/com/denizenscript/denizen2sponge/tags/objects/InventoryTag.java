@@ -56,22 +56,6 @@ public class InventoryTag extends AbstractTagObject {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
-        // @Name InventoryTag.name
-        // @Updated 2017/06/10
-        // @Group General Information
-        // @ReturnType TextTag
-        // @Returns the inventory's name (in English).
-        // @Example "player/bob" .name might return "Bob".
-        // -->
-        handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
-        // @Name InventoryTag.size
-        // @Updated 2017/06/11
-        // @Group General Information
-        // @ReturnType IntegerTag
-        // @Returns the inventory's size (in slots).
-        // @Example "block/0,1,2,world" .size might return "36".
-        // -->
-        handlers.put("size", (dat, obj) -> new IntegerTag(((InventoryTag) obj).internal.size()));
         // @Name InventoryTag.contains[<ItemTag>]
         // @Updated 2017/06/17
         // @Group General Information
@@ -88,6 +72,58 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "block/0,1,2,world" .contains_any[diamond] might return "true".
         // -->
         handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // @Name InventoryTag.fuel
+        // @Updated 2017/09/05
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns the item in the fuel slot of a furnace inventory.
+        // @Example "block/0,1,2,world" .fuel might return "coal".
+        // -->
+        handlers.put("fuel", (dat, obj) -> {
+            Inventory inventory = ((InventoryTag) obj).internal.query(FuelSlot.class);
+            if (inventory instanceof EmptyInventory) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This inventory does not contain any fuel slots!");
+                }
+                return new NullTag();
+            }
+            ItemStack item = inventory.peek().orElse(ItemStack.empty());
+            return new ItemTag(item);
+        });
+        // @Name InventoryTag.name
+        // @Updated 2017/06/10
+        // @Group General Information
+        // @ReturnType TextTag
+        // @Returns the inventory's name (in English).
+        // @Example "player/bob" .name might return "Bob".
+        // -->
+        handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
+        // @Name InventoryTag.result
+        // @Updated 2017/09/05
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns the item in the result slot of a furnace inventory.
+        // @Example "block/0,1,2,world" .result might return "iron_ingot".
+        // -->
+        handlers.put("result", (dat, obj) -> {
+            Inventory inventory = ((InventoryTag) obj).internal.query(OutputSlot.class);
+            if (inventory instanceof EmptyInventory) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This inventory does not contain any result slots!");
+                }
+                return new NullTag();
+            }
+            ItemStack item = inventory.peek().orElse(ItemStack.empty());
+            return new ItemTag(item);
+        });
+        // @Name InventoryTag.size
+        // @Updated 2017/06/11
+        // @Group General Information
+        // @ReturnType IntegerTag
+        // @Returns the inventory's size (in slots).
+        // @Example "block/0,1,2,world" .size might return "36".
+        // -->
+        handlers.put("size", (dat, obj) -> new IntegerTag(((InventoryTag) obj).internal.size()));
         // @Name InventoryTag.slot[<IntegerTag>]
         // @Updated 2017/09/05
         // @Group General Information
@@ -111,42 +147,6 @@ public class InventoryTag extends AbstractTagObject {
                 return new NullTag();
             }
             ItemStack item = ((OrderedInventory) inventory).peek(new SlotIndex(slot - 1)).orElse(ItemStack.empty());
-            return new ItemTag(item);
-        });
-        // @Name InventoryTag.fuel
-        // @Updated 2017/09/05
-        // @Group General Information
-        // @ReturnType ItemTag
-        // @Returns the item in the fuel slot of a furnace inventory.
-        // @Example "block/0,1,2,world" .fuel might return "coal".
-        // -->
-        handlers.put("fuel", (dat, obj) -> {
-            Inventory inventory = ((InventoryTag) obj).internal.query(FuelSlot.class);
-            if (inventory instanceof EmptyInventory) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("This inventory does not contain any fuel slots!");
-                }
-                return new NullTag();
-            }
-            ItemStack item = inventory.peek().orElse(ItemStack.empty());
-            return new ItemTag(item);
-        });
-        // @Name InventoryTag.result
-        // @Updated 2017/09/05
-        // @Group General Information
-        // @ReturnType ItemTag
-        // @Returns the item in the result slot of a furnace inventory.
-        // @Example "block/0,1,2,world" .result might return "iron_ingot".
-        // -->
-        handlers.put("result", (dat, obj) -> {
-            Inventory inventory = ((InventoryTag) obj).internal.query(OutputSlot.class);
-            if (inventory instanceof EmptyInventory) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("This inventory does not contain any result slots!");
-                }
-                return new NullTag();
-            }
-            ItemStack item = inventory.peek().orElse(ItemStack.empty());
             return new ItemTag(item);
         });
     }

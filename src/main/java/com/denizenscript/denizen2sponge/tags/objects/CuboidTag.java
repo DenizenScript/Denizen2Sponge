@@ -56,47 +56,6 @@ public class CuboidTag extends AbstractTagObject {
     static {
         // <--[tag]
         // @Since 0.3.0
-        // @Name CuboidTag.min
-        // @Updated 2016/11/24
-        // @Group Identification
-        // @ReturnType LocationTag
-        // @Returns the minimum location of this cuboid. IE, it's lowest-valued corner.
-        // @Example "0,1,2/4,5,6/world" .min returns "0,1,2,world".
-        // -->
-        handlers.put("min", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.min));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name CuboidTag.max
-        // @Updated 2016/11/24
-        // @Group Identification
-        // @ReturnType LocationTag
-        // @Returns the maximum location of this cuboid. IE, it's highest-valued corner.
-        // @Example "0,1,2/4,5,6/world" .max returns "4,5,6,world".
-        // -->
-        handlers.put("max", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.max));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name CuboidTag.world
-        // @Updated 2016/11/24
-        // @Group Identification
-        // @ReturnType WorldTag
-        // @Returns the world of the location.
-        // @Example "0,1,2/4,5,6/world" .world returns "world".
-        // -->
-        handlers.put("world", (dat, obj) -> new WorldTag(((CuboidTag) obj).internal.min.world));
-        // <--[tag]
-        // @Since 0.3.0
-        // @Name CuboidTag.contains[<LocationTag>]
-        // @Updated 2016/11/24
-        // @Group Mathematics
-        // @ReturnType WorldTag
-        // @Returns whether the cuboid contains the specified location.
-        // @Example "0,1,2/4,5,6/world" .contains[1,2,3,world] returns "true".
-        // -->
-        handlers.put("contains", (dat, obj) -> new BooleanTag(((CuboidTag) obj).contains(
-                LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
-        // <--[tag]
-        // @Since 0.3.0
         // @Name CuboidTag.block_locations[<ListTag>]
         // @Updated 2016/11/24
         // @Group Connected Information
@@ -131,6 +90,47 @@ public class CuboidTag extends AbstractTagObject {
             }
             return lt;
         });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name CuboidTag.contains[<LocationTag>]
+        // @Updated 2016/11/24
+        // @Group Mathematics
+        // @ReturnType BooleanTag
+        // @Returns whether the cuboid contains the specified location.
+        // @Example "0,1,2/4,5,6/world" .contains[1,2,3,world] returns "true".
+        // -->
+        handlers.put("contains", (dat, obj) -> new BooleanTag(((CuboidTag) obj).contains(
+                LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name CuboidTag.max
+        // @Updated 2016/11/24
+        // @Group Identification
+        // @ReturnType LocationTag
+        // @Returns the maximum location of this cuboid. IE, it's highest-valued corner.
+        // @Example "0,1,2/4,5,6/world" .max returns "4,5,6,world".
+        // -->
+        handlers.put("max", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.max));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name CuboidTag.min
+        // @Updated 2016/11/24
+        // @Group Identification
+        // @ReturnType LocationTag
+        // @Returns the minimum location of this cuboid. IE, it's lowest-valued corner.
+        // @Example "0,1,2/4,5,6/world" .min returns "0,1,2,world".
+        // -->
+        handlers.put("min", (dat, obj) -> new LocationTag(((CuboidTag) obj).internal.min));
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name CuboidTag.world
+        // @Updated 2016/11/24
+        // @Group Identification
+        // @ReturnType WorldTag
+        // @Returns the world of the location.
+        // @Example "0,1,2/4,5,6/world" .world returns "world".
+        // -->
+        handlers.put("world", (dat, obj) -> new WorldTag(((CuboidTag) obj).internal.min.world));
     }
 
     public static CuboidTag getFor(Action<String> error, String text) {

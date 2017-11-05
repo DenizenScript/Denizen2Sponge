@@ -171,6 +171,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new UnloadWorldCommand());
         Denizen2Core.register(new WeatherCommand());
         // Events: Entity
+        Denizen2Core.register(new EntityCollidesWithBlockScriptEvent());
+        Denizen2Core.register(new EntityCollidesWithEntityScriptEvent());
         Denizen2Core.register(new EntityDamagedScriptEvent());
         Denizen2Core.register(new EntityDiesScriptEvent());
         Denizen2Core.register(new EntityEntersAreaScriptEvent());
@@ -178,7 +180,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntityLeavesAreaScriptEvent());
         Denizen2Core.register(new EntityMovesScriptEvent());
         Denizen2Core.register(new EntitySpawnsScriptEvent());
-        Denizen2Core.register(new ProjectileHitsBlockScriptEvent());
+        Denizen2Core.register(new ProjectileImpactsBlockScriptEvent());
+        Denizen2Core.register(new ProjectileImpactsEntityScriptEvent());
         // Events: Player
         Denizen2Core.register(new ExperienceChangesScriptEvent());
         Denizen2Core.register(new LevelChangesScriptEvent());
