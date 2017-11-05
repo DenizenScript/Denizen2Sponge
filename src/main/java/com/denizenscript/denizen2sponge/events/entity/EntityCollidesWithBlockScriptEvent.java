@@ -7,11 +7,13 @@ import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
+import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.CollideBlockEvent;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
@@ -57,12 +59,14 @@ public class EntityCollidesWithBlockScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
+        UtilLocation loc = location.getInternal();
+        World world = loc.world;
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type")
                 && D2SpongeEventHelper.checkBlockType(material.getInternal(), data, this::error, "block_type")
-                && D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
-                && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWorld(world, data, this::error)
+                && D2SpongeEventHelper.checkCuboid(loc, data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                location.getInternal().world.getWeather().getId()), data, this::error);
+                        world.getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;
