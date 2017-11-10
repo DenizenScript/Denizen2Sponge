@@ -57,7 +57,7 @@ public class HealCommand extends AbstractCommand {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Living ent = (Living) entityTag.getInternal();
         NumberTag amount = NumberTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        Boolean set;
+        boolean set;
         if (entry.namedArgs.containsKey("operation")) {
             String operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
             if (operation.equals("add")) {

@@ -20,10 +20,11 @@ public class StrikeCommand extends AbstractCommand {
     // @Group World
     // @Minimum 1
     // @Maximum 1
-    // @Named ambient (BooleanTag) Sets whether the lightning will affect entities.
+    // @Named ambient (BooleanTag) Sets whether the lightning will be ambient.
     // @Description
-    // Strikes lightning upon a location. Optionally specify whether it will affect entities
-    // or not. Damaging lightning will also charge creepers and turn pigs into pig zombies.
+    // Strikes lightning upon a location. Optionally specify whether it will be an ambient
+    // lightning strike. Ambient lightning strikes do not damage entities, charge creepers,
+    // nor turn pigs into pig zombies. Lightning strikes are non-ambient by default.
     // @Example
     // # This example strikes a damaging lightning upon the player.
     // - strike <player.location> --ambient false
