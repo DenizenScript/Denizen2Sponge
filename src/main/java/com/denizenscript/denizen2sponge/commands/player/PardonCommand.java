@@ -18,7 +18,7 @@ public class PardonCommand extends AbstractCommand {
     // <--[command]
     // @Since 0.3.0
     // @Name pardon
-    // @Arguments <OfflinePlayerTag>/<IP>
+    // @Arguments <PlayerTag>/<IP>
     // @Short pardons a player.
     // @Updated 2017/04/08
     // @Group Player
@@ -38,7 +38,7 @@ public class PardonCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<OfflinePlayerTag>/<IP>";
+        return "<PlayerTag>/<IP>";
     }
 
     @Override

@@ -57,31 +57,52 @@ public class HealCommand extends AbstractCommand {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Living ent = (Living) entityTag.getInternal();
         NumberTag amount = NumberTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        String operation;
+        Boolean set;
         if (entry.namedArgs.containsKey("operation")) {
-            operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
-            if (!(operation.equals("add") || operation.equals("set"))) {
+            String operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
+            if (operation.equals("add")) {
+                set = false;
+            }
+            else if (operation.equals("set")) {
+                set = true;
+            }
+            else {
                 queue.handleError(entry, "Invalid operation: '" + operation + "'!");
                 return;
             }
         }
         else {
-            operation = "add";
+            set = false;
         }
         String type;
-        double value;
         if (entry.namedArgs.containsKey("type")) {
             type = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "type").toString());
             switch (type) {
                 case "remaining":
-                    value = ent.health().transform(operation.equals("add") ?
-                            x -> x + amount.getInternal() : x -> amount.getInternal()).get();
-                    ent.offer(Keys.HEALTH, value);
+                    if (set) {
+                        if (amount.getInternal() < 0) {
+                            queue.handleError(entry, "You can't set health to negative values!");
+                            return;
+                        }
+                        ent.offer(Keys.HEALTH, Math.min(amount.getInternal(), ent.maxHealth().get()));
+                    }
+                    else {
+                        ent.offer(Keys.HEALTH, ent.health().transform(
+                                x -> Math.max(Math.min(x + amount.getInternal(), ent.maxHealth().get()), 0)).get());
+                    }
                     break;
                 case "maximum":
-                    value = ent.maxHealth().transform(operation.equals("add") ?
-                            x -> x + amount.getInternal() : x -> amount.getInternal()).get();
-                    ent.offer(Keys.MAX_HEALTH, value);
+                    if (set) {
+                        if (amount.getInternal() < 0) {
+                            queue.handleError(entry, "You can't set max health to negative values!");
+                            return;
+                        }
+                        ent.offer(Keys.MAX_HEALTH, amount.getInternal());
+                    }
+                    else {
+                        ent.offer(Keys.MAX_HEALTH, ent.maxHealth().transform(
+                                x -> Math.max(x + amount.getInternal(), 0)).get());
+                    }
                     break;
                 default:
                     queue.handleError(entry, "Invalid health type: '" + type + "'!");
@@ -90,14 +111,22 @@ public class HealCommand extends AbstractCommand {
         }
         else {
             type = "remaining";
-            value = ent.health().transform(operation.equals("add") ?
-                    x -> x + amount.getInternal() : x -> amount.getInternal()).get();
-            ent.offer(Keys.HEALTH, value);
+            if (set) {
+                if (amount.getInternal() < 0) {
+                    queue.handleError(entry, "You can't set health to negative values!");
+                    return;
+                }
+                ent.offer(Keys.HEALTH, Math.min(amount.getInternal(), ent.maxHealth().get()));
+            }
+            else {
+                ent.offer(Keys.HEALTH, ent.health().transform(
+                        x -> Math.max(Math.min(x + amount.getInternal(), ent.maxHealth().get()), 0)).get());
+            }
         }
         if (queue.shouldShowGood()) {
-            queue.outGood(ColorSet.emphasis + (operation.equals("add") ? "Increasing" : "Setting") +
+            queue.outGood(ColorSet.emphasis + (set ? "Setting" : "Increasing") +
                     ColorSet.good + " the " + ColorSet.emphasis + type + ColorSet.good + " health of " +
-                    ColorSet.emphasis + entityTag.debug() + ColorSet.good + (operation.equals("add") ? " by " : " to ") +
+                    ColorSet.emphasis + entityTag.debug() + ColorSet.good + (set ? " to " : " by ") +
                     ColorSet.emphasis + amount.debug() + ColorSet.good + "!");
         }
     }
