@@ -13,16 +13,21 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.*;
+import org.spongepowered.api.block.tileentity.CommandBlock;
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandMapping;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.source.CommandBlockSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.vehicle.minecart.CommandBlockMinecart;
 import org.spongepowered.api.text.Text;
 
 import java.util.ArrayList;
@@ -48,8 +53,9 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
     // An in-game command script is a script that handles in-game commands.
     // It is simply identified with the type "command".
     // Expected keys: name (list or string), description (string), permission (string, optional),
-    // Valid contexts: source (player/block/server), player (PlayerTag, if source=player), location (LocationTag, if source=block)
-    // arguments (ListTag), raw_arguments (TextTag)
+    // script (commands). Valid contexts: source (player/block/minecart/server), player (PlayerTag,
+    // if source=player), location (LocationTag, if source=block), entity (EntityTag, if source=minecart),
+    // arguments (ListTag), raw_arguments (TextTag).
     // -->
 
     public GameCommandScript(String name, YAMLConfiguration section) {
@@ -137,9 +143,13 @@ public class GameCommandScript extends CommandScript implements CommandExecutor 
             context.getInternal().put("source", new TextTag("player"));
             context.getInternal().put("player", new PlayerTag((Player) commandSource));
         }
-        else if (commandSource instanceof CommandBlockSource) {
+        else if (commandSource instanceof CommandBlock) {
             context.getInternal().put("source", new TextTag("block"));
-            context.getInternal().put("location", new LocationTag(((CommandBlockSource) commandSource).getLocation()));
+            context.getInternal().put("location", new LocationTag(((CommandBlock) commandSource).getLocation()));
+        }
+        else if (commandSource instanceof CommandBlockMinecart) {
+            context.getInternal().put("source", new TextTag("minecart"));
+            context.getInternal().put("entity", new EntityTag((CommandBlockMinecart) commandSource));
         }
         else {
             context.getInternal().put("source", new TextTag("server"));
