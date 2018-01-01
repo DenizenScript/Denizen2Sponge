@@ -262,6 +262,15 @@ public class WorldTag extends AbstractTagObject {
         // @Returns the duration the current weather in the world has been running for.
         // -->
         handlers.put("running_weather_time", (dat, obj) -> new DurationTag(((WorldTag) obj).internal.getRunningDuration() * (1.0 / 20.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name WorldTag.view_distance
+        // @Updated 2018/01/01
+        // @Group Properties
+        // @ReturnType IntegerTag
+        // @Returns the view distance in the world.
+        // -->
+        handlers.put("view_distance", (dat, obj) -> new IntegerTag(((WorldTag) obj).internal.getViewDistance()));
     }
 
     public static WorldTag getFor(Action<String> error, String text) {

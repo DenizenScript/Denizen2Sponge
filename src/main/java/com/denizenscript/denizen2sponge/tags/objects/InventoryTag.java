@@ -22,6 +22,9 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
+import org.spongepowered.api.item.inventory.query.QueryOperation;
+import org.spongepowered.api.item.inventory.query.QueryOperationType;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.slot.FuelSlot;
 import org.spongepowered.api.item.inventory.slot.OutputSlot;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
@@ -73,14 +76,14 @@ public class InventoryTag extends AbstractTagObject {
         // -->
         handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
         // @Name InventoryTag.fuel
-        // @Updated 2017/09/05
+        // @Updated 2018/01/01
         // @Group General Information
         // @ReturnType ItemTag
         // @Returns the item in the fuel slot of a furnace inventory.
         // @Example "block/0,1,2,world" .fuel might return "coal".
         // -->
         handlers.put("fuel", (dat, obj) -> {
-            Inventory inventory = ((InventoryTag) obj).internal.query(FuelSlot.class);
+            Inventory inventory = ((InventoryTag) obj).internal.query(QueryOperationTypes.INVENTORY_TYPE.of(FuelSlot.class));
             if (inventory instanceof EmptyInventory) {
                 if (!dat.hasFallback()) {
                     dat.error.run("This inventory does not contain any fuel slots!");
@@ -99,14 +102,14 @@ public class InventoryTag extends AbstractTagObject {
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
         // @Name InventoryTag.result
-        // @Updated 2017/09/05
+        // @Updated 2018/01/01
         // @Group General Information
         // @ReturnType ItemTag
         // @Returns the item in the result slot of a furnace inventory.
         // @Example "block/0,1,2,world" .result might return "iron_ingot".
         // -->
         handlers.put("result", (dat, obj) -> {
-            Inventory inventory = ((InventoryTag) obj).internal.query(OutputSlot.class);
+            Inventory inventory = ((InventoryTag) obj).internal.query(QueryOperationTypes.INVENTORY_TYPE.of(OutputSlot.class));
             if (inventory instanceof EmptyInventory) {
                 if (!dat.hasFallback()) {
                     dat.error.run("This inventory does not contain any result slots!");
@@ -132,7 +135,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "block/0,1,2,world" .slot[8] might return "diamond".
         // -->
         handlers.put("slot", (dat, obj) -> {
-            Inventory inventory = ((InventoryTag) obj).internal.query(OrderedInventory.class);
+            Inventory inventory = ((InventoryTag) obj).internal.query(QueryOperationTypes.INVENTORY_TYPE.of(OrderedInventory.class));
             if (inventory instanceof EmptyInventory) {
                 if (!dat.hasFallback()) {
                     dat.error.run("This inventory does not contain slots ordered by index!");

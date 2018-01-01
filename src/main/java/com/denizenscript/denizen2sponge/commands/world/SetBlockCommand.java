@@ -9,7 +9,7 @@ import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.BlockTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import org.spongepowered.api.world.BlockChangeFlag;
+import org.spongepowered.api.world.BlockChangeFlags;
 
 public class SetBlockCommand extends AbstractCommand {
 
@@ -71,7 +71,7 @@ public class SetBlockCommand extends AbstractCommand {
         for (AbstractTagObject ato : locs.getInternal()) {
             LocationTag loc = LocationTag.getFor(queue.error, ato);
             loc.getInternal().world.setBlockType(loc.getInternal().toVector3i(), type.getInternal(),
-                    phys ? BlockChangeFlag.ALL : BlockChangeFlag.NONE);
+                    phys ? BlockChangeFlags.ALL : BlockChangeFlags.NONE);
         }
         // TODO: "Cause" argument!
     }

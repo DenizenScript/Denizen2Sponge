@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class TakeCommand extends AbstractCommand {
     // @Name take
     // @Arguments <player> <item>
     // @Short takes an item from a player.
-    // @Updated 2017/12/30
+    // @Updated 2018/01/01
     // @Group Player
     // @Minimum 2
     // @Maximum 2
@@ -58,7 +59,8 @@ public class TakeCommand extends AbstractCommand {
             queue.outGood("Attempting to take " + ColorSet.emphasis + item.debug() + ColorSet.good
                     + " from " + ColorSet.emphasis + player.debug() + ColorSet.good + "!");
         }
-        Optional<ItemStack> result = player.getInternal().getInventory().query(item.getInternal().getType()).poll(item.getInternal().getQuantity());
+        Optional<ItemStack> result = player.getInternal().getInventory()
+                .query(QueryOperationTypes.ITEM_TYPE.of(item.getInternal().getType())).poll(item.getInternal().getQuantity());
         if (result.isPresent()) {
             if (queue.shouldShowGood()) {
                 queue.outGood("Items taken: " + ColorSet.emphasis + new ItemTag(result.get()).debug());

@@ -171,6 +171,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new SetGameRuleCommand());
         Denizen2Core.register(new StrikeCommand());
         Denizen2Core.register(new UnloadWorldCommand());
+        Denizen2Core.register(new ViewDistanceCommand());
         Denizen2Core.register(new WeatherCommand());
         // Events: Entity
         Denizen2Core.register(new EntityCollidesWithBlockScriptEvent());
