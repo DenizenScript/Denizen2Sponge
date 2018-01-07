@@ -143,6 +143,7 @@ public class Denizen2Sponge {
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new BanCommand());
+        Denizen2Core.register(new CooldownCommand());
         Denizen2Core.register(new FeedCommand());
         Denizen2Core.register(new GamemodeCommand());
         Denizen2Core.register(new GiveCommand());
@@ -187,6 +188,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ProjectileImpactsEntityScriptEvent());
         // Events: Player
         Denizen2Core.register(new ExperienceChangesScriptEvent());
+        Denizen2Core.register(new ItemCooldownEndsScriptEvent());
+        Denizen2Core.register(new ItemCooldownStartsScriptEvent());
         Denizen2Core.register(new LevelChangesScriptEvent());
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());

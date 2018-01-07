@@ -5,23 +5,17 @@ import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
-import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
-import org.spongepowered.api.statistic.*;
-import org.spongepowered.api.util.blockray.BlockRay;
-import org.spongepowered.api.util.blockray.BlockRayHit;
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.EntityUniverse;
+import org.spongepowered.api.item.inventory.entity.UserInventory;
+import org.spongepowered.api.statistic.Statistic;
+import org.spongepowered.api.statistic.StatisticType;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 public class PlayerTag extends AbstractTagObject {
@@ -61,6 +55,38 @@ public class PlayerTag extends AbstractTagObject {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.cooldown[<ItemTypeTag>]
+        // @Updated 2018/01/07
+        // @Group Properties
+        // @ReturnType DurationTag
+        // @Returns the cooldown on an item type for the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("cooldown", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            return new DurationTag(pl.getCooldownTracker().getCooldown(item.getInternal()).orElse(0) * (1.0 / 20.0));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.cooldown_fraction[<ItemTypeTag>]
+        // @Updated 2018/01/07
+        // @Group Properties
+        // @ReturnType NumberTag
+        // @Returns the cooldown fraction on an item type for the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("cooldown_fraction", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            return new NumberTag(pl.getCooldownTracker().getFractionRemaining(item.getInternal()).orElse(0));
+        });
         // <--[tag]
         // @Since 0.3.0
         // @Name PlayerTag.exhaustion
@@ -105,6 +131,22 @@ public class PlayerTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new TextTag(pl.gameMode().get().toString());
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.has_cooldown[<ItemTypeTag>]
+        // @Updated 2018/01/07
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether an item type has cooldown for the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("has_cooldown", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            return new BooleanTag(pl.getCooldownTracker().hasCooldown(item.getInternal()));
         });
         // <--[tag]
         // @Since 0.3.0

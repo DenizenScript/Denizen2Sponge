@@ -18,6 +18,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.EntityType;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.weather.Weather;
 
@@ -52,6 +53,22 @@ public class D2SpongeEventHelper {
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
             if (EntityTypeTag.getFor(error, ato).getInternal().equals(etype)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkItemType(ItemType itype, ScriptEvent.ScriptEventData data, Action<String> error) {
+        return checkItemType(itype, data, error, "type");
+    }
+
+    public static boolean checkItemType(ItemType itype, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
+        if (!data.switches.containsKey(tname)) {
+            return true;
+        }
+        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
+            if (ItemTypeTag.getFor(error, ato).getInternal().equals(itype)) {
                 return true;
             }
         }
