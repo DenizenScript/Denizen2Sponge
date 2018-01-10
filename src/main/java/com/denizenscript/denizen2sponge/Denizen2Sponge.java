@@ -124,6 +124,8 @@ public class Denizen2Sponge {
         // Commands: Entity
         Denizen2Core.register(new AirCommand());
         Denizen2Core.register(new CastCommand());
+        Denizen2Core.register(new DefuseCommand());
+        Denizen2Core.register(new DetonateCommand());
         Denizen2Core.register(new DropCommand());
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new EquipCommand());
@@ -132,6 +134,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new HurtCommand());
         Denizen2Core.register(new LookAtCommand());
         Denizen2Core.register(new MountCommand());
+        Denizen2Core.register(new PrimeCommand());
         Denizen2Core.register(new RemoveCommand());
         Denizen2Core.register(new SpawnCommand());
         Denizen2Core.register(new TeleportCommand());

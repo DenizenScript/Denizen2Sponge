@@ -19,6 +19,7 @@ import org.spongepowered.api.data.type.Art;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.entity.explosive.Explosive;
+import org.spongepowered.api.entity.explosive.FusedExplosive;
 import org.spongepowered.api.entity.hanging.Hanging;
 import org.spongepowered.api.entity.hanging.LeashHitch;
 import org.spongepowered.api.entity.hanging.Painting;
@@ -481,7 +482,7 @@ public class EntityTag extends AbstractTagObject {
         // @Since 0.3.0
         // @Name EntityTag.explosion_radius
         // @Updated 2017/09/28
-        // @Group Current Information
+        // @Group Explosive Entities
         // @ReturnType IntegerTag
         // @Returns the radius in blocks that the explosion will affect. Explosive entities only.
         // -->
@@ -877,6 +878,33 @@ public class EntityTag extends AbstractTagObject {
             }
             return list;
         });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.fuse_duration
+        // @Updated 2018/01/10
+        // @Group Explosive Entities
+        // @ReturnType DurationTag
+        // @Returns the duration before an explosive entity detonates when primed.
+        // -->
+        handlers.put("fuse_duration", (dat, obj) -> new DurationTag(((FusedExplosive) ((EntityTag) obj).internal).getFuseData().fuseDuration().get() * (1.0 / 20.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.remaining_fuse_duration
+        // @Updated 2018/01/10
+        // @Group Explosive Entities
+        // @ReturnType DurationTag
+        // @Returns the remaining duration before a primed explosive entity detonates.
+        // -->
+        handlers.put("remaining_fuse_duration", (dat, obj) -> new DurationTag(((FusedExplosive) ((EntityTag) obj).internal).getFuseData().ticksRemaining().get() * (1.0 / 20.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.is_primed
+        // @Updated 2018/01/10
+        // @Group Explosive Entities
+        // @ReturnType BooleanTag
+        // @Returns whether an explosive entity is primed.
+        // -->
+        handlers.put("is_primed", (dat, obj) -> new BooleanTag(((FusedExplosive) ((EntityTag) obj).internal).isPrimed()));
     }
 
     public static EntityTag getFor(Action<String> error, String text) {

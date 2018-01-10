@@ -13,7 +13,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.CooldownEvent;
-import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.HashMap;
@@ -32,8 +31,6 @@ public class ItemCooldownStartsScriptEvent extends ScriptEvent {
     // @Group Player
     //
     // @Triggers when a item type's cooldown starts for a player.
-    //
-    // @Warning This event does not trigger in Sponge during last testing.
     //
     // @Switch type (ItemTypeTag) checks the item type.
     // @Switch world (WorldTag) checks the world.
@@ -101,7 +98,7 @@ public class ItemCooldownStartsScriptEvent extends ScriptEvent {
     }
 
     @Listener
-    public void onItemCooldownStarts(CooldownEvent.Set evt, @Getter("getTargetEntity") Player player) {
+    public void onItemCooldownStarts(CooldownEvent.Set evt, @Root Player player) {
         ItemCooldownStartsScriptEvent event = (ItemCooldownStartsScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
