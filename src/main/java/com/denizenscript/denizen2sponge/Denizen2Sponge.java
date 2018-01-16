@@ -137,6 +137,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new PrimeCommand());
         Denizen2Core.register(new RemoveCommand());
         Denizen2Core.register(new SpawnCommand());
+        Denizen2Core.register(new TargetCommand());
         Denizen2Core.register(new TeleportCommand());
         Denizen2Core.register(new UnflagCommand());
         // Commands: Item

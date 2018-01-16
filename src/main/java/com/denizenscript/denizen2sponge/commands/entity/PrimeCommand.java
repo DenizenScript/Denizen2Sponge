@@ -20,6 +20,7 @@ public class PrimeCommand extends AbstractCommand {
     // @Maximum 1
     // @Description
     // Primes an explosive entity. Inverse of <@link command defuse>defuse<@/link>.
+    // @Warning This command does not work in Sponge during last testing.
     // @Example
     // # This example primes the creeper the player is looking at.
     // - prime <player.target_entities[type:creeper].get[1]>

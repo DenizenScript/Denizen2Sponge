@@ -20,6 +20,7 @@ public class DefuseCommand extends AbstractCommand {
     // @Maximum 1
     // @Description
     // Defuses an explosive entity. Inverse of <@link command prime>prime<@/link>.
+    // @Warning This command does not work in Sponge during last testing.
     // @Example
     // # This example defuses the creeper the player is looking at.
     // - defuse <player.target_entities[type:creeper].get[1]>
