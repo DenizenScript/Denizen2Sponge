@@ -64,6 +64,10 @@ public class LocationTag extends AbstractTagObject {
         this(location.getX(), location.getY(), location.getZ(), world);
     }
 
+    public LocationTag(Vector3d location, World world) {
+        this(location.getX(), location.getY(), location.getZ(), world);
+    }
+
     public LocationTag(Vector3d location) {
         this(location.getX(), location.getY(), location.getZ());
     }

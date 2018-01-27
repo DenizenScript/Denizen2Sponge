@@ -3,26 +3,27 @@ package com.denizenscript.denizen2sponge.events.player;
 import com.denizenscript.denizen2core.events.ScriptEvent;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.TextTag;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
+import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
-import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
 
@@ -120,18 +121,20 @@ public class PlayerRightClicksBlockScriptEvent extends ScriptEvent {
         PlayerRightClicksBlockScriptEvent event = (PlayerRightClicksBlockScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
-        if (evt.getTargetBlock().getLocation().isPresent()) {
-            event.location = new LocationTag(evt.getTargetBlock().getLocation().get());
-            event.precise_location = new LocationTag(evt.getInteractionPoint().get().add(evt.getTargetBlock().getPosition().toDouble()));
-            event.precise_location.getInternal().world = event.location.getInternal().world;
-            event.intersection_point = new LocationTag(evt.getInteractionPoint().get());
+        World world = player.getWorld();
+        Optional<Location<World>> opt = evt.getTargetBlock().getLocation();
+        if (opt.isPresent()) {
+            event.location = new LocationTag(opt.get());
+            Vector3d point = evt.getInteractionPoint().get();
+            event.precise_location = new LocationTag(point, world);
+            event.intersection_point = new LocationTag(point.sub(opt.get().getPosition()));
             event.impact_normal = new LocationTag(evt.getTargetSide().asOffset());
         }
         else {
-            BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(Utilities.getHandReach(player)).build().end().get();
+            BlockRayHit<World> brh = BlockRay.from(player)
+                    .distanceLimit(Utilities.getHandReach(player)).build().end().get();
             event.location = new LocationTag(brh.getLocation());
-            event.precise_location = new LocationTag(brh.getPosition());
-            event.precise_location.getInternal().world = event.location.getInternal().world;
+            event.precise_location = new LocationTag(brh.getPosition(), world);
             event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
             event.impact_normal = new LocationTag(0, 0, 0);
         }
