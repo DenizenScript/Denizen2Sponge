@@ -122,6 +122,7 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
+        Denizen2Core.register(new AddAITaskCommand());
         Denizen2Core.register(new AirCommand());
         Denizen2Core.register(new CastCommand());
         Denizen2Core.register(new DefuseCommand());
@@ -135,6 +136,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new LookAtCommand());
         Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new PrimeCommand());
+        Denizen2Core.register(new RemoveAITasksCommand());
         Denizen2Core.register(new RemoveCommand());
         Denizen2Core.register(new SpawnCommand());
         Denizen2Core.register(new TargetCommand());
