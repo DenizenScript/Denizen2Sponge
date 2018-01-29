@@ -40,6 +40,7 @@ public class RemoveAITasksCommand extends AbstractCommand {
     // Removes all AI tasks of the specified type from an entity's goal.
     // Related information: <@link explanation AI Goal Types>AI goal types<@/link>.
     // Related information: <@link explanation AI Task Types>AI task types<@/link>.
+    // Related commands: <@link command addaitask>addaitask<@/link>.
     // @Example
     // # Makes the zombie in front of the player stop wandering around.
     // - removeaitask <player.target_entities[type:zombie].get[1]> wander --goal normal

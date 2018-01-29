@@ -150,6 +150,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new ActionBarCommand());
         Denizen2Core.register(new BanCommand());
         Denizen2Core.register(new CooldownCommand());
+        Denizen2Core.register(new CreateBossBarCommand());
+        Denizen2Core.register(new EditBossBarCommand());
         Denizen2Core.register(new FeedCommand());
         Denizen2Core.register(new GamemodeCommand());
         Denizen2Core.register(new GiveCommand());
@@ -157,6 +159,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
+        Denizen2Core.register(new RemoveBossBarCommand());
         Denizen2Core.register(new TakeCommand());
         Denizen2Core.register(new TellCommand());
         Denizen2Core.register(new TitleCommand());

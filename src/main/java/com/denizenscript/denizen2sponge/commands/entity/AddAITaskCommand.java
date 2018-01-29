@@ -69,6 +69,7 @@ public class AddAITaskCommand extends AbstractCommand {
     // Adds an AI task to an entity's goal.
     // Related information: <@link explanation AI Goal Types>AI goal types<@/link>.
     // Related information: <@link explanation AI Task Types>AI task types<@/link>.
+    // Related commands: <@link command removeaitasks>removeaitasks<@/link>.
     // TODO: Explain task priority.
     // TODO: Explain properties of each task type.
     // @Example

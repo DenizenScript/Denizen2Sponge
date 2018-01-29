@@ -36,6 +36,7 @@ public class BanCommand extends AbstractCommand {
     // Bans a player or IP for the specified duration, or permanently if no duration
     // is specified. Optionally specify the reason and source of the ban.
     // Note that this command will not automatically kick the player from the server.
+    // Related commands: <@link command pardon>pardon<@/link> and <@link command kick>kick<@/link>.
     // @Example
     // # This example bans the current player for 1 hour.
     // - ban <player> 1h
