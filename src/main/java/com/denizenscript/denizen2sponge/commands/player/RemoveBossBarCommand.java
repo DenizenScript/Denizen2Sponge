@@ -3,6 +3,7 @@ package com.denizenscript.denizen2sponge.commands.player;
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.utilities.BossBars;
 import org.spongepowered.api.boss.ServerBossBar;
@@ -48,7 +49,7 @@ public class RemoveBossBarCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        String id = entry.getArgumentObject(queue, 0).toString();
+        String id = CoreUtilities.toLowerCase(entry.getArgumentObject(queue, 0).toString());
         if (!BossBars.CurrentBossBars.containsKey(id)) {
             queue.handleError(entry, "The BossBar with ID '" + id + "' doesn't exist!");
             return;

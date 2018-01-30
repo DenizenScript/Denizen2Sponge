@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
@@ -70,7 +71,7 @@ public class CreateBossBarCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        String id = entry.getArgumentObject(queue, 0).toString();
+        String id = CoreUtilities.toLowerCase(entry.getArgumentObject(queue, 0).toString());
         if (BossBars.CurrentBossBars.containsKey(id)) {
             queue.handleError(entry, "A BossBar with ID '" + id + "' already exists!");
             return;
