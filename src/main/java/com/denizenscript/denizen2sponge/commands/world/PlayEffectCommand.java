@@ -6,11 +6,9 @@ import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
-import org.spongepowered.api.Sponge;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleType;
-
-import java.util.Optional;
 
 public class PlayEffectCommand extends AbstractCommand {
 
@@ -43,7 +41,7 @@ public class PlayEffectCommand extends AbstractCommand {
     // TODO: Explain more!
     // @Example
     // # This example plays the 'heart' effect around the player.
-    // - playeffect <player.location> minecraft:heart --count 50 --offset 1,1,1
+    // - playeffect <player.location> heart --count 50 --offset 1,1,1
     // -->
 
     @Override
@@ -71,12 +69,12 @@ public class PlayEffectCommand extends AbstractCommand {
         LocationTag loc = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         String effectName = entry.getArgumentObject(queue, 1).toString();
         ParticleEffect.Builder build = ParticleEffect.builder();
-        Optional<ParticleType> type = Sponge.getRegistry().getType(ParticleType.class, effectName);
-        if (!type.isPresent()) {
+        Object type = Utilities.getTypeWithDefaultPrefix(ParticleType.class, effectName);
+        if (type == null) {
             queue.handleError(entry, "Invalid particle effect type: '" + effectName + "'!");
             return;
         }
-        build.type(type.get());
+        build.type((ParticleType) type);
         if (entry.namedArgs.containsKey("count")) {
             IntegerTag count = IntegerTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "count"));
             build.quantity((int) count.getInternal());
@@ -99,7 +97,7 @@ public class PlayEffectCommand extends AbstractCommand {
         }
         if (queue.shouldShowGood()) {
             queue.outGood("Successfully played the particle effect of type '" +
-                    ColorSet.emphasis + type.get().getId() + ColorSet.good + "' at location " +
+                    ColorSet.emphasis + ((ParticleType) type).getId() + ColorSet.good + "' at location " +
                     ColorSet.emphasis + loc.debug() + ColorSet.good + "!");
         }
     }
