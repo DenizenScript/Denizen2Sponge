@@ -13,6 +13,7 @@ import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.statistic.Statistic;
 import org.spongepowered.api.statistic.StatisticType;
+import org.spongepowered.api.text.Text;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -313,6 +314,36 @@ public class PlayerTag extends AbstractTagObject {
                 statistic = opt.get();
             }
             return new IntegerTag(pl.getStatisticData().get(statistic).orElse((long) 0));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.tablist_header
+        // @Updated 2018/02/04
+        // @Group Properties
+        // @ReturnType FormattedTextTag
+        // @Returns whether the player's tablist header. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("tablist_header", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new FormattedTextTag(pl.getTabList().getHeader().orElse(Text.of("")));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.tablist_footer
+        // @Updated 2018/02/04
+        // @Group Properties
+        // @ReturnType FormattedTextTag
+        // @Returns whether the player's tablist footer. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("tablist_footer", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new FormattedTextTag(pl.getTabList().getFooter().orElse(Text.of("")));
         });
     }
 

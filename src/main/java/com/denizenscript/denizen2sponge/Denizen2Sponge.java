@@ -160,6 +160,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
         Denizen2Core.register(new RemoveBossBarCommand());
+        Denizen2Core.register(new TabListCommand());
         Denizen2Core.register(new TakeCommand());
         Denizen2Core.register(new TellCommand());
         Denizen2Core.register(new TitleCommand());

@@ -73,7 +73,7 @@ public class RemoveAITasksCommand extends AbstractCommand {
         try {
             Agent agent = (Agent) entityTag.getInternal();
             TextTag type = TextTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-            // TODO: Swtich to these once Sponge fixes task types.
+            // TODO: Switch to this once Sponge fixes task types.
             // Optional<AITaskType> opt = Sponge.getRegistry().getType(AITaskType.class, type.getInternal());
             // if (!opt.isPresent()) {
             //     queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITask command!");
