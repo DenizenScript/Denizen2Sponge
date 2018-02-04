@@ -7,19 +7,9 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.ai.Goal;
 import org.spongepowered.api.entity.ai.GoalType;
 import org.spongepowered.api.entity.ai.GoalTypes;
-import org.spongepowered.api.entity.ai.task.AITask;
-import org.spongepowered.api.entity.ai.task.builtin.LookIdleAITask;
-import org.spongepowered.api.entity.ai.task.builtin.SwimmingAITask;
-import org.spongepowered.api.entity.ai.task.builtin.WatchClosestAITask;
-import org.spongepowered.api.entity.ai.task.builtin.creature.AttackLivingAITask;
-import org.spongepowered.api.entity.ai.task.builtin.creature.AvoidEntityAITask;
-import org.spongepowered.api.entity.ai.task.builtin.creature.RangeAgentAITask;
-import org.spongepowered.api.entity.ai.task.builtin.creature.WanderAITask;
-import org.spongepowered.api.entity.ai.task.builtin.creature.horse.RunAroundLikeCrazyAITask;
-import org.spongepowered.api.entity.ai.task.builtin.creature.target.FindNearestAttackableTargetAITask;
+import org.spongepowered.api.entity.ai.task.AITaskType;
 import org.spongepowered.api.entity.living.Agent;
 
 import java.util.Optional;
@@ -72,45 +62,17 @@ public class RemoveAITasksCommand extends AbstractCommand {
         try {
             Agent agent = (Agent) entityTag.getInternal();
             TextTag type = TextTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-            Class clazz;
-            switch (type.getInternal()) {
-                case "attack_living":
-                    clazz = AttackLivingAITask.class;
-                    break;
-                case "avoid_entity":
-                    clazz = AvoidEntityAITask.class;
-                    break;
-                case "find_target":
-                    clazz = FindNearestAttackableTargetAITask.class;
-                    break;
-                case "look_idle":
-                    clazz = LookIdleAITask.class;
-                    break;
-                case "range":
-                    clazz = RangeAgentAITask.class;
-                    break;
-                case "run_around":
-                    clazz = RunAroundLikeCrazyAITask.class;
-                    break;
-                case "swim":
-                    clazz = SwimmingAITask.class;
-                    break;
-                case "wander":
-                    clazz = WanderAITask.class;
-                    break;
-                case "watch_closest":
-                    clazz = WatchClosestAITask.class;
-                    break;
-                default:
-                    queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITask command!");
-                    return;
+            Optional<AITaskType> opt = Sponge.getRegistry().getType(AITaskType.class, type.getInternal());
+            if (!opt.isPresent()) {
+                queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITask command!");
+                return;
             }
             GoalType goal;
             if (entry.namedArgs.containsKey("goal")) {
                 TextTag goalType = TextTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "goal"));
-                Optional<GoalType> opt = Sponge.getRegistry().getType(GoalType.class, goalType.getInternal());
-                if (opt.isPresent()) {
-                    goal = opt.get();
+                Optional<GoalType> goalOpt = Sponge.getRegistry().getType(GoalType.class, goalType.getInternal());
+                if (goalOpt.isPresent()) {
+                    goal = goalOpt.get();
                 }
                 else {
                     queue.handleError(entry, "Invalid goal type '" + goalType.debug() + "' in RemoveAITask command!");
@@ -120,17 +82,9 @@ public class RemoveAITasksCommand extends AbstractCommand {
             else {
                 goal = GoalTypes.NORMAL;
             }
-            Goal<Agent> agentGoal = agent.getGoal(goal).get();
-            for (Object obj : agentGoal.getTasks()) {
-                AITask<? extends Agent> task = (AITask<? extends Agent>) obj;
-                if (clazz.isInstance(task)) {
-                    agentGoal.removeTask(task);
-                }
-            }
-            // TODO: Change the current method of removing once Sponge has proper AITaskTypes.
-            // agent.getGoal(goal).get().removeTasks(typeHere);
+            agent.getGoal(goal).get().removeTasks(opt.get());
             if (queue.shouldShowGood()) {
-                queue.outGood("Removed tasks of type '" + ColorSet.emphasis + type.debug()
+                queue.outGood("Removed tasks of type '" + ColorSet.emphasis + opt.get().getId()
                         + ColorSet.good + "' from goal '" + ColorSet.emphasis + goal.getId()
                         + ColorSet.good + "' of entity '" + ColorSet.emphasis + entityTag.debug()
                         + ColorSet.good + "'!");
