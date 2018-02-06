@@ -26,6 +26,7 @@ import com.denizenscript.denizen2sponge.events.world.*;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
+import com.denizenscript.denizen2sponge.spongescripts.AdvancementScript;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.denizenscript.denizen2sponge.tags.objects.*;
@@ -155,11 +156,13 @@ public class Denizen2Sponge {
         Denizen2Core.register(new FeedCommand());
         Denizen2Core.register(new GamemodeCommand());
         Denizen2Core.register(new GiveCommand());
+        Denizen2Core.register(new GrantAdvancementCommand());
         Denizen2Core.register(new HotbarCommand());
         Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
         Denizen2Core.register(new RemoveBossBarCommand());
+        Denizen2Core.register(new RevokeAdvancementCommand());
         Denizen2Core.register(new TabListCommand());
         Denizen2Core.register(new TakeCommand());
         Denizen2Core.register(new TellCommand());
@@ -249,6 +252,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new WorldTagBase());
         // Sponge Script Types
         Denizen2Core.register("command", GameCommandScript::new);
+        Denizen2Core.register("advancement", AdvancementScript::new);
         // Tag Types
         Denizen2Core.customSaveLoaders.put("BlockTypeTag", BlockTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("CuboidTag", CuboidTag::getFor);

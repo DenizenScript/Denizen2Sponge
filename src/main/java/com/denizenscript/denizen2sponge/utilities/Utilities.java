@@ -40,7 +40,16 @@ public class Utilities {
     }
 
     public static String getIdWithoutDefaultPrefix(String id) {
-        return id.startsWith("minecraft:") ? id.substring("minecraft:".length()) : id;
+        if (id.startsWith("minecraft")) {
+            return id.substring("minecraft:".length());
+        }
+        if (id.startsWith("sponge")) {
+            return id.substring("sponge:".length());
+        }
+        if (id.startsWith("denizen2sponge")) {
+            return id.substring("denizen2sponge:".length());
+        }
+        return id;
     }
 
     public static Object getTypeWithDefaultPrefix(Class clazz, String name) {
@@ -53,6 +62,10 @@ public class Utilities {
             return opt.get();
         }
         opt = Sponge.getRegistry().getType(clazz, "sponge:" + name);
+        if (opt.isPresent()) {
+            return opt.get();
+        }
+        opt = Sponge.getRegistry().getType(clazz, "denizen2sponge:" + name);
         return opt.orElse(null);
     }
 }
