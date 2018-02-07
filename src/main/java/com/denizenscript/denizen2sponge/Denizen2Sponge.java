@@ -38,6 +38,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -149,6 +150,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new RememberInventoryCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
+        Denizen2Core.register(new AdvancementCommand());
         Denizen2Core.register(new BanCommand());
         Denizen2Core.register(new CooldownCommand());
         Denizen2Core.register(new CreateBossBarCommand());
@@ -156,13 +158,11 @@ public class Denizen2Sponge {
         Denizen2Core.register(new FeedCommand());
         Denizen2Core.register(new GamemodeCommand());
         Denizen2Core.register(new GiveCommand());
-        Denizen2Core.register(new GrantAdvancementCommand());
         Denizen2Core.register(new HotbarCommand());
         Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
         Denizen2Core.register(new RemoveBossBarCommand());
-        Denizen2Core.register(new RevokeAdvancementCommand());
         Denizen2Core.register(new TabListCommand());
         Denizen2Core.register(new TakeCommand());
         Denizen2Core.register(new TellCommand());
@@ -283,6 +283,12 @@ public class Denizen2Sponge {
         // Call loaded event for sub-plugins to listen for
         Sponge.getEventManager().post(new Denizen2SpongeLoadedEvent(getGenericCause()));
         // TODO: Config option -> readyToSpamEvents = true;
+    }
+
+    @Listener
+    public void onServerStarted(GamePostInitializationEvent event) {
+        // Build the already loaded advancement scripts
+        AdvancementScript.buildAll();
     }
 
     public File getMainDirectory() {

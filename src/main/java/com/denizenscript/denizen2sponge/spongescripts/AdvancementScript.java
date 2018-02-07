@@ -5,11 +5,9 @@ import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.scripts.CommandScript;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
-import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.tags.objects.NumberTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
-import com.denizenscript.denizen2core.utilities.yaml.StringHolder;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
@@ -19,17 +17,20 @@ import com.flowpowered.math.vector.Vector2d;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.advancement.*;
 import org.spongepowered.api.advancement.criteria.AdvancementCriterion;
-import org.spongepowered.api.advancement.criteria.ScoreAdvancementCriterion;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.advancement.AdvancementTreeEvent;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class AdvancementScript extends CommandScript {
 
     public static HashMap<String, AdvancementScript> currentAdvancementScripts = new HashMap<>();
+
+    public static Set<String> oldAdvancementScripts = new HashSet<>();
 
     // <--[explanation]
     // @Since 0.4.0
@@ -49,7 +50,13 @@ public class AdvancementScript extends CommandScript {
 
     public AdvancementScript(String name, YAMLConfiguration section) {
         super(name, section);
+        id = section.getString("id");
+        parentId = section.getString("parent", null);
     }
+
+    public String id;
+
+    public String parentId;
 
     @Override
     public boolean isExecutable(String section) {
@@ -65,41 +72,51 @@ public class AdvancementScript extends CommandScript {
         return false;
     }
 
-    public Advancement advancement;
+    public void register() {
+        Sponge.getEventManager().registerListeners(Denizen2Sponge.instance, this);
+        if (Denizen2Core.getImplementation().generalDebug()) {
+            Debug.good("Registering advancement script '" + ColorSet.emphasis + id
+                    + ColorSet.good + "' to Denizen2Sponge...");
+        }
+        if (currentAdvancementScripts.containsKey(id)) {
+            Debug.error("An advancement script with id '" + ColorSet.emphasis + id
+                    + ColorSet.good + "' has already been registered!");
+            return;
+        }
+        currentAdvancementScripts.put(id, this);
+    }
+
+    public static void buildAll() {
+        for (AdvancementScript script : currentAdvancementScripts.values()) {
+            script.buildTree();
+        }
+    }
+
+    public Advancement advancement = null;
+
+    public void buildTree() {
+        if (advancement != null) {
+            return;
+        }
+        if (parentId != null) {
+            currentAdvancementScripts.get(parentId).buildTree();
+        }
+        if (Denizen2Core.getImplementation().generalDebug()) {
+            Debug.good("Building advancement '" + ColorSet.emphasis + id + ColorSet.good + "'...");
+        }
+        buildAdvancement();
+    }
 
     public AdvancementTree tree = null;
 
     public Vector2d position;
 
-    public void register() {
-        Sponge.getEventManager().registerListeners(Denizen2Sponge.instance, this);
-        String id = contents.getString("id");
-        if (Denizen2Core.getImplementation().generalDebug()) {
-            Debug.good("Registering advancement script " + ColorSet.emphasis + id
-                    + ColorSet.good + " to Denizen2Sponge...");
-        }
+    public void buildAdvancement() {
         Advancement.Builder builder = Advancement.builder().id(id);
         if (contents.contains("name")) {
             builder.name(contents.getString("name"));
         }
-        AdvancementCriterion criterion = AdvancementCriterion.EMPTY;
-        YAMLConfiguration criteria = contents.getConfigurationSection("criteria");
-        for (StringHolder strh : criteria.getKeys(false)) {
-            String critNumber = strh.low;
-            String critName = criteria.getString(critNumber + ".name");
-            AdvancementCriterion.BaseBuilder<?, ?> toAdd = AdvancementCriterion.builder().name(critName);
-            if (criteria.contains(critName + ".score")) {
-                boolean score = BooleanTag.getFor(Debug::error,
-                        criteria.getString(critName + ".score")).getInternal();
-                if (score) {
-                    IntegerTag goal = IntegerTag.getFor(Debug::error,
-                            criteria.getString(critName + ".goal"));
-                    ((ScoreAdvancementCriterion.Builder) toAdd).goal((int) goal.getInternal());
-                }
-            }
-            criterion = criterion.and(toAdd.build());
-        }
-        builder.criterion(criterion);
+        builder.criterion(AdvancementCriterion.DUMMY);
         String typeId = contents.getString("display");
         Optional<AdvancementType> type = Sponge.getRegistry().getType(AdvancementType.class, typeId);
         if (!type.isPresent()) {
@@ -134,12 +151,15 @@ public class AdvancementScript extends CommandScript {
         ItemTypeTag icon = ItemTypeTag.getFor(Debug::error, contents.getString("icon"));
         info.icon(icon.getInternal());
         builder.displayInfo(info.build());
-        if (criteria.contains("parent")) {
+        if (contents.contains("parent")) {
             String parentId = contents.getString("parent");
             Advancement parent = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, parentId);
             if (parent == null) {
-                Debug.error("There's no registered advancement for the parent id specified!");
-                return;
+                if (!currentAdvancementScripts.containsKey(parentId)) {
+                    Debug.error("There's no registered advancement for the parent id specified!");
+                    return;
+                }
+                parent = currentAdvancementScripts.get(parentId).advancement;
             }
             builder.parent(parent);
             advancement = builder.build();
@@ -157,7 +177,6 @@ public class AdvancementScript extends CommandScript {
             treeBuilder.rootAdvancement(advancement);
             tree = treeBuilder.build();
         }
-        currentAdvancementScripts.put(id, this);
         NumberTag x = NumberTag.getFor(Debug::error, contents.getString("x_position"));
         NumberTag y = NumberTag.getFor(Debug::error, contents.getString("y_position"));
         position = new Vector2d(x.getInternal(), y.getInternal());
@@ -171,14 +190,20 @@ public class AdvancementScript extends CommandScript {
     public void onRegisterAdvancementTrees(GameRegistryEvent.Register<AdvancementTree> event) {
         if (isTreeRoot()) {
             event.register(tree);
-            Debug.good("Registering advancement tree '" + tree.getId() + "' to Sponge...");
+            if (Denizen2Core.getImplementation().generalDebug()) {
+                Debug.good("Registering advancement tree '" + ColorSet.emphasis + tree.getId()
+                        + ColorSet.good + "' to Sponge...");
+            }
         }
     }
 
     @Listener
     public void onRegisterAdvancements(GameRegistryEvent.Register<Advancement> event) {
         event.register(advancement);
-        Debug.good("Registering advancement '" + advancement.getId() + "' to Sponge...");
+        if (Denizen2Core.getImplementation().generalDebug()) {
+            Debug.good("Registering advancement '" + ColorSet.emphasis + advancement.getId()
+                    + ColorSet.good + "' to Sponge...");
+        }
     }
 
     @Listener
@@ -189,7 +214,10 @@ public class AdvancementScript extends CommandScript {
                         .get(Utilities.getIdWithoutDefaultPrefix(element.getAdvancement().getId())).position;
                 element.setPosition(pos);
             }
-            Debug.good("Updating layout for tree '" + tree.getId() + "'...");
+            if (Denizen2Core.getImplementation().generalDebug()) {
+                Debug.good("Updating layout for tree '" + ColorSet.emphasis
+                        + tree.getId() + ColorSet.good + "'...");
+            }
         }
     }
 }

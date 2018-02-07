@@ -4,8 +4,9 @@ import com.denizenscript.denizen2core.Denizen2Implementation;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
-import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeReloadEvent;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
+import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeReloadEvent;
+import com.denizenscript.denizen2sponge.spongescripts.AdvancementScript;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
@@ -13,12 +14,15 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
+import java.util.HashSet;
 
 public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public void preReload() {
         GameCommandScript.clear();
+        AdvancementScript.oldAdvancementScripts = new HashSet<>(AdvancementScript.currentAdvancementScripts.keySet());
+        AdvancementScript.currentAdvancementScripts.clear();
     }
 
     @Override
@@ -28,6 +32,11 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
 
     @Override
     public void reload() {
+        if (!AdvancementScript.oldAdvancementScripts.equals(AdvancementScript.currentAdvancementScripts.keySet())) {
+            Debug.info("Advancement scripts have changed, but won't have any effect. " +
+                    "Restart the server for the new advancements to be registered!");
+        }
+        AdvancementScript.buildAll();
         Sponge.getEventManager().post(new Denizen2SpongeReloadEvent(Denizen2Sponge.getGenericCause()));
         // ...?
     }
