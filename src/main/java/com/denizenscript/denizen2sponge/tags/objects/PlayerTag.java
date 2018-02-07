@@ -5,7 +5,9 @@ import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.advancement.Advancement;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
@@ -132,6 +134,29 @@ public class PlayerTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new TextTag(pl.gameMode().get().toString());
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.has_advancement[<TextTag>]
+        // @Updated 2018/02/07
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether the player has completed an advancement. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("has_advancement", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            String id = dat.getNextModifier().toString();
+            Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
+            if (advancement == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("There's no registered advancement that matches the specified id!");
+                }
+                return new NullTag();
+            }
+            return new BooleanTag(pl.getProgress(advancement).achieved());
         });
         // <--[tag]
         // @Since 0.4.0

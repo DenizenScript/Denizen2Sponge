@@ -10,18 +10,15 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.BossBars;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
-import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
-import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.advancement.Advancement;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.boss.ServerBossBar;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ServerTagBase extends AbstractTagBase {
 
@@ -294,6 +291,19 @@ public class ServerTagBase extends AbstractTagBase {
             properties.getInternal().put("darken_sky", new BooleanTag(bar.shouldDarkenSky()));
             properties.getInternal().put("play_music", new BooleanTag(bar.shouldPlayEndBossMusic()));
             return properties;
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name ServerBaseTag.advancement_exists[<TextTag>]
+        // @Updated 2018/02/07
+        // @Group Registered Advancements
+        // @ReturnType BooleanTag
+        // @Returns whether the server has the specified advancement registered.
+        // -->
+        handlers.put("advancement_exists", (dat, obj) -> {
+            String id = dat.getNextModifier().toString();
+            Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
+            return new BooleanTag(advancement != null);
         });
     }
 
