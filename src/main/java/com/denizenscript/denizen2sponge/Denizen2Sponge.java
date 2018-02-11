@@ -134,6 +134,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new FlagCommand());
         Denizen2Core.register(new HealCommand());
         Denizen2Core.register(new HurtCommand());
+        Denizen2Core.register(new InvisibleCommand());
         Denizen2Core.register(new LookAtCommand());
         Denizen2Core.register(new MountCommand());
         Denizen2Core.register(new PrimeCommand());
@@ -143,6 +144,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new TargetCommand());
         Denizen2Core.register(new TeleportCommand());
         Denizen2Core.register(new UnflagCommand());
+        Denizen2Core.register(new VanishCommand());
         // Commands: Item
         Denizen2Core.register(new CreateInventoryCommand());
         Denizen2Core.register(new ForgetInventoryCommand());
@@ -277,7 +279,7 @@ public class Denizen2Sponge {
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
         Denizen2Core.start();
-        // Build loaded advamcements
+        // Build loaded advancements
         AdvancementScript.buildAll();
         // Central loop
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);

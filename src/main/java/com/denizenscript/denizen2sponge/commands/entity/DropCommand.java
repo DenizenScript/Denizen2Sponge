@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
@@ -57,12 +58,13 @@ public class DropCommand extends AbstractCommand {
         LocationTag locationTag = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         UtilLocation location = locationTag.getInternal();
         if (location.world == null) {
-            queue.handleError(entry, "Invalid location with no world in Spawn command!");
+            queue.handleError(entry, "Invalid location with no world in Drop command!");
             return;
         }
         Entity entity = location.world.createEntity(EntityTypes.ITEM, location.toVector3d());
         entity.offer(Keys.REPRESENTED_ITEM, item.getInternal().createSnapshot());
         location.world.spawnEntity(entity);
+        queue.commandStack.peek().setDefinition("drop_entity", new EntityTag(entity));
         if (queue.shouldShowGood()) {
             queue.outGood("Dropped item " + ColorSet.emphasis + item.debug() + ColorSet.good
                     + " at location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "!");
