@@ -53,10 +53,9 @@ public class CooldownCommand extends AbstractCommand {
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         ItemTypeTag item = ItemTypeTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        boolean passed;
         if (entry.arguments.size() > 2) {
             DurationTag duration = DurationTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
-            passed = player.getOnline(queue.error).getCooldownTracker().setCooldown(item.getInternal(),
+            player.getOnline(queue.error).getCooldownTracker().setCooldown(item.getInternal(),
                     (int) (duration.getInternal() * 20));
             if (queue.shouldShowGood()) {
                 queue.outGood("Attempting to set cooldown of item type '" + ColorSet.emphasis + item.debug()
@@ -65,20 +64,10 @@ public class CooldownCommand extends AbstractCommand {
             }
         }
         else {
-            passed = player.getOnline(queue.error).getCooldownTracker().resetCooldown(item.getInternal());
+            player.getOnline(queue.error).getCooldownTracker().resetCooldown(item.getInternal());
             if (queue.shouldShowGood()) {
                 queue.outGood("Attempting to reset cooldown of item type '" + ColorSet.emphasis + item.debug()
                         + ColorSet.good + "' for player '" + ColorSet.emphasis + player.debug() + ColorSet.good + "'!");
-            }
-        }
-        if (passed) {
-            if (queue.shouldShowGood()) {
-                queue.outGood("Cooldown operation passed!");
-            }
-        }
-        else {
-            if (queue.shouldShowGood()) {
-                queue.outGood("Cooldown operation failed!");
             }
         }
     }

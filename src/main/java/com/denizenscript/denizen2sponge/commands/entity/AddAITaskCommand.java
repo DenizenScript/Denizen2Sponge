@@ -174,8 +174,8 @@ public class AddAITaskCommand extends AbstractCommand {
                     }
                     float radius = (float) NumberTag.getFor(queue.error,
                             entry.getNamedArgumentObject(queue, "distance")).getInternal();
-                    int delay = (int) DurationTag.getFor(queue.error,
-                            entry.getNamedArgumentObject(queue, "delay")).getInternal() * 20;
+                    int delay = (int) (DurationTag.getFor(queue.error,
+                            entry.getNamedArgumentObject(queue, "delay")).getInternal() * 20);
                     double moveSpeed = NumberTag.getFor(queue.error,
                             entry.getNamedArgumentObject(queue, "speed")).getInternal();
                     task = RangeAgentAITask.builder().attackRadius(radius).delayBetweenAttacks(delay)

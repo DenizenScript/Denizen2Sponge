@@ -22,8 +22,6 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
-import org.spongepowered.api.item.inventory.query.QueryOperation;
-import org.spongepowered.api.item.inventory.query.QueryOperationType;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.slot.FuelSlot;
 import org.spongepowered.api.item.inventory.slot.OutputSlot;
@@ -59,6 +57,8 @@ public class InventoryTag extends AbstractTagObject {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Since 0.3.0
         // @Name InventoryTag.contains[<ItemTag>]
         // @Updated 2017/06/17
         // @Group General Information
@@ -67,6 +67,8 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "block/0,1,2,world" .contains[diamond/3] might return "false".
         // -->
         handlers.put("contains", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.contains(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // <--[tag]
+        // @Since 0.3.0
         // @Name InventoryTag.contains_any[<ItemTag>]
         // @Updated 2017/06/17
         // @Group General Information
@@ -75,6 +77,8 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "block/0,1,2,world" .contains_any[diamond] might return "true".
         // -->
         handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        // <--[tag]
+        // @Since 0.4.0
         // @Name InventoryTag.fuel
         // @Updated 2018/01/01
         // @Group General Information
@@ -93,6 +97,8 @@ public class InventoryTag extends AbstractTagObject {
             ItemStack item = inventory.peek().orElse(ItemStack.empty());
             return new ItemTag(item);
         });
+        // <--[tag]
+        // @Since 0.3.0
         // @Name InventoryTag.name
         // @Updated 2017/06/10
         // @Group General Information
@@ -101,6 +107,8 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "player/bob" .name might return "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
+        // <--[tag]
+        // @Since 0.4.0
         // @Name InventoryTag.result
         // @Updated 2018/01/01
         // @Group General Information
@@ -119,6 +127,8 @@ public class InventoryTag extends AbstractTagObject {
             ItemStack item = inventory.peek().orElse(ItemStack.empty());
             return new ItemTag(item);
         });
+        // <--[tag]
+        // @Since 0.3.0
         // @Name InventoryTag.size
         // @Updated 2017/06/11
         // @Group General Information
@@ -127,6 +137,8 @@ public class InventoryTag extends AbstractTagObject {
         // @Example "block/0,1,2,world" .size might return "36".
         // -->
         handlers.put("size", (dat, obj) -> new IntegerTag(((InventoryTag) obj).internal.size()));
+        // <--[tag]
+        // @Since 0.3.0
         // @Name InventoryTag.slot[<IntegerTag>]
         // @Updated 2017/09/05
         // @Group General Information

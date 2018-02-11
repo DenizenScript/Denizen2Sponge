@@ -36,7 +36,6 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
             Debug.info("Advancement scripts have changed, but won't have any effect. " +
                     "Restart the server for the new advancements to be registered!");
         }
-        AdvancementScript.buildAll();
         Sponge.getEventManager().post(new Denizen2SpongeReloadEvent(Denizen2Sponge.getGenericCause()));
         // ...?
     }

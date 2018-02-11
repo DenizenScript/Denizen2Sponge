@@ -70,11 +70,11 @@ public class TextsTagBase extends AbstractTagBase {
         // @Note Valid inputs:
         // text:hello -> the base text will be 'hello'.
         // color:blue -> the color will be blue.
-        // style:italics|bold -> the style will be bold-italic. Also allowed: obfuscated, reset, underline, strike.
+        // style:italic|bold -> the style will be bold-italic. Also allowed: obfuscated, reset, underline, strikethrough.
         // hover_text:<FormattedTextTag> -> hovering over the text will display 'hello_world'.
         // click_type:suggest -> clicking will suggest a command. Also allowed: execute, open_url.
         // click_data:/dance -> clicking will use the command '/dance'.
-        // @Example <texts.for_input[text:hello|color:blue|style:<escape[bold|italics]>|hover_text:<texts.for_plain[hi]>|click_type:suggest|click_data:/dance]>
+        // @Example <texts.for_input[text:hello|color:blue|style:<escape[bold|italic]>|hover_text:<texts.for_plain[hi]>|click_type:suggest|click_data:/dance]>
         // -->
         handlers.put("for_input", (dat, obj) -> {
             MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());

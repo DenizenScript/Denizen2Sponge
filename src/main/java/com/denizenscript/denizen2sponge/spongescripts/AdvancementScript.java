@@ -39,12 +39,12 @@ public class AdvancementScript extends CommandScript {
     // @Description
     // An advancement script is a script that adds new advancements to the server.
     // It is identified with the type "advancement".
-    // Expected keys: id (string), name (string, optional), criteria (map), display
-    // (advancement type), title (FormattedTextTag), description (FormattedTextTag),
-    // announce (boolean), show_toast (boolean), hidden (boolean), icon (item type),
-    // parent (id, only for children advancements), tree_id (string, only for root
-    // advancements), tree_name (string, only for root advancements, optional),
-    // position_x (number), and position_y (number).
+    // Expected keys: id (TextTag), name (TextTag, optional), display (challenge/goal/task),
+    // title (FormattedTextTag), description (FormattedTextTag), announce (BooleanTag),
+    // show_toast (BooleanTag), hidden (BooleanTag), icon (ItemTypeTag),
+    // parent (TextTag, only for children advancements), tree_id (TextTag, only for root
+    // advancements), tree_name (TextTag, only for root advancements, optional),
+    // position_x (NumberTag), and position_y (NumberTag).
     // TODO: Add "Related information" such as criteria formatting, advancement types and examples.
     // -->
 

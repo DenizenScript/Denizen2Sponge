@@ -11,7 +11,6 @@ import org.spongepowered.api.entity.ai.Goal;
 import org.spongepowered.api.entity.ai.GoalType;
 import org.spongepowered.api.entity.ai.GoalTypes;
 import org.spongepowered.api.entity.ai.task.AITask;
-import org.spongepowered.api.entity.ai.task.AITaskType;
 import org.spongepowered.api.entity.ai.task.builtin.LookIdleAITask;
 import org.spongepowered.api.entity.ai.task.builtin.SwimmingAITask;
 import org.spongepowered.api.entity.ai.task.builtin.WatchClosestAITask;
@@ -29,7 +28,7 @@ public class RemoveAITasksCommand extends AbstractCommand {
 
     // <--[command]
     // @Since 0.4.0
-    // @Name removeaitask
+    // @Name removeaitasks
     // @Arguments <entity> <task type>
     // @Short removes AI tasks from an entity's goal.
     // @Updated 2018/01/27
@@ -44,12 +43,12 @@ public class RemoveAITasksCommand extends AbstractCommand {
     // Related commands: <@link command addaitask>addaitask<@/link>.
     // @Example
     // # Makes the zombie in front of the player stop wandering around.
-    // - removeaitask <player.target_entities[type:zombie].get[1]> wander --goal normal
+    // - removeaitasks <player.target_entities[type:zombie].get[1]> wander --goal normal
     // -->
 
     @Override
     public String getName() {
-        return "removeaitask";
+        return "removeaitasks";
     }
 
     @Override
@@ -76,7 +75,7 @@ public class RemoveAITasksCommand extends AbstractCommand {
             // TODO: Switch to this once Sponge fixes task types.
             // Optional<AITaskType> opt = Sponge.getRegistry().getType(AITaskType.class, type.getInternal());
             // if (!opt.isPresent()) {
-            //     queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITask command!");
+            //     queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITasks command!");
             //     return;
             // }
             Class clazz;
@@ -109,7 +108,7 @@ public class RemoveAITasksCommand extends AbstractCommand {
                     clazz = WatchClosestAITask.class;
                     break;
                 default:
-                    queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITask command!");
+                    queue.handleError(entry, "Invalid task type '" + type.debug() + "' in RemoveAITasks command!");
                     return;
             }
             GoalType goal;

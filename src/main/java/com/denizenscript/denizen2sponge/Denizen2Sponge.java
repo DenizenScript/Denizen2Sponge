@@ -38,7 +38,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
-import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppedEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -278,17 +277,13 @@ public class Denizen2Sponge {
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
         Denizen2Core.start();
+        // Build loaded advamcements
+        AdvancementScript.buildAll();
         // Central loop
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);
         // Call loaded event for sub-plugins to listen for
         Sponge.getEventManager().post(new Denizen2SpongeLoadedEvent(getGenericCause()));
         // TODO: Config option -> readyToSpamEvents = true;
-    }
-
-    @Listener
-    public void onServerStarted(GamePostInitializationEvent event) {
-        // Build the already loaded advancement scripts
-        AdvancementScript.buildAll();
     }
 
     public File getMainDirectory() {
