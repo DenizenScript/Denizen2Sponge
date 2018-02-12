@@ -22,6 +22,7 @@ public class KickCommand extends AbstractCommand {
     // @Maximum 2
     // @Description
     // Kicks a player with the specified reason.
+    // Related commands: <@link command ban>ban<@/link> and <@link command pardon>pardon<@/link>.
     // TODO: Explain more!
     // @Example
     // # This example kicks the current player from the server given the reason "Spam".

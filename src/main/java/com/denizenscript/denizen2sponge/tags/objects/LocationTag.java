@@ -21,6 +21,8 @@ import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.profile.property.ProfileProperty;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.util.AABB;
+import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.TeleportHelper;
 import org.spongepowered.api.world.World;
@@ -61,6 +63,10 @@ public class LocationTag extends AbstractTagObject {
     }
 
     public LocationTag(Vector3i location, World world) {
+        this(location.getX(), location.getY(), location.getZ(), world);
+    }
+
+    public LocationTag(Vector3d location, World world) {
         this(location.getX(), location.getY(), location.getZ(), world);
     }
 
@@ -404,7 +410,7 @@ public class LocationTag extends AbstractTagObject {
         // @Since 0.3.0
         // @Name LocationTag.find_safe_location[<MapTag>]
         // @Updated 2017/04/05
-        // @Group World Data
+        // @Group Location Search
         // @ReturnType MapTag
         // @Returns whether a location that entities can safely teleport to within
         // the specified tolerance exists, and such location.
@@ -519,6 +525,36 @@ public class LocationTag extends AbstractTagObject {
             ProfileProperty p = te.get().get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
             return new TextTag(p.getValue() + "|" + p.getSignature().get());
         });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name LocationTag.line_of_sight[<LocationTag>]
+        // @Updated 2018/02/08
+        // @Group Block Ray
+        // @ReturnType BooleanTag
+        // @Returns whether the specified location is in the line of sight of this location.
+        // -->
+        handlers.put("line_of_sight", (dat, obj) -> {
+            Location<World> loc1 = ((LocationTag) obj).internal.toLocation();
+            Location<World> loc2 = LocationTag.getFor(dat.error, dat.getNextModifier()).internal.toLocation();
+            Vector3d direction = loc2.getPosition().sub(loc1.getPosition());
+            double length = direction.length();
+            if (length == 0) {
+                return new BooleanTag(true);
+            }
+            BlockRayHit<World> brh = BlockRay.from(loc1).direction(direction).distanceLimit(length)
+                    .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
+                    .build().end().get();
+            return new BooleanTag(brh.getBlockPosition().equals(loc2.getBlockPosition()));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name LocationTag.highest_location
+        // @Updated 2018/02/08
+        // @Group Location Search
+        // @ReturnType LocationTag
+        // @Returns the location on top of the highest solid block on this location's column.
+        // -->
+        handlers.put("highest_location", (dat, obj) -> new LocationTag(((LocationTag) obj).internal.toLocation().asHighestLocation()));
     }
 
     public static double LengthSquared(Location<World> loc) {

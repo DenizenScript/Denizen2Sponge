@@ -26,6 +26,7 @@ import com.denizenscript.denizen2sponge.events.world.*;
 import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
+import com.denizenscript.denizen2sponge.spongescripts.AdvancementScript;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.denizenscript.denizen2sponge.tags.objects.*;
@@ -122,27 +123,39 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
+        Denizen2Core.register(new AddAITaskCommand());
         Denizen2Core.register(new AirCommand());
         Denizen2Core.register(new CastCommand());
+        Denizen2Core.register(new DefuseCommand());
+        Denizen2Core.register(new DetonateCommand());
         Denizen2Core.register(new DropCommand());
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new EquipCommand());
         Denizen2Core.register(new FlagCommand());
         Denizen2Core.register(new HealCommand());
         Denizen2Core.register(new HurtCommand());
+        Denizen2Core.register(new InvisibleCommand());
         Denizen2Core.register(new LookAtCommand());
         Denizen2Core.register(new MountCommand());
+        Denizen2Core.register(new PrimeCommand());
+        Denizen2Core.register(new RemoveAITasksCommand());
         Denizen2Core.register(new RemoveCommand());
         Denizen2Core.register(new SpawnCommand());
+        Denizen2Core.register(new TargetCommand());
         Denizen2Core.register(new TeleportCommand());
         Denizen2Core.register(new UnflagCommand());
+        Denizen2Core.register(new VanishCommand());
         // Commands: Item
         Denizen2Core.register(new CreateInventoryCommand());
         Denizen2Core.register(new ForgetInventoryCommand());
         Denizen2Core.register(new RememberInventoryCommand());
         // Commands: Player
         Denizen2Core.register(new ActionBarCommand());
+        Denizen2Core.register(new AdvancementCommand());
         Denizen2Core.register(new BanCommand());
+        Denizen2Core.register(new CooldownCommand());
+        Denizen2Core.register(new CreateBossBarCommand());
+        Denizen2Core.register(new EditBossBarCommand());
         Denizen2Core.register(new FeedCommand());
         Denizen2Core.register(new GamemodeCommand());
         Denizen2Core.register(new GiveCommand());
@@ -150,6 +163,9 @@ public class Denizen2Sponge {
         Denizen2Core.register(new KickCommand());
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
+        Denizen2Core.register(new RemoveBossBarCommand());
+        Denizen2Core.register(new TabListCommand());
+        Denizen2Core.register(new TakeCommand());
         Denizen2Core.register(new TellCommand());
         Denizen2Core.register(new TitleCommand());
         // Commands: Server
@@ -168,7 +184,9 @@ public class Denizen2Sponge {
         Denizen2Core.register(new RemoveGameRuleCommand());
         Denizen2Core.register(new SetBlockCommand());
         Denizen2Core.register(new SetGameRuleCommand());
+        Denizen2Core.register(new StrikeCommand());
         Denizen2Core.register(new UnloadWorldCommand());
+        Denizen2Core.register(new ViewDistanceCommand());
         Denizen2Core.register(new WeatherCommand());
         // Events: Entity
         Denizen2Core.register(new EntityCollidesWithBlockScriptEvent());
@@ -182,10 +200,14 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntitySpawnsScriptEvent());
         Denizen2Core.register(new ProjectileImpactsBlockScriptEvent());
         Denizen2Core.register(new ProjectileImpactsEntityScriptEvent());
+        Denizen2Core.register(new ProjectileLaunchedScriptEvent());
         // Events: Player
         Denizen2Core.register(new ExperienceChangesScriptEvent());
+        Denizen2Core.register(new ItemCooldownEndsScriptEvent());
+        Denizen2Core.register(new ItemCooldownStartsScriptEvent());
         Denizen2Core.register(new LevelChangesScriptEvent());
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
+        Denizen2Core.register(new PlayerChangesGamemodeScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());
         Denizen2Core.register(new PlayerDisconnectsScriptEvent());
         Denizen2Core.register(new PlayerFinishesUsingItemScriptEvent());
@@ -233,6 +255,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new WorldTagBase());
         // Sponge Script Types
         Denizen2Core.register("command", GameCommandScript::new);
+        Denizen2Core.register("advancement", AdvancementScript::new);
         // Tag Types
         Denizen2Core.customSaveLoaders.put("BlockTypeTag", BlockTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("CuboidTag", CuboidTag::getFor);
@@ -258,6 +281,8 @@ public class Denizen2Sponge {
         Sponge.getEventManager().post(new Denizen2SpongeLoadingEvent(getGenericCause()));
         // Load Denizen2
         Denizen2Core.start();
+        // Build loaded advancements
+        AdvancementScript.buildAll();
         // Central loop
         Sponge.getScheduler().createTaskBuilder().intervalTicks(1).execute(() -> Denizen2Core.tick(0.05)).submit(this);
         // Call loaded event for sub-plugins to listen for

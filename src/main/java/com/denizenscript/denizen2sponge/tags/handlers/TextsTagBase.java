@@ -3,21 +3,25 @@ package com.denizenscript.denizen2sponge.tags.handlers;
 import com.denizenscript.denizen2core.tags.AbstractTagBase;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
-import com.denizenscript.denizen2core.tags.objects.*;
+import com.denizenscript.denizen2core.tags.objects.ListTag;
+import com.denizenscript.denizen2core.tags.objects.MapTag;
+import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColor;
-import org.spongepowered.api.text.format.TextStyles;
+import org.spongepowered.api.text.format.TextStyle;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class TextsTagBase extends AbstractTagBase {
 
@@ -66,46 +70,33 @@ public class TextsTagBase extends AbstractTagBase {
         // @Note Valid inputs:
         // text:hello -> the base text will be 'hello'.
         // color:blue -> the color will be blue.
-        // style:italics|bold -> the style will be bold-italic. Also allowed: obfuscated, reset, underline, strike.
-        // hover_text:<FormattedTextTag> -> hovering over the the text will display 'hello_world'
+        // style:italic|bold -> the style will be bold-italic. Also allowed: obfuscated, reset, underline, strikethrough.
+        // hover_text:<FormattedTextTag> -> hovering over the text will display 'hello_world'.
         // click_type:suggest -> clicking will suggest a command. Also allowed: execute, open_url.
         // click_data:/dance -> clicking will use the command '/dance'.
-        // @Example <texts.for_input[text:hello|color:blue|style:<escape[bold|italics]>|hover_text:<texts.for_plain[hi]>|click_type:suggest|click_data:/dance]>
+        // @Example <texts.for_input[text:hello|color:blue|style:<escape[bold|italic]>|hover_text:<texts.for_plain[hi]>|click_type:suggest|click_data:/dance]>
         // -->
         handlers.put("for_input", (dat, obj) -> {
             MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
             if (!map.getInternal().containsKey("text")) {
-                dat.error.run("Missing TEXT setter in for_input tag, cannot created FormattedTextTag!");
+                dat.error.run("Missing TEXT setter in for_input tag, cannot create FormattedTextTag!");
             }
             Text.Builder build = Text.builder(map.getInternal().get("text").toString());
             if (map.getInternal().containsKey("color")) {
-                build.color(Sponge.getRegistry().getType(TextColor.class, map.getInternal().get("color").toString().toUpperCase()).get());
+                Optional<TextColor> color = Sponge.getRegistry().getType(TextColor.class, map.getInternal().get("color").toString());
+                if (!color.isPresent()) {
+                    dat.error.run("The color specified in for_input tag is invalid, cannot create FormattedTextTag!");
+                }
+                build.color(color.get());
             }
             if (map.getInternal().containsKey("style")) {
                 ListTag reqs = ListTag.getFor(dat.error, map.getInternal().get("style"));
-                boolean bold = false;
-                boolean italics = false;
-                boolean obfu = false;
                 for (AbstractTagObject ato : reqs.getInternal()) {
-                    String str = ato.toString();
-                    if (str.equals("bold")) {
-                        build.style(TextStyles.BOLD);
+                    Object style = Utilities.getTypeWithDefaultPrefix(TextStyle.Base.class, ato.toString());
+                    if (style == null) {
+                        dat.error.run("The style specified in for_input tag is invalid, cannot create FormattedTextTag!");
                     }
-                    else if (str.equals("italics")) {
-                        build.style(TextStyles.ITALIC);
-                    }
-                    else if (str.equals("obfuscated")) {
-                        build.style(TextStyles.OBFUSCATED);
-                    }
-                    else if (str.equals("reset")) {
-                        build.style(TextStyles.RESET);
-                    }
-                    else if (str.equals("underline")) {
-                        build.style(TextStyles.UNDERLINE);
-                    }
-                    else if (str.equals("strike")) {
-                        build.style(TextStyles.STRIKETHROUGH);
-                    }
+                    build.style((TextStyle.Base) style);
                 }
             }
             if (map.getInternal().containsKey("hover_text")) {

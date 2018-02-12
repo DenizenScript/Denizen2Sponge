@@ -6,12 +6,15 @@ import com.denizenscript.denizen2core.tags.objects.DurationTag;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.events.D2SpongeEventHelper;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
+import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 
@@ -31,6 +34,10 @@ public class PlayerStartsUsingItemScriptEvent extends ScriptEvent {
     // @Triggers when a player starts using an item.
     //
     // @Switch item (ItemTag) checks the item used.
+    // @Switch world (WorldTag) checks the world.
+    // @Switch cuboid (CuboidTag) checks the cuboid area.
+    // @Switch weather (TextTag) checks the weather.
+    // @Switch gamemode (TextTag) checks the player's gamemode.
     //
     // @Context
     // player (PlayerTag) returns the player that started using the item.
@@ -53,7 +60,14 @@ public class PlayerStartsUsingItemScriptEvent extends ScriptEvent {
 
     @Override
     public boolean matches(ScriptEventData data) {
-        return D2SpongeEventHelper.checkItem(item, data, this::error, "item");
+        Player playerInternal = player.getOnline(this::error);
+        World world = playerInternal.getWorld();
+        return D2SpongeEventHelper.checkItem(item, data, this::error, "item")
+                && D2SpongeEventHelper.checkWorld(world, data, this::error) && D2SpongeEventHelper.checkCuboid(
+                new LocationTag(playerInternal.getLocation()).getInternal(), data, this::error)
+                && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
+                world.getWeather().getId()), data, this::error) && D2SpongeEventHelper.checkGamemode(
+                        Utilities.getIdWithoutDefaultPrefix(playerInternal.gameMode().get().getId()), data, this::error);
     }
 
     public PlayerTag player;

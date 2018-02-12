@@ -18,7 +18,7 @@ public class PardonCommand extends AbstractCommand {
     // <--[command]
     // @Since 0.3.0
     // @Name pardon
-    // @Arguments <OfflinePlayerTag>/<IP>
+    // @Arguments <PlayerTag>/<IP>
     // @Short pardons a player.
     // @Updated 2017/04/08
     // @Group Player
@@ -26,6 +26,7 @@ public class PardonCommand extends AbstractCommand {
     // @Maximum 1
     // @Description
     // Pardons a player or IP, removing its ban.
+    // Related commands: <@link command ban>ban<@/link> and <@link command kick>kick<@/link>.
     // @Example
     // # This example pardons the current player.
     // - pardon <player>
@@ -38,7 +39,7 @@ public class PardonCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<OfflinePlayerTag>/<IP>";
+        return "<PlayerTag>/<IP>";
     }
 
     @Override

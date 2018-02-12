@@ -8,18 +8,17 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.*;
+import com.denizenscript.denizen2sponge.utilities.BossBars;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
-import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
-import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.advancement.Advancement;
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.boss.ServerBossBar;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ServerTagBase extends AbstractTagBase {
 
@@ -238,6 +237,73 @@ public class ServerTagBase extends AbstractTagBase {
                 return new NullTag();
             }
             return smap.getInternal().get("value");
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name ServerBaseTag.current_bossbars
+        // @Updated 2018/01/30
+        // @Group BossBar Data
+        // @ReturnType ListTag
+        // @Returns the list of BossBars on the server.
+        // -->
+        handlers.put("current_bossbars", (dat, obj) -> {
+            ListTag bars = new ListTag();
+            for (String id : BossBars.CurrentBossBars.keySet()) {
+                bars.getInternal().add(new TextTag(id));
+            }
+            return bars;
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name ServerBaseTag.bossbar_players[<TextTag>]
+        // @Updated 2018/01/30
+        // @Group BossBar Data
+        // @ReturnType ListTag
+        // @Returns the list of players that can see a BossBar.
+        // -->
+        handlers.put("bossbar_players", (dat, obj) -> {
+            String id = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            ServerBossBar bar = BossBars.CurrentBossBars.get(id);
+            ListTag players = new ListTag();
+            for (Player player : bar.getPlayers()) {
+                players.getInternal().add(new PlayerTag(player));
+            }
+            return players;
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name ServerBaseTag.bossbar_properties[<TextTag>]
+        // @Updated 2018/01/30
+        // @Group BossBar Data
+        // @ReturnType ListTag
+        // @Returns the map of properties of the specified BossBar.
+        // -->
+        handlers.put("bossbar_properties", (dat, obj) -> {
+            String id = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
+            ServerBossBar bar = BossBars.CurrentBossBars.get(id);
+            MapTag properties = new MapTag();
+            properties.getInternal().put("title", new FormattedTextTag(bar.getName()));
+            properties.getInternal().put("color", new TextTag(Utilities.getIdWithoutDefaultPrefix(bar.getColor().getId())));
+            properties.getInternal().put("overlay", new TextTag(bar.getOverlay().getId()));
+            properties.getInternal().put("visible", new BooleanTag(bar.isVisible()));
+            properties.getInternal().put("percent", new NumberTag(bar.getPercent()));
+            properties.getInternal().put("create_fog", new BooleanTag(bar.shouldCreateFog()));
+            properties.getInternal().put("darken_sky", new BooleanTag(bar.shouldDarkenSky()));
+            properties.getInternal().put("play_music", new BooleanTag(bar.shouldPlayEndBossMusic()));
+            return properties;
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name ServerBaseTag.advancement_exists[<TextTag>]
+        // @Updated 2018/02/07
+        // @Group Registered Advancements
+        // @ReturnType BooleanTag
+        // @Returns whether the server has the specified advancement registered.
+        // -->
+        handlers.put("advancement_exists", (dat, obj) -> {
+            String id = dat.getNextModifier().toString();
+            Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
+            return new BooleanTag(advancement != null);
         });
     }
 

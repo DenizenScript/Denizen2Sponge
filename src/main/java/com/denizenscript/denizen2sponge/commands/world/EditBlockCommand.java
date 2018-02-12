@@ -10,7 +10,7 @@ import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.world.BlockChangeFlag;
+import org.spongepowered.api.world.BlockChangeFlags;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -68,7 +68,7 @@ public class EditBlockCommand extends AbstractCommand {
             }
             bs = (BlockState) DataKeys.with(bs, found, mapEntry.getValue(), queue.error);
         }
-        loc.setBlock(bs, BlockChangeFlag.NONE);
+        loc.setBlock(bs, BlockChangeFlags.NONE);
         if (queue.shouldShowGood()) {
             queue.outGood("Edited the location " + ColorSet.emphasis + locationTag.debug() + ColorSet.good
                     + " to have the new following properties: " + propertyMap.debug());

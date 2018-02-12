@@ -21,6 +21,7 @@ public class RemoveCommand extends AbstractCommand {
     // @Maximum 1
     // @Description
     // Removes a list of entities from the world.
+    // Related commands: <@link command spawn>spawn<@/link>.
     // @Example
     // # This example removes all zombies within a 3 block range of the player
     // - remove <player.location.nearby_entities[type:zombie|range:3]>

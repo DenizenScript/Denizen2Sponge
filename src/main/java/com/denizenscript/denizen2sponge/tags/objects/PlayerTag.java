@@ -7,21 +7,18 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.advancement.Advancement;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
-import org.spongepowered.api.statistic.*;
-import org.spongepowered.api.util.blockray.BlockRay;
-import org.spongepowered.api.util.blockray.BlockRayHit;
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.EntityUniverse;
+import org.spongepowered.api.item.inventory.entity.UserInventory;
+import org.spongepowered.api.statistic.Statistic;
+import org.spongepowered.api.statistic.StatisticType;
+import org.spongepowered.api.text.Text;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 public class PlayerTag extends AbstractTagObject {
@@ -61,6 +58,38 @@ public class PlayerTag extends AbstractTagObject {
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     static {
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.cooldown[<ItemTypeTag>]
+        // @Updated 2018/01/07
+        // @Group Properties
+        // @ReturnType DurationTag
+        // @Returns the cooldown on an item type for the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("cooldown", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            return new DurationTag(pl.getCooldownTracker().getCooldown(item.getInternal()).orElse(0) * (1.0 / 20.0));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.cooldown_fraction[<ItemTypeTag>]
+        // @Updated 2018/01/07
+        // @Group Properties
+        // @ReturnType NumberTag
+        // @Returns the cooldown fraction on an item type for the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("cooldown_fraction", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            return new NumberTag(pl.getCooldownTracker().getFractionRemaining(item.getInternal()).orElse(0));
+        });
         // <--[tag]
         // @Since 0.3.0
         // @Name PlayerTag.exhaustion
@@ -105,6 +134,45 @@ public class PlayerTag extends AbstractTagObject {
                 return new NullTag();
             }
             return new TextTag(pl.gameMode().get().toString());
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.has_advancement[<TextTag>]
+        // @Updated 2018/02/07
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether the player has completed an advancement. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("has_advancement", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            String id = dat.getNextModifier().toString();
+            Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
+            if (advancement == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("There's no registered advancement that matches the specified id!");
+                }
+                return new NullTag();
+            }
+            return new BooleanTag(pl.getProgress(advancement).achieved());
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.has_cooldown[<ItemTypeTag>]
+        // @Updated 2018/01/07
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether an item type has cooldown for the player. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("has_cooldown", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            return new BooleanTag(pl.getCooldownTracker().hasCooldown(item.getInternal()));
         });
         // <--[tag]
         // @Since 0.3.0
@@ -271,6 +339,36 @@ public class PlayerTag extends AbstractTagObject {
                 statistic = opt.get();
             }
             return new IntegerTag(pl.getStatisticData().get(statistic).orElse((long) 0));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.tablist_header
+        // @Updated 2018/02/04
+        // @Group Properties
+        // @ReturnType FormattedTextTag
+        // @Returns whether the player's tablist header. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("tablist_header", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new FormattedTextTag(pl.getTabList().getHeader().orElse(Text.of("")));
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.tablist_footer
+        // @Updated 2018/02/04
+        // @Group Properties
+        // @ReturnType FormattedTextTag
+        // @Returns whether the player's tablist footer. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("tablist_footer", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            return new FormattedTextTag(pl.getTabList().getFooter().orElse(Text.of("")));
         });
     }
 

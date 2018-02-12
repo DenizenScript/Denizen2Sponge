@@ -19,17 +19,18 @@ import org.spongepowered.api.data.type.Art;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.entity.explosive.Explosive;
+import org.spongepowered.api.entity.explosive.FusedExplosive;
 import org.spongepowered.api.entity.hanging.Hanging;
 import org.spongepowered.api.entity.hanging.LeashHitch;
 import org.spongepowered.api.entity.hanging.Painting;
 import org.spongepowered.api.entity.living.Ageable;
+import org.spongepowered.api.entity.living.Agent;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.entity.projectile.source.BlockProjectileSource;
 import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.entity.vehicle.Boat;
-import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.Color;
@@ -481,7 +482,7 @@ public class EntityTag extends AbstractTagObject {
         // @Since 0.3.0
         // @Name EntityTag.explosion_radius
         // @Updated 2017/09/28
-        // @Group Current Information
+        // @Group Explosive Entities
         // @ReturnType IntegerTag
         // @Returns the radius in blocks that the explosion will affect. Explosive entities only.
         // -->
@@ -809,7 +810,7 @@ public class EntityTag extends AbstractTagObject {
         // If no distance is specified, the default hand-reach distance is used.
         // -->
         handlers.put("target_block", (dat, obj) -> {
-            Entity ent = ((EntityTag) obj).getInternal();
+            Entity ent = ((EntityTag) obj).internal;
             return new LocationTag(BlockRay.from(ent)
                     .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
@@ -825,7 +826,7 @@ public class EntityTag extends AbstractTagObject {
         // If no distance is specified, the default hand-reach distance is used.
         // -->
         handlers.put("precise_target_location", (dat, obj) -> {
-            Entity ent = ((EntityTag) obj).getInternal();
+            Entity ent = ((EntityTag) obj).internal;
             BlockRayHit hit = BlockRay.from(ent).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(ent))).build().end().get();
@@ -841,7 +842,7 @@ public class EntityTag extends AbstractTagObject {
         // If no distance is specified, the default hand-reach distance is used.
         // -->
         handlers.put("precise_target_normal", (dat, obj) -> {
-            Entity ent = ((EntityTag) obj).getInternal();
+            Entity ent = ((EntityTag) obj).internal;
             return new LocationTag(BlockRay.from(ent)
                     .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
@@ -858,7 +859,7 @@ public class EntityTag extends AbstractTagObject {
         // Input is type:<EntityTypeTag>|range:<NumberTag>
         // -->
         handlers.put("target_entities", (dat, obj) -> {
-            Entity ent = ((EntityTag) obj).getInternal();
+            Entity ent = ((EntityTag) obj).internal;
             ListTag list = new ListTag();
             MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
             EntityTypeTag requiredTypeTag = null;
@@ -876,6 +877,63 @@ public class EntityTag extends AbstractTagObject {
                 }
             }
             return list;
+        });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.fuse_duration
+        // @Updated 2018/01/10
+        // @Group Explosive Entities
+        // @ReturnType DurationTag
+        // @Returns the duration before an explosive entity detonates when primed.
+        // -->
+        handlers.put("fuse_duration", (dat, obj) -> new DurationTag(((FusedExplosive) ((EntityTag) obj).internal).getFuseData().fuseDuration().get() * (1.0 / 20.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.remaining_fuse_duration
+        // @Updated 2018/01/10
+        // @Group Explosive Entities
+        // @ReturnType DurationTag
+        // @Returns the remaining duration before a primed explosive entity detonates.
+        // -->
+        handlers.put("remaining_fuse_duration", (dat, obj) -> new DurationTag(((FusedExplosive) ((EntityTag) obj).internal).getFuseData().ticksRemaining().get() * (1.0 / 20.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.is_primed
+        // @Updated 2018/01/10
+        // @Group Explosive Entities
+        // @ReturnType BooleanTag
+        // @Returns whether an explosive entity is primed.
+        // @Warning This tag always returns false in Sponge during last testing.
+        // -->
+        handlers.put("is_primed", (dat, obj) -> new BooleanTag(((FusedExplosive) ((EntityTag) obj).internal).isPrimed()));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.has_ai
+        // @Updated 2018/01/16
+        // @Group Entity Behavior
+        // @ReturnType BooleanTag
+        // @Returns whether an entity has ai enabled.
+        // -->
+        handlers.put("has_ai", (dat, obj) -> new BooleanTag(((Agent) ((EntityTag) obj).internal).aiEnabled().get()));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.ai_target
+        // @Updated 2018/01/16
+        // @Group Entity Behavior
+        // @ReturnType EntityTag
+        // @Returns the entity that is being targeted by this entity's AI, if any.
+        // -->
+        handlers.put("ai_target", (dat, obj) -> {
+            Optional<Entity> opt = ((Agent) ((EntityTag) obj).internal).getTarget();
+            if (opt.isPresent()) {
+                return new EntityTag(opt.get());
+            }
+            else {
+                if (!dat.hasFallback()) {
+                    dat.error.run("This entity doesn't have target!");
+                }
+                return new NullTag();
+            }
         });
     }
 
