@@ -21,16 +21,16 @@ public class VanishCommand extends AbstractCommand {
     // @Minimum 2
     // @Maximum 2
     // @Named ignore_collisions (BooleanTag) Sets whether this vanished entity can collide with other entities.
-    // @Named untargeteable (BooleanTag) Sets whether this vanished entity can be selected as a target.
+    // @Named untargetable (BooleanTag) Sets whether this vanished entity can be selected as a target.
     // @Description
     // Changes the vanish state of an entity. Vanished entities don't send packets to clients,
     // but they can still affect collisions or target selection server-side. This can be adjusted
-    // with the "ignore_collisions" and "untargeteable" named arguments.
+    // with the "ignore_collisions" and "untargetable" named arguments.
     // but update packets are still sent to the server and clients.
     // Related commands: <@link command invisible>invisible<@/link>.
     // @Example
-    // # Vanishes the player and makes it untargeteable and uncollidable.
-    // - vanish <player> true --ignore_collisions true --untargeteable true
+    // # Vanishes the player and makes it untargetable and uncollidable.
+    // - vanish <player> true --ignore_collisions true --untargetable true
     // -->
 
     @Override
@@ -63,8 +63,8 @@ public class VanishCommand extends AbstractCommand {
             BooleanTag bt = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "ignore_collisions"));
             entity.offer(Keys.VANISH_IGNORES_COLLISION, bt.getInternal());
         }
-        if (entry.namedArgs.containsKey("untargeteable")) {
-            BooleanTag bt = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "untargeteable"));
+        if (entry.namedArgs.containsKey("untargetable")) {
+            BooleanTag bt = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "untargetable"));
             entity.offer(Keys.VANISH_PREVENTS_TARGETING, bt.getInternal());
         }
         if (queue.shouldShowGood()) {

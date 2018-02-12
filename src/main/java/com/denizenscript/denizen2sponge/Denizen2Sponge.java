@@ -200,12 +200,14 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EntitySpawnsScriptEvent());
         Denizen2Core.register(new ProjectileImpactsBlockScriptEvent());
         Denizen2Core.register(new ProjectileImpactsEntityScriptEvent());
+        Denizen2Core.register(new ProjectileLaunchedScriptEvent());
         // Events: Player
         Denizen2Core.register(new ExperienceChangesScriptEvent());
         Denizen2Core.register(new ItemCooldownEndsScriptEvent());
         Denizen2Core.register(new ItemCooldownStartsScriptEvent());
         Denizen2Core.register(new LevelChangesScriptEvent());
         Denizen2Core.register(new PlayerBreaksBlockScriptEvent());
+        Denizen2Core.register(new PlayerChangesGamemodeScriptEvent());
         Denizen2Core.register(new PlayerChatsScriptEvent());
         Denizen2Core.register(new PlayerDisconnectsScriptEvent());
         Denizen2Core.register(new PlayerFinishesUsingItemScriptEvent());
