@@ -127,8 +127,10 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
+        Denizen2Core.register(new AbsorptionCommand());
         Denizen2Core.register(new AddAITaskCommand());
         Denizen2Core.register(new AirCommand());
+        Denizen2Core.register(new BurnCommand());
         Denizen2Core.register(new CastCommand());
         Denizen2Core.register(new DefuseCommand());
         Denizen2Core.register(new DetonateCommand());
@@ -136,6 +138,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new EquipCommand());
         Denizen2Core.register(new FlagCommand());
+        Denizen2Core.register(new GlowCommand());
         Denizen2Core.register(new HealCommand());
         Denizen2Core.register(new HurtCommand());
         Denizen2Core.register(new InvisibleCommand());

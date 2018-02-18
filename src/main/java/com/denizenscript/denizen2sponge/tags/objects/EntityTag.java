@@ -935,6 +935,42 @@ public class EntityTag extends AbstractTagObject {
                 return NullTag.NULL;
             }
         });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.burning
+        // @Updated 2018/02/17
+        // @Group Entity Properties
+        // @ReturnType BooleanTag
+        // @Returns whether an entity is currently burning.
+        // -->
+        handlers.put("burning", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.FIRE_TICKS).orElse(0) > 0));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.burn_time
+        // @Updated 2018/02/17
+        // @Group Entity Properties
+        // @ReturnType DurationTag
+        // @Returns how long an entity is burning for.
+        // -->
+        handlers.put("burn_time", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.FIRE_TICKS).orElse(0) / 20.0));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.absorption
+        // @Updated 2018/02/17
+        // @Group Entity Properties
+        // @ReturnType NumberTag
+        // @Returns how much absorption this entity has.
+        // -->
+        handlers.put("absorption", (dat, obj) -> new NumberTag(((EntityTag) obj).internal.get(Keys.ABSORPTION).orElse(0.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.glowing
+        // @Updated 2018/02/18
+        // @Group Entity Properties
+        // @ReturnType BooleanTag
+        // @Returns whether an entity is currently glowing.
+        // -->
+        handlers.put("glowing", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.GLOWING).get()));
     }
 
     public static EntityTag getFor(Action<String> error, String text) {

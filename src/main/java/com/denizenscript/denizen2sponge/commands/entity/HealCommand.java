@@ -60,15 +60,16 @@ public class HealCommand extends AbstractCommand {
         boolean set;
         if (entry.namedArgs.containsKey("operation")) {
             String operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
-            if (operation.equals("add")) {
-                set = false;
-            }
-            else if (operation.equals("set")) {
-                set = true;
-            }
-            else {
-                queue.handleError(entry, "Invalid operation: '" + operation + "'!");
-                return;
+            switch (operation) {
+                case "add":
+                    set = false;
+                    break;
+                case "set":
+                    set = true;
+                    break;
+                default:
+                    queue.handleError(entry, "Invalid operation: '" + operation + "'!");
+                    return;
             }
         }
         else {
@@ -124,10 +125,10 @@ public class HealCommand extends AbstractCommand {
             }
         }
         if (queue.shouldShowGood()) {
-            queue.outGood(ColorSet.emphasis + (set ? "Setting" : "Increasing") +
-                    ColorSet.good + " the " + ColorSet.emphasis + type + ColorSet.good + " health of " +
-                    ColorSet.emphasis + entityTag.debug() + ColorSet.good + (set ? " to " : " by ") +
-                    ColorSet.emphasis + amount.debug() + ColorSet.good + "!");
+            queue.outGood(ColorSet.emphasis + (set ? "Setting" : "Increasing") + ColorSet.good + " the "
+                    + ColorSet.emphasis + type + ColorSet.good + " health of entity '" + ColorSet.emphasis
+                    + entityTag.debug() + ColorSet.good + "' " + (set ? "to" : "by") +  " '"
+                    + ColorSet.emphasis + amount.debug() + ColorSet.good + "'!");
         }
     }
 }
