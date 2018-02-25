@@ -116,18 +116,25 @@ public class PlayerLeftClicksBlockScriptEvent extends ScriptEvent {
         Optional<Location<World>> opt = evt.getTargetBlock().getLocation();
         if (opt.isPresent()) {
             event.location = new LocationTag(opt.get());
-            Vector3d point = evt.getInteractionPoint().get();
-            event.precise_location = new LocationTag(point, world);
-            event.intersection_point = new LocationTag(point.sub(opt.get().getPosition()));
-            event.impact_normal = new LocationTag(evt.getTargetSide().asOffset());
+            if (evt.getInteractionPoint().isPresent()) {
+                Vector3d point = evt.getInteractionPoint().get();
+                event.precise_location = new LocationTag(point, world);
+                event.intersection_point = new LocationTag(point.sub(opt.get().getPosition()));
+                event.impact_normal = new LocationTag(evt.getTargetSide().asOffset());
+            }
+            else {
+                BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(Utilities.getHandReach(player)).build().end().get();
+                event.precise_location = new LocationTag(brh.getPosition(), world);
+                event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
+                event.impact_normal = new LocationTag(brh.getNormal());
+            }
         }
         else {
-            BlockRayHit<World> brh = BlockRay.from(player)
-                    .distanceLimit(Utilities.getHandReach(player)).build().end().get();
+            BlockRayHit<World> brh = BlockRay.from(player).distanceLimit(Utilities.getHandReach(player)).build().end().get();
             event.location = new LocationTag(brh.getLocation());
             event.precise_location = new LocationTag(brh.getPosition(), world);
             event.intersection_point = new LocationTag(brh.getPosition().sub(brh.getBlockPosition().toDouble()));
-            event.impact_normal = new LocationTag(0, 0, 0);
+            event.impact_normal = new LocationTag(brh.getNormal());
         }
         event.cancelled = evt.isCancelled();
         event.run();
