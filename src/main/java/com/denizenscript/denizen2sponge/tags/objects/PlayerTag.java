@@ -9,6 +9,7 @@ import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.advancement.Advancement;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.inventory.entity.PlayerInventory;
@@ -391,8 +392,18 @@ public class PlayerTag extends AbstractTagObject {
         }
     }
 
-    public static PlayerTag getFor(Action<String> error, AbstractTagObject text) {
-        return (text instanceof PlayerTag) ? (PlayerTag) text : getFor(error, text.toString());
+    public static PlayerTag getFor(Action<String> error, AbstractTagObject ato) {
+        if (ato instanceof PlayerTag) {
+            return (PlayerTag) ato;
+        }
+        if (ato instanceof EntityTag) {
+            Entity ent = ((EntityTag) ato).getInternal();
+            if (ent instanceof Player) {
+                return new PlayerTag((Player) ent);
+            }
+            error.run("Invalid PlayerTag entity input!");
+        }
+        return getFor(error, ato.toString());
     }
 
     public Player getOnline(Action<String> error) {

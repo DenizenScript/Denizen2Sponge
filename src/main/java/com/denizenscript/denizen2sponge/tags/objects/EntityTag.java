@@ -949,8 +949,14 @@ public class EntityTag extends AbstractTagObject {
         return null;
     }
 
-    public static EntityTag getFor(Action<String> error, AbstractTagObject text) {
-        return (text instanceof EntityTag) ? (EntityTag) text : getFor(error, text.toString());
+    public static EntityTag getFor(Action<String> error, AbstractTagObject ato) {
+        if (ato instanceof EntityTag) {
+            return (EntityTag) ato;
+        }
+        if (ato instanceof PlayerTag) {
+            return new EntityTag(((PlayerTag) ato).getOnline(error));
+        }
+        return getFor(error, ato.toString());
     }
 
     @Override
