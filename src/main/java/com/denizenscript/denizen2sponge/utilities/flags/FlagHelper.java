@@ -10,19 +10,15 @@ import org.spongepowered.api.data.value.mutable.Value;
 
 public class FlagHelper {
 
-    public static final TypeToken<FlagMap> FLAGMAP_TOKEN = new TypeToken<FlagMap>() {
-    };
-
     public static final TypeToken<Value<FlagMap>> FLAGMAP_VALUE_TOKEN = new TypeToken<Value<FlagMap>>() {
     };
 
-    public static Key<Value<FlagMap>> FLAGMAP = KeyFactory.makeSingleKey(
-            FLAGMAP_TOKEN,
-            FLAGMAP_VALUE_TOKEN,
-            DataQuery.of("flagmap"),
-            "denizen2sponge:flagmap",
-            "DenizenFlagMap"
-    );
+    public static Key<Value<FlagMap>> FLAGMAP = Key.builder()
+            .type(FLAGMAP_VALUE_TOKEN)
+            .query(DataQuery.of("flagmap"))
+            .id("flagmap")
+            .name("DenizenFlagMap")
+            .build();
 
     public static FlagMapDataBuilder FMDB;
 

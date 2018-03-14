@@ -25,7 +25,7 @@ public class AbsorptionCommand extends AbstractCommand {
     // Changes the absorption points of an entity. You can specify whether
     // the command will 'add' or 'set' the points. Defaults to 'add'.
     // @Example
-    // # This example increased the player's absorption points by 10 (5 golden hearts).
+    // # This example increases the player's absorption points by 10 (5 golden hearts).
     // - absorption <player> 10
     // -->
 
