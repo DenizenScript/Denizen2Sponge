@@ -29,7 +29,7 @@ public class EntityTypeTag extends AbstractTagObject {
     // @Group Useful Lists
     // @Description
     // A list of all default entity types can be found here:
-    // <@link url https://jd.spongepowered.org/7.0.0-SNAPSHOT/org/spongepowered/api/entity/EntityTypes.html>entity types list<@/link>
+    // <@link url https://jd.spongepowered.org/7.1.0-SNAPSHOT/org/spongepowered/api/entity/EntityTypes.html>entity types list<@/link>
     // These can be used with the spawn command as well as with some event switches.
     // -->
 
