@@ -12,6 +12,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.EventContextKeys;
+import org.spongepowered.api.event.cause.entity.spawn.SpawnType;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -78,7 +79,8 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
                 && D2SpongeEventHelper.checkCuboid((new LocationTag(loc)).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
                         world.getWeather().getId()), data, this::error)
-                && D2SpongeEventHelper.checkSpawnType(spawnType.toString(), data, this::error);
+                && D2SpongeEventHelper.checkCatalogType(
+                        SpawnType.class, spawnType.toString(), data, this::error, "spawn_type");
     }
 
     public EntityTag entity;

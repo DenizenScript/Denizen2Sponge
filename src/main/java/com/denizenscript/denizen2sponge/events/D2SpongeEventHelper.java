@@ -18,7 +18,6 @@ import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.living.player.gamemode.GameMode;
-import org.spongepowered.api.event.cause.entity.spawn.SpawnType;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.weather.Weather;
@@ -154,27 +153,6 @@ public class D2SpongeEventHelper {
             Optional<CatalogType> opt = getRegistry().getType(clazz, ato.toString());
             if (!opt.isPresent()) {
                 error.run("Invalid " + clazz.getSimpleName() + " type: '" + ato.debug() + "'!");
-                return false;
-            }
-            else if (Utilities.getIdWithoutDefaultPrefix(opt.get().getId()).equals(type)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean checkSpawnType(String type, ScriptEvent.ScriptEventData data, Action<String> error) {
-        return checkSpawnType(type, data, error, "spawn_type");
-    }
-
-    public static boolean checkSpawnType(String type, ScriptEvent.ScriptEventData data, Action<String> error, String tname) {
-        if (!data.switches.containsKey(tname)) {
-            return true;
-        }
-        for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            Optional<SpawnType> opt = getRegistry().getType(SpawnType.class, ato.toString());
-            if (!opt.isPresent()) {
-                error.run("Invalid spawn type: '" + ato.debug() + "'!");
                 return false;
             }
             else if (Utilities.getIdWithoutDefaultPrefix(opt.get().getId()).equals(type)) {
