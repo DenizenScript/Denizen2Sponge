@@ -133,7 +133,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
     }
 
     public boolean isSafePath(String file) {
-        // TODO: Potentially prevent paths with bad symbolism, EG backslashes or colons, which could be misintrepretted based on environment?
+        // TODO: Potentially prevent paths with bad symbolism, EG backslashes or colons, which could be misinterpreted based on environment?
         try {
             File f = new File(getScriptDataFolder(), file);
             String canPath = f.getCanonicalPath();
