@@ -22,6 +22,10 @@ public class WorldTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid world tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return WorldTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

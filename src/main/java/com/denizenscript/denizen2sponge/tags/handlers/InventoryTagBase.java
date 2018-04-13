@@ -22,6 +22,10 @@ public class InventoryTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid inventory tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return InventoryTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

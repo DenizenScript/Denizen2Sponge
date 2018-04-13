@@ -22,6 +22,10 @@ public class ItemTypeTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid item_type tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return ItemTypeTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

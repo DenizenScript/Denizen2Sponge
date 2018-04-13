@@ -22,6 +22,10 @@ public class LocationTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid location tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return LocationTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

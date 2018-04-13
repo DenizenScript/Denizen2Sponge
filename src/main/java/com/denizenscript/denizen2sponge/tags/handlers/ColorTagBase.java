@@ -24,6 +24,10 @@ public class ColorTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid color tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         String c = data.getNextModifier().toString();
         StringBuilder res = new StringBuilder(c.length() * 2);
         for (int i = 0; i < c.length(); i++) {

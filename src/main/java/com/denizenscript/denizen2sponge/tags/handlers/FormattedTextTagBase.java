@@ -22,6 +22,10 @@ public class FormattedTextTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid formatted_text tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return FormattedTextTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

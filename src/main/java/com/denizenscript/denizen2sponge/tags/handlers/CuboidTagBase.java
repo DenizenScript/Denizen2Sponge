@@ -22,6 +22,10 @@ public class CuboidTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid cuboid tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return CuboidTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

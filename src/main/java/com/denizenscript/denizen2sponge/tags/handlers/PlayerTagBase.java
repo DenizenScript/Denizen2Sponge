@@ -55,6 +55,10 @@ public class PlayerTagBase extends AbstractTagBase {
             data.error.run("Tried to read connected player, but failed (no connected player).");
             return new NullTag();
         }
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid player tag-base: expected a modifier! See documentation for this tag! (No local player ref found)");
+            return null;
+        }
         return PlayerTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }

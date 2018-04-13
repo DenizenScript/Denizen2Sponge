@@ -22,6 +22,10 @@ public class EntityTagBase extends AbstractTagBase {
 
     @Override
     public AbstractTagObject handle(TagData data) {
+        if (!data.hasNextModifier()) {
+            data.error.run("Invalid entity tag-base: expected a modifier! See documentation for this tag!");
+            return null;
+        }
         return EntityTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
     }
 }
