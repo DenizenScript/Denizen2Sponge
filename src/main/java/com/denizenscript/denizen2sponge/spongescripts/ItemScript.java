@@ -17,6 +17,7 @@ import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.StringHolder;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
@@ -171,12 +172,24 @@ public class ItemScript extends CommandScript {
         };
         ItemStack.Builder its = ItemStack.builder().from(ItemTag.getFor(error, parseVal(queue, material), queue).getInternal()).quantity(1);
         if (displayName != null) {
-            its = its.add(Keys.DISPLAY_NAME, Denizen2Sponge.parseColor(parseVal(queue, displayName).toString()));
+            AbstractTagObject ato = parseVal(queue, displayName);
+            if (ato instanceof FormattedTextTag) {
+                its = its.add(Keys.DISPLAY_NAME, ((FormattedTextTag) ato).getInternal());
+            }
+            else {
+                its = its.add(Keys.DISPLAY_NAME, Denizen2Sponge.parseColor(ato.toString()));
+            }
         }
         if (lore != null) {
             List<Text> loreVal = new ArrayList<>();
             for (Argument arg : lore) {
-                loreVal.add(Denizen2Sponge.parseColor(parseVal(queue, arg).toString()));
+                AbstractTagObject ato = parseVal(queue, arg);
+                if (ato instanceof FormattedTextTag) {
+                    loreVal.add(((FormattedTextTag) ato).getInternal());
+                }
+                else {
+                    loreVal.add(Denizen2Sponge.parseColor(ato.toString()));
+                }
             }
             its.add(Keys.ITEM_LORE, loreVal);
         }
