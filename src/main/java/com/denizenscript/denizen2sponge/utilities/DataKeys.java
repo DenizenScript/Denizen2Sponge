@@ -12,6 +12,7 @@ import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import com.flowpowered.math.vector.Vector3d;
+import com.google.common.reflect.TypeToken;
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataHolder;
@@ -20,9 +21,7 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.text.Text;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 public class DataKeys {
 
@@ -71,7 +70,92 @@ public class DataKeys {
         return temp;
     }
 
-    // TODO: List support!
+    public static Object convertObjectUsing(Action<String> error, TypeToken type, AbstractTagObject value) {
+        if (List.class.isAssignableFrom(type.getRawType())) {
+            TypeToken st = type.resolveType(List.class.getTypeParameters()[0]);
+            ArrayList toRet = new ArrayList();
+            for (AbstractTagObject obj : ListTag.getFor(error, value).getInternal()) {
+                toRet.add(convertObjectUsing(error, st, obj));
+            }
+            return toRet;
+        }
+        else if (type.isSubtypeOf(Boolean.class)) {
+            return BooleanTag.getFor(error, value).getInternal();
+        }
+        else if (type.isSubtypeOf(CatalogType.class)) {
+            String val = value.toString();
+            Optional optCatalogType = Sponge.getRegistry().getType(type.getRawType(), val);
+            if (!optCatalogType.isPresent()) {
+                error.run("Invalid value '" + val + "' requested for enumeration '" + type.getRawType().getCanonicalName() + "'!");
+                return null;
+            }
+            return optCatalogType.get();
+        }
+        else if (type.isSubtypeOf(Double.class)) {
+            return NumberTag.getFor(error, value).getInternal();
+        }
+        else if (type.isSubtypeOf(Enum.class)) {
+            return Enum.valueOf(type.getRawType(), value.toString().toUpperCase());
+        }
+        else if (type.isSubtypeOf(Integer.class)) {
+            return (int) IntegerTag.getFor(error, value).getInternal();
+        }
+        else if (type.isSubtypeOf(Vector3d.class)) {
+            return LocationTag.getFor(error, value).getInternal().toVector3d();
+        }
+        else if (type.isSubtypeOf(Text.class)) {
+            return FormattedTextTag.getFor(error, value).getInternal();
+        }
+        else if (type.isSubtypeOf(FlagMap.class)) {
+            return new FlagMap(MapTag.getFor(error, value));
+        }
+        else {
+            error.run("The value type '" + type.getRawType().getCanonicalName() + "' is not supported yet, cannot apply!");
+            return null;
+        }
+    }
+
+    public static AbstractTagObject taggifyObject(Action<String> error, Object input) {
+        if (input instanceof List) {
+            ListTag toRet = new ListTag();
+            for (Object obj : (List) input) {
+                toRet.getInternal().add(taggifyObject(error, obj));
+            }
+            return toRet;
+        }
+        if (input instanceof AbstractTagObject) {
+            return (AbstractTagObject) input;
+        }
+        if (input instanceof Boolean) {
+            return new BooleanTag((Boolean) input);
+        }
+        if (input instanceof CatalogType) {
+            return new TextTag(input.toString());
+        }
+        if (input instanceof Double) {
+            return new NumberTag((Double) input);
+        }
+        if (input instanceof Enum) {
+            return new TextTag(input.toString());
+        }
+        if (input instanceof Integer) {
+            return new IntegerTag((Integer) input);
+        }
+        if (input instanceof Vector3d) {
+            return new LocationTag((Vector3d) input);
+        }
+        if (input instanceof Text) {
+            return new FormattedTextTag((Text) input);
+        }
+        if (input instanceof FlagMap) {
+            return new MapTag(((FlagMap) input).flags.getInternal());
+        }
+        error.run("The value type '" + input.getClass().getName() + "' is not supported yet, cannot taggify!");
+        return new NullTag();
+    }
+
+    private static ArrayList EMPTY_LIST = new ArrayList();
+
     // TODO: Rotation support!
 
     public static AbstractTagObject getValue(DataHolder dataHolder, Key key, Action<String> error) {
@@ -82,6 +166,9 @@ public class DataKeys {
             }
             error.run("This data holder does not support the key '" + key.getId() + "'!");
             return new NullTag();
+        }
+        if (List.class.isAssignableFrom(clazz)) {
+            return taggifyObject(error, dataHolder.getOrElse(key, EMPTY_LIST));
         }
         if (Boolean.class.isAssignableFrom(clazz)) {
             return new BooleanTag(dataHolder.getOrElse((Key<BaseValue<Boolean>>) key, false));
@@ -108,15 +195,18 @@ public class DataKeys {
             return new MapTag(dataHolder.getOrElse((Key<BaseValue<FlagMap>>) key, new FlagMap(new MapTag())).flags.getInternal());
         }
         else {
-            error.run("The value type '" + clazz.getName() + "' is not supported yet!");
+            error.run("The value type '" + clazz.getName() + "' is not supported yet, cannot get its value!");
             return new NullTag();
         }
     }
 
     public static void tryApply(DataHolder entity, Key key, AbstractTagObject value, Action<String> error) {
-        Class clazz = key.getElementToken().getRawType();
+        if (key == null) {
+            error.run("The given key is null - an invalid key name may have been given.");
+            return;
+        }
         if (!entity.supports(key)) {
-            if (FlagMap.class.isAssignableFrom(clazz)) {
+            if (key.getElementToken().isSubtypeOf(FlagMap.class)) {
                 entity.offer(new FlagMapDataImpl(new FlagMap(new MapTag())));
             }
             else {
@@ -124,45 +214,23 @@ public class DataKeys {
                 return;
             }
         }
-        if (Boolean.class.isAssignableFrom(clazz)) {
-            entity.offer(key, BooleanTag.getFor(error, value).getInternal());
+        Object offerMe = convertObjectUsing(error, key.getElementToken(), value);
+        if (offerMe == null) {
+            error.run("Failed to apply key with null value!");
+            return;
         }
-        else if (CatalogType.class.isAssignableFrom(clazz)) {
-            String val = value.toString();
-            Optional optCatalogType = Sponge.getRegistry().getType(clazz, val);
-            if (!optCatalogType.isPresent()) {
-                error.run("Invalid value '" + val + "' for property '" + key.getId() + "'!");
-                return;
-            }
-            entity.offer(key, optCatalogType.get());
-        }
-        else if (Double.class.isAssignableFrom(clazz)) {
-            entity.offer(key, NumberTag.getFor(error, value).getInternal());
-        }
-        else if (Enum.class.isAssignableFrom(clazz)) {
-            entity.offer(key, Enum.valueOf(clazz, value.toString().toUpperCase()));
-        }
-        else if (Integer.class.isAssignableFrom(clazz)) {
-            entity.offer(key, (int) IntegerTag.getFor(error, value).getInternal());
-        }
-        else if (Vector3d.class.isAssignableFrom(clazz)) {
-            entity.offer(key, LocationTag.getFor(error, value).getInternal().toVector3d());
-        }
-        else if (Text.class.isAssignableFrom(clazz)) {
-            entity.offer(key, FormattedTextTag.getFor(error, value).getInternal());
-        }
-        else if (FlagMap.class.isAssignableFrom(clazz)) {
-            entity.offer(new FlagMapDataImpl(new FlagMap(MapTag.getFor(error, value))));
+        if (offerMe instanceof FlagMap) {
+            entity.offer(new FlagMapDataImpl((FlagMap) offerMe));
         }
         else {
-            error.run("The value type '" + clazz.getName() + "' is not supported yet!");
+            entity.offer(key, offerMe);
         }
     }
 
     public static ImmutableDataHolder with(ImmutableDataHolder entity, Key key, AbstractTagObject value, Action<String> error) {
         Class clazz = key.getElementToken().getRawType();
         if (!entity.supports(key)) {
-            if (FlagMap.class.isAssignableFrom(clazz)) {
+            if (key.getElementToken().isSubtypeOf(FlagMap.class)) {
                 entity = (ImmutableDataHolder) entity.with(new FlagMapDataImpl(new FlagMap(new MapTag()))).get();
             }
             else {
@@ -170,39 +238,16 @@ public class DataKeys {
                 return null;
             }
         }
-        if (Boolean.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(key, BooleanTag.getFor(error, value).getInternal()).get();
+        Object offerMe = convertObjectUsing(error, key.getElementToken(), value);
+        if (offerMe == null) {
+            error.run("Failed to apply key with null value!");
+            return null;
         }
-        else if (CatalogType.class.isAssignableFrom(clazz)) {
-            String val = value.toString();
-            Optional optCatalogType = Sponge.getRegistry().getType(clazz, val);
-            if (!optCatalogType.isPresent()) {
-                error.run("Invalid value '" + val + "' for property '" + key.getId() + "'!");
-                return null;
-            }
-            return (ImmutableDataHolder) entity.with(key, optCatalogType.get()).get();
-        }
-        else if (Double.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(key, NumberTag.getFor(error, value).getInternal()).get();
-        }
-        else if (Enum.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(key, Enum.valueOf(clazz, value.toString().toUpperCase())).get();
-        }
-        else if (Integer.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(key, (int) IntegerTag.getFor(error, value).getInternal()).get();
-        }
-        else if (Vector3d.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(key, LocationTag.getFor(error, value).getInternal().toVector3d()).get();
-        }
-        else if (Text.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(key, FormattedTextTag.getFor(error, value).getInternal()).get();
-        }
-        else if (FlagMap.class.isAssignableFrom(clazz)) {
-            return (ImmutableDataHolder) entity.with(new FlagMapDataImpl(new FlagMap(MapTag.getFor(error, value)))).get();
+        if (offerMe instanceof FlagMap) {
+            return (ImmutableDataHolder) entity.with(new FlagMapDataImpl((FlagMap) offerMe)).get();
         }
         else {
-            error.run("The value type '" + clazz.getName() + "' is not supported yet!");
-            return null;
+            return (ImmutableDataHolder) entity.with(key, offerMe).get();
         }
     }
 }
