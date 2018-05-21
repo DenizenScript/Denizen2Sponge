@@ -5,15 +5,20 @@ import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.spongescripts.ItemScript;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SkullType;
 import org.spongepowered.api.data.type.SkullTypes;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.profile.property.ProfileProperty;
 
@@ -44,6 +49,23 @@ public class ItemTag extends AbstractTagObject {
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
+    public ItemScript getSourceScript() {
+        Optional<FlagMap> fm = internal.get(FlagHelper.FLAGMAP);
+        if (fm.isPresent()) {
+            MapTag flags = fm.get().flags;
+            if (flags.getInternal().containsKey("_d2_script")) {
+                AbstractTagObject scriptObj = flags.getInternal().get("_d2_script");
+                if (scriptObj instanceof ScriptTag) {
+                    ScriptTag script = (ScriptTag) scriptObj;
+                    if (script.getInternal() instanceof ItemScript) {
+                        return (ItemScript) script.getInternal();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     static {
         // <--[tag]
         // @Since 0.3.0
@@ -52,8 +74,36 @@ public class ItemTag extends AbstractTagObject {
         // @Group General Information
         // @ReturnType MapTag
         // @Returns a list of all data keys and their values for the entity.
+        // TODO: Create and reference an explanation of basic item keys.
         // -->
         handlers.put("data", (dat, obj) -> DataKeys.getAllKeys(((ItemTag) obj).internal));
+        // <--[tag]
+        // @Since 0.5.0
+        // @Name ItemTag.is_script
+        // @Updated 2018/05/21
+        // @Group General Information
+        // @ReturnType BooleanTag
+        // @Returns whether the item was sourced from a script.
+        // -->
+        handlers.put("is_script", (dat, obj) -> new BooleanTag(((ItemTag) obj).getSourceScript() != null));
+        // <--[tag]
+        // @Since 0.5.0
+        // @Name ItemTag.script
+        // @Updated 2018/05/21
+        // @Group General Information
+        // @ReturnType ScriptTag
+        // @Returns the script this item tag was created with, if any.
+        // -->
+        handlers.put("script", (dat, obj) -> {
+            ItemScript src = ((ItemTag) obj).getSourceScript();
+            if (src == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Item was not sourced from a script.");
+                }
+                return new NullTag();
+            }
+            return new ScriptTag(src);
+        });
         // <--[tag]
         // @Since 0.3.0
         // @Name ItemTag.flag[<TextTag>]
@@ -93,6 +143,7 @@ public class ItemTag extends AbstractTagObject {
         // @Group General Information
         // @ReturnType Dynamic
         // @Returns the value of the specified key on the entity.
+        // TODO: Create and reference an explanation of basic item keys.
         // -->
         handlers.put("get", (dat, obj) -> {
             String keyName = dat.getNextModifier().toString();
@@ -272,12 +323,17 @@ public class ItemTag extends AbstractTagObject {
         // @Group General Information
         // @ReturnType ItemTag
         // @Returns a copy of the item, with the specified data adjustments.
+        // TODO: Create and reference an explanation of basic item keys.
         // -->
         handlers.put("with", (dat, obj) -> {
             ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
             MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
             for (Map.Entry<String, AbstractTagObject> a : toApply.getInternal().entrySet()) {
-                DataKeys.tryApply(its, DataKeys.getKeyForName(a.getKey()), a.getValue(), dat.error);
+                Key k = DataKeys.getKeyForName(a.getKey());
+                if (k == null) {
+                    dat.error.run("Key '" + a.getKey() + "' does not seem to exist.");
+                }
+                DataKeys.tryApply(its, k, a.getValue(), dat.error);
             }
             return new ItemTag(its);
         });
@@ -311,16 +367,33 @@ public class ItemTag extends AbstractTagObject {
 
     public static ItemTag getFor(Action<String> error, String text) {
         List<String> split = CoreUtilities.split(text, '/', 3);
-        ItemTypeTag type = ItemTypeTag.getFor(error, split.get(0));
         int q = 1;
         if (split.size() > 1) {
             q = (int) IntegerTag.getFor(error, split.get(1)).getInternal();
         }
-        ItemStack its = ItemStack.of(type.getInternal(), q);
+        Optional<ItemType> optItemType = Sponge.getRegistry().getType(ItemType.class, text);
+        ItemStack its;
+        if (optItemType.isPresent()) {
+            its = ItemStack.of(optItemType.get(), q);
+        }
+        else {
+            String tlow = CoreUtilities.toLowerCase(text);
+            if (Denizen2Sponge.itemScripts.containsKey(tlow)) {
+                its = Denizen2Sponge.itemScripts.get(tlow).getItemCopy(null);
+            }
+            else {
+                error.run("Invalid item type '" + text + "'");
+                return null;
+            }
+        }
         if (split.size() > 2) {
             MapTag toApply = MapTag.getFor(error, split.get(2));
             for (Map.Entry<String, AbstractTagObject> a : toApply.getInternal().entrySet()) {
-                DataKeys.tryApply(its, DataKeys.getKeyForName(a.getKey()), a.getValue(), error);
+                Key k = DataKeys.getKeyForName(a.getKey());
+                if (k == null) {
+                    error.run("Key '" + a.getKey() + "' does not seem to exist.");
+                }
+                DataKeys.tryApply(its, k, a.getValue(), error);
             }
         }
         return new ItemTag(its);

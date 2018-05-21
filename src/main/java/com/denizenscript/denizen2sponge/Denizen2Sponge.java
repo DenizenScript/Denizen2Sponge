@@ -28,6 +28,7 @@ import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.spongescripts.AdvancementScript;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
+import com.denizenscript.denizen2sponge.spongescripts.ItemScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.GameRules;
@@ -47,6 +48,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Main plugin class for Denizen2Sponge.
@@ -79,11 +81,12 @@ public class Denizen2Sponge {
         return TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize(inp);
     }
 
-    public static HashMap<String, InventoryTag> rememberedInventories = new HashMap<>();
+    public static final Map<String, InventoryTag> rememberedInventories = new HashMap<>();
 
     @Inject
     public Logger logger;
 
+    public static final Map<String, ItemScript> itemScripts = new HashMap<>();
 
     static {
         YAMLConfiguration tconfig = null;
@@ -256,6 +259,7 @@ public class Denizen2Sponge {
         // Sponge Script Types
         Denizen2Core.register("command", GameCommandScript::new);
         Denizen2Core.register("advancement", AdvancementScript::new);
+        Denizen2Core.register("item", ItemScript::new);
         // Tag Types
         Denizen2Core.customSaveLoaders.put("BlockTypeTag", BlockTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("CuboidTag", CuboidTag::getFor);
