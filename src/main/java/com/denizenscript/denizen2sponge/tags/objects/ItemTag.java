@@ -1,5 +1,6 @@
 package com.denizenscript.denizen2sponge.tags.objects;
 
+import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
@@ -365,7 +366,7 @@ public class ItemTag extends AbstractTagObject {
         });
     }
 
-    public static ItemTag getFor(Action<String> error, String text) {
+    public static ItemTag getFor(Action<String> error, String text, CommandQueue queue) {
         List<String> split = CoreUtilities.split(text, '/', 3);
         int q = 1;
         if (split.size() > 1) {
@@ -379,7 +380,7 @@ public class ItemTag extends AbstractTagObject {
         else {
             String tlow = CoreUtilities.toLowerCase(text);
             if (Denizen2Sponge.itemScripts.containsKey(tlow)) {
-                its = Denizen2Sponge.itemScripts.get(tlow).getItemCopy(null);
+                its = Denizen2Sponge.itemScripts.get(tlow).getItemCopy(queue);
             }
             else {
                 error.run("Invalid item type '" + text + "'");
@@ -399,8 +400,16 @@ public class ItemTag extends AbstractTagObject {
         return new ItemTag(its);
     }
 
-    public static ItemTag getFor(Action<String> error, AbstractTagObject text) {
-        return (text instanceof ItemTag) ? (ItemTag) text : getFor(error, text.toString());
+    public static ItemTag getFor(Action<String> error, AbstractTagObject ato, CommandQueue queue) {
+        return (ato instanceof ItemTag) ? (ItemTag) ato : getFor(error, ato.toString());
+    }
+
+    public static ItemTag getFor(Action<String> error, String text) {
+        return getFor(error, text, null);
+    }
+
+    public static ItemTag getFor(Action<String> error, AbstractTagObject ato) {
+        return getFor(error, ato, null);
     }
 
     @Override

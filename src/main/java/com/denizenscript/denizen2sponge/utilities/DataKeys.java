@@ -106,6 +106,9 @@ public class DataKeys {
         else if (type.isSubtypeOf(Text.class)) {
             return FormattedTextTag.getFor(error, value).getInternal();
         }
+        else if (type.isSubtypeOf(UUID.class)) {
+            return UUID.fromString(value.toString());
+        }
         else if (type.isSubtypeOf(FlagMap.class)) {
             return new FlagMap(MapTag.getFor(error, value));
         }
@@ -146,6 +149,9 @@ public class DataKeys {
         }
         if (input instanceof Text) {
             return new FormattedTextTag((Text) input);
+        }
+        if (input instanceof UUID) {
+            return new TextTag(input.toString());
         }
         if (input instanceof FlagMap) {
             return new MapTag(((FlagMap) input).flags.getInternal());
@@ -190,6 +196,9 @@ public class DataKeys {
         }
         else if (Text.class.isAssignableFrom(clazz)) {
             return new FormattedTextTag(dataHolder.getOrElse((Key<BaseValue<Text>>) key, Text.EMPTY));
+        }
+        else if (UUID.class.isAssignableFrom(clazz)) {
+            return new TextTag(dataHolder.getValue((Key<BaseValue<UUID>>) key).orElseThrow(() -> new ErrorInducedException("Empty UUID value!")).get().toString());
         }
         else if (FlagMap.class.isAssignableFrom(clazz)) {
             return new MapTag(dataHolder.getOrElse((Key<BaseValue<FlagMap>>) key, new FlagMap(new MapTag())).flags.getInternal());

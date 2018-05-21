@@ -60,7 +60,7 @@ public class TakeCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+        ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 1), queue);
         String type;
         if (entry.namedArgs.containsKey("operation")) {
             type = entry.getNamedArgumentObject(queue, "operation").toString();

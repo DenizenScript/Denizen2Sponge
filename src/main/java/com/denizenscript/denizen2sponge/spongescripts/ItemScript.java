@@ -169,7 +169,7 @@ public class ItemScript extends CommandScript {
         Action<String> error = (es) -> {
             throw new ErrorInducedException(es);
         };
-        ItemStack.Builder its = ItemStack.builder().from(ItemTag.getFor(error, parseVal(queue, material)).getInternal()).quantity(1);
+        ItemStack.Builder its = ItemStack.builder().from(ItemTag.getFor(error, parseVal(queue, material), queue).getInternal()).quantity(1);
         if (displayName != null) {
             its = its.add(Keys.DISPLAY_NAME, Denizen2Sponge.parseColor(parseVal(queue, displayName).toString()));
         }

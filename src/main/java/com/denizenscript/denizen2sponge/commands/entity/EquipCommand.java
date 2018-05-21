@@ -61,7 +61,7 @@ public class EquipCommand extends AbstractCommand {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         MapTag map = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         for (Map.Entry<String, AbstractTagObject> mapentry : map.getInternal().entrySet()) {
-            ItemTag itm = ItemTag.getFor(queue.error, mapentry.getValue());
+            ItemTag itm = ItemTag.getFor(queue.error, mapentry.getValue(), queue);
             Equipment.equippers.get(CoreUtilities.toLowerCase(mapentry.getKey())).run(new Tuple<>((Living) ent.getInternal(), itm));
         }
         if (queue.shouldShowGood()) {

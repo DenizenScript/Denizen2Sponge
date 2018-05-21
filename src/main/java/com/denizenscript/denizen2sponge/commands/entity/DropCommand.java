@@ -54,7 +54,7 @@ public class DropCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
+        ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 0), queue);
         LocationTag locationTag = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         UtilLocation location = locationTag.getInternal();
         if (location.world == null) {

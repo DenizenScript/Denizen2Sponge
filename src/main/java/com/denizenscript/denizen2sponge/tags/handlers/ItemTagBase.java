@@ -26,6 +26,6 @@ public class ItemTagBase extends AbstractTagBase {
             data.error.run("Invalid item tag-base: expected a modifier! See documentation for this tag!");
             return null;
         }
-        return ItemTag.getFor(data.error, data.getNextModifier()).handle(data.shrink());
+        return ItemTag.getFor(data.error, data.getNextModifier(), data.currentQueue).handle(data.shrink());
     }
 }

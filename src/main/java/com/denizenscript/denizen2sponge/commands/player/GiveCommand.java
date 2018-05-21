@@ -62,7 +62,7 @@ public class GiveCommand extends AbstractCommand {
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
         PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
+        ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 1), queue);
         if (queue.shouldShowGood()) {
             queue.outGood("Giving " + ColorSet.emphasis + player.debug() + ColorSet.good
                     + ": " + ColorSet.emphasis + item.debug());

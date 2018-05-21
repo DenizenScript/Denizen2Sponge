@@ -66,7 +66,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Returns whether the inventory contains the specified quantity or more of the specified item.
         // @Example "block/0,1,2,world" .contains[diamond/3] might return "false".
         // -->
-        handlers.put("contains", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.contains(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        handlers.put("contains", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.contains(ItemTag.getFor(dat.error, dat.getNextModifier(), dat.currentQueue).getInternal())));
         // <--[tag]
         // @Since 0.3.0
         // @Name InventoryTag.contains_any[<ItemTag>]
@@ -76,7 +76,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Returns whether the inventory contains any quantity of the specified item.
         // @Example "block/0,1,2,world" .contains_any[diamond] might return "true".
         // -->
-        handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+        handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier(), dat.currentQueue).getInternal())));
         // <--[tag]
         // @Since 0.4.0
         // @Name InventoryTag.fuel

@@ -23,6 +23,7 @@ public class Denizen2SpongeImplementation extends Denizen2Implementation {
         GameCommandScript.clear();
         AdvancementScript.oldAdvancementScripts = new HashSet<>(AdvancementScript.currentAdvancementScripts.keySet());
         AdvancementScript.currentAdvancementScripts.clear();
+        Denizen2Sponge.itemScripts.clear();
     }
 
     @Override
