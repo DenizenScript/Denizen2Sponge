@@ -41,7 +41,8 @@ public class ItemTag extends AbstractTagObject {
     private ItemStack internal;
 
     public ItemTag(ItemStack itm) {
-        internal = itm;
+        // TODO: option to get ItemTag that doesn't auto-copy?
+        internal = itm.copy();
     }
 
     public ItemStack getInternal() {
@@ -300,7 +301,7 @@ public class ItemTag extends AbstractTagObject {
             }
             MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
             flags.getInternal().putAll(toApply.getInternal());
-            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            ItemStack its = ((ItemTag) obj).internal.copy();
             its.offer(new FlagMapDataImpl(new FlagMap(flags)));
             return new ItemTag(its);
         });
@@ -313,7 +314,7 @@ public class ItemTag extends AbstractTagObject {
         // @Returns a copy of the item, with the specified quantity.
         // -->
         handlers.put("with_quantity", (dat, obj) -> {
-            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            ItemStack its = ((ItemTag) obj).internal.copy();
             its.setQuantity((int) IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal());
             return new ItemTag(its);
         });
@@ -327,7 +328,7 @@ public class ItemTag extends AbstractTagObject {
         // TODO: Create and reference an explanation of basic item keys.
         // -->
         handlers.put("with", (dat, obj) -> {
-            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            ItemStack its = ((ItemTag) obj).internal.copy();
             MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
             for (Map.Entry<String, AbstractTagObject> a : toApply.getInternal().entrySet()) {
                 Key k = DataKeys.getKeyForName(a.getKey());
@@ -360,7 +361,7 @@ public class ItemTag extends AbstractTagObject {
             for (AbstractTagObject k : toRemove.getInternal()) {
                 flags.getInternal().remove(k.toString());
             }
-            ItemStack its = ((ItemTag) obj).internal.createSnapshot().createStack();
+            ItemStack its = ((ItemTag) obj).internal.copy();
             its.offer(new FlagMapDataImpl(new FlagMap(flags)));
             return new ItemTag(its);
         });

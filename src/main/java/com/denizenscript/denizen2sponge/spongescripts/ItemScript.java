@@ -104,7 +104,7 @@ public class ItemScript extends CommandScript {
 
     public ItemStack getItemCopy(CommandQueue queue) {
         if (staticItem != null) {
-            return staticItem;
+            return staticItem.copy();
         }
         return generateItem(queue);
     }

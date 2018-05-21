@@ -67,7 +67,7 @@ public class GiveCommand extends AbstractCommand {
             queue.outGood("Giving " + ColorSet.emphasis + player.debug() + ColorSet.good
                     + ": " + ColorSet.emphasis + item.debug());
         }
-        InventoryTransactionResult itr = player.getInternal().getInventory().offer(item.getInternal());
+        InventoryTransactionResult itr = player.getInternal().getInventory().offer(item.getInternal().copy());
         for (ItemStackSnapshot iss : itr.getReplacedItems()) {
             if (queue.shouldShowGood()) {
                 queue.outGood("Gave: " + new ItemTag(iss.createStack()).debug());
