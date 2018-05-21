@@ -39,10 +39,11 @@ public class ExperienceChangesScriptEvent extends ScriptEvent {
     //
     // @Context
     // player (PlayerTag) returns the player that changed experience.
+    // old_xp (IntegerTag) returns the old experience value.
     // new_xp (IntegerTag) returns the new experience value.
     //
     // @Determinations
-    // level (IntegerTag) sets the new experience value.
+    // xp (IntegerTag) sets the new experience value.
     // -->
 
     @Override
@@ -66,6 +67,8 @@ public class ExperienceChangesScriptEvent extends ScriptEvent {
 
     public PlayerTag player;
 
+    public IntegerTag old_xp;
+
     public IntegerTag new_xp;
 
     public ChangeEntityExperienceEvent internal;
@@ -74,6 +77,7 @@ public class ExperienceChangesScriptEvent extends ScriptEvent {
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("player", player);
+        defs.put("old_xp", old_xp);
         defs.put("new_xp", new_xp);
         return defs;
     }
@@ -93,6 +97,7 @@ public class ExperienceChangesScriptEvent extends ScriptEvent {
         ExperienceChangesScriptEvent event = (ExperienceChangesScriptEvent) clone();
         event.internal = evt;
         event.player = new PlayerTag(player);
+        event.old_xp = new IntegerTag(evt.getOriginalExperience());
         event.new_xp = new IntegerTag(evt.getExperience());
         event.cancelled = evt.isCancelled();
         event.run();
@@ -101,7 +106,7 @@ public class ExperienceChangesScriptEvent extends ScriptEvent {
 
     @Override
     public void applyDetermination(boolean errors, String determination, AbstractTagObject value) {
-        if (determination.equals("level")) {
+        if (determination.equals("xp")) {
             IntegerTag it = IntegerTag.getFor(this::error, value);
             new_xp = it;
             internal.setExperience((int) it.getInternal());

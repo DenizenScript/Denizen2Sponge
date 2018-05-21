@@ -45,7 +45,7 @@ public class AdvancementScript extends CommandScript {
     // parent (TextTag, only for children advancements), tree_id (TextTag, only for root
     // advancements), tree_name (TextTag, only for root advancements, optional),
     // position_x (NumberTag), and position_y (NumberTag).
-    // TODO: Add "Related information" such as criteria formatting, advancement types and examples.
+    // TODO: Add "Related information" such as advancement types and examples.
     // -->
 
     public AdvancementScript(String name, YAMLConfiguration section) {
