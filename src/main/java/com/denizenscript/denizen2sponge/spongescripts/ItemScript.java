@@ -58,6 +58,7 @@ public class ItemScript extends CommandScript {
     // as that is likely very localized. The item stack given directly by the item script system will have a quantity of 1.
     //
     // All options listed below are used to define the item's specific details. They all support tags on input.
+    // All options other than "material" may use the automatically included definition tag <[material]> to get the base material.
     //
     // Set key "material" directly to an ItemTag of the basic item type to use. You may list an item type, or an existing item.
     // Be careful to not list the item script within itself, even indirectly, as this can cause recursion errors.
@@ -162,20 +163,23 @@ public class ItemScript extends CommandScript {
         }
     }
 
-    public AbstractTagObject parseVal(CommandQueue queue, Argument arg) {
+    public AbstractTagObject parseVal(CommandQueue queue, Argument arg, HashMap<String, AbstractTagObject> varBack) {
         Action<String> error = (es) -> {
             throw new ErrorInducedException(es);
         };
-        return arg.parse(queue, new HashMap<>(), getDebugMode(), error);
+        return arg.parse(queue, varBack, getDebugMode(), error);
     }
 
     public ItemStack generateItem(CommandQueue queue) {
         Action<String> error = (es) -> {
             throw new ErrorInducedException(es);
         };
-        ItemStack.Builder its = ItemStack.builder().from(ItemTag.getFor(error, parseVal(queue, material), queue).getInternal()).quantity(1);
+        HashMap<String, AbstractTagObject> varBack = new HashMap<>();
+        ItemTag baseMat = ItemTag.getFor(error, parseVal(queue, material, varBack), queue);
+        varBack.put("material", baseMat);
+        ItemStack.Builder its = ItemStack.builder().from(baseMat.getInternal().copy()).quantity(1);
         if (displayName != null) {
-            AbstractTagObject ato = parseVal(queue, displayName);
+            AbstractTagObject ato = parseVal(queue, displayName, varBack);
             if (ato instanceof FormattedTextTag) {
                 its = its.add(Keys.DISPLAY_NAME, ((FormattedTextTag) ato).getInternal());
             }
@@ -186,7 +190,7 @@ public class ItemScript extends CommandScript {
         if (lore != null) {
             List<Text> loreVal = new ArrayList<>();
             for (Argument arg : lore) {
-                AbstractTagObject ato = parseVal(queue, arg);
+                AbstractTagObject ato = parseVal(queue, arg, varBack);
                 if (ato instanceof FormattedTextTag) {
                     loreVal.add(((FormattedTextTag) ato).getInternal());
                 }
@@ -199,10 +203,10 @@ public class ItemScript extends CommandScript {
         MapTag flagsMap = new MapTag();
         if (flags != null) {
             for (Tuple<String, Argument> flagVal : flags) {
-                flagsMap.getInternal().put(flagVal.one, parseVal(queue, flagVal.two));
+                flagsMap.getInternal().put(flagVal.one, parseVal(queue, flagVal.two, varBack));
             }
         }
-        if (plain == null || !BooleanTag.getFor(error, parseVal(queue, plain)).getInternal()) {
+        if (plain == null || !BooleanTag.getFor(error, parseVal(queue, plain, varBack)).getInternal()) {
             flagsMap.getInternal().put("_d2_script", new ScriptTag(this));
         }
         ItemStack toRet = its.build();
@@ -212,7 +216,7 @@ public class ItemScript extends CommandScript {
                 if (k == null) {
                     throw new ErrorInducedException("Key '" + input.one + "' does not seem to exist.");
                 }
-                DataKeys.tryApply(toRet, k, parseVal(queue, input.two), error);
+                DataKeys.tryApply(toRet, k, parseVal(queue, input.two, varBack), error);
             }
         }
         if (!flagsMap.getInternal().isEmpty()) {
