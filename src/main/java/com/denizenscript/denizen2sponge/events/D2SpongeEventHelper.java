@@ -5,9 +5,9 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.IntegerTag;
 import com.denizenscript.denizen2core.tags.objects.ListTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
-import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2sponge.spongescripts.ItemScript;
 import com.denizenscript.denizen2sponge.tags.objects.*;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
@@ -178,6 +178,7 @@ public class D2SpongeEventHelper {
     // type: (ItemTypeTag) checks if the item type matches.
     // Quantity: (IntegerTag) checks if the quantity is at least a value.
     // Flagged: (TextTag) checks if the item has a flag.
+    // Script: (ScriptTag) checks if the item was created by a specific script.
     // -->
 
     public static boolean checkItem(ItemTag itm, ScriptEvent.ScriptEventData data, Action<String> error) {
@@ -207,8 +208,14 @@ public class D2SpongeEventHelper {
                     return false;
                 }
             }
-            if (t.equals("quantity")) {
+            else if (t.equals("quantity")) {
                 if (itm.getInternal().getQuantity() < IntegerTag.getFor(error, v).getInternal()) {
+                    return false;
+                }
+            }
+            else if (t.equals("script")) {
+                ItemScript src = itm.getSourceScript();
+                if (src == null || !src.itemScriptName.equals(CoreUtilities.toLowerCase(v))) {
                     return false;
                 }
             }

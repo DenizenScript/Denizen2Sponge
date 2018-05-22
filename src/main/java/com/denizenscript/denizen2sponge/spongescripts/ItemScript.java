@@ -76,7 +76,10 @@ public class ItemScript extends CommandScript {
 
     public ItemScript(String name, YAMLConfiguration section) {
         super(name, section);
+        itemScriptName = CoreUtilities.toLowerCase(name);
     }
+
+    public final String itemScriptName;
 
     @Override
     public boolean init() {
@@ -94,7 +97,7 @@ public class ItemScript extends CommandScript {
                 Debug.error("Item generation for " + ColorSet.emphasis + title + ColorSet.warning + ": " + ex.getMessage());
                 return false;
             }
-            Denizen2Sponge.itemScripts.put(CoreUtilities.toLowerCase(title), this);
+            Denizen2Sponge.itemScripts.put(itemScriptName, this);
             return true;
         }
         return false;
