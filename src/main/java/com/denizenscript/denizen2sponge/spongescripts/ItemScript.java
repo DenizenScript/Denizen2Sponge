@@ -82,6 +82,8 @@ public class ItemScript extends CommandScript {
 
     public final String itemScriptName;
 
+    private static final CommandQueue FORCE_TO_STATIC = new CommandQueue(); // Special case recursive static generation helper
+
     @Override
     public boolean init() {
         if (super.init()) {
@@ -91,7 +93,7 @@ public class ItemScript extends CommandScript {
                     throw new ErrorInducedException(es);
                 };
                 if (contents.contains("static") && BooleanTag.getFor(error, contents.getString("static")).getInternal()) {
-                    staticItem = generateItem(null);
+                    staticItem = getItemCopy(FORCE_TO_STATIC);
                 }
             }
             catch (ErrorInducedException ex) {
@@ -221,6 +223,9 @@ public class ItemScript extends CommandScript {
         }
         if (!flagsMap.getInternal().isEmpty()) {
             toRet.offer(new FlagMapDataImpl(new FlagMap(flagsMap)));
+        }
+        if (queue == FORCE_TO_STATIC) {
+            staticItem = toRet;
         }
         return toRet;
     }
