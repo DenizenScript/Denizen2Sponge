@@ -224,7 +224,8 @@ public class ItemScript extends CommandScript {
         if (!flagsMap.getInternal().isEmpty()) {
             toRet.offer(new FlagMapDataImpl(new FlagMap(flagsMap)));
         }
-        if (queue == FORCE_TO_STATIC) {
+        if (queue == FORCE_TO_STATIC && contents.contains("static")
+                && BooleanTag.getFor(error, contents.getString("static")).getInternal()) {
             staticItem = toRet;
         }
         return toRet;
