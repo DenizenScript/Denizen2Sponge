@@ -291,7 +291,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("with_flags", (dat, obj) -> {
             MapTag flags;
-            ItemStack e = ((ItemTag) obj).internal;
+            ItemStack e = ((ItemTag) obj).internal.copy();
             Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
             if (fm.isPresent()) {
                 flags = new MapTag(fm.get().flags.getInternal());
@@ -301,9 +301,8 @@ public class ItemTag extends AbstractTagObject {
             }
             MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
             flags.getInternal().putAll(toApply.getInternal());
-            ItemStack its = ((ItemTag) obj).internal.copy();
-            its.offer(new FlagMapDataImpl(new FlagMap(flags)));
-            return new ItemTag(its);
+            e.offer(new FlagMapDataImpl(new FlagMap(flags)));
+            return new ItemTag(e);
         });
         // <--[tag]
         // @Since 0.3.0
@@ -333,7 +332,10 @@ public class ItemTag extends AbstractTagObject {
             for (Map.Entry<String, AbstractTagObject> a : toApply.getInternal().entrySet()) {
                 Key k = DataKeys.getKeyForName(a.getKey());
                 if (k == null) {
-                    dat.error.run("Key '" + a.getKey() + "' does not seem to exist.");
+                    if (!dat.hasFallback()) {
+                        dat.error.run("Key '" + a.getKey() + "' does not seem to exist.");
+                    }
+                    return new NullTag();
                 }
                 DataKeys.tryApply(its, k, a.getValue(), dat.error);
             }
@@ -342,7 +344,7 @@ public class ItemTag extends AbstractTagObject {
         // <--[tag]
         // @Since 0.3.0
         // @Name ItemTag.without_flags[<ListTag>]
-        // @Updated 2017/02/13
+        // @Updated 2018/05/30
         // @Group General Information
         // @ReturnType ItemTag
         // @Returns a copy of the item, with the specified flags removed. Give no modifier to remove the flag mapping entirely.
@@ -366,6 +368,29 @@ public class ItemTag extends AbstractTagObject {
                 flags.getInternal().remove(k.toString());
             }
             e.offer(new FlagMapDataImpl(new FlagMap(flags)));
+            return new ItemTag(e);
+        });
+        // <--[tag]
+        // @Since 0.3.0
+        // @Name ItemTag.without[<ListTag>]
+        // @Updated 2018/05/30
+        // @Group General Information
+        // @ReturnType ItemTag
+        // @Returns a copy of the item, with the specified keys removed. Use with care (removing data may cause unexpected results).
+        // -->
+        handlers.put("without", (dat, obj) -> {
+            ItemStack e = ((ItemTag) obj).internal.copy();
+            ListTag toRemove = ListTag.getFor(dat.error, dat.getNextModifier());
+            for (AbstractTagObject kName : toRemove.getInternal()) {
+                Key k = DataKeys.getKeyForName(kName.toString());
+                if (k == null) {
+                    if (!dat.hasFallback()) {
+                        dat.error.run("Key '" + kName.toString() + "' does not seem to exist.");
+                    }
+                    return new NullTag();
+                }
+                e.remove(k);
+            }
             return new ItemTag(e);
         });
     }
