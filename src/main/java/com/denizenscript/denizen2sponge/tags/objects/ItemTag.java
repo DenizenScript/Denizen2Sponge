@@ -345,11 +345,15 @@ public class ItemTag extends AbstractTagObject {
         // @Updated 2017/02/13
         // @Group General Information
         // @ReturnType ItemTag
-        // @Returns a copy of the item, with the specified flags removed.
+        // @Returns a copy of the item, with the specified flags removed. Give no modifier to remove the flag mapping entirely.
         // -->
         handlers.put("without_flags", (dat, obj) -> {
+            ItemStack e = ((ItemTag) obj).internal.copy();
+            if (dat.hasNextModifier()) {
+                e.remove(FlagHelper.FLAGMAP);
+                return new ItemTag(e);
+            }
             MapTag flags;
-            ItemStack e = ((ItemTag) obj).internal;
             Optional<FlagMap> fm = e.get(FlagHelper.FLAGMAP);
             if (fm.isPresent()) {
                 flags = new MapTag(fm.get().flags.getInternal());
@@ -361,9 +365,8 @@ public class ItemTag extends AbstractTagObject {
             for (AbstractTagObject k : toRemove.getInternal()) {
                 flags.getInternal().remove(k.toString());
             }
-            ItemStack its = ((ItemTag) obj).internal.copy();
-            its.offer(new FlagMapDataImpl(new FlagMap(flags)));
-            return new ItemTag(its);
+            e.offer(new FlagMapDataImpl(new FlagMap(flags)));
+            return new ItemTag(e);
         });
     }
 
