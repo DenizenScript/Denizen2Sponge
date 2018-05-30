@@ -20,6 +20,7 @@ import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
+import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
 import org.spongepowered.api.Sponge;
@@ -202,7 +203,14 @@ public class ItemScript extends CommandScript {
             }
             its.add(Keys.ITEM_LORE, loreVal);
         }
-        MapTag flagsMap = new MapTag();
+        MapTag flagsMap;
+        Optional<FlagMap> fm = baseMat.getInternal().get(FlagHelper.FLAGMAP);
+        if (fm.isPresent()) {
+            flagsMap = new MapTag(fm.get().flags.getInternal());
+        }
+        else {
+            flagsMap = new MapTag();
+        }
         if (flags != null) {
             for (Tuple<String, Argument> flagVal : flags) {
                 flagsMap.getInternal().put(flagVal.one, parseVal(queue, flagVal.two, varBack));
