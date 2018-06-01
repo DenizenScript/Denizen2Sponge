@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 
@@ -70,12 +71,12 @@ public class ItemTypeTag extends AbstractTagObject {
     }
 
     public static ItemTypeTag getFor(Action<String> error, String text) {
-        Optional<ItemType> optItemType = Sponge.getRegistry().getType(ItemType.class, text);
-        if (!optItemType.isPresent()) {
+        ItemType itemType = (ItemType) Utilities.getTypeWithDefaultPrefix(ItemType.class, text);
+        if (itemType == null) {
             error.run("Invalid ItemTypeTag input!");
             return null;
         }
-        return new ItemTypeTag(optItemType.get());
+        return new ItemTypeTag(itemType);
     }
 
     public static ItemTypeTag getFor(Action<String> error, AbstractTagObject text) {
