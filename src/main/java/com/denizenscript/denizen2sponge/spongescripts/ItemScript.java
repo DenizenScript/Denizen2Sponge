@@ -64,7 +64,7 @@ public class ItemScript extends CommandScript {
     // Set key "material" directly to an ItemTag of the basic item type to use. You may list an item type, or an existing item.
     // Be careful to not list the item script within itself, even indirectly, as this can cause recursion errors.
     //
-    // Set key "display name" directly to a TextTag value of the name the item should have.
+    // Set key "display name" directly to a TextTag or FormattedTextTag value of the name the item should have.
     //
     // Set key "lore" as a list key of lines the item should have.
     // If you wish to dynamically structure the list, see the "other values" option for specifying that.

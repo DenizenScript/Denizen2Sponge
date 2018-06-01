@@ -6,15 +6,14 @@ import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
-import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.spongescripts.ItemScript;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMapDataImpl;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.SkullType;
@@ -401,10 +400,10 @@ public class ItemTag extends AbstractTagObject {
         if (split.size() > 1) {
             q = (int) IntegerTag.getFor(error, split.get(1)).getInternal();
         }
-        Optional<ItemType> optItemType = Sponge.getRegistry().getType(ItemType.class, text);
+        ItemType itemType = (ItemType) Utilities.getTypeWithDefaultPrefix(ItemType.class, text);
         ItemStack its;
-        if (optItemType.isPresent()) {
-            its = ItemStack.of(optItemType.get(), q);
+        if (itemType != null) {
+            its = ItemStack.of(itemType, q);
         }
         else {
             String tlow = CoreUtilities.toLowerCase(text);
