@@ -181,10 +181,10 @@ public class ItemScript extends CommandScript {
         if (displayName != null) {
             AbstractTagObject ato = parseVal(queue, displayName, varBack);
             if (ato instanceof FormattedTextTag) {
-                its = its.add(Keys.DISPLAY_NAME, ((FormattedTextTag) ato).getInternal());
+                its.add(Keys.DISPLAY_NAME, ((FormattedTextTag) ato).getInternal());
             }
             else {
-                its = its.add(Keys.DISPLAY_NAME, Denizen2Sponge.parseColor(ato.toString()));
+                its.add(Keys.DISPLAY_NAME, Denizen2Sponge.parseColor(ato.toString()));
             }
         }
         if (lore != null) {

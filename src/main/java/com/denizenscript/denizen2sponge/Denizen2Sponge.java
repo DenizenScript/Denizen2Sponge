@@ -28,6 +28,7 @@ import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.spongescripts.AdvancementScript;
+import com.denizenscript.denizen2sponge.spongescripts.EntityScript;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.spongescripts.ItemScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
@@ -88,6 +89,8 @@ public class Denizen2Sponge {
     public Logger logger;
 
     public static final Map<String, ItemScript> itemScripts = new HashMap<>();
+
+    public static final Map<String, EntityScript> entityScripts = new HashMap<>();
 
     static {
         YAMLConfiguration tconfig = null;
@@ -266,6 +269,7 @@ public class Denizen2Sponge {
         Denizen2Core.register("command", GameCommandScript::new);
         Denizen2Core.register("advancement", AdvancementScript::new);
         Denizen2Core.register("item", ItemScript::new);
+        Denizen2Core.register("entity", EntityScript::new);
         // Tag Types
         Denizen2Core.customSaveLoaders.put("BlockTypeTag", BlockTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("CuboidTag", CuboidTag::getFor);

@@ -6,15 +6,21 @@ import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.BooleanTag;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
-import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
+import com.denizenscript.denizen2sponge.utilities.EntityTemplate;
 import com.denizenscript.denizen2sponge.utilities.UtilLocation;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityType;
+import org.spongepowered.api.event.cause.EventContextKeys;
+import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
 import java.util.Map;
 
@@ -64,20 +70,42 @@ public class SpawnCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        EntityTypeTag entityTypeTag = EntityTypeTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
-        EntityType entityType = entityTypeTag.getInternal();
         LocationTag locationTag = LocationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         UtilLocation location = locationTag.getInternal();
         if (location.world == null) {
             queue.handleError(entry, "Invalid location with no world in Spawn command!");
             return;
         }
-        Entity entity = location.world.createEntity(entityType, location.toVector3d());
+        String str = entry.getArgumentObject(queue, 0).toString();
+        EntityType entType = (EntityType) Utilities.getTypeWithDefaultPrefix(EntityType.class, str);
+        Entity entity;
+        boolean fromScript;
         MapTag propertyMap = new MapTag();
+        if (entType != null) {
+            fromScript = false;
+            entity = location.world.createEntity(entType, location.toVector3d());
+        }
+        else {
+            String strLow = CoreUtilities.toLowerCase(str);
+            if (Denizen2Sponge.entityScripts.containsKey(strLow)) {
+                EntityTemplate template = Denizen2Sponge.entityScripts.get(strLow).getEntityCopy(queue);
+                entType = template.type;
+                propertyMap = template.properties;
+                fromScript = true;
+                entity = location.world.createEntity(entType, location.toVector3d());
+            }
+            else {
+                queue.handleError(entry, "No entity types nor scripts found for id '" + str + "'.");
+                return;
+            }
+        }
         if (entry.arguments.size() > 2) {
-            propertyMap = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
+            MapTag moreProperties = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
+            propertyMap.getInternal().putAll(moreProperties.getInternal());
+        }
+        if (!propertyMap.getInternal().isEmpty()) {
             for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.getInternal().entrySet()) {
-                if (mapEntry.getKey().equalsIgnoreCase("rotation")) {
+                if (mapEntry.getKey().equalsIgnoreCase("orientation")) {
                     LocationTag rot = LocationTag.getFor(queue.error, mapEntry.getValue());
                     entity.setRotation(rot.getInternal().toVector3d());
                 }
@@ -92,11 +120,13 @@ public class SpawnCommand extends AbstractCommand {
             }
         }
         if (queue.shouldShowGood()) {
-                queue.outGood("Spawning an entity of type " + ColorSet.emphasis + entityType.getId()
-                        + ColorSet.good + " with the following properties: " + ColorSet.emphasis
-                        + propertyMap.debug() + ColorSet.good + " at location " + ColorSet.emphasis
-                        + locationTag.debug() + ColorSet.good + "...");
+                queue.outGood("Spawning an entity " + ColorSet.emphasis
+                        + (fromScript ? "from script " + str : "of type " + entType.getId())
+                        + ColorSet.good + " with the following additional properties: "
+                        + ColorSet.emphasis + propertyMap.debug() + ColorSet.good + " at location "
+                        + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "...");
         }
+        Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.CUSTOM);
         boolean passed = location.world.spawnEntity(entity);
         // TODO: "Cause" argument!
         if (queue.shouldShowGood()) {
