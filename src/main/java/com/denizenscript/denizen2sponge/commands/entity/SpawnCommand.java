@@ -20,6 +20,7 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.event.cause.EventContextKeys;
+import org.spongepowered.api.event.cause.entity.spawn.SpawnType;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
 import java.util.Map;
@@ -31,21 +32,25 @@ public class SpawnCommand extends AbstractCommand {
     // @Name spawn
     // @Arguments <entity type> <location> [map of properties]
     // @Short spawns a new entity.
-    // @Updated 2017/10/18
+    // @Updated 2018/06/03
     // @Group Entity
     // @Minimum 2
     // @Maximum 3
+    // @Named cause (TextTag) Sets what caused this entity to spawn.
     // @Tag <[spawn_success]> (BooleanTag) returns whether the spawn passed.
     // @Tag <[spawn_entity]> (EntityTag) returns the entity that was spawned (only if the spawn passed).
     // @Description
-    // Spawns an entity at the specified location. Optionally, specify a MapTag
-    // of properties to spawn the entity with those values automatically set on
-    // it. The MapTag can also contain a "rotation" key with a LocationTag.
-    // Related information: <@link explanation Entity Types>entity types<@/link>.
+    // Spawns an entity of the specified entity type or from a script at a location.
+    // This entity Optionally, specify a MapTag of properties to spawn the entity with those values
+    // automatically set on it. The MapTag can also contain an "orientation" key with a LocationTag.
+    // Related information: <@link explanation Entity Types>entity types<@/link> and <@link explanation Spawn Causes>spawn causes<@/link>.
     // Related commands: <@link command remove>remove<@/link>.
     // @Example
     // # Spawns a sheep that feels the burn.
     // - spawn sheep <player.location> display_name:<texts.for_input[text:Bahhhb]>|max_health:300|health:300|fire_ticks:999999|is_sheared:true
+    // @Example
+    // # Spawns the custom mob "cool_zombie" with the "breeding" spawn cause.
+    // - spawn cool_zombie <player.location> --cause breeding
     // -->
 
     @Override
@@ -119,16 +124,28 @@ public class SpawnCommand extends AbstractCommand {
                 }
             }
         }
+        SpawnType cause;
+        if (entry.namedArgs.containsKey("cause")) {
+            String causeStr = entry.getNamedArgumentObject(queue, "cause").toString();
+            cause = (SpawnType) Utilities.getTypeWithDefaultPrefix(SpawnType.class, causeStr);
+            if (cause == null) {
+                queue.handleError(entry, "Invalid spawn cause '" + causeStr + "' in Spawn command!");
+                return;
+            }
+        }
+        else {
+            cause = SpawnTypes.CUSTOM;
+        }
+        Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, cause);
         if (queue.shouldShowGood()) {
-                queue.outGood("Spawning an entity " + ColorSet.emphasis
+            queue.outGood("Spawning an entity " + ColorSet.emphasis
                         + (fromScript ? "from script " + str : "of type " + entType.getId())
                         + ColorSet.good + " with the following additional properties: "
                         + ColorSet.emphasis + propertyMap.debug() + ColorSet.good + " at location "
-                        + ColorSet.emphasis + locationTag.debug() + ColorSet.good + "...");
+                        + ColorSet.emphasis + locationTag.debug() + ColorSet.good + " and with cause "
+                        + ColorSet.emphasis + Utilities.getIdWithoutDefaultPrefix(cause.getId()) + "...");
         }
-        Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.CUSTOM);
         boolean passed = location.world.spawnEntity(entity);
-        // TODO: "Cause" argument!
         if (queue.shouldShowGood()) {
             queue.outGood("Spawning " + (passed ? "succeeded" : "was blocked") + "!");
         }

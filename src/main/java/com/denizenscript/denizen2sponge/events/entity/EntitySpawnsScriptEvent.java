@@ -26,7 +26,7 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
     // @Events
     // entity spawns
     //
-    // @Updated 2017/10/14
+    // @Updated 2018/06/03
     //
     // @Group Entity
     //
@@ -36,14 +36,14 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
     // @Switch world (WorldTag) checks the world.
     // @Switch cuboid (CuboidTag) checks the cuboid area.
     // @Switch weather (TextTag) checks the weather.
-    // @Switch spawn_type (TextTag) checks the spawn type.
+    // @Switch cause (TextTag) checks the spawn cause.
     //
     // @Triggers when an entity spawns in the world (non players).
-    // Possible spawn types can be found at <@link explanation Spawn Types>spawn types<@/link>.
+    // Possible spawn causes can be found at <@link explanation Spawn Causes>spawn causes<@/link>.
     //
     // @Context
     // entity (EntityTag) returns the entity that is attempting to spawn.
-    // spawn_type (TextTag) returns the type of spawn that fired this event.
+    // cause (TextTag) returns the type of spawn that fired this event.
     //
     // @Determinations
     // None.
@@ -51,12 +51,13 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
 
     // <--[explanation]
     // @Since 0.4.0
-    // @Name Spawn Types
+    // @Name Spawn Causes
     // @Group Useful Lists
     // @Description
-    // A list of all default spawn types can be found here:
+    // A list of all default spawn causes can be found here:
     // <@link url https://jd.spongepowered.org/7.1.0-SNAPSHOT/org/spongepowered/api/event/cause/entity/spawn/SpawnTypes.html>spawn types list<@/link>
-    // This information can be useful to understand the spawn_type context in spawn events.
+    // This information can be useful to understand the cause context in spawn events,
+    // and cause named argument in spawn commands.
     // -->
 
     @Override
@@ -80,12 +81,12 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
                         world.getWeather().getId()), data, this::error)
                 && D2SpongeEventHelper.checkCatalogType(
-                        SpawnType.class, spawnType.toString(), data, this::error, "spawn_type");
+                        SpawnType.class, cause.toString(), data, this::error, "cause");
     }
 
     public EntityTag entity;
 
-    public TextTag spawnType;
+    public TextTag cause;
 
     public SpawnEntityEvent internal;
 
@@ -93,7 +94,7 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
     public HashMap<String, AbstractTagObject> getDefinitions(ScriptEvent.ScriptEventData data) {
         HashMap<String, AbstractTagObject> defs = super.getDefinitions(data);
         defs.put("entity", entity);
-        defs.put("spawn_type", spawnType);
+        defs.put("cause", cause);
         return defs;
     }
 
@@ -113,7 +114,7 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
             EntitySpawnsScriptEvent event = (EntitySpawnsScriptEvent) clone();
             event.internal = evt;
             event.entity = new EntityTag(ent);
-            event.spawnType = new TextTag(Utilities.getIdWithoutDefaultPrefix(
+            event.cause = new TextTag(Utilities.getIdWithoutDefaultPrefix(
                     evt.getContext().get(EventContextKeys.SPAWN_TYPE).get().getId()));
             event.cancelled = evt.isCancelled();
             event.run();
