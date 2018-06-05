@@ -130,7 +130,7 @@ public class ItemScript extends CommandScript {
             throw new ErrorInducedException(es);
         };
         if (Sponge.getRegistry().getType(ItemType.class, title).isPresent()) {
-            Debug.error("Item script " + title + " may be unusable: a base item type exists with that name!");
+            Debug.error("Item script may be unusable: a base item type exists with the same name!");
         }
         if (contents.contains("display name")) {
             displayName = Denizen2Core.splitToArgument(contents.getString("display name"), true, true, error);
@@ -221,7 +221,8 @@ public class ItemScript extends CommandScript {
             for (Tuple<String, Argument> input : otherValues) {
                 Key k = DataKeys.getKeyForName(input.one);
                 if (k == null) {
-                    throw new ErrorInducedException("Key '" + input.one + "' does not seem to exist.");
+                    queue.error.run("Error handling item script '" + ColorSet.emphasis + title + ColorSet.warning
+                            + "': key '" + ColorSet.emphasis + input.one + ColorSet.warning + "' does not seem to exist.");
                 }
                 DataKeys.tryApply(toRet, k, parseVal(queue, input.two, varBack), queue.error);
             }
