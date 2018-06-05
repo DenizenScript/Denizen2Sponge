@@ -83,17 +83,20 @@ public class ItemScript extends CommandScript {
 
     public final String itemScriptName;
 
-    private static final CommandQueue FORCE_TO_STATIC = new CommandQueue(); // Special case recursive static generation helper
+    private static final CommandQueue FORCE_TO_STATIC; // Special case recursive static generation helper
+
+    static {
+        (FORCE_TO_STATIC = new CommandQueue()).error = (es) -> {
+            throw new ErrorInducedException(es);
+        };
+    }
 
     @Override
     public boolean init() {
         if (super.init()) {
             try {
                 prepValues();
-                Action<String> error = (es) -> {
-                    throw new ErrorInducedException(es);
-                };
-                if (contents.contains("static") && BooleanTag.getFor(error, contents.getString("static")).getInternal()) {
+                if (contents.contains("static") && BooleanTag.getFor(FORCE_TO_STATIC.error, contents.getString("static")).getInternal()) {
                     staticItem = getItemCopy(FORCE_TO_STATIC);
                 }
             }
@@ -167,18 +170,12 @@ public class ItemScript extends CommandScript {
     }
 
     public AbstractTagObject parseVal(CommandQueue queue, Argument arg, HashMap<String, AbstractTagObject> varBack) {
-        Action<String> error = (es) -> {
-            throw new ErrorInducedException(es);
-        };
-        return arg.parse(queue, varBack, getDebugMode(), error);
+        return arg.parse(queue, varBack, getDebugMode(), queue.error);
     }
 
     public ItemStack generateItem(CommandQueue queue) {
-        Action<String> error = (es) -> {
-            throw new ErrorInducedException(es);
-        };
         HashMap<String, AbstractTagObject> varBack = new HashMap<>();
-        ItemTag baseMat = ItemTag.getFor(error, parseVal(queue, material, varBack), queue);
+        ItemTag baseMat = ItemTag.getFor(queue.error, parseVal(queue, material, varBack), queue);
         varBack.put("material", baseMat);
         ItemStack.Builder its = ItemStack.builder().from(baseMat.getInternal().copy()).quantity(1);
         if (displayName != null) {
@@ -216,7 +213,7 @@ public class ItemScript extends CommandScript {
                 flagsMap.getInternal().put(flagVal.one, parseVal(queue, flagVal.two, varBack));
             }
         }
-        if (plain == null || !BooleanTag.getFor(error, parseVal(queue, plain, varBack)).getInternal()) {
+        if (plain == null || !BooleanTag.getFor(queue.error, parseVal(queue, plain, varBack)).getInternal()) {
             flagsMap.getInternal().put("_d2_script", new ScriptTag(this));
         }
         ItemStack toRet = its.build();
@@ -226,14 +223,14 @@ public class ItemScript extends CommandScript {
                 if (k == null) {
                     throw new ErrorInducedException("Key '" + input.one + "' does not seem to exist.");
                 }
-                DataKeys.tryApply(toRet, k, parseVal(queue, input.two, varBack), error);
+                DataKeys.tryApply(toRet, k, parseVal(queue, input.two, varBack), queue.error);
             }
         }
         if (!flagsMap.getInternal().isEmpty()) {
             toRet.offer(new FlagMapDataImpl(new FlagMap(flagsMap)));
         }
         if (queue == FORCE_TO_STATIC && contents.contains("static")
-                && BooleanTag.getFor(error, contents.getString("static")).getInternal()) {
+                && BooleanTag.getFor(queue.error, contents.getString("static")).getInternal()) {
             staticItem = toRet;
         }
         return toRet;
