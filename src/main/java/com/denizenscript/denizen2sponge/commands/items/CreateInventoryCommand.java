@@ -24,7 +24,7 @@ public class CreateInventoryCommand extends AbstractCommand {
     // @Save createinventory_inv (InventoryTag) returns the created inventory.
     // @Description
     // Creates a new inventory of the given type.
-    // See also rememberinventory command.
+    // See also the <@link command rememberinventory>rememberinventory command<@/link>.
     // @Example
     // # This example creates an inventory and saves it in definition "test_inv".
     // - createinventory CHEST --save test_inv
@@ -72,6 +72,6 @@ public class CreateInventoryCommand extends AbstractCommand {
             return;
         }
         InventoryTag inv = new InventoryTag(Inventory.builder().of(arch).build(Denizen2Sponge.plugin));
-        queue.commandStack.peek().setDefinition(entry.resName(queue, "rememberinventory_inv"), inv);
+        queue.commandStack.peek().setDefinition(entry.resName(queue, "createinventory_inv"), inv);
     }
 }

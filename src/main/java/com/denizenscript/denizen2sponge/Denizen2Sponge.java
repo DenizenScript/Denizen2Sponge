@@ -9,6 +9,7 @@ import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.commands.entity.*;
 import com.denizenscript.denizen2sponge.commands.items.CreateInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.items.ForgetInventoryCommand;
+import com.denizenscript.denizen2sponge.commands.items.GiveCommand;
 import com.denizenscript.denizen2sponge.commands.items.RememberInventoryCommand;
 import com.denizenscript.denizen2sponge.commands.player.*;
 import com.denizenscript.denizen2sponge.commands.server.AnnounceCommand;

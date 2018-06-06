@@ -98,13 +98,23 @@ public class InventoryTag extends AbstractTagObject {
             return new ItemTag(item);
         });
         // <--[tag]
+        // @Since 0.5.0
+        // @Name InventoryTag.remembered_name
+        // @Updated 2018/06/05
+        // @Group General Information
+        // @ReturnType TextTag
+        // @Returns the inventory's remembered name (as is set by the <@link command rememberinventory>rememberinventory command<@/link>, if any.
+        // @Example "shared/test" returns "test".
+        // -->
+        handlers.put("remembered_name", (dat, obj) -> new TextTag(((InventoryTag) obj).remAs));
+        // <--[tag]
         // @Since 0.3.0
         // @Name InventoryTag.name
         // @Updated 2017/06/10
         // @Group General Information
         // @ReturnType TextTag
-        // @Returns the inventory's name (in English).
-        // @Example "player/bob" .name might return "Bob".
+        // @Returns the inventory's name (in English). // TODO: Translation options? Also, output testing?
+        // @Example "player/bob" .name returns "Bob".
         // -->
         handlers.put("name", (dat, obj) -> new TextTag(((InventoryTag) obj).internal.getName().get(Locale.ENGLISH)));
         // <--[tag]
@@ -220,15 +230,15 @@ public class InventoryTag extends AbstractTagObject {
     }
 
     public String toString(boolean unks) {
-        if (remAs != null) {
-            return "shared/" + remAs;
-        }
         if (internal instanceof MainPlayerInventory) {
             return "player/" + ((PlayerInventory) (internal).parent()).getCarrier().get().getUniqueId().toString();
         }
         else if (internal instanceof CarriedInventory) {
             Object o = ((CarriedInventory) internal).getCarrier().orElse(null);
             if (o == null) {
+                if (remAs != null) {
+                    return "shared/" + remAs;
+                }
                 return "((UNKNOWN INVENTORY TYPE))";
             }
             if (o instanceof Entity) {
@@ -239,6 +249,10 @@ public class InventoryTag extends AbstractTagObject {
                 return "block/" + new LocationTag(new UtilLocation(lb.getPosition(), lb.getWorld()));
             }
         }
+        else if (remAs != null) {
+            return "shared/" + remAs;
+        }
+        // TODO: Generic inventory save method
         if (!unks) {
             // TODO: Handle all inventory types somehow???
             throw new RuntimeException("Inventory type not known to the system!");
@@ -260,6 +274,6 @@ public class InventoryTag extends AbstractTagObject {
 
     @Override
     public String debug() {
-        return toString();
+        return toString(true);
     }
 }

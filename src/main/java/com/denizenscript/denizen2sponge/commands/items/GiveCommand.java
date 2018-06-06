@@ -1,11 +1,15 @@
-package com.denizenscript.denizen2sponge.commands.player;
+package com.denizenscript.denizen2sponge.commands.items;
 
 import com.denizenscript.denizen2core.commands.AbstractCommand;
 import com.denizenscript.denizen2core.commands.CommandEntry;
 import com.denizenscript.denizen2core.commands.CommandQueue;
+import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
+import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.item.inventory.transaction.InventoryTransactionResult;
 
@@ -24,14 +28,14 @@ public class GiveCommand extends AbstractCommand {
     // <--[command]
     // @Since 0.3.0
     // @Name give
-    // @Arguments <player> <item>
-    // @Short gives a player an item.
-    // @Updated 2016/11/24
-    // @Group Player
+    // @Arguments <inventory/entity> <item>
+    // @Short gives an inventory an item.
+    // @Updated 2018/06/05
+    // @Group Items
     // @Minimum 2
     // @Maximum 2
     // @Description
-    // Gives a player an item.
+    // Gives an inventory an item. Input an entity that carries an inventory (such as a player) to give to that entity's inventory.
     // Related information: <@link explanation Item Types>item types<@/link>.
     // TODO: Explain more!
     // @Example
@@ -46,7 +50,7 @@ public class GiveCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<player> <item>";
+        return "<inventory/entity> <item>";
     }
 
     @Override
@@ -61,21 +65,35 @@ public class GiveCommand extends AbstractCommand {
 
     @Override
     public void execute(CommandQueue queue, CommandEntry entry) {
-        PlayerTag player = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         ItemTag item = ItemTag.getFor(queue.error, entry.getArgumentObject(queue, 1), queue);
-        if (queue.shouldShowGood()) {
-            queue.outGood("Giving " + ColorSet.emphasis + player.debug() + ColorSet.good
-                    + ": " + ColorSet.emphasis + item.debug());
+        AbstractTagObject ato = entry.getArgumentObject(queue, 0);
+        InventoryTag inv;
+        if (ato instanceof InventoryTag) {
+            inv = (InventoryTag) ato;
         }
-        InventoryTransactionResult itr = player.getInternal().getInventory().offer(item.getInternal().copy());
+        else {
+            EntityTag et = EntityTag.getFor(queue.error, ato);
+            if (et instanceof Carrier) {
+                inv = new InventoryTag(((Carrier) et).getInventory());
+            }
+            else {
+                queue.error.run("Entity " + ColorSet.emphasis + et.debug() + ColorSet.warning + " does not carry an inventory!");
+                return;
+            }
+        }
+        if (queue.shouldShowGood()) {
+            queue.outGood("Giving " + ColorSet.emphasis + ato.debug() + ColorSet.good + ": " + ColorSet.emphasis + item.debug());
+        }
+        InventoryTransactionResult itr = inv.getInternal().offer(item.getInternal().copy());
+        queue.outGood("Give result: " + ColorSet.emphasis + itr.getType().name());
         for (ItemStackSnapshot iss : itr.getReplacedItems()) {
             if (queue.shouldShowGood()) {
-                queue.outGood("Gave: " + new ItemTag(iss.createStack()).debug());
+                queue.outGood("Successfully gave: " + ColorSet.emphasis + new ItemTag(iss.createStack()).debug());
             }
         }
         for (ItemStackSnapshot iss : itr.getRejectedItems()) {
             if (queue.shouldShowGood()) {
-                queue.outGood("Failed to give: " + new ItemTag(iss.createStack()).debug());
+                queue.outGood("Failed to give: " + ColorSet.emphasis + new ItemTag(iss.createStack()).debug());
             }
         }
     }

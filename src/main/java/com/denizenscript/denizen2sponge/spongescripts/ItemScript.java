@@ -223,6 +223,7 @@ public class ItemScript extends CommandScript {
                 if (k == null) {
                     queue.error.run("Error handling item script '" + ColorSet.emphasis + title + ColorSet.warning
                             + "': key '" + ColorSet.emphasis + input.one + ColorSet.warning + "' does not seem to exist.");
+                    return null;
                 }
                 DataKeys.tryApply(toRet, k, parseVal(queue, input.two, varBack), queue.error);
             }
