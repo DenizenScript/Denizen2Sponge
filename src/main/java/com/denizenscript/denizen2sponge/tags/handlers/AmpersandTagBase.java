@@ -15,6 +15,7 @@ public class AmpersandTagBase extends AbstractTagBase {
     // @ReturnType TextTag
     // @Returns the color code corresponding to the given symbol. Valid symbols: 0123456789 abcdef klmno r
     // @Note This also supports combinations of color codes, EG "1o" for oblong text with color 1.
+    // @Note You can use an empty input modifier - like <&[]> - to get the raw color code symbol.
     // -->
 
     @Override
@@ -29,6 +30,9 @@ public class AmpersandTagBase extends AbstractTagBase {
             return null;
         }
         String c = data.getNextModifier().toString();
+        if (c.length() == 0) {
+            return new TextTag(String.valueOf(Denizen2Sponge.colorChar)).handle(data.shrink());
+        }
         StringBuilder res = new StringBuilder(c.length() * 2);
         for (int i = 0; i < c.length(); i++) {
             String sub = c.substring(i, i + 1);

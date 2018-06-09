@@ -61,6 +61,16 @@ public class TextsTagBase extends AbstractTagBase {
         handlers.put("for_old_colors", (dat, obj) -> new FormattedTextTag(
                 TextSerializers.formattingCode(Denizen2Sponge.colorChar).deserialize((dat.getNextModifier().toString()))));
         // <--[tag]
+        // @Since 0.5.0
+        // @Name TextsBaseTag.for_ampersand_colors[<TextTag>]
+        // @Updated 2018/06/09
+        // @Group Text Formatting
+        // @ReturnType FormattedTextTag
+        // @Returns the ampersand colored text as a FormattedTextTag.
+        // -->
+        handlers.put("for_ampersand_colors", (dat, obj) -> new FormattedTextTag(
+                TextSerializers.formattingCode('&').deserialize((dat.getNextModifier().toString()))));
+        // <--[tag]
         // @Since 0.3.0
         // @Name TextsBaseTag.for_input[<MapTag>]
         // @Updated 2016/09/21
