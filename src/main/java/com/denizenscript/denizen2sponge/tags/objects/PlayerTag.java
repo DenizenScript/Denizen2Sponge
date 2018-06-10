@@ -137,6 +137,17 @@ public class PlayerTag extends AbstractTagObject {
             return new TextTag(pl.gameMode().get().toString());
         });
         // <--[tag]
+        // @Since 0.5.0
+        // @Name PlayerTag.has_permission[<TextTag>]
+        // @Updated 2018/06/09
+        // @Group Properties
+        // @ReturnType BooleanTag
+        // @Returns whether the player has a specific permission node.
+        // -->
+        handlers.put("has_permission", (dat, obj) -> {
+            return BooleanTag.getForBoolean(((PlayerTag) obj).internal.hasPermission(dat.getNextModifier().toString()));
+        });
+        // <--[tag]
         // @Since 0.4.0
         // @Name PlayerTag.has_advancement[<TextTag>]
         // @Updated 2018/02/07
