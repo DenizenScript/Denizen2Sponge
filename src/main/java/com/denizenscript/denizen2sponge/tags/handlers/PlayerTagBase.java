@@ -35,7 +35,7 @@ public class PlayerTagBase extends AbstractTagBase {
                     return ato.handle(data.shrink());
                 }
                 data.error.run("Tried to read connected player, but failed (improperly typed player).");
-                return new NullTag();
+                return NullTag.NULL;
             }
             else if (data.currentQueue.commandStack.peek().hasDefinition("context")) {
                 AbstractTagObject ato = data.currentQueue.commandStack.peek().getDefinition("context");
@@ -46,14 +46,14 @@ public class PlayerTagBase extends AbstractTagBase {
                             return plt.handle(data.shrink());
                         }
                         data.error.run("Tried to read connected player, but failed (improperly typed context -> player).");
-                        return new NullTag();
+                        return NullTag.NULL;
                     }
                 }
                 data.error.run("Tried to read connected player, but failed (context isn't a map?!).");
-                return new NullTag();
+                return NullTag.NULL;
             }
             data.error.run("Tried to read connected player, but failed (no connected player).");
-            return new NullTag();
+            return NullTag.NULL;
         }
         if (!data.hasNextModifier()) {
             data.error.run("Invalid player tag-base: expected a modifier! See documentation for this tag! (No local player ref found)");

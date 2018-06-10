@@ -301,7 +301,7 @@ public class LocationTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("No sign contents present for this location!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             ListTag list = new ListTag();
             for (Text t : contents.get()) {
@@ -331,7 +331,7 @@ public class LocationTag extends AbstractTagObject {
             Key key = DataKeys.getKeyForName(keyName);
             if (key == null) {
                 dat.error.run("Invalid key '" + keyName + "'!");
-                return new NullTag();
+                return NullTag.NULL;
             }
             return DataKeys.getValue(((LocationTag) obj).internal.toLocation(), key, dat.error);
         });
@@ -426,11 +426,11 @@ public class LocationTag extends AbstractTagObject {
             Optional<Location<World>> opt = Sponge.getGame().getTeleportHelper().getSafeLocation(((LocationTag) obj).internal.toLocation(), height, width);
             MapTag outputMap = new MapTag();
             if (!opt.isPresent()) {
-                outputMap.getInternal().put("is_valid", new BooleanTag(false));
+                outputMap.getInternal().put("is_valid", BooleanTag.getForBoolean(false));
                 outputMap.getInternal().put("location", obj);
                 return outputMap;
             }
-            outputMap.getInternal().put("is_valid", new BooleanTag(true));
+            outputMap.getInternal().put("is_valid", BooleanTag.getForBoolean(true));
             outputMap.getInternal().put("location", new LocationTag(opt.get().getBlockPosition(), opt.get().getExtent()));
             return outputMap;
         });
@@ -448,7 +448,7 @@ public class LocationTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("The block at this location is not a valid tile entity, so it can't contain an inventory!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new InventoryTag(((TileEntityCarrier) te.get()).getInventory());
         });
@@ -466,7 +466,7 @@ public class LocationTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("The block at this location is not a skull tile entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(((Skull) te.get()).skullType().get().getId());
         });
@@ -484,7 +484,7 @@ public class LocationTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("The block at this location is not a player skull tile entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getName().get());
         });
@@ -502,7 +502,7 @@ public class LocationTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("The block at this location is not a player skull tile entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(te.get().get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
         });
@@ -520,7 +520,7 @@ public class LocationTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("The block at this location is not a player skull tile entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             ProfileProperty p = te.get().get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
             return new TextTag(p.getValue() + "|" + p.getSignature().get());
@@ -539,12 +539,12 @@ public class LocationTag extends AbstractTagObject {
             Vector3d direction = loc2.getPosition().sub(loc1.getPosition());
             double length = direction.length();
             if (length == 0) {
-                return new BooleanTag(true);
+                return BooleanTag.getForBoolean(true);
             }
             BlockRayHit<World> brh = BlockRay.from(loc1).direction(direction).distanceLimit(length)
                     .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
                     .build().end().get();
-            return new BooleanTag(brh.getBlockPosition().equals(loc2.getBlockPosition()));
+            return BooleanTag.getForBoolean(brh.getBlockPosition().equals(loc2.getBlockPosition()));
         });
         // <--[tag]
         // @Since 0.4.0

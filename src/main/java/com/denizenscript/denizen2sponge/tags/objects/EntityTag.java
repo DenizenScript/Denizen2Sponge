@@ -252,7 +252,7 @@ public class EntityTag extends AbstractTagObject {
             Key key = DataKeys.getKeyForName(keyName);
             if (key == null) {
                 dat.error.run("Invalid key '" + keyName + "'!");
-                return new NullTag();
+                return NullTag.NULL;
             }
             return DataKeys.getValue(((EntityTag) obj).internal, key, dat.error);
         });
@@ -275,7 +275,7 @@ public class EntityTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
-            return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
+            return BooleanTag.getForBoolean(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
         // @Since 0.3.0
@@ -337,14 +337,14 @@ public class EntityTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on this entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             MapTag smap = MapTag.getFor(dat.error, flags.getInternal().get(flagName));
             if (smap == null) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on this entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return smap.getInternal().get("value");
         });
@@ -375,7 +375,7 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("vehicle", (dat, obj) -> {
             Optional<Entity> opt = ((EntityTag) obj).internal.getVehicle();
             if (!opt.isPresent()) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new EntityTag(opt.get());
         });
@@ -396,7 +396,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether this entity is on the ground or not.
         // -->
-        handlers.put("on_ground", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.isOnGround()));
+        handlers.put("on_ground", (dat, obj) -> BooleanTag.getForBoolean(((EntityTag) obj).internal.isOnGround()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.scale
@@ -504,7 +504,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether this falling block can drop as an item if it can't be placed when it lands. Falling block entities only.
         // -->
-        handlers.put("can_drop_as_item", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canDropAsItem().get()));
+        handlers.put("can_drop_as_item", (dat, obj) -> BooleanTag.getForBoolean(((FallingBlock) ((EntityTag) obj).internal).canDropAsItem().get()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.can_place_as_block
@@ -513,7 +513,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether this falling block can place as a block when it lands. Falling block entities only.
         // -->
-        handlers.put("can_place_as_block", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canPlaceAsBlock().get()));
+        handlers.put("can_place_as_block", (dat, obj) -> BooleanTag.getForBoolean(((FallingBlock) ((EntityTag) obj).internal).canPlaceAsBlock().get()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.can_hurt_entities
@@ -522,7 +522,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether this falling block can hurt entities if it lands on them. Falling block entities only.
         // -->
-        handlers.put("can_hurt_entities", (dat, obj) -> new BooleanTag(((FallingBlock) ((EntityTag) obj).internal).canHurtEntities().get()));
+        handlers.put("can_hurt_entities", (dat, obj) -> BooleanTag.getForBoolean(((FallingBlock) ((EntityTag) obj).internal).canHurtEntities().get()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.fall_damage_per_block
@@ -597,7 +597,7 @@ public class EntityTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("The projectile source is unknown!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
         });
         // <--[tag]
@@ -635,7 +635,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether the boat is able to move freely on land or not. Boat entities only.
         // -->
-        handlers.put("can_move_on_land", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).canMoveOnLand()));
+        handlers.put("can_move_on_land", (dat, obj) -> BooleanTag.getForBoolean(((Boat) ((EntityTag) obj).internal).canMoveOnLand()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.in_water
@@ -644,7 +644,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether the boat is currently in water or not. Boat entities only.
         // -->
-        handlers.put("in_water", (dat, obj) -> new BooleanTag(((Boat) ((EntityTag) obj).internal).isInWater()));
+        handlers.put("in_water", (dat, obj) -> BooleanTag.getForBoolean(((Boat) ((EntityTag) obj).internal).isInWater()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.art_name
@@ -680,7 +680,7 @@ public class EntityTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This hitch has no leashed entity!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new EntityTag(ent);
         });
@@ -788,7 +788,7 @@ public class EntityTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This entity doesn't have an age property!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
         });
         // <--[tag]
@@ -799,7 +799,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether this entity is an adult or not.
         // -->
-        handlers.put("is_adult", (dat, obj) -> new BooleanTag(((Ageable) ((EntityTag) obj).internal).adult().get()));
+        handlers.put("is_adult", (dat, obj) -> BooleanTag.getForBoolean(((Ageable) ((EntityTag) obj).internal).adult().get()));
         // <--[tag]
         // @Since 0.3.0
         // @Name EntityTag.target_block[<NumberTag>]
@@ -905,7 +905,7 @@ public class EntityTag extends AbstractTagObject {
         // @Returns whether an explosive entity is primed.
         // @Warning This tag always returns false in Sponge during last testing.
         // -->
-        handlers.put("is_primed", (dat, obj) -> new BooleanTag(((FusedExplosive) ((EntityTag) obj).internal).isPrimed()));
+        handlers.put("is_primed", (dat, obj) -> BooleanTag.getForBoolean(((FusedExplosive) ((EntityTag) obj).internal).isPrimed()));
         // <--[tag]
         // @Since 0.4.0
         // @Name EntityTag.has_ai
@@ -914,7 +914,7 @@ public class EntityTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether an entity has ai enabled.
         // -->
-        handlers.put("has_ai", (dat, obj) -> new BooleanTag(((Agent) ((EntityTag) obj).internal).aiEnabled().get()));
+        handlers.put("has_ai", (dat, obj) -> BooleanTag.getForBoolean(((Agent) ((EntityTag) obj).internal).aiEnabled().get()));
         // <--[tag]
         // @Since 0.4.0
         // @Name EntityTag.ai_target
@@ -932,7 +932,7 @@ public class EntityTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This entity doesn't have target!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
         });
     }

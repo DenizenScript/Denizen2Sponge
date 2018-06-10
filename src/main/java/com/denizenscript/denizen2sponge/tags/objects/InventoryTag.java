@@ -66,7 +66,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Returns whether the inventory contains the specified quantity or more of the specified item.
         // @Example "block/0,1,2,world" .contains[diamond/3] might return "false".
         // -->
-        handlers.put("contains", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.contains(ItemTag.getFor(dat.error, dat.getNextModifier(), dat.currentQueue).getInternal())));
+        handlers.put("contains", (dat, obj) -> BooleanTag.getForBoolean(((InventoryTag) obj).internal.contains(ItemTag.getFor(dat.error, dat.getNextModifier(), dat.currentQueue).getInternal())));
         // <--[tag]
         // @Since 0.3.0
         // @Name InventoryTag.contains_any[<ItemTag>]
@@ -76,7 +76,7 @@ public class InventoryTag extends AbstractTagObject {
         // @Returns whether the inventory contains any quantity of the specified item.
         // @Example "block/0,1,2,world" .contains_any[diamond] might return "true".
         // -->
-        handlers.put("contains_any", (dat, obj) -> new BooleanTag(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier(), dat.currentQueue).getInternal())));
+        handlers.put("contains_any", (dat, obj) -> BooleanTag.getForBoolean(((InventoryTag) obj).internal.containsAny(ItemTag.getFor(dat.error, dat.getNextModifier(), dat.currentQueue).getInternal())));
         // <--[tag]
         // @Since 0.4.0
         // @Name InventoryTag.fuel
@@ -92,7 +92,7 @@ public class InventoryTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This inventory does not contain any fuel slots!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             ItemStack item = inventory.peek().orElse(ItemStack.empty());
             return new ItemTag(item);
@@ -132,7 +132,7 @@ public class InventoryTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This inventory does not contain any result slots!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             ItemStack item = inventory.peek().orElse(ItemStack.empty());
             return new ItemTag(item);
@@ -162,14 +162,14 @@ public class InventoryTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This inventory does not contain slots ordered by index!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             int slot = (int) IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal();
             if (slot < 1 || slot > inventory.capacity()) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid slot index specified!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             ItemStack item = ((OrderedInventory) inventory).peek(new SlotIndex(slot - 1)).orElse(ItemStack.empty());
             return new ItemTag(item);

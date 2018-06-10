@@ -117,10 +117,10 @@ public class ExplosionOccursScriptEvent extends ScriptEvent {
         Explosion exp = evt.getExplosion();
         MapTag data = new MapTag();
         data.getInternal().put("radius", new NumberTag(exp.getRadius()));
-        data.getInternal().put("fire", new BooleanTag(exp.canCauseFire()));
-        data.getInternal().put("break_blocks", new BooleanTag(exp.shouldBreakBlocks()));
-        data.getInternal().put("damage_entities", new BooleanTag(exp.shouldDamageEntities()));
-        data.getInternal().put("smoke", new BooleanTag(exp.shouldPlaySmoke()));
+        data.getInternal().put("fire", BooleanTag.getForBoolean(exp.canCauseFire()));
+        data.getInternal().put("break_blocks", BooleanTag.getForBoolean(exp.shouldBreakBlocks()));
+        data.getInternal().put("damage_entities", BooleanTag.getForBoolean(exp.shouldDamageEntities()));
+        data.getInternal().put("smoke", BooleanTag.getForBoolean(exp.shouldPlaySmoke()));
         event.explosion_data = data;
         event.cancelled = evt.isCancelled();
         event.run();

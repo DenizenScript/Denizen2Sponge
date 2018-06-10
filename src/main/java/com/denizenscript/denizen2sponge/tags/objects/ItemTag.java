@@ -87,7 +87,7 @@ public class ItemTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether the item was sourced from a script.
         // -->
-        handlers.put("is_script", (dat, obj) -> new BooleanTag(((ItemTag) obj).getSourceScript() != null));
+        handlers.put("is_script", (dat, obj) -> BooleanTag.getForBoolean(((ItemTag) obj).getSourceScript() != null));
         // <--[tag]
         // @Since 0.5.0
         // @Name ItemTag.script
@@ -102,7 +102,7 @@ public class ItemTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("Item was not sourced from a script.");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new ScriptTag(src);
         });
@@ -134,7 +134,7 @@ public class ItemTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on this item!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return ato;
         });
@@ -152,7 +152,7 @@ public class ItemTag extends AbstractTagObject {
             Key key = DataKeys.getKeyForName(keyName);
             if (key == null) {
                 dat.error.run("Invalid key '" + keyName + "'!");
-                return new NullTag();
+                return NullTag.NULL;
             }
             return DataKeys.getValue(((ItemTag) obj).internal, key, dat.error);
         });
@@ -175,7 +175,7 @@ public class ItemTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
-            return new BooleanTag(flags.getInternal().containsKey(flagName));
+            return BooleanTag.getForBoolean(flags.getInternal().containsKey(flagName));
         });
         // <--[tag]
         // @Since 0.3.0
@@ -219,7 +219,7 @@ public class ItemTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This item is not a player skull!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getName().get());
         });
@@ -238,7 +238,7 @@ public class ItemTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This item is not a player skull!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             ProfileProperty p = item.get(Keys.REPRESENTED_PLAYER).get().getPropertyMap().get("textures").iterator().next();
             return new TextTag(p.getValue() + "|" + p.getSignature().get());
@@ -258,7 +258,7 @@ public class ItemTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This item is not a player skull!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(item.get(Keys.REPRESENTED_PLAYER).get().getUniqueId().toString());
         });
@@ -277,7 +277,7 @@ public class ItemTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("This item is not a skull!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(type.get().getId());
         });
@@ -335,7 +335,7 @@ public class ItemTag extends AbstractTagObject {
                     if (!dat.hasFallback()) {
                         dat.error.run("Key '" + a.getKey() + "' does not seem to exist.");
                     }
-                    return new NullTag();
+                    return NullTag.NULL;
                 }
                 DataKeys.tryApply(its, k, a.getValue(), dat.error);
             }
@@ -387,7 +387,7 @@ public class ItemTag extends AbstractTagObject {
                     if (!dat.hasFallback()) {
                         dat.error.run("Key '" + kName.toString() + "' does not seem to exist.");
                     }
-                    return new NullTag();
+                    return NullTag.NULL;
                 }
                 e.remove(k);
             }

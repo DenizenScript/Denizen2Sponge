@@ -32,6 +32,6 @@ public class ContextTagBase extends AbstractTagBase {
             }
         }
         data.error.run("No context present!");
-        return new NullTag();
+        return NullTag.NULL;
     }
 }

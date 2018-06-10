@@ -130,7 +130,7 @@ public class DataKeys {
             return (AbstractTagObject) input;
         }
         if (input instanceof Boolean) {
-            return new BooleanTag((Boolean) input);
+            return BooleanTag.getForBoolean((Boolean) input);
         }
         if (input instanceof CatalogType) {
             return new TextTag(input.toString());
@@ -157,7 +157,7 @@ public class DataKeys {
             return new MapTag(((FlagMap) input).flags.getInternal());
         }
         error.run("The value type '" + input.getClass().getName() + "' is not supported yet, cannot taggify!");
-        return new NullTag();
+        return NullTag.NULL;
     }
 
     private static ArrayList EMPTY_LIST = new ArrayList();
@@ -171,13 +171,13 @@ public class DataKeys {
                 return new MapTag();
             }
             error.run("This data holder does not support the key '" + key.getId() + "'!");
-            return new NullTag();
+            return NullTag.NULL;
         }
         if (List.class.isAssignableFrom(clazz)) {
             return taggifyObject(error, dataHolder.getOrElse(key, EMPTY_LIST));
         }
         if (Boolean.class.isAssignableFrom(clazz)) {
-            return new BooleanTag(dataHolder.getOrElse((Key<BaseValue<Boolean>>) key, false));
+            return BooleanTag.getForBoolean(dataHolder.getOrElse((Key<BaseValue<Boolean>>) key, false));
         }
         else if (CatalogType.class.isAssignableFrom(clazz)) {
             return new TextTag(dataHolder.getValue((Key<BaseValue<CatalogType>>) key).orElseThrow(() -> new ErrorInducedException("Value not present!")).get().getId());
@@ -205,7 +205,7 @@ public class DataKeys {
         }
         else {
             error.run("The value type '" + clazz.getName() + "' is not supported yet, cannot get its value!");
-            return new NullTag();
+            return NullTag.NULL;
         }
     }
 

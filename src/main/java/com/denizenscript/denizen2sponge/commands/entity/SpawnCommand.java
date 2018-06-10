@@ -102,7 +102,7 @@ public class SpawnCommand extends AbstractCommand {
         if (queue.shouldShowGood()) {
             queue.outGood("Spawning " + (passed ? "succeeded" : "was blocked") + "!");
         }
-        queue.commandStack.peek().setDefinition("spawn_success", new BooleanTag(passed));
+        queue.commandStack.peek().setDefinition("spawn_success", BooleanTag.getForBoolean(passed));
         if (passed) {
             queue.commandStack.peek().setDefinition("spawn_entity", new EntityTag(entity));
         }

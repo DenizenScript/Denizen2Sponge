@@ -99,7 +99,7 @@ public class CuboidTag extends AbstractTagObject {
         // @Returns whether the cuboid contains the specified location.
         // @Example "0,1,2/4,5,6/world" .contains[1,2,3,world] returns "true".
         // -->
-        handlers.put("contains", (dat, obj) -> new BooleanTag(((CuboidTag) obj).contains(
+        handlers.put("contains", (dat, obj) -> BooleanTag.getForBoolean(((CuboidTag) obj).contains(
                 LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
         // <--[tag]
         // @Since 0.3.0

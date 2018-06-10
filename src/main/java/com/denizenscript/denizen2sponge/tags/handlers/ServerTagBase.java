@@ -103,7 +103,7 @@ public class ServerTagBase extends AbstractTagBase {
         // @ReturnType BooleanTag
         // @Returns whether there is currently an enabled whitelist on the server.
         // -->
-        handlers.put("has_whitelist", (dat, obj) -> new BooleanTag(Sponge.getServer().hasWhitelist()));
+        handlers.put("has_whitelist", (dat, obj) -> BooleanTag.getForBoolean(Sponge.getServer().hasWhitelist()));
         // <--[tag]
         // @Since 0.3.0
         // @Name ServerBaseTag.online_mode
@@ -112,7 +112,7 @@ public class ServerTagBase extends AbstractTagBase {
         // @ReturnType BooleanTag
         // @Returns whether there the server is currently on online mode or not.
         // -->
-        handlers.put("online_mode", (dat, obj) -> new BooleanTag(Sponge.getServer().getOnlineMode()));
+        handlers.put("online_mode", (dat, obj) -> BooleanTag.getForBoolean(Sponge.getServer().getOnlineMode()));
         // <--[tag]
         // @Since 0.3.0
         // @Name ServerBaseTag.motd
@@ -139,7 +139,7 @@ public class ServerTagBase extends AbstractTagBase {
         // @ReturnType BooleanTag
         // @Returns whether the specified text is a valid block type, and can be read as a BlockTypeTag.
         // -->
-        handlers.put("block_type_is_valid", (dat, obj) -> new BooleanTag(Sponge.getRegistry().getType(
+        handlers.put("block_type_is_valid", (dat, obj) -> BooleanTag.getForBoolean(Sponge.getRegistry().getType(
                 BlockType.class, dat.getNextModifier().toString()).isPresent()));
         // <--[tag]
         // @Since 0.3.0
@@ -155,7 +155,7 @@ public class ServerTagBase extends AbstractTagBase {
                 if (!dat.hasFallback()) {
                     dat.error.run("Empty list tag, cannot wrap a cuboid around nothing!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             LocationTag one = LocationTag.getFor(dat.error, lt.getInternal().get(0));
             CuboidTag ct = new CuboidTag(one.getInternal(), one.getInternal());
@@ -181,7 +181,7 @@ public class ServerTagBase extends AbstractTagBase {
         handlers.put("has_flag", (dat, obj) -> {
             String flagName = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
             MapTag flags = Denizen2Sponge.instance.serverFlagMap;
-            return new BooleanTag(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
+            return BooleanTag.getForBoolean(Utilities.flagIsValidAndNotExpired(dat.error, flags, flagName));
         });
         // <--[tag]
         // @Since 0.3.0
@@ -227,14 +227,14 @@ public class ServerTagBase extends AbstractTagBase {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on the server!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             MapTag smap = MapTag.getFor(dat.error, flags.getInternal().get(flagName));
             if (smap == null) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on the server!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return smap.getInternal().get("value");
         });
@@ -285,11 +285,11 @@ public class ServerTagBase extends AbstractTagBase {
             properties.getInternal().put("title", new FormattedTextTag(bar.getName()));
             properties.getInternal().put("color", new TextTag(Utilities.getIdWithoutDefaultPrefix(bar.getColor().getId())));
             properties.getInternal().put("overlay", new TextTag(bar.getOverlay().getId()));
-            properties.getInternal().put("visible", new BooleanTag(bar.isVisible()));
+            properties.getInternal().put("visible", BooleanTag.getForBoolean(bar.isVisible()));
             properties.getInternal().put("percent", new NumberTag(bar.getPercent()));
-            properties.getInternal().put("create_fog", new BooleanTag(bar.shouldCreateFog()));
-            properties.getInternal().put("darken_sky", new BooleanTag(bar.shouldDarkenSky()));
-            properties.getInternal().put("play_music", new BooleanTag(bar.shouldPlayEndBossMusic()));
+            properties.getInternal().put("create_fog", BooleanTag.getForBoolean(bar.shouldCreateFog()));
+            properties.getInternal().put("darken_sky", BooleanTag.getForBoolean(bar.shouldDarkenSky()));
+            properties.getInternal().put("play_music", BooleanTag.getForBoolean(bar.shouldPlayEndBossMusic()));
             return properties;
         });
         // <--[tag]
@@ -303,7 +303,7 @@ public class ServerTagBase extends AbstractTagBase {
         handlers.put("advancement_exists", (dat, obj) -> {
             String id = dat.getNextModifier().toString();
             Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
-            return new BooleanTag(advancement != null);
+            return BooleanTag.getForBoolean(advancement != null);
         });
     }
 

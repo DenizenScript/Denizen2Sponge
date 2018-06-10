@@ -147,7 +147,7 @@ public class WorldTag extends AbstractTagObject {
             Optional<String> opt = ((WorldTag) obj).internal.getGameRule(gamerule);
             if (!opt.isPresent()) {
                 dat.error.run("Gamerule '" + gamerule + "' does not exist!");
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(opt.get());
         });
@@ -206,7 +206,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether it is raining in the world or not.
         // -->
-        handlers.put("is_raining", (dat, obj) -> new BooleanTag(((WorldTag) obj).internal.getProperties().isRaining()));
+        handlers.put("is_raining", (dat, obj) -> BooleanTag.getForBoolean(((WorldTag) obj).internal.getProperties().isRaining()));
         // <--[tag]
         // @Since 0.3.0
         // @Name WorldTag.rain_time
@@ -224,7 +224,7 @@ public class WorldTag extends AbstractTagObject {
         // @ReturnType BooleanTag
         // @Returns whether it is thundering in the world or not.
         // -->
-        handlers.put("is_thundering", (dat, obj) -> new BooleanTag(((WorldTag) obj).internal.getProperties().isThundering()));
+        handlers.put("is_thundering", (dat, obj) -> BooleanTag.getForBoolean(((WorldTag) obj).internal.getProperties().isThundering()));
         // <--[tag]
         // @Since 0.3.0
         // @Name WorldTag.thunder_time

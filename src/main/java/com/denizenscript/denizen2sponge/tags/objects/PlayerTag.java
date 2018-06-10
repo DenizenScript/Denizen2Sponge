@@ -70,7 +70,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("cooldown", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
             return new DurationTag(pl.getCooldownTracker().getCooldown(item.getInternal()).orElse(0) * (1.0 / 20.0));
@@ -86,7 +86,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("cooldown_fraction", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
             return new NumberTag(pl.getCooldownTracker().getFractionRemaining(item.getInternal()).orElse(0));
@@ -102,7 +102,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("exhaustion", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new NumberTag(pl.exhaustion().get());
         });
@@ -117,7 +117,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("food_level", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new IntegerTag(pl.foodLevel().get());
         });
@@ -132,7 +132,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("gamemode", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(pl.gameMode().get().toString());
         });
@@ -147,7 +147,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("has_advancement", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             String id = dat.getNextModifier().toString();
             Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
@@ -155,9 +155,9 @@ public class PlayerTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("There's no registered advancement that matches the specified id!");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
-            return new BooleanTag(pl.getProgress(advancement).achieved());
+            return BooleanTag.getForBoolean(pl.getProgress(advancement).achieved());
         });
         // <--[tag]
         // @Since 0.4.0
@@ -170,10 +170,10 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("has_cooldown", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
-            return new BooleanTag(pl.getCooldownTracker().hasCooldown(item.getInternal()));
+            return BooleanTag.getForBoolean(pl.getCooldownTracker().hasCooldown(item.getInternal()));
         });
         // <--[tag]
         // @Since 0.3.0
@@ -195,7 +195,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("ip", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new TextTag(pl.getConnection().getAddress().getAddress().getHostName());
         });
@@ -210,7 +210,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("latency", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new IntegerTag(pl.getConnection().getLatency());
         });
@@ -235,7 +235,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("saturation", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new NumberTag(pl.saturation().get());
         });
@@ -259,9 +259,9 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("sneaking", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
-            return new BooleanTag(pl.get(Keys.IS_SNEAKING).get());
+            return BooleanTag.getForBoolean(pl.get(Keys.IS_SNEAKING).get());
         });
         // <--[tag]
         // @Since 0.3.0
@@ -274,9 +274,9 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("sprinting", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
-            return new BooleanTag(pl.get(Keys.IS_SPRINTING).get());
+            return BooleanTag.getForBoolean(pl.get(Keys.IS_SPRINTING).get());
         });
         // <--[tag]
         // @Since 0.3.0
@@ -302,7 +302,7 @@ public class PlayerTag extends AbstractTagObject {
                     if (!dat.hasFallback()) {
                         dat.error.run("The specified statistic type does not exist!");
                     }
-                    return new NullTag();
+                    return NullTag.NULL;
                 }
                 EntityTypeTag ent = EntityTypeTag.getFor(dat.error, map.getInternal().get("entity"));
                 statistic = Sponge.getRegistry().getEntityStatistic(type.get(), ent.getInternal()).get();
@@ -313,7 +313,7 @@ public class PlayerTag extends AbstractTagObject {
                     if (!dat.hasFallback()) {
                         dat.error.run("The specified statistic type does not exist!");
                     }
-                    return new NullTag();
+                    return NullTag.NULL;
                 }
                 BlockTypeTag block = BlockTypeTag.getFor(dat.error, map.getInternal().get("block"));
                 statistic = Sponge.getRegistry().getBlockStatistic(type.get(), block.getInternal()).get();
@@ -324,7 +324,7 @@ public class PlayerTag extends AbstractTagObject {
                     if (!dat.hasFallback()) {
                         dat.error.run("The specified statistic type does not exist!");
                     }
-                    return new NullTag();
+                    return NullTag.NULL;
                 }
                 ItemTypeTag item = ItemTypeTag.getFor(dat.error, map.getInternal().get("item"));
                 statistic = Sponge.getRegistry().getItemStatistic(type.get(), item.getInternal()).get();
@@ -335,7 +335,7 @@ public class PlayerTag extends AbstractTagObject {
                     if (!dat.hasFallback()) {
                         dat.error.run("The specified general statistic does not exist!");
                     }
-                    return new NullTag();
+                    return NullTag.NULL;
                 }
                 statistic = opt.get();
             }
@@ -352,7 +352,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("tablist_header", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new FormattedTextTag(pl.getTabList().getHeader().orElse(Text.of("")));
         });
@@ -367,7 +367,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("tablist_footer", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new FormattedTextTag(pl.getTabList().getFooter().orElse(Text.of("")));
         });
