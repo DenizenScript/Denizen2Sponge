@@ -73,8 +73,8 @@ public class GiveCommand extends AbstractCommand {
         }
         else {
             EntityTag et = EntityTag.getFor(queue.error, ato);
-            if (et instanceof Carrier) {
-                inv = new InventoryTag(((Carrier) et).getInventory());
+            if (et.getInternal() instanceof Carrier) {
+                inv = new InventoryTag(((Carrier) et.getInternal()).getInventory());
             }
             else {
                 queue.error.run("Entity " + ColorSet.emphasis + et.debug() + ColorSet.warning + " does not carry an inventory!");
