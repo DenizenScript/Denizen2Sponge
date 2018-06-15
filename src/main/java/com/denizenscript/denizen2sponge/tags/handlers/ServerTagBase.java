@@ -314,13 +314,18 @@ public class ServerTagBase extends AbstractTagBase {
         // -->
         handlers.put("match_player", (dat, obj) -> {
             String matchInput = CoreUtilities.toLowerCase( dat.getNextModifier().toString());
-            UUID uuid = CoreUtilities.tryGetUUID(matchInput);
-            if (uuid != null) {
-                Optional<Player> opt = Sponge.getServer().getPlayer(uuid);
-                if (!opt.isPresent()) {
-                    return NullTag.NULL;
+            try {
+                UUID uuid = CoreUtilities.tryGetUUID(matchInput);
+                if (uuid != null) {
+                    Optional<Player> opt = Sponge.getServer().getPlayer(uuid);
+                    if (!opt.isPresent()) {
+                        return NullTag.NULL;
+                    }
+                    return new PlayerTag(opt.get());
                 }
-                return new PlayerTag(opt.get());
+            }
+            catch (Exception e) {
+                // Ignore.
             }
             Collection<Player> players = Sponge.getServer().getOnlinePlayers();
             for (Player player : players) {

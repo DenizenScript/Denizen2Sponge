@@ -1019,19 +1019,25 @@ public class EntityTag extends AbstractTagObject {
     }
 
     public static EntityTag getFor(Action<String> error, String text) {
-        UUID uuid = CoreUtilities.tryGetUUID(text);
-        if (uuid == null) {
+        try {
+            UUID uuid = CoreUtilities.tryGetUUID(text);
+            if (uuid == null) {
+                error.run("Invalid EntityTag UUID input (input is not a valid UUID)!");
+                return null;
+            }
+            for (World world : Sponge.getServer().getWorlds()) {
+                Optional<Entity> e = world.getEntity(uuid);
+                if (e.isPresent()) {
+                    return new EntityTag(e.get());
+                }
+            }
+            error.run("Invalid EntityTag UUID input (that UUID cannot be matched to a real entity)!");
+            return null;
+        }
+        catch (Exception e) {
             error.run("Invalid EntityTag UUID input (input is not a valid UUID)!");
             return null;
         }
-        for (World world : Sponge.getServer().getWorlds()) {
-            Optional<Entity> e = world.getEntity(uuid);
-            if (e.isPresent()) {
-                return new EntityTag(e.get());
-            }
-        }
-        error.run("Invalid EntityTag UUID input (that UUID cannot be matched to a real entity)!");
-        return null;
     }
 
     public static EntityTag getFor(Action<String> error, AbstractTagObject ato) {

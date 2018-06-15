@@ -411,14 +411,19 @@ public class PlayerTag extends AbstractTagObject {
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
-        UUID uuid = CoreUtilities.tryGetUUID(text);
-        if (uuid != null) {
-            Optional<Player> oplayer = Sponge.getServer().getPlayer(uuid);
-            if (!oplayer.isPresent()) {
-                error.run("Invalid PlayerTag UUID input!");
-                return null;
+        try {
+            UUID uuid = CoreUtilities.tryGetUUID(text);
+            if (uuid != null) {
+                Optional<Player> oplayer = Sponge.getServer().getPlayer(uuid);
+                if (!oplayer.isPresent()) {
+                    error.run("Invalid PlayerTag UUID input!");
+                    return null;
+                }
+                return new PlayerTag(oplayer.get());
             }
-            return new PlayerTag(oplayer.get());
+        }
+        catch (Exception e) {
+            // Ignore.
         }
         Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
         if (!oplayer.isPresent()) {
