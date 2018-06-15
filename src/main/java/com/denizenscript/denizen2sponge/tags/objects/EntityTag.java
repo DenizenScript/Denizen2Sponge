@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.spongescripts.EntityScript;
 import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
@@ -62,6 +63,23 @@ public class EntityTag extends AbstractTagObject {
     }
 
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
+
+    public EntityScript getSourceScript() {
+        Optional<FlagMap> fm = internal.get(FlagHelper.FLAGMAP);
+        if (fm.isPresent()) {
+            MapTag flags = fm.get().flags;
+            if (flags.getInternal().containsKey("_d2_script")) {
+                AbstractTagObject scriptObj = flags.getInternal().get("_d2_script");
+                if (scriptObj instanceof ScriptTag) {
+                    ScriptTag script = (ScriptTag) scriptObj;
+                    if (script.getInternal() instanceof EntityScript) {
+                        return (EntityScript) script.getInternal();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     public String friendlyName() {
         if (internal instanceof Player) {
@@ -850,7 +868,7 @@ public class EntityTag extends AbstractTagObject {
         });
         // <--[tag]
         // @Since 0.3.0
-        // @Name EntityTagTag.target_entities[<MapTag>]
+        // @Name EntityTag.target_entities[<MapTag>]
         // @Updated 2017/10/17
         // @Group Entity Target
         // @ReturnType ListTag<EntityTag>
@@ -935,25 +953,91 @@ public class EntityTag extends AbstractTagObject {
                 return NullTag.NULL;
             }
         });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.burning
+        // @Updated 2018/02/17
+        // @Group Entity Properties
+        // @ReturnType BooleanTag
+        // @Returns whether an entity is currently burning.
+        // -->
+        handlers.put("burning", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.FIRE_TICKS).orElse(0) > 0));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.burn_time
+        // @Updated 2018/02/17
+        // @Group Entity Properties
+        // @ReturnType DurationTag
+        // @Returns how long an entity is burning for.
+        // -->
+        handlers.put("burn_time", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.FIRE_TICKS).orElse(0) / 20.0));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.absorption
+        // @Updated 2018/02/17
+        // @Group Entity Properties
+        // @ReturnType NumberTag
+        // @Returns how much absorption this entity has.
+        // -->
+        handlers.put("absorption", (dat, obj) -> new NumberTag(((EntityTag) obj).internal.get(Keys.ABSORPTION).orElse(0.0)));
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name EntityTag.glowing
+        // @Updated 2018/02/18
+        // @Group Entity Properties
+        // @ReturnType BooleanTag
+        // @Returns whether an entity is currently glowing.
+        // -->
+        handlers.put("glowing", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.GLOWING).get()));
+        // <--[tag]
+        // @Since 0.5.0
+        // @Name EntityTag.is_script
+        // @Updated 2018/05/29
+        // @Group General Information
+        // @ReturnType BooleanTag
+        // @Returns whether the entity was sourced from a script.
+        // -->
+        handlers.put("is_script", (dat, obj) -> new BooleanTag(((EntityTag) obj).getSourceScript() != null));
+        // <--[tag]
+        // @Since 0.5.0
+        // @Name EntityTag.script
+        // @Updated 2018/05/29
+        // @Group General Information
+        // @ReturnType ScriptTag
+        // @Returns the script this entity was spawned from, if any.
+        // -->
+        handlers.put("script", (dat, obj) -> {
+            EntityScript src = ((EntityTag) obj).getSourceScript();
+            if (src == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("Entity was not sourced from a script.");
+                }
+                return new NullTag();
+            }
+            return new ScriptTag(src);
+        });
     }
 
     public static EntityTag getFor(Action<String> error, String text) {
-        UUID id;
         try {
-            id = UUID.fromString(text);
+            UUID uuid = CoreUtilities.tryGetUUID(text);
+            if (uuid == null) {
+                error.run("Invalid EntityTag UUID input (input is not a valid UUID)!");
+                return null;
+            }
+            for (World world : Sponge.getServer().getWorlds()) {
+                Optional<Entity> e = world.getEntity(uuid);
+                if (e.isPresent()) {
+                    return new EntityTag(e.get());
+                }
+            }
+            error.run("Invalid EntityTag UUID input (that UUID cannot be matched to a real entity)!");
+            return null;
         }
-        catch (IllegalArgumentException e) {
+        catch (Exception e) {
             error.run("Invalid EntityTag UUID input (input is not a valid UUID)!");
             return null;
         }
-        for (World world : Sponge.getServer().getWorlds()) {
-            Optional<Entity> e = world.getEntity(id);
-            if (e.isPresent()) {
-                return new EntityTag(e.get());
-            }
-        }
-        error.run("Invalid EntityTag UUID input (that UUID cannot be matched to a real entity)!");
-        return null;
     }
 
     public static EntityTag getFor(Action<String> error, AbstractTagObject ato) {

@@ -17,8 +17,7 @@ import org.spongepowered.api.boss.ServerBossBar;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ServerTagBase extends AbstractTagBase {
 
@@ -304,6 +303,47 @@ public class ServerTagBase extends AbstractTagBase {
             String id = dat.getNextModifier().toString();
             Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
             return BooleanTag.getForBoolean(advancement != null);
+        });
+        // <--[tag]
+        // @Since 0.5.0
+        // @Name ServerBaseTag.match_player[<TextTag>]
+        // @Updated 2018/06/15
+        // @Group Server Tools
+        // @ReturnType PlayerTag
+        // @Returns the online player that best matches the input name.
+        // -->
+        handlers.put("match_player", (dat, obj) -> {
+            String matchInput = CoreUtilities.toLowerCase( dat.getNextModifier().toString());
+            try {
+                UUID uuid = CoreUtilities.tryGetUUID(matchInput);
+                if (uuid != null) {
+                    Optional<Player> opt = Sponge.getServer().getPlayer(uuid);
+                    if (!opt.isPresent()) {
+                        return NullTag.NULL;
+                    }
+                    return new PlayerTag(opt.get());
+                }
+            }
+            catch (Exception e) {
+                // Ignore.
+            }
+            Collection<Player> players = Sponge.getServer().getOnlinePlayers();
+            for (Player player : players) {
+                if (CoreUtilities.toLowerCase(player.getName()).equals(matchInput)) {
+                    return new PlayerTag(player);
+                }
+            }
+            for (Player player : players) {
+                if (CoreUtilities.toLowerCase(player.getName()).startsWith(matchInput)) {
+                    return new PlayerTag(player);
+                }
+            }
+            for (Player player : players) {
+                if (CoreUtilities.toLowerCase(player.getName()).contains(matchInput)) {
+                    return new PlayerTag(player);
+                }
+            }
+            return NullTag.NULL;
         });
     }
 

@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
+import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
@@ -104,7 +105,12 @@ public class DataKeys {
             return LocationTag.getFor(error, value).getInternal().toVector3d();
         }
         else if (type.isSubtypeOf(Text.class)) {
-            return FormattedTextTag.getFor(error, value).getInternal();
+            if (value instanceof FormattedTextTag) {
+                return ((FormattedTextTag) value).getInternal();
+            }
+            else {
+                return Denizen2Sponge.parseColor(value.toString());
+            }
         }
         else if (type.isSubtypeOf(UUID.class)) {
             return UUID.fromString(value.toString());

@@ -28,6 +28,7 @@ import com.denizenscript.denizen2sponge.spongecommands.ExCommand;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadedEvent;
 import com.denizenscript.denizen2sponge.spongeevents.Denizen2SpongeLoadingEvent;
 import com.denizenscript.denizen2sponge.spongescripts.AdvancementScript;
+import com.denizenscript.denizen2sponge.spongescripts.EntityScript;
 import com.denizenscript.denizen2sponge.spongescripts.GameCommandScript;
 import com.denizenscript.denizen2sponge.spongescripts.ItemScript;
 import com.denizenscript.denizen2sponge.tags.handlers.*;
@@ -89,6 +90,8 @@ public class Denizen2Sponge {
 
     public static final Map<String, ItemScript> itemScripts = new HashMap<>();
 
+    public static final Map<String, EntityScript> entityScripts = new HashMap<>();
+
     static {
         YAMLConfiguration tconfig = null;
         try {
@@ -127,8 +130,10 @@ public class Denizen2Sponge {
         Denizen2Core.getImplementation().getAddonsFolder().mkdirs();
         Denizen2Core.getImplementation().getScriptDataFolder().mkdirs();
         // Commands: Entity
+        Denizen2Core.register(new AbsorptionCommand());
         Denizen2Core.register(new AddAITaskCommand());
         Denizen2Core.register(new AirCommand());
+        Denizen2Core.register(new BurnCommand());
         Denizen2Core.register(new CastCommand());
         Denizen2Core.register(new DefuseCommand());
         Denizen2Core.register(new DetonateCommand());
@@ -136,6 +141,7 @@ public class Denizen2Sponge {
         Denizen2Core.register(new EditEntityCommand());
         Denizen2Core.register(new EquipCommand());
         Denizen2Core.register(new FlagCommand());
+        Denizen2Core.register(new GlowCommand());
         Denizen2Core.register(new HealCommand());
         Denizen2Core.register(new HurtCommand());
         Denizen2Core.register(new InvisibleCommand());
@@ -168,6 +174,8 @@ public class Denizen2Sponge {
         Denizen2Core.register(new NarrateCommand());
         Denizen2Core.register(new PardonCommand());
         Denizen2Core.register(new RemoveBossBarCommand());
+        Denizen2Core.register(new RemoveRespawnCommand());
+        Denizen2Core.register(new SetRespawnCommand());
         Denizen2Core.register(new TabListCommand());
         Denizen2Core.register(new TakeCommand());
         Denizen2Core.register(new TellCommand());
@@ -261,6 +269,7 @@ public class Denizen2Sponge {
         Denizen2Core.register("command", GameCommandScript::new);
         Denizen2Core.register("advancement", AdvancementScript::new);
         Denizen2Core.register("item", ItemScript::new);
+        Denizen2Core.register("entity", EntityScript::new);
         // Tag Types
         Denizen2Core.customSaveLoaders.put("BlockTypeTag", BlockTypeTag::getFor);
         Denizen2Core.customSaveLoaders.put("CuboidTag", CuboidTag::getFor);

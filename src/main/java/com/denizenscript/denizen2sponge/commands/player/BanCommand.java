@@ -7,6 +7,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.objects.DurationTag;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.FormattedTextTag;
 import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.Sponge;
@@ -91,8 +92,8 @@ public class BanCommand extends AbstractCommand {
             }
         }
         AbstractTagObject target = entry.getArgumentObject(queue, 0);
-        if (target instanceof PlayerTag) {
-            GameProfile profile = ((PlayerTag) target).getInternal().getProfile();
+        if (target instanceof PlayerTag || target instanceof EntityTag) {
+            GameProfile profile = PlayerTag.getFor(queue.error, target).getInternal().getProfile();
             build.type(BanTypes.PROFILE).profile(profile);
             if (queue.shouldShowGood()) {
                 queue.outGood("Banning player " + ColorSet.emphasis + profile.getName().get() +

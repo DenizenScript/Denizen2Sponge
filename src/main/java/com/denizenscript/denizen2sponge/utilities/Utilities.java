@@ -3,7 +3,6 @@ package com.denizenscript.denizen2sponge.utilities;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.tags.objects.TimeTag;
 import com.denizenscript.denizen2core.utilities.Action;
-import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
@@ -67,5 +66,10 @@ public class Utilities {
         }
         opt = Sponge.getRegistry().getType(clazz, "denizen2sponge:" + name);
         return opt.orElse(null);
+    }
+
+    @FunctionalInterface
+    public interface Function3<A, B, C, R> {
+        R apply(A a, B b, C c);
     }
 }

@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
@@ -17,6 +18,8 @@ import org.spongepowered.api.item.inventory.entity.UserInventory;
 import org.spongepowered.api.statistic.Statistic;
 import org.spongepowered.api.statistic.StatisticType;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.RespawnLocation;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -382,25 +385,52 @@ public class PlayerTag extends AbstractTagObject {
             }
             return new FormattedTextTag(pl.getTabList().getFooter().orElse(Text.of("")));
         });
+        // <--[tag]
+        // @Since 0.4.0
+        // @Name PlayerTag.respawn_location[<WorldTag>]
+        // @Updated 2018/02/22
+        // @Group Properties
+        // @ReturnType LocationTag
+        // @Returns whether the player's respawn location in the specified world. ONLINE-PLAYERS-ONLY.
+        // -->
+        handlers.put("respawn_location", (dat, obj) -> {
+            Player pl = ((PlayerTag) obj).getOnline(dat);
+            if (pl == null) {
+                return new NullTag();
+            }
+            World world = WorldTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            RespawnLocation loc = pl.get(Keys.RESPAWN_LOCATIONS).orElse(new HashMap<>()).get(world.getUniqueId());
+            if (loc == null) {
+                if (!dat.hasFallback()) {
+                    dat.error.run("The player has no defined respawn location in the specified world!");
+                }
+                return new NullTag();
+            }
+            return new LocationTag(loc.asLocation().get());
+        });
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
         try {
-            Optional<Player> oplayer = Sponge.getServer().getPlayer(UUID.fromString(text));
-            if (!oplayer.isPresent()) {
-                error.run("Invalid PlayerTag UUID input!");
-                return null;
+            UUID uuid = CoreUtilities.tryGetUUID(text);
+            if (uuid != null) {
+                Optional<Player> oplayer = Sponge.getServer().getPlayer(uuid);
+                if (!oplayer.isPresent()) {
+                    error.run("Invalid PlayerTag UUID input!");
+                    return null;
+                }
+                return new PlayerTag(oplayer.get());
             }
-            return new PlayerTag(oplayer.get());
         }
-        catch (IllegalArgumentException e) { // TODO: better impl of this backup logic
-            Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
-            if (!oplayer.isPresent()) {
-                error.run("Invalid PlayerTag named input!");
-                return null;
-            }
-            return new PlayerTag(oplayer.get());
+        catch (Exception e) {
+            // Ignore.
         }
+        Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
+        if (!oplayer.isPresent()) {
+            error.run("Invalid PlayerTag named input!");
+            return null;
+        }
+        return new PlayerTag(oplayer.get());
     }
 
     public static PlayerTag getFor(Action<String> error, AbstractTagObject ato) {

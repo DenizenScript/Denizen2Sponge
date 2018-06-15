@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.TextTag;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 
@@ -80,12 +81,12 @@ public class BlockTypeTag extends AbstractTagObject {
     }
 
     public static BlockTypeTag getFor(Action<String> error, String text) {
-        Optional<BlockType> optItemType = Sponge.getRegistry().getType(BlockType.class, text);
-        if (!optItemType.isPresent()) {
+        BlockType blockType = (BlockType) Utilities.getTypeWithDefaultPrefix(BlockType.class, text);
+        if (blockType == null) {
             error.run("Invalid BlockTypeTag input!");
             return null;
         }
-        return new BlockTypeTag(optItemType.get());
+        return new BlockTypeTag(blockType);
     }
 
     public static BlockTypeTag getFor(Action<String> error, AbstractTagObject text) {
