@@ -1,8 +1,10 @@
 package com.denizenscript.denizen2sponge;
 
 import com.denizenscript.denizen2core.Denizen2Core;
+import com.denizenscript.denizen2core.commands.CommandQueue;
 import com.denizenscript.denizen2core.tags.objects.MapTag;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
+import com.denizenscript.denizen2core.utilities.ErrorInducedException;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
@@ -73,6 +75,14 @@ public class Denizen2Sponge {
     public YAMLConfiguration config;
 
     public static char colorChar = '\u00A7';
+
+    public static final CommandQueue FORCE_TO_STATIC; // Special case recursive static generation helper
+
+    static {
+        (FORCE_TO_STATIC = new CommandQueue()).error = (es) -> {
+            throw new ErrorInducedException(es);
+        };
+    }
 
     public static Cause getGenericCause() {
         // TODO: Decipher new cause system, make a nice generic cause

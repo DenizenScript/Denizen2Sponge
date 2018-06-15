@@ -83,21 +83,13 @@ public class ItemScript extends CommandScript {
 
     public final String itemScriptName;
 
-    private static final CommandQueue FORCE_TO_STATIC; // Special case recursive static generation helper
-
-    static {
-        (FORCE_TO_STATIC = new CommandQueue()).error = (es) -> {
-            throw new ErrorInducedException(es);
-        };
-    }
-
     @Override
     public boolean init() {
         if (super.init()) {
             try {
                 prepValues();
-                if (contents.contains("static") && BooleanTag.getFor(FORCE_TO_STATIC.error, contents.getString("static")).getInternal()) {
-                    staticItem = getItemCopy(FORCE_TO_STATIC);
+                if (contents.contains("static") && BooleanTag.getFor(Denizen2Sponge.FORCE_TO_STATIC.error, contents.getString("static")).getInternal()) {
+                    staticItem = getItemCopy(Denizen2Sponge.FORCE_TO_STATIC);
                 }
             }
             catch (ErrorInducedException ex) {
@@ -156,7 +148,7 @@ public class ItemScript extends CommandScript {
             YAMLConfiguration sec = contents.getConfigurationSection("flags");
             for (StringHolder key : sec.getKeys(false)) {
                 Argument arg = Denizen2Core.splitToArgument(sec.getString(key.str), true, true, error);
-                flags.add(new Tuple<>(CoreUtilities.toUpperCase(key.low), arg));
+                flags.add(new Tuple<>(key.low, arg));
             }
         }
         if (contents.contains("keys")) {
@@ -164,7 +156,7 @@ public class ItemScript extends CommandScript {
             YAMLConfiguration sec = contents.getConfigurationSection("keys");
             for (StringHolder key : sec.getKeys(false)) {
                 Argument arg = Denizen2Core.splitToArgument(sec.getString(key.str), true, true, error);
-                otherValues.add(new Tuple<>(CoreUtilities.toUpperCase(key.low), arg));
+                otherValues.add(new Tuple<>(key.low, arg));
             }
         }
     }
@@ -231,7 +223,7 @@ public class ItemScript extends CommandScript {
         if (!flagsMap.getInternal().isEmpty()) {
             toRet.offer(new FlagMapDataImpl(new FlagMap(flagsMap)));
         }
-        if (queue == FORCE_TO_STATIC && contents.contains("static")
+        if (queue == Denizen2Sponge.FORCE_TO_STATIC && contents.contains("static")
                 && BooleanTag.getFor(queue.error, contents.getString("static")).getInternal()) {
             staticItem = toRet;
         }

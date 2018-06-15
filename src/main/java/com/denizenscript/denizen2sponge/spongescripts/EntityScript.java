@@ -34,7 +34,7 @@ import java.util.List;
 public class EntityScript extends CommandScript {
 
     // <--[explanation]
-    // @Since 0.5.0
+    // @Since 0.5.5
     // @Name Entity Scripts
     // @Group Script Types
     // @Description
@@ -42,9 +42,7 @@ public class EntityScript extends CommandScript {
     // be used to spawn entities afterwards. Keys in an entity script define which properties the
     // final entity will have.
     //
-    // An entity script can be used in place of any normal entity type, by putting the name of the
-    // entity script where a script expects an entity type. A script may block this from user input by
-    // requiring a valid EntityTypeTag input, which will not recognize an item script.
+    // An entity script can be used in place of an entity type in certain spawning related commands or inputs.
     //
     // The entity script name may not be the same as an existing entity type name.
     //
@@ -68,11 +66,12 @@ public class EntityScript extends CommandScript {
     // Set key "flags" as a section and within it put all flags keyed by name and with the value that each flag should hold.
     // If you wish to dynamically structure the mapping, see the "keys" option for specifying that.
     //
-    // To specify other values, create a section labeled "keys" and within it put any valid item keys.
+    // To specify other values, create a section labeled "keys" and within it put any valid entity keys.
     // TODO: Create and reference an explanation of basic entity keys.
     //
-    // You can also specify AI Tasks that will be applied to the entity on spawn. Valid task types can be found at
-    // <@link explanation AI Task Types>AI task types<@/link>, and the properties they accept are explained at <@link command addaitask>addaitask<@/link>.
+    // Set key "ai tasks" to specify AI Tasks that will be applied to the entity on spawn. Valid task types can be found in the
+    // <@link explanation AI Task Types>AI task types explanation<@/link>, and the properties they accept
+    // are explained in the <@link command addaitask>addaitask command<@/link> documentation.
     // On top of that, each task accepts a goal (see <@link explanation AI Goal Types>AI goal types<@/link>) and a priority value.
     // -->
 
@@ -83,21 +82,13 @@ public class EntityScript extends CommandScript {
 
     public final String entityScriptName;
 
-    private static final CommandQueue FORCE_TO_STATIC; // Special case recursive static generation helper
-
-    static {
-        (FORCE_TO_STATIC = new CommandQueue()).error = (es) -> {
-            throw new ErrorInducedException(es);
-        };
-    }
-
     @Override
     public boolean init() {
         if (super.init()) {
             try {
                 prepValues();
-                if (contents.contains("static") && BooleanTag.getFor(FORCE_TO_STATIC.error, contents.getString("static")).getInternal()) {
-                    staticEntity = getEntityCopy(FORCE_TO_STATIC);
+                if (contents.contains("static") && BooleanTag.getFor(Denizen2Sponge.FORCE_TO_STATIC.error, contents.getString("static")).getInternal()) {
+                    staticEntity = getEntityCopy(Denizen2Sponge.FORCE_TO_STATIC);
                 }
             }
             catch (ErrorInducedException ex) {
@@ -123,7 +114,7 @@ public class EntityScript extends CommandScript {
 
     public List<Tuple<String, Argument>> otherValues, flags;
 
-    public List<Tuple<String, YAMLConfiguration>> taskData;
+    public List<Tuple<String, List<Tuple<String, Argument>>>> taskData;
 
     public void prepValues() {
         Action<String> error = (es) -> {
@@ -149,7 +140,7 @@ public class EntityScript extends CommandScript {
             YAMLConfiguration sec = contents.getConfigurationSection("flags");
             for (StringHolder key : sec.getKeys(false)) {
                 Argument arg = Denizen2Core.splitToArgument(sec.getString(key.str), true, true, error);
-                flags.add(new Tuple<>(CoreUtilities.toUpperCase(key.low), arg));
+                flags.add(new Tuple<>(key.low, arg));
             }
         }
         if (contents.contains("keys")) {
@@ -157,14 +148,20 @@ public class EntityScript extends CommandScript {
             YAMLConfiguration sec = contents.getConfigurationSection("keys");
             for (StringHolder key : sec.getKeys(false)) {
                 Argument arg = Denizen2Core.splitToArgument(sec.getString(key.str), true, true, error);
-                otherValues.add(new Tuple<>(CoreUtilities.toUpperCase(key.low), arg));
+                otherValues.add(new Tuple<>(key.low, arg));
             }
         }
         if (contents.contains("ai tasks")) {
             taskData = new ArrayList<>();
             YAMLConfiguration sec = contents.getConfigurationSection("ai tasks");
             for (StringHolder key : sec.getKeys(false)) {
-                taskData.add( new Tuple<>(key.low, sec.getConfigurationSection(key.str)));
+                YAMLConfiguration subsec = sec.getConfigurationSection(key.str);
+                List<Tuple<String, Argument>> subList = new ArrayList<>();
+                for (StringHolder subKey : subsec.getKeys(false)) {
+                    Argument arg = Denizen2Core.splitToArgument(subsec.getString(subKey.str), true, true, error);
+                    subList.add(new Tuple<>(subKey.low, arg));
+                }
+                taskData.add(new Tuple<>(key.low, subList));
             }
         }
     }
@@ -234,21 +231,20 @@ public class EntityScript extends CommandScript {
         }
         ent.properties.putAll(prop);
         if (taskData != null) {
-            for (Tuple<String, YAMLConfiguration> task : taskData) {
+            for (Tuple<String, List<Tuple<String, Argument>>> task : taskData) {
                 if (AITaskHelper.handlers.get(task.one) == null) {
                     queue.error.run("Error handling entity script '" + ColorSet.emphasis + title + ColorSet.warning
                             + "': task type '" + ColorSet.emphasis + task.one + ColorSet.warning + "' does not seem to exist.");
                     return null;
                 }
                 HashMap<String, AbstractTagObject> map = new HashMap<>();
-                for (StringHolder subkey : task.two.getKeys(false)) {
-                    Argument arg = Denizen2Core.splitToArgument(task.two.getString(subkey.str), true, true, queue.error);
-                    map.put(subkey.low, parseVal(queue, arg, varBack));
+                for (Tuple<String, Argument> opt : task.two) {
+                    map.put(opt.one, parseVal(queue, opt.two, varBack));
                 }
                 ent.tasks.put(task.one, map);
             }
         }
-        if (queue == FORCE_TO_STATIC && contents.contains("static")
+        if (queue == Denizen2Sponge.FORCE_TO_STATIC && contents.contains("static")
                 && BooleanTag.getFor(queue.error, contents.getString("static")).getInternal()) {
             staticEntity = ent;
         }
