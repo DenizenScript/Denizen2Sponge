@@ -4,6 +4,7 @@ import com.denizenscript.denizen2core.tags.AbstractTagObject;
 import com.denizenscript.denizen2core.tags.TagData;
 import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
+import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
@@ -410,22 +411,21 @@ public class PlayerTag extends AbstractTagObject {
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
-        try {
-            Optional<Player> oplayer = Sponge.getServer().getPlayer(UUID.fromString(text));
+        UUID uuid = CoreUtilities.tryGetUUID(text);
+        if (uuid != null) {
+            Optional<Player> oplayer = Sponge.getServer().getPlayer(uuid);
             if (!oplayer.isPresent()) {
                 error.run("Invalid PlayerTag UUID input!");
                 return null;
             }
             return new PlayerTag(oplayer.get());
         }
-        catch (IllegalArgumentException e) { // TODO: better impl of this backup logic
-            Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
-            if (!oplayer.isPresent()) {
-                error.run("Invalid PlayerTag named input!");
-                return null;
-            }
-            return new PlayerTag(oplayer.get());
+        Optional<Player> oplayer = Sponge.getServer().getPlayer(text);
+        if (!oplayer.isPresent()) {
+            error.run("Invalid PlayerTag named input!");
+            return null;
         }
+        return new PlayerTag(oplayer.get());
     }
 
     public static PlayerTag getFor(Action<String> error, AbstractTagObject ato) {

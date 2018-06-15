@@ -18,9 +18,12 @@ import com.denizenscript.denizen2core.utilities.yaml.StringHolder;
 import com.denizenscript.denizen2core.utilities.yaml.YAMLConfiguration;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
+import com.denizenscript.denizen2sponge.utilities.AITaskHelper;
+import com.denizenscript.denizen2sponge.utilities.DataKeys;
 import com.denizenscript.denizen2sponge.utilities.EntityTemplate;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.item.ItemType;
 
@@ -67,6 +70,10 @@ public class EntityScript extends CommandScript {
     //
     // To specify other values, create a section labeled "keys" and within it put any valid item keys.
     // TODO: Create and reference an explanation of basic entity keys.
+    //
+    // You can also specify AI Tasks that will be applied to the entity on spawn. Valid task types can be found at
+    // <@link explanation AI Task Types>AI task types<@/link>, and the properties they accept are explained at <@link command addaitask>addaitask<@/link>.
+    // On top of that, each task accepts a goal (see <@link explanation AI Goal Types>AI goal types<@/link>) and a priority value.
     // -->
 
     public EntityScript(String name, YAMLConfiguration section) {
@@ -76,17 +83,20 @@ public class EntityScript extends CommandScript {
 
     public final String entityScriptName;
 
-    private static final CommandQueue FORCE_TO_STATIC = new CommandQueue(); // Special case recursive static generation helper
+    private static final CommandQueue FORCE_TO_STATIC; // Special case recursive static generation helper
+
+    static {
+        (FORCE_TO_STATIC = new CommandQueue()).error = (es) -> {
+            throw new ErrorInducedException(es);
+        };
+    }
 
     @Override
     public boolean init() {
         if (super.init()) {
             try {
                 prepValues();
-                Action<String> error = (es) -> {
-                    throw new ErrorInducedException(es);
-                };
-                if (contents.contains("static") && BooleanTag.getFor(error, contents.getString("static")).getInternal()) {
+                if (contents.contains("static") && BooleanTag.getFor(FORCE_TO_STATIC.error, contents.getString("static")).getInternal()) {
                     staticEntity = getEntityCopy(FORCE_TO_STATIC);
                 }
             }
@@ -113,12 +123,14 @@ public class EntityScript extends CommandScript {
 
     public List<Tuple<String, Argument>> otherValues, flags;
 
+    public List<Tuple<String, YAMLConfiguration>> taskData;
+
     public void prepValues() {
         Action<String> error = (es) -> {
             throw new ErrorInducedException(es);
         };
         if (Sponge.getRegistry().getType(ItemType.class, title).isPresent()) {
-            Debug.error("Entity script " + title + " may be unusable: a base entity type exists with that name!");
+            Debug.error("Entity script may be unusable: a base entity type exists with the same name!");
         }
         if (contents.contains("display name")) {
             displayName = Denizen2Core.splitToArgument(contents.getString("display name"), true, true, error);
@@ -148,19 +160,20 @@ public class EntityScript extends CommandScript {
                 otherValues.add(new Tuple<>(CoreUtilities.toUpperCase(key.low), arg));
             }
         }
+        if (contents.contains("ai tasks")) {
+            taskData = new ArrayList<>();
+            YAMLConfiguration sec = contents.getConfigurationSection("ai tasks");
+            for (StringHolder key : sec.getKeys(false)) {
+                taskData.add( new Tuple<>(key.low, sec.getConfigurationSection(key.str)));
+            }
+        }
     }
 
     public AbstractTagObject parseVal(CommandQueue queue, Argument arg, HashMap<String, AbstractTagObject> varBack) {
-        Action<String> error = (es) -> {
-            throw new ErrorInducedException(es);
-        };
-        return arg.parse(queue, varBack, getDebugMode(), error);
+        return arg.parse(queue, varBack, getDebugMode(), queue.error);
     }
 
     public EntityTemplate generateEntity(CommandQueue queue) {
-        Action<String> error = (es) -> {
-            throw new ErrorInducedException(es);
-        };
         EntityTemplate ent;
         HashMap<String, AbstractTagObject> varBack = new HashMap<>();
         String baseStr = parseVal(queue, base, varBack).toString();
@@ -173,25 +186,35 @@ public class EntityScript extends CommandScript {
             if (Denizen2Sponge.entityScripts.containsKey(baseLow)) {
                 EntityTemplate baseEnt = Denizen2Sponge.entityScripts.get(baseLow).getEntityCopy(queue);
                 ent = new EntityTemplate(baseEnt);
-                MapTag baseProperties = new MapTag(baseEnt.properties.getInternal());
+                MapTag baseProperties = new MapTag(baseEnt.properties);
                 baseProperties.getInternal().put("type", new EntityTypeTag(ent.type));
                 varBack.put("base", baseProperties);
             }
             else {
-                throw new ErrorInducedException("No entity types or scripts found for id '" + baseStr + "'.");
+                queue.error.run("No entity types or scripts found for id '" + baseStr + "'.");
+                return null;
             }
         }
-        MapTag properties = new MapTag();
+        HashMap<String, AbstractTagObject> prop = new HashMap<>();
         if (displayName != null) {
-            properties.getInternal().put("display_name", parseVal(queue, displayName, varBack));
+            prop.put("display_name", parseVal(queue, displayName, varBack));
         }
         if (otherValues != null) {
             for (Tuple<String, Argument> input : otherValues) {
-                properties.getInternal().put(input.one, parseVal(queue, input.two, varBack));
+                if (!input.one.equalsIgnoreCase("clear_ai_tasks")
+                        && !input.one.equalsIgnoreCase("orientation")) {
+                    Key k = DataKeys.getKeyForName(input.one);
+                    if (k == null) {
+                        queue.error.run("Error handling entity script '" + ColorSet.emphasis + title + ColorSet.warning
+                                + "': key '" + ColorSet.emphasis + input.one + ColorSet.warning + "' does not seem to exist.");
+                        return null;
+                    }
+                }
+                prop.put(input.one, parseVal(queue, input.two, varBack));
             }
         }
         MapTag flagsMap;
-        AbstractTagObject ato = ent.properties.getInternal().get("flagmap");
+        AbstractTagObject ato = ent.properties.get("flagmap");
         if (ato != null) {
             flagsMap = new MapTag(((MapTag) ato).getInternal());
         }
@@ -203,15 +226,30 @@ public class EntityScript extends CommandScript {
                 flagsMap.getInternal().put(flagVal.one, parseVal(queue, flagVal.two, varBack));
             }
         }
-        if (plain == null || !BooleanTag.getFor(error, parseVal(queue, plain, varBack)).getInternal()) {
+        if (plain == null || !BooleanTag.getFor(queue.error, parseVal(queue, plain, varBack)).getInternal()) {
             flagsMap.getInternal().put("_d2_script", new ScriptTag(this));
         }
         if (!flagsMap.getInternal().isEmpty()) {
-            properties.getInternal().put("flagmap", flagsMap);
+            prop.put("flagmap", flagsMap);
         }
-        ent.addProperties(properties);
+        ent.properties.putAll(prop);
+        if (taskData != null) {
+            for (Tuple<String, YAMLConfiguration> task : taskData) {
+                if (AITaskHelper.handlers.get(task.one) == null) {
+                    queue.error.run("Error handling entity script '" + ColorSet.emphasis + title + ColorSet.warning
+                            + "': task type '" + ColorSet.emphasis + task.one + ColorSet.warning + "' does not seem to exist.");
+                    return null;
+                }
+                HashMap<String, AbstractTagObject> map = new HashMap<>();
+                for (StringHolder subkey : task.two.getKeys(false)) {
+                    Argument arg = Denizen2Core.splitToArgument(task.two.getString(subkey.str), true, true, queue.error);
+                    map.put(subkey.low, parseVal(queue, arg, varBack));
+                }
+                ent.tasks.put(task.one, map);
+            }
+        }
         if (queue == FORCE_TO_STATIC && contents.contains("static")
-                && BooleanTag.getFor(error, contents.getString("static")).getInternal()) {
+                && BooleanTag.getFor(queue.error, contents.getString("static")).getInternal()) {
             staticEntity = ent;
         }
         return ent;
