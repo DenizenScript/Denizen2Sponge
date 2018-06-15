@@ -55,7 +55,7 @@ public class EntityScript extends CommandScript {
     //
     // All options listed below are used to define the entity's specific details.
     // They all support tags on input. All options other than "base" may use the automatically
-    // included definition tag <[base]> to get a map of the base entity's properties.
+    // included definition tag <[base]> to get the base type.
     //
     // Set key "base" directly to an EntityTypeTag of the basic entity type to use. You may also
     // use an existing entity script to inherit its properties. Be careful to not list the
@@ -105,7 +105,7 @@ public class EntityScript extends CommandScript {
 
     public EntityTemplate getEntityCopy(CommandQueue queue) {
         if (staticEntity != null) {
-            return staticEntity.copy();
+            return staticEntity;
         }
         return generateEntity(queue);
     }
@@ -177,15 +177,14 @@ public class EntityScript extends CommandScript {
         EntityType entType = (EntityType) Utilities.getTypeWithDefaultPrefix(EntityType.class, baseStr);
         if (entType != null) {
             ent = new EntityTemplate(entType);
+            varBack.put("base", new EntityTypeTag(entType));
         }
         else {
             String baseLow = CoreUtilities.toLowerCase(baseStr);
             if (Denizen2Sponge.entityScripts.containsKey(baseLow)) {
                 EntityTemplate baseEnt = Denizen2Sponge.entityScripts.get(baseLow).getEntityCopy(queue);
                 ent = new EntityTemplate(baseEnt);
-                MapTag baseProperties = new MapTag(baseEnt.properties);
-                baseProperties.getInternal().put("type", new EntityTypeTag(ent.type));
-                varBack.put("base", baseProperties);
+                varBack.put("base", new MapTag(baseEnt.properties));
             }
             else {
                 queue.error.run("No entity types or scripts found for id '" + baseStr + "'.");

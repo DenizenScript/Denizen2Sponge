@@ -24,8 +24,4 @@ public class EntityTemplate {
         properties = new HashMap<>(base.properties);
         tasks = new HashMap<>(base.tasks);
     }
-
-    public EntityTemplate copy() {
-        return new EntityTemplate(this);
-    }
 }

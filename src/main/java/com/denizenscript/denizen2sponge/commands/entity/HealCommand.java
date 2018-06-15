@@ -57,61 +57,21 @@ public class HealCommand extends AbstractCommand {
         EntityTag entityTag = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Living ent = (Living) entityTag.getInternal();
         NumberTag amount = NumberTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        boolean set;
+        boolean set = false;
         if (entry.namedArgs.containsKey("operation")) {
             String operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
-            switch (operation) {
-                case "add":
-                    set = false;
-                    break;
-                case "set":
-                    set = true;
-                    break;
-                default:
-                    queue.handleError(entry, "Invalid operation: '" + operation + "'!");
-                    return;
+            if (operation.equals("set")) {
+                set = true;
+            }
+            else if (!operation.equals("add")) {
+                queue.handleError(entry, "Invalid operation: '" + operation + "'!");
             }
         }
-        else {
-            set = false;
-        }
-        String type;
+        String type = "remaining";
         if (entry.namedArgs.containsKey("type")) {
             type = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "type").toString());
-            switch (type) {
-                case "remaining":
-                    if (set) {
-                        if (amount.getInternal() < 0) {
-                            queue.handleError(entry, "You can't set health to negative values!");
-                            return;
-                        }
-                        ent.offer(Keys.HEALTH, Math.min(amount.getInternal(), ent.maxHealth().get()));
-                    }
-                    else {
-                        ent.offer(Keys.HEALTH, ent.health().transform(
-                                x -> Math.max(Math.min(x + amount.getInternal(), ent.maxHealth().get()), 0)).get());
-                    }
-                    break;
-                case "maximum":
-                    if (set) {
-                        if (amount.getInternal() < 0) {
-                            queue.handleError(entry, "You can't set max health to negative values!");
-                            return;
-                        }
-                        ent.offer(Keys.MAX_HEALTH, amount.getInternal());
-                    }
-                    else {
-                        ent.offer(Keys.MAX_HEALTH, ent.maxHealth().transform(
-                                x -> Math.max(x + amount.getInternal(), 0)).get());
-                    }
-                    break;
-                default:
-                    queue.handleError(entry, "Invalid health type: '" + type + "'!");
-                    return;
-            }
         }
-        else {
-            type = "remaining";
+        if (type.equals("remaining")) {
             if (set) {
                 if (amount.getInternal() < 0) {
                     queue.handleError(entry, "You can't set health to negative values!");
@@ -123,6 +83,23 @@ public class HealCommand extends AbstractCommand {
                 ent.offer(Keys.HEALTH, ent.health().transform(
                         x -> Math.max(Math.min(x + amount.getInternal(), ent.maxHealth().get()), 0)).get());
             }
+        }
+        else if (type.equals("maximum")) {
+            if (set) {
+                if (amount.getInternal() < 0) {
+                    queue.handleError(entry, "You can't set max health to negative values!");
+                    return;
+                }
+                ent.offer(Keys.MAX_HEALTH, amount.getInternal());
+            }
+            else {
+                ent.offer(Keys.MAX_HEALTH, ent.maxHealth().transform(
+                        x -> Math.max(x + amount.getInternal(), 0)).get());
+            }
+        }
+        else {
+            queue.handleError(entry, "Invalid health type: '" + type + "'!");
+            return;
         }
         if (queue.shouldShowGood()) {
             queue.outGood(ColorSet.emphasis + (set ? "Setting" : "Increasing") + ColorSet.good + " the "

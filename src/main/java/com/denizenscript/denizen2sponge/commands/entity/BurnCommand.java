@@ -12,11 +12,11 @@ import org.spongepowered.api.data.key.Keys;
 public class BurnCommand extends AbstractCommand {
 
     // <--[command]
-    // @Since 0.4.0
+    // @Since 0.5.5
     // @Name burn
     // @Arguments <entity> <duration>
     // @Short sets an entity on fire.
-    // @Updated 2018/02/17
+    // @Updated 2018/06/15
     // @Group Entity
     // @Minimum 2
     // @Maximum 2
@@ -54,23 +54,15 @@ public class BurnCommand extends AbstractCommand {
         EntityTag ent = EntityTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         DurationTag dt = DurationTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
         int ticks = (int) dt.getInternal() * 20;
-        boolean set;
+        boolean set = false;
         if (entry.namedArgs.containsKey("operation")) {
             String operation = CoreUtilities.toLowerCase(entry.getNamedArgumentObject(queue, "operation").toString());
-            switch (operation) {
-                case "add":
-                    set = false;
-                    break;
-                case "set":
-                    set = true;
-                    break;
-                default:
-                    queue.handleError(entry, "Invalid operation: '" + operation + "'!");
-                    return;
+            if (operation.equals("set")) {
+                set = true;
             }
-        }
-        else {
-            set = false;
+            else if (!operation.equals("add")) {
+                queue.handleError(entry, "Invalid operation: '" + operation + "'!");
+            }
         }
         ent.getInternal().offer(Keys.FIRE_TICKS,
                 set ? ticks : ent.getInternal().get(Keys.FIRE_TICKS).orElse(0) + ticks);

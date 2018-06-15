@@ -12,16 +12,17 @@ import org.spongepowered.api.util.RespawnLocation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class RemoveRespawnCommand extends AbstractCommand {
 
     // <--[command]
-    // @Since 0.4.0
+    // @Since 0.5.5
     // @Name removerespawn
     // @Arguments <player> <world>
     // @Short removes a respawn location for the player.
-    // @Updated 2018/02/22
+    // @Updated 2018/06/15
     // @Group Player
     // @Warning This command doesn't work due to not being implemented in Sponge yet.
     // @Minimum 2
@@ -59,8 +60,15 @@ public class RemoveRespawnCommand extends AbstractCommand {
         PlayerTag playerTag = PlayerTag.getFor(queue.error, entry.getArgumentObject(queue, 0));
         Player player = playerTag.getOnline(queue.error);
         WorldTag world = WorldTag.getFor(queue.error, entry.getArgumentObject(queue, 1));
-        Map<UUID, RespawnLocation> map = player.get(Keys.RESPAWN_LOCATIONS).orElse(new HashMap<>());
-        map.remove(world.getInternal().getUniqueId());
+        Optional<Map<UUID, RespawnLocation>> mapOpt = player.get(Keys.RESPAWN_LOCATIONS);
+        Map<UUID, RespawnLocation> map;
+        if (mapOpt.isPresent()) {
+            map = mapOpt.get();
+            map.remove(world.getInternal().getUniqueId());
+        }
+        else {
+            map = new HashMap<>();
+        }
         player.offer(Keys.RESPAWN_LOCATIONS, map);
         if (queue.shouldShowGood()) {
             queue.outGood("Removing respawn location for player '" + ColorSet.emphasis + playerTag.debug()

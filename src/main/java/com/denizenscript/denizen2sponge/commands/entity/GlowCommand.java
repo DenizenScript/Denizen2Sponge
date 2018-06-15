@@ -11,17 +11,17 @@ import org.spongepowered.api.data.key.Keys;
 public class GlowCommand extends AbstractCommand {
 
     // <--[command]
-    // @Since 0.4.0
+    // @Since 0.5.5
     // @Name glow
     // @Arguments <entity> <state>
     // @Short manages the glowing outline of an entity.
-    // @Updated 2018/02/18
+    // @Updated 2018/06/15
     // @Group Entity
     // @Minimum 2
     // @Maximum 2
     // @Description
     // Manages the glowing outline of an entity.
-    // TODO: Research how to add colored outlines.
+    // TODO: Allow setting glow color (might require scoreboard weirdness)
     // @Example
     // # This example makes the player glow.
     // - glow <player> true

@@ -18,11 +18,11 @@ import java.util.UUID;
 public class SetRespawnCommand extends AbstractCommand {
 
     // <--[command]
-    // @Since 0.4.0
+    // @Since 0.5.5
     // @Name setrespawn
     // @Arguments <player> <location>
     // @Short sets a respawn location for the player.
-    // @Updated 2018/02/22
+    // @Updated 2018/06/15
     // @Group Player
     // @Warning This command doesn't work due to not being implemented in Sponge yet.
     // @Minimum 2
@@ -68,10 +68,9 @@ public class SetRespawnCommand extends AbstractCommand {
             BooleanTag force = BooleanTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "force"));
             builder.forceSpawn(force.getInternal());
         }
-        Map<UUID, RespawnLocation> map = player.get(Keys.RESPAWN_LOCATIONS).orElse(new HashMap<>());
+        Map<UUID, RespawnLocation> map = player.get(Keys.RESPAWN_LOCATIONS).orElseGet(HashMap::new);
         map.put(location.getInternal().world.getUniqueId(), builder.build());
         player.offer(Keys.RESPAWN_LOCATIONS, map);
-        queue.outInfo(player.get(Keys.RESPAWN_LOCATIONS).orElse(new HashMap<>()).toString());
         if (queue.shouldShowGood()) {
             queue.outGood("Setting respawn location for player '" + ColorSet.emphasis + playerTag.debug()
                     + ColorSet.good + "' to '" + ColorSet.emphasis + location.debug() + ColorSet.good + "'!");

@@ -92,11 +92,14 @@ public class BanCommand extends AbstractCommand {
             }
         }
         AbstractTagObject target = entry.getArgumentObject(queue, 0);
-        if (target instanceof PlayerTag || target instanceof EntityTag) {
-            GameProfile profile = PlayerTag.getFor(queue.error, target).getInternal().getProfile();
+        if (target instanceof EntityTag) {
+            target = PlayerTag.getFrom(queue.error, (EntityTag) target);
+        }
+        if (target instanceof PlayerTag) {
+            GameProfile profile = ((PlayerTag) target).getInternal().getProfile();
             build.type(BanTypes.PROFILE).profile(profile);
             if (queue.shouldShowGood()) {
-                queue.outGood("Banning player " + ColorSet.emphasis + profile.getName().get() +
+                queue.outGood("Banning player " + ColorSet.emphasis + profile.getName().orElse("<NameError>") +
                         ((duration == null) ?
                                 (ColorSet.good + " permanently") :
                                 (ColorSet.good + " for " + ColorSet.emphasis + duration.debug() + ColorSet.good + " seconds")) +
@@ -124,6 +127,9 @@ public class BanCommand extends AbstractCommand {
                 return;
             }
         }
-        Sponge.getServiceManager().provide(BanService.class).get().addBan(build.build());
+        Sponge.getServiceManager().provide(BanService.class).orElseThrow(() -> {
+            queue.error.run("BanService is missing!");
+            return new RuntimeException("BanService is missing!");
+        }).addBan(build.build());
     }
 }

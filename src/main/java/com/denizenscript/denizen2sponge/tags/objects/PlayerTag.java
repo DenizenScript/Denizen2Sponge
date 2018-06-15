@@ -444,16 +444,21 @@ public class PlayerTag extends AbstractTagObject {
         return new PlayerTag(oplayer.get());
     }
 
+    public static PlayerTag getFrom(Action<String> error, EntityTag entTag) {
+        Entity ent = entTag.getInternal();
+        if (ent instanceof Player) {
+            return new PlayerTag((Player) ent);
+        }
+        error.run("Invalid PlayerTag entity input!");
+        return null;
+    }
+
     public static PlayerTag getFor(Action<String> error, AbstractTagObject ato) {
         if (ato instanceof PlayerTag) {
             return (PlayerTag) ato;
         }
         if (ato instanceof EntityTag) {
-            Entity ent = ((EntityTag) ato).getInternal();
-            if (ent instanceof Player) {
-                return new PlayerTag((Player) ent);
-            }
-            error.run("Invalid PlayerTag entity input!");
+            return getFrom(error, (EntityTag) ato);
         }
         return getFor(error, ato.toString());
     }

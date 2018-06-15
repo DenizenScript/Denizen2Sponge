@@ -11,6 +11,7 @@ import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.Denizen2Sponge;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
+import com.denizenscript.denizen2sponge.tags.objects.EntityTypeTag;
 import com.denizenscript.denizen2sponge.tags.objects.LocationTag;
 import com.denizenscript.denizen2sponge.utilities.*;
 import org.spongepowered.api.Sponge;
@@ -24,6 +25,7 @@ import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnType;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +42,7 @@ public class SpawnCommand extends AbstractCommand {
     // @Minimum 2
     // @Maximum 4
     // @Named cause (TextTag) Sets what caused this entity to spawn.
+    // @Named aitasks (MapTag) Sets a map of AI tasks (each of which takes a map itself as a value) to apply to the entity on spawn.
     // @Tag <[spawn_success]> (BooleanTag) returns whether the spawn passed.
     // @Tag <[spawn_entity]> (EntityTag) returns the entity that was spawned (only if the spawn passed).
     // @Description
@@ -59,7 +62,7 @@ public class SpawnCommand extends AbstractCommand {
     // - spawn cool_zombie <player.location> --cause breeding
     // @Example
     // # Spawns a skeleton, clears its AI Tasks for goal "normal", and then makes it sink on water.
-    // - spawn skeleton <player.location> clear_ai_tasks:normal swimming:<map[chance:0].escaped>
+    // - spawn skeleton <player.location> clear_ai_tasks:normal --aitasks swimming:<map[chance:0].escaped>
     // -->
 
     @Override
@@ -69,7 +72,7 @@ public class SpawnCommand extends AbstractCommand {
 
     @Override
     public String getArguments() {
-        return "<entity type> <location> [map of properties] [map of task maps]";
+        return "<entity type> <location> [map of properties]";
     }
 
     @Override
@@ -79,7 +82,7 @@ public class SpawnCommand extends AbstractCommand {
 
     @Override
     public int getMaximumArguments() {
-        return 4;
+        return 3;
     }
 
     @Override
@@ -90,120 +93,114 @@ public class SpawnCommand extends AbstractCommand {
             queue.handleError(entry, "Invalid location with no world in Spawn command!");
             return;
         }
-        String str = entry.getArgumentObject(queue, 0).toString();
-        EntityType entType = (EntityType) Utilities.getTypeWithDefaultPrefix(EntityType.class, str);
-        Entity entity;
-        boolean fromScript;
-        HashMap<String, AbstractTagObject> propertyMap;
-        HashMap<String, HashMap<String, AbstractTagObject>> taskMap;
-        if (entType != null) {
-            fromScript = false;
-            propertyMap = new HashMap<>();
-            taskMap = new HashMap<>();
-            entity = location.world.createEntity(entType, location.toVector3d());
-        }
-        else {
-            String strLow = CoreUtilities.toLowerCase(str);
-            if (Denizen2Sponge.entityScripts.containsKey(strLow)) {
-                EntityTemplate template = Denizen2Sponge.entityScripts.get(strLow).getEntityCopy(queue);
-                fromScript = true;
+        String inputType = entry.getArgumentObject(queue, 0).toString();
+        EntityType entType = (EntityType) Utilities.getTypeWithDefaultPrefix(EntityType.class, inputType);
+        boolean fromScript = entType == null;
+        EntityTemplate template = null;
+        if (fromScript) {
+            String inputTypeLow = CoreUtilities.toLowerCase(inputType);
+            if (Denizen2Sponge.entityScripts.containsKey(inputTypeLow)) {
+                template = Denizen2Sponge.entityScripts.get(inputTypeLow).getEntityCopy(queue);
                 entType = template.type;
-                propertyMap = template.properties;
-                taskMap = template.tasks;
-                entity = location.world.createEntity(entType, location.toVector3d());
-
             }
             else {
-                queue.handleError(entry, "No entity types nor scripts found for id '" + str + "'.");
+                queue.handleError(entry, "No entity types nor scripts found for id '"
+                        + ColorSet.emphasis + inputType + ColorSet.warning + "'.");
                 return;
             }
         }
-        MapTag moreProperties;
+        Entity entity = location.world.createEntity(entType, location.toVector3d());
+        HashMap<String, AbstractTagObject> propertyMap = template == null ? null : template.properties;
         if (entry.arguments.size() > 2) {
-            moreProperties = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
-            propertyMap.putAll(moreProperties.getInternal());
+            MapTag argProps = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 2));
+            if (propertyMap == null) {
+                propertyMap = argProps.getInternal();
+            }
+            else {
+                propertyMap.putAll(argProps.getInternal());
+            }
         }
-        else {
-            moreProperties = new MapTag();
-        }
-        try {
-            if (!propertyMap.isEmpty()) {
-                for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.entrySet()) {
-                    if (mapEntry.getKey().equalsIgnoreCase("orientation")) {
-                        LocationTag rot = LocationTag.getFor(queue.error, mapEntry.getValue());
-                        entity.setRotation(rot.getInternal().toVector3d());
+        if (propertyMap != null && !propertyMap.isEmpty()) {
+            for (Map.Entry<String, AbstractTagObject> mapEntry : propertyMap.entrySet()) {
+                if (mapEntry.getKey().equalsIgnoreCase("orientation")) {
+                    LocationTag rot = LocationTag.getFor(queue.error, mapEntry.getValue());
+                    entity.setRotation(rot.getInternal().toVector3d());
+                }
+                if (mapEntry.getKey().equalsIgnoreCase("clear_ai_tasks")) {
+                    TextTag gt = TextTag.getFor(queue.error, mapEntry.getValue());
+                    GoalType goalType = (GoalType) Utilities.getTypeWithDefaultPrefix(GoalType.class, gt.getInternal());
+                    if (goalType == null) {
+                        queue.handleError(entry, "Invalid goal type '" + gt.debug()
+                                + "' for clear_ai_tasks property in Spawn command!");
+                        return;
                     }
-                    if (mapEntry.getKey().equalsIgnoreCase("clear_ai_tasks")) {
-                        TextTag gt = TextTag.getFor(queue.error, mapEntry.getValue());
-                        GoalType goalType = (GoalType) Utilities.getTypeWithDefaultPrefix(GoalType.class, gt.getInternal());
-                        if (goalType == null) {
-                            queue.handleError(entry, "Invalid goal type '" + gt.debug()
-                                    + "' for clear_ai_tasks property in Spawn command!");
-                            return;
-                        }
-                        Agent agent = (Agent) entity;
-                        Optional<Goal<Agent>> goal = agent.getGoal(goalType);
-                        if (!goal.isPresent()) {
-                            queue.handleError(entry, "This entity doesn't have an AI Goal of type '" + goalType.getId() + "'!");
-                            return;
-                        }
-                        goal.get().clear();
+                    Agent agent = (Agent) entity;
+                    Optional<Goal<Agent>> goal = agent.getGoal(goalType);
+                    if (!goal.isPresent()) {
+                        queue.handleError(entry, "This entity doesn't have an AI Goal of type '" + goalType.getId() + "'!");
+                        return;
                     }
-                    else {
-                        Key found = DataKeys.getKeyForName(mapEntry.getKey());
-                        if (found == null) {
-                            queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in Spawn command!");
-                            return;
-                        }
-                        DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
+                    goal.get().clear();
+                }
+                else {
+                    Key found = DataKeys.getKeyForName(mapEntry.getKey());
+                    if (found == null) {
+                        queue.handleError(entry, "Invalid property '" + mapEntry.getKey() + "' in Spawn command!");
+                        return;
                     }
+                    DataKeys.tryApply(entity, found, mapEntry.getValue(), queue.error);
                 }
             }
-            MapTag moreTasks;
-            if (entry.arguments.size() > 3) {
-                moreTasks = MapTag.getFor(queue.error, entry.getArgumentObject(queue, 3));
-                for (Map.Entry<String, AbstractTagObject> task : moreTasks.getInternal().entrySet()) {
-                    MapTag taskData = MapTag.getFor(queue.error, task.getValue());
-                    taskMap.put(task.getKey(), taskData.getInternal());
-                }
+        }
+        HashMap<String, HashMap<String, AbstractTagObject>> taskMap = template == null ? null : template.tasks;
+        if (entry.namedArgs.containsKey("aitasks")) {
+            MapTag moreTasks = MapTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "aitasks"));
+            if (taskMap == null) {
+                taskMap = new HashMap<>();
             }
-            if (!taskMap.isEmpty()) {
+            for (Map.Entry<String, AbstractTagObject> task : moreTasks.getInternal().entrySet()) {
+                MapTag taskData = MapTag.getFor(queue.error, task.getValue());
+                taskMap.put(task.getKey(), taskData.getInternal());
+            }
+        }
+        if (taskMap != null && !taskMap.isEmpty()) {
+            try {
                 for (String taskType : taskMap.keySet()) {
                     AITaskHelper.giveAITask(queue, (Agent) entity, taskType, taskMap.get(taskType));
                 }
             }
-            SpawnType cause;
-            if (entry.namedArgs.containsKey("cause")) {
-                String causeStr = entry.getNamedArgumentObject(queue, "cause").toString();
-                cause = (SpawnType) Utilities.getTypeWithDefaultPrefix(SpawnType.class, causeStr);
-                if (cause == null) {
-                    queue.handleError(entry, "Invalid spawn cause '" + causeStr + "' in Spawn command!");
-                    return;
-                }
-            }
-            else {
-                cause = SpawnTypes.CUSTOM;
-            }
-            Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, cause);
-            if (queue.shouldShowGood()) {
-                queue.outGood("Spawning an entity " + ColorSet.emphasis
-                        + (fromScript ? "from script " + str : "of type " + entType.getId())
-                        + ColorSet.good + " with the following additional properties: "
-                        + ColorSet.emphasis + moreProperties.debug() + ColorSet.good + " at location "
-                        + ColorSet.emphasis + locationTag.debug() + ColorSet.good + " and with cause "
-                        + ColorSet.emphasis + Utilities.getIdWithoutDefaultPrefix(cause.getId()) + "...");
-            }
-            boolean passed = location.world.spawnEntity(entity);
-            if (queue.shouldShowGood()) {
-                queue.outGood("Spawning " + (passed ? "succeeded" : "was blocked") + "!");
-            }
-            queue.commandStack.peek().setDefinition("spawn_success", new BooleanTag(passed));
-            if (passed) {
-                queue.commandStack.peek().setDefinition("spawn_entity", new EntityTag(entity));
+            catch (ClassCastException e) {
+                queue.handleError(entry, "This entity doesn't support AI tasks!");
             }
         }
-        catch (ClassCastException e) {
-            queue.handleError(entry, "This entity doesn't support AI tasks!");
+        SpawnType cause;
+        if (entry.namedArgs.containsKey("cause")) {
+            String causeStr = entry.getNamedArgumentObject(queue, "cause").toString();
+            cause = (SpawnType) Utilities.getTypeWithDefaultPrefix(SpawnType.class, causeStr);
+            if (cause == null) {
+                queue.handleError(entry, "Invalid spawn cause '" + causeStr + "' in Spawn command!");
+                return;
+            }
+        }
+        else {
+            cause = SpawnTypes.CUSTOM;
+        }
+        Sponge.getCauseStackManager().addContext(EventContextKeys.SPAWN_TYPE, cause);
+        if (queue.shouldShowGood()) {
+            queue.outGood("Spawning an entity "
+                    + (fromScript ? "from script " + ColorSet.emphasis + inputType : "of type " + ColorSet.emphasis + new EntityTypeTag(entType).debug())
+                    + ColorSet.good + (propertyMap == null ? "" : " with the following additional properties: "
+                    + ColorSet.emphasis + new MapTag(propertyMap).debug() + ColorSet.good) + " at location "
+                    + ColorSet.emphasis + locationTag.debug() + ColorSet.good + " and with cause "
+                    + ColorSet.emphasis + Utilities.getIdWithoutDefaultPrefix(cause.getId()) + ColorSet.good + "...");
+        }
+        boolean passed = location.world.spawnEntity(entity);
+        if (queue.shouldShowGood()) {
+            queue.outGood("Spawning " + (passed ? "succeeded" : "was blocked") + "!");
+        }
+        queue.commandStack.peek().setDefinition("spawn_success", new BooleanTag(passed));
+        if (passed) {
+            queue.commandStack.peek().setDefinition("spawn_entity", new EntityTag(entity));
         }
     }
 }
