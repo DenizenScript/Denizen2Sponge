@@ -16,7 +16,7 @@ public class Utilities {
 
     public static double getHandReach(Entity entity) {
         if (entity instanceof Player) {
-            return ((Player) entity).gameMode().equals(GameModes.CREATIVE) ? 5.0 : 4.0;
+            return ((Player) entity).gameMode().get().equals(GameModes.CREATIVE) ? 5.0 : 4.0;
         }
         else {
             return 5.0;
@@ -29,12 +29,12 @@ public class Utilities {
             b = true;
             MapTag subMap = MapTag.getFor(error, flags.getInternal().get(flagName));
             if (subMap.getInternal().containsKey("duration")) {
-                    TimeTag tt = TimeTag.getFor(error, subMap.getInternal().get("duration"));
-                    if (tt.getInternal().isBefore(LocalDateTime.now(ZoneId.of("UTC")))) {
-                        b = false;
-                    }
+                TimeTag tt = TimeTag.getFor(error, subMap.getInternal().get("duration"));
+                if (tt.getInternal().isBefore(LocalDateTime.now(ZoneId.of("UTC")))) {
+                    b = false;
                 }
             }
+        }
         return b;
     }
 

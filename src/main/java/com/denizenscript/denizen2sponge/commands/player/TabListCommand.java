@@ -68,10 +68,10 @@ public class TabListCommand extends AbstractCommand {
         AbstractTagObject ato2 = entry.getArgumentObject(queue, 2);
         Text footer;
         if (ato2 instanceof FormattedTextTag) {
-             footer = ((FormattedTextTag) ato2).getInternal();
+            footer = ((FormattedTextTag) ato2).getInternal();
         }
         else {
-             footer = Denizen2Sponge.parseColor(ato2.toString());
+            footer = Denizen2Sponge.parseColor(ato2.toString());
         }
         player.getOnline(queue.error).getTabList().setHeaderAndFooter(header, footer);
         if (queue.shouldShowGood()) {

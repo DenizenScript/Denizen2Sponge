@@ -41,7 +41,8 @@ public class AITaskHelper {
             boolean memory = BooleanTag.getFor(queue.error, properties.get("memory")).getInternal();
             if (memory) {
                 return AttackLivingAITask.builder().speed(speed).longMemory().build((Creature) entity);
-            } else {
+            }
+            else {
                 return AttackLivingAITask.builder().speed(speed).build((Creature) entity);
             }
         });

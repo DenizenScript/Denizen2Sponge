@@ -104,7 +104,7 @@ public class HealCommand extends AbstractCommand {
         if (queue.shouldShowGood()) {
             queue.outGood(ColorSet.emphasis + (set ? "Setting" : "Increasing") + ColorSet.good + " the "
                     + ColorSet.emphasis + type + ColorSet.good + " health of entity '" + ColorSet.emphasis
-                    + entityTag.debug() + ColorSet.good + "' " + (set ? "to" : "by") +  " '"
+                    + entityTag.debug() + ColorSet.good + "' " + (set ? "to" : "by") + " '"
                     + ColorSet.emphasis + amount.debug() + ColorSet.good + "'!");
         }
     }

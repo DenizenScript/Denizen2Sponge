@@ -79,9 +79,9 @@ public class EntitySpawnsScriptEvent extends ScriptEvent {
                 && D2SpongeEventHelper.checkWorld(world, data, this::error)
                 && D2SpongeEventHelper.checkCuboid((new LocationTag(loc)).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        world.getWeather().getId()), data, this::error)
+                world.getWeather().getId()), data, this::error)
                 && D2SpongeEventHelper.checkCatalogType(
-                        SpawnType.class, cause.toString(), data, this::error, "cause");
+                SpawnType.class, cause.toString(), data, this::error, "cause");
     }
 
     public EntityTag entity;

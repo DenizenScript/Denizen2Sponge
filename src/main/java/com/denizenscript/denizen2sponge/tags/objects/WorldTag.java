@@ -71,7 +71,7 @@ public class WorldTag extends AbstractTagObject {
             ListTag list = new ListTag();
             EntityTypeTag requiredTypeTag = null;
             if (dat.hasNextModifier()) {
-                requiredTypeTag = EntityTypeTag.getFor(dat.error, dat.getNextModifier());
+                requiredTypeTag = EntityTypeTag.getFor(dat.checkedError, dat.getNextModifier());
             }
             for (Entity entity : ((WorldTag) obj).internal.getEntities()) {
                 if (requiredTypeTag == null || entity.getType().equals(requiredTypeTag.getInternal())) {
@@ -126,10 +126,10 @@ public class WorldTag extends AbstractTagObject {
             for (Map.Entry<String, String> entry : ((WorldTag) obj).internal.getGameRules().entrySet()) {
                 if (GameRules.MinecraftToSponge.containsKey(entry.getKey())) {
                     map.getInternal().put(GameRules.MinecraftToSponge.get(entry.getKey()),
-                            TextTag.getFor(dat.error, entry.getValue()));
+                            TextTag.getFor(dat.checkedError, entry.getValue()));
                 }
                 else {
-                    map.getInternal().put(entry.getKey(), TextTag.getFor(dat.error, entry.getValue()));
+                    map.getInternal().put(entry.getKey(), TextTag.getFor(dat.checkedError, entry.getValue()));
                 }
             }
             return map;

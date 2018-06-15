@@ -7,11 +7,9 @@ import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 public class ItemTypeTag extends AbstractTagObject {
 

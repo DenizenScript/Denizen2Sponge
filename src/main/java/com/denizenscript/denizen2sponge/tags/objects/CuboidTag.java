@@ -68,8 +68,8 @@ public class CuboidTag extends AbstractTagObject {
             if (dat.hasNextModifier()) {
                 AbstractTagObject mod = dat.getNextModifier();
                 valids = new ArrayList<>();
-                for (AbstractTagObject ato : ListTag.getFor(dat.error, mod).getInternal()) {
-                    BlockTypeTag btt = BlockTypeTag.getFor(dat.error, ato);
+                for (AbstractTagObject ato : ListTag.getFor(dat.checkedError, mod).getInternal()) {
+                    BlockTypeTag btt = BlockTypeTag.getFor(dat.checkedError, ato);
                     valids.add(btt.getInternal());
                 }
             }
@@ -100,7 +100,7 @@ public class CuboidTag extends AbstractTagObject {
         // @Example "0,1,2/4,5,6/world" .contains[1,2,3,world] returns "true".
         // -->
         handlers.put("contains", (dat, obj) -> BooleanTag.getForBoolean(((CuboidTag) obj).contains(
-                LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal())));
+                LocationTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal())));
         // <--[tag]
         // @Since 0.3.0
         // @Name CuboidTag.max

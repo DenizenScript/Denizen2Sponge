@@ -73,11 +73,11 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the cooldown on an item type for the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("cooldown", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
-            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            ItemTypeTag item = ItemTypeTag.getFor(dat.checkedError, dat.getNextModifier());
             return new DurationTag(pl.getCooldownTracker().getCooldown(item.getInternal()).orElse(0) * (1.0 / 20.0));
         });
         // <--[tag]
@@ -89,11 +89,11 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the cooldown fraction on an item type for the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("cooldown_fraction", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
-            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            ItemTypeTag item = ItemTypeTag.getFor(dat.checkedError, dat.getNextModifier());
             return new NumberTag(pl.getCooldownTracker().getFractionRemaining(item.getInternal()).orElse(0));
         });
         // <--[tag]
@@ -105,7 +105,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the exhaustion of the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("exhaustion", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -120,7 +120,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the food level of the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("food_level", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -135,7 +135,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the gamemode of the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("gamemode", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -161,7 +161,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player has completed an advancement. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("has_advancement", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -184,11 +184,11 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether an item type has cooldown for the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("has_cooldown", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
-            ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
+            ItemTypeTag item = ItemTypeTag.getFor(dat.checkedError, dat.getNextModifier());
             return BooleanTag.getForBoolean(pl.getCooldownTracker().hasCooldown(item.getInternal()));
         });
         // <--[tag]
@@ -209,7 +209,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the current IP of the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("ip", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -224,7 +224,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the current latency of the player, in milliseconds. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("latency", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -249,7 +249,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns the saturation of the player. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("saturation", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -273,7 +273,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player is sneaking or not. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("sneaking", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -288,7 +288,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player is sprinting or not. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("sprinting", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -309,8 +309,8 @@ public class PlayerTag extends AbstractTagObject {
         // -->
         handlers.put("statistic", (dat, obj) -> {
             User pl = ((PlayerTag) obj).internal;
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
-            String name = TextTag.getFor(dat.error, map.getInternal().get("type")).getInternal();
+            MapTag map = MapTag.getFor(dat.checkedError, dat.getNextModifier());
+            String name = TextTag.getFor(dat.checkedError, map.getInternal().get("type")).getInternal();
             Statistic statistic;
             if (map.getInternal().containsKey("entity")) {
                 Optional<StatisticType> type = Sponge.getRegistry().getType(StatisticType.class, name);
@@ -320,7 +320,7 @@ public class PlayerTag extends AbstractTagObject {
                     }
                     return NullTag.NULL;
                 }
-                EntityTypeTag ent = EntityTypeTag.getFor(dat.error, map.getInternal().get("entity"));
+                EntityTypeTag ent = EntityTypeTag.getFor(dat.checkedError, map.getInternal().get("entity"));
                 statistic = Sponge.getRegistry().getEntityStatistic(type.get(), ent.getInternal()).get();
             }
             else if (map.getInternal().containsKey("block")) {
@@ -331,7 +331,7 @@ public class PlayerTag extends AbstractTagObject {
                     }
                     return NullTag.NULL;
                 }
-                BlockTypeTag block = BlockTypeTag.getFor(dat.error, map.getInternal().get("block"));
+                BlockTypeTag block = BlockTypeTag.getFor(dat.checkedError, map.getInternal().get("block"));
                 statistic = Sponge.getRegistry().getBlockStatistic(type.get(), block.getInternal()).get();
             }
             else if (map.getInternal().containsKey("item")) {
@@ -342,7 +342,7 @@ public class PlayerTag extends AbstractTagObject {
                     }
                     return NullTag.NULL;
                 }
-                ItemTypeTag item = ItemTypeTag.getFor(dat.error, map.getInternal().get("item"));
+                ItemTypeTag item = ItemTypeTag.getFor(dat.checkedError, map.getInternal().get("item"));
                 statistic = Sponge.getRegistry().getItemStatistic(type.get(), item.getInternal()).get();
             }
             else {
@@ -366,7 +366,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player's tablist header. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("tablist_header", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -381,7 +381,7 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player's tablist footer. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("tablist_footer", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
@@ -396,11 +396,11 @@ public class PlayerTag extends AbstractTagObject {
         // @Returns whether the player's respawn location in the specified world. ONLINE-PLAYERS-ONLY.
         // -->
         handlers.put("respawn_location", (dat, obj) -> {
-            Player pl = ((PlayerTag) obj).getOnline(dat);
+            Player pl = ((PlayerTag) obj).getOnline();
             if (pl == null) {
                 return offlineFault(dat);
             }
-            World world = WorldTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            World world = WorldTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             Optional<Map<UUID, RespawnLocation>> optMap = pl.get(Keys.RESPAWN_LOCATIONS);
             if (optMap.isPresent()) {
                 RespawnLocation loc = optMap.get().get(world.getUniqueId());
@@ -472,15 +472,8 @@ public class PlayerTag extends AbstractTagObject {
         return null;
     }
 
-    public Player getOnline(TagData data) {
-        Optional<Player> pl = internal.getPlayer();
-        if (pl.isPresent()) {
-            return pl.get();
-        }
-        if (data.hasFallback()) {
-            data.error.run("Player is not online, tag is not valid!");
-        }
-        return null;
+    public Player getOnline() {
+        return internal.getPlayer().orElse(null);
     }
 
     @Override

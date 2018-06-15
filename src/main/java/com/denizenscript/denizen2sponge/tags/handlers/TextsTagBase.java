@@ -87,7 +87,7 @@ public class TextsTagBase extends AbstractTagBase {
         // @Example <texts.for_input[text:hello|color:blue|style:<escape[bold|italic]>|hover_text:<texts.for_plain[hi]>|click_type:suggest|click_data:/dance]>
         // -->
         handlers.put("for_input", (dat, obj) -> {
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag map = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             if (!map.getInternal().containsKey("text")) {
                 dat.error.run("Missing TEXT setter in for_input tag, cannot create FormattedTextTag!");
             }
@@ -100,7 +100,7 @@ public class TextsTagBase extends AbstractTagBase {
                 build.color(color.get());
             }
             if (map.getInternal().containsKey("style")) {
-                ListTag reqs = ListTag.getFor(dat.error, map.getInternal().get("style"));
+                ListTag reqs = ListTag.getFor(dat.checkedError, map.getInternal().get("style"));
                 for (AbstractTagObject ato : reqs.getInternal()) {
                     Object style = Utilities.getTypeWithDefaultPrefix(TextStyle.Base.class, ato.toString());
                     if (style == null) {
@@ -110,7 +110,7 @@ public class TextsTagBase extends AbstractTagBase {
                 }
             }
             if (map.getInternal().containsKey("hover_text")) {
-                build.onHover(TextActions.showText(FormattedTextTag.getFor(dat.error, map.getInternal().get("hover_text")).getInternal()));
+                build.onHover(TextActions.showText(FormattedTextTag.getFor(dat.checkedError, map.getInternal().get("hover_text")).getInternal()));
             }
             if (map.getInternal().containsKey("click_type") && map.getInternal().containsKey("click_data")) {
                 String s = CoreUtilities.toLowerCase(map.getInternal().get("click_type").toString());

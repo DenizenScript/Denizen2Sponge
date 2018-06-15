@@ -43,7 +43,8 @@ public class AnnounceCommand extends AbstractCommand {
         return 1;
     }
 
-    @Override public int getMaximumArguments() {
+    @Override
+    public int getMaximumArguments() {
         return 1;
     }
 

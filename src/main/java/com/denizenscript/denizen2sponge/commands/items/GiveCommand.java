@@ -8,7 +8,6 @@ import com.denizenscript.denizen2core.utilities.debugging.ColorSet;
 import com.denizenscript.denizen2sponge.tags.objects.EntityTag;
 import com.denizenscript.denizen2sponge.tags.objects.InventoryTag;
 import com.denizenscript.denizen2sponge.tags.objects.ItemTag;
-import com.denizenscript.denizen2sponge.tags.objects.PlayerTag;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.item.inventory.transaction.InventoryTransactionResult;

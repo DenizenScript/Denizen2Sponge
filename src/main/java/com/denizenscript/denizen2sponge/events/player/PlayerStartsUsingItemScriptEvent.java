@@ -67,7 +67,7 @@ public class PlayerStartsUsingItemScriptEvent extends ScriptEvent {
                 new LocationTag(playerInternal.getLocation()).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
                 world.getWeather().getId()), data, this::error) && D2SpongeEventHelper.checkGamemode(
-                        Utilities.getIdWithoutDefaultPrefix(playerInternal.gameMode().get().getId()), data, this::error);
+                Utilities.getIdWithoutDefaultPrefix(playerInternal.gameMode().get().getId()), data, this::error);
     }
 
     public PlayerTag player;

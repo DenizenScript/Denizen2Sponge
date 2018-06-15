@@ -63,7 +63,7 @@ public class ProjectileLaunchedScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error, "entity_type")
                 && D2SpongeEventHelper.checkEntityType(shooterInternal.getType(), data, this::error, "shooter_type")
                 && D2SpongeEventHelper.checkWorld(world, data, this::error) && D2SpongeEventHelper.checkCuboid(
-                        new LocationTag(shooterInternal.getLocation()).getInternal(), data, this::error)
+                new LocationTag(shooterInternal.getLocation()).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
                 world.getWeather().getId()), data, this::error);
     }

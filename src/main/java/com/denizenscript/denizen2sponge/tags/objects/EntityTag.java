@@ -62,6 +62,8 @@ public class EntityTag extends AbstractTagObject {
         return internal;
     }
 
+    // TODO: handle entities that were removed or lost already with care...
+
     public final static HashMap<String, Function2<TagData, AbstractTagObject, AbstractTagObject>> handlers = new HashMap<>();
 
     public EntityScript getSourceScript() {
@@ -344,7 +346,7 @@ public class EntityTag extends AbstractTagObject {
                 MapTag valid = new MapTag();
                 for (Map.Entry<String, AbstractTagObject> flag : flags.getInternal().entrySet()) {
                     if (Utilities.flagIsValidAndNotExpired(dat.error, flags, flag.getKey())) {
-                        MapTag mt = MapTag.getFor(dat.error, flag.getKey());
+                        MapTag mt = MapTag.getFor(dat.checkedError, flag.getKey());
                         valid.getInternal().put(flag.getKey(), mt.getInternal().get("value"));
                     }
                 }
@@ -357,7 +359,7 @@ public class EntityTag extends AbstractTagObject {
                 }
                 return NullTag.NULL;
             }
-            MapTag smap = MapTag.getFor(dat.error, flags.getInternal().get(flagName));
+            MapTag smap = MapTag.getFor(dat.checkedError, flags.getInternal().get(flagName));
             if (smap == null) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on this entity!");
@@ -435,12 +437,12 @@ public class EntityTag extends AbstractTagObject {
         // -->
         handlers.put("nearby_entities", (dat, obj) -> {
             ListTag list = new ListTag();
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag map = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             EntityTypeTag requiredTypeTag = null;
             if (map.getInternal().containsKey("type")) {
-                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+                requiredTypeTag = EntityTypeTag.getFor(dat.checkedError, map.getInternal().get("type"));
             }
-            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            double range = NumberTag.getFor(dat.checkedError, map.getInternal().get("range")).getInternal();
             Entity source = ((EntityTag) obj).internal;
             Collection<Entity> ents = source.getNearbyEntities(range);
             for (Entity ent : ents) {
@@ -608,7 +610,7 @@ public class EntityTag extends AbstractTagObject {
             if (source instanceof BlockProjectileSource) {
                 return new LocationTag(((BlockProjectileSource) source).getLocation());
             }
-            else if (source instanceof  Entity) {
+            else if (source instanceof Entity) {
                 return new EntityTag(((Entity) source));
             }
             else {
@@ -831,7 +833,7 @@ public class EntityTag extends AbstractTagObject {
             Entity ent = ((EntityTag) obj).internal;
             return new LocationTag(BlockRay.from(ent)
                     .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
-                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(ent))).build().end().get().getLocation());
         });
         // <--[tag]
@@ -846,7 +848,7 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("precise_target_location", (dat, obj) -> {
             Entity ent = ((EntityTag) obj).internal;
             BlockRayHit hit = BlockRay.from(ent).stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
-                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(ent))).build().end().get();
             return new LocationTag(hit.getX(), hit.getY(), hit.getZ(), (World) hit.getExtent());
         });
@@ -863,7 +865,7 @@ public class EntityTag extends AbstractTagObject {
             Entity ent = ((EntityTag) obj).internal;
             return new LocationTag(BlockRay.from(ent)
                     .stopFilter(BlockRay.continueAfterFilter(BlockRay.onlyAirFilter(), 1))
-                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal() :
+                    .distanceLimit(dat.hasNextModifier() ? NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal() :
                             (Utilities.getHandReach(ent))).build().end().get().getNormal());
         });
         // <--[tag]
@@ -879,14 +881,14 @@ public class EntityTag extends AbstractTagObject {
         handlers.put("target_entities", (dat, obj) -> {
             Entity ent = ((EntityTag) obj).internal;
             ListTag list = new ListTag();
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag map = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             EntityTypeTag requiredTypeTag = null;
             if (map.getInternal().containsKey("type")) {
-                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+                requiredTypeTag = EntityTypeTag.getFor(dat.checkedError, map.getInternal().get("type"));
             }
             Set<EntityUniverse.EntityHit> entHits = ent.getWorld()
                     .getIntersectingEntities(ent, map.getInternal().containsKey("range") ?
-                            NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal() :
+                            NumberTag.getFor(dat.checkedError, map.getInternal().get("range")).getInternal() :
                             (Utilities.getHandReach(ent)));
             for (EntityUniverse.EntityHit entHit : entHits) {
                 Entity hit = entHit.getEntity();

@@ -50,7 +50,7 @@ public class FormattedTextTag extends AbstractTagObject {
         // @Returns the text followed by another piece of text.
         // -->
         handlers.put("append", (dat, obj) -> new FormattedTextTag(Text.join(((FormattedTextTag) obj).internal,
-                FormattedTextTag.getFor(dat.error, dat.getNextModifier()).internal)));
+                FormattedTextTag.getFor(dat.checkedError, dat.getNextModifier()).internal)));
         // <--[tag]
         // @Since 0.3.0
         // @Name FormattedTextTag.color_codes
@@ -97,7 +97,7 @@ public class FormattedTextTag extends AbstractTagObject {
         // -->
         handlers.put("with_styles", (dat, obj) -> {
             Text.Builder build = ((FormattedTextTag) obj).internal.toBuilder();
-            ListTag styles = ListTag.getFor(dat.error, dat.getNextModifier());
+            ListTag styles = ListTag.getFor(dat.checkedError, dat.getNextModifier());
             for (AbstractTagObject ato : styles.getInternal()) {
                 Object style = Utilities.getTypeWithDefaultPrefix(TextStyle.Base.class, ato.toString());
                 if (style == null) {

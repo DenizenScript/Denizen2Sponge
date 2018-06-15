@@ -25,7 +25,6 @@ import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnType;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

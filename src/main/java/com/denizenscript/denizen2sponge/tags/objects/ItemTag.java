@@ -298,7 +298,7 @@ public class ItemTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
-            MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag toApply = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             flags.getInternal().putAll(toApply.getInternal());
             e.offer(new FlagMapDataImpl(new FlagMap(flags)));
             return new ItemTag(e);
@@ -313,7 +313,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("with_quantity", (dat, obj) -> {
             ItemStack its = ((ItemTag) obj).internal.copy();
-            its.setQuantity((int) IntegerTag.getFor(dat.error, dat.getNextModifier()).getInternal());
+            its.setQuantity((int) IntegerTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal());
             return new ItemTag(its);
         });
         // <--[tag]
@@ -327,7 +327,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("with", (dat, obj) -> {
             ItemStack its = ((ItemTag) obj).internal.copy();
-            MapTag toApply = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag toApply = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             for (Map.Entry<String, AbstractTagObject> a : toApply.getInternal().entrySet()) {
                 Key k = DataKeys.getKeyForName(a.getKey());
                 if (k == null) {
@@ -362,7 +362,7 @@ public class ItemTag extends AbstractTagObject {
             else {
                 flags = new MapTag();
             }
-            ListTag toRemove = ListTag.getFor(dat.error, dat.getNextModifier());
+            ListTag toRemove = ListTag.getFor(dat.checkedError, dat.getNextModifier());
             for (AbstractTagObject k : toRemove.getInternal()) {
                 flags.getInternal().remove(k.toString());
             }
@@ -379,7 +379,7 @@ public class ItemTag extends AbstractTagObject {
         // -->
         handlers.put("without", (dat, obj) -> {
             ItemStack e = ((ItemTag) obj).internal.copy();
-            ListTag toRemove = ListTag.getFor(dat.error, dat.getNextModifier());
+            ListTag toRemove = ListTag.getFor(dat.checkedError, dat.getNextModifier());
             for (AbstractTagObject kName : toRemove.getInternal()) {
                 Key k = DataKeys.getKeyForName(kName.toString());
                 if (k == null) {

@@ -66,7 +66,7 @@ public class ExplosionOccursScriptEvent extends ScriptEvent {
         return D2SpongeEventHelper.checkWorld(location.getInternal().world, data, this::error)
                 && D2SpongeEventHelper.checkCuboid(location.getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        location.getInternal().world.getWeather().getId()), data, this::error);
+                location.getInternal().world.getWeather().getId()), data, this::error);
     }
 
     public LocationTag location;

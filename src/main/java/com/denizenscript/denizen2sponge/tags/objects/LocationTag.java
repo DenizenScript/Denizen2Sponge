@@ -193,7 +193,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("rotate_around_x", (dat, obj) -> {
             UtilLocation loc = ((LocationTag) obj).internal;
-            double angle = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            double angle = NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(loc.x, loc.y * Math.cos(angle) - loc.z * Math.sin(angle), loc.y * Math.sin(angle) + loc.z * Math.cos(angle), loc.world);
         });
         // <--[tag]
@@ -206,7 +206,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("rotate_around_y", (dat, obj) -> {
             UtilLocation loc = ((LocationTag) obj).internal;
-            double angle = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            double angle = NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(loc.z * Math.sin(angle) + loc.x * Math.cos(angle), loc.y, loc.z * Math.cos(angle) - loc.x * Math.sin(angle), loc.world);
         });
         // <--[tag]
@@ -219,7 +219,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("rotate_around_z", (dat, obj) -> {
             UtilLocation loc = ((LocationTag) obj).internal;
-            double angle = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            double angle = NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(loc.x * Math.cos(angle) - loc.y * Math.sin(angle), loc.x * Math.sin(angle) + loc.y * Math.cos(angle), loc.z, loc.world);
         });
         // <--[tag]
@@ -242,7 +242,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("add", (dat, obj) -> {
             UtilLocation t = ((LocationTag) obj).internal;
-            UtilLocation a = LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            UtilLocation a = LocationTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(t.x + a.x, t.y + a.y, t.z + a.z, t.world);
         });
         // <--[tag]
@@ -255,7 +255,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("subtract", (dat, obj) -> {
             UtilLocation t = ((LocationTag) obj).internal;
-            UtilLocation a = LocationTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            UtilLocation a = LocationTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(t.x - a.x, t.y - a.y, t.z - a.z, t.world);
         });
         // <--[tag]
@@ -269,7 +269,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("multiply", (dat, obj) -> {
             UtilLocation loc = ((LocationTag) obj).internal;
-            double scalar = NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            double scalar = NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
         });
         // <--[tag]
@@ -283,7 +283,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("divide", (dat, obj) -> {
             UtilLocation loc = ((LocationTag) obj).internal;
-            double scalar = 1.0 / NumberTag.getFor(dat.error, dat.getNextModifier()).getInternal();
+            double scalar = 1.0 / NumberTag.getFor(dat.checkedError, dat.getNextModifier()).getInternal();
             return new LocationTag(loc.x * scalar, loc.y * scalar, loc.z * scalar, loc.world);
         });
         // <--[tag]
@@ -346,12 +346,12 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("nearby_entities", (dat, obj) -> {
             ListTag list = new ListTag();
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag map = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             EntityTypeTag requiredTypeTag = null;
             if (map.getInternal().containsKey("type")) {
-                requiredTypeTag = EntityTypeTag.getFor(dat.error, map.getInternal().get("type"));
+                requiredTypeTag = EntityTypeTag.getFor(dat.checkedError, map.getInternal().get("type"));
             }
-            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            double range = NumberTag.getFor(dat.checkedError, map.getInternal().get("range")).getInternal();
             UtilLocation loc = ((LocationTag) obj).getInternal();
             Set<Entity> ents = loc.world.getIntersectingEntities(new AABB(
                     loc.x - range, loc.y - range, loc.z - range, loc.x + range, loc.y + range, loc.z + range));
@@ -374,12 +374,12 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("nearby_blocks", (dat, obj) -> {
             ListTag list = new ListTag();
-            MapTag map = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag map = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             BlockTypeTag requiredTypeTag = null;
             if (map.getInternal().containsKey("type")) {
-                requiredTypeTag = BlockTypeTag.getFor(dat.error, map.getInternal().get("type"));
+                requiredTypeTag = BlockTypeTag.getFor(dat.checkedError, map.getInternal().get("type"));
             }
-            double range = NumberTag.getFor(dat.error, map.getInternal().get("range")).getInternal();
+            double range = NumberTag.getFor(dat.checkedError, map.getInternal().get("range")).getInternal();
             UtilLocation loc = ((LocationTag) obj).getInternal();
             int low = (int) Math.floor(-range);
             int high = (int) Math.ceil(range);
@@ -418,11 +418,11 @@ public class LocationTag extends AbstractTagObject {
         // Input is height:<IntegerTag>|width:<IntegerTag>
         // -->
         handlers.put("find_safe_location", (dat, obj) -> {
-            MapTag inputMap = MapTag.getFor(dat.error, dat.getNextModifier());
+            MapTag inputMap = MapTag.getFor(dat.checkedError, dat.getNextModifier());
             int height = inputMap.getInternal().containsKey("height") ?
-                    (int) IntegerTag.getFor(dat.error, inputMap.getInternal().get("height")).getInternal() : TeleportHelper.DEFAULT_HEIGHT;
+                    (int) IntegerTag.getFor(dat.checkedError, inputMap.getInternal().get("height")).getInternal() : TeleportHelper.DEFAULT_HEIGHT;
             int width = inputMap.getInternal().containsKey("width") ?
-                    (int) IntegerTag.getFor(dat.error, inputMap.getInternal().get("width")).getInternal() : TeleportHelper.DEFAULT_WIDTH;
+                    (int) IntegerTag.getFor(dat.checkedError, inputMap.getInternal().get("width")).getInternal() : TeleportHelper.DEFAULT_WIDTH;
             Optional<Location<World>> opt = Sponge.getGame().getTeleportHelper().getSafeLocation(((LocationTag) obj).internal.toLocation(), height, width);
             MapTag outputMap = new MapTag();
             if (!opt.isPresent()) {
@@ -535,7 +535,7 @@ public class LocationTag extends AbstractTagObject {
         // -->
         handlers.put("line_of_sight", (dat, obj) -> {
             Location<World> loc1 = ((LocationTag) obj).internal.toLocation();
-            Location<World> loc2 = LocationTag.getFor(dat.error, dat.getNextModifier()).internal.toLocation();
+            Location<World> loc2 = LocationTag.getFor(dat.checkedError, dat.getNextModifier()).internal.toLocation();
             Vector3d direction = loc2.getPosition().sub(loc1.getPosition());
             double length = direction.length();
             if (length == 0) {

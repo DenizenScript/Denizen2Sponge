@@ -77,7 +77,7 @@ public class EntityEntersAreaScriptEvent extends ScriptEvent {
         }
         return toArea && D2SpongeEventHelper.checkEntityType(entity.getInternal().getType(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
+                entity.getInternal().getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;

@@ -150,17 +150,17 @@ public class ServerTagBase extends AbstractTagBase {
         // @Returns a CuboidTag that contains and minimally wraps all locations in the list of locations.
         // -->
         handlers.put("cuboid_wrapping", (dat, obj) -> {
-            ListTag lt = ListTag.getFor(dat.error, dat.getNextModifier());
+            ListTag lt = ListTag.getFor(dat.checkedError, dat.getNextModifier());
             if (lt.getInternal().size() == 0) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Empty list tag, cannot wrap a cuboid around nothing!");
                 }
                 return NullTag.NULL;
             }
-            LocationTag one = LocationTag.getFor(dat.error, lt.getInternal().get(0));
+            LocationTag one = LocationTag.getFor(dat.checkedError, lt.getInternal().get(0));
             CuboidTag ct = new CuboidTag(one.getInternal(), one.getInternal());
             for (int i = 1; i < lt.getInternal().size(); i++) {
-                LocationTag c = LocationTag.getFor(dat.error, lt.getInternal().get(i));
+                LocationTag c = LocationTag.getFor(dat.checkedError, lt.getInternal().get(i));
                 ct.getInternal().min.x = Math.min(ct.getInternal().min.x, c.getInternal().x);
                 ct.getInternal().min.y = Math.min(ct.getInternal().min.y, c.getInternal().y);
                 ct.getInternal().min.z = Math.min(ct.getInternal().min.z, c.getInternal().z);
@@ -216,7 +216,7 @@ public class ServerTagBase extends AbstractTagBase {
                 MapTag valid = new MapTag();
                 for (Map.Entry<String, AbstractTagObject> flag : flags.getInternal().entrySet()) {
                     if (Utilities.flagIsValidAndNotExpired(dat.error, flags, flag.getKey())) {
-                        MapTag mt = MapTag.getFor(dat.error, flag.getKey());
+                        MapTag mt = MapTag.getFor(dat.checkedError, flag.getKey());
                         valid.getInternal().put(flag.getKey(), mt.getInternal().get("value"));
                     }
                 }
@@ -229,7 +229,7 @@ public class ServerTagBase extends AbstractTagBase {
                 }
                 return NullTag.NULL;
             }
-            MapTag smap = MapTag.getFor(dat.error, flags.getInternal().get(flagName));
+            MapTag smap = MapTag.getFor(dat.checkedError, flags.getInternal().get(flagName));
             if (smap == null) {
                 if (!dat.hasFallback()) {
                     dat.error.run("Invalid flag specified, not present on the server!");

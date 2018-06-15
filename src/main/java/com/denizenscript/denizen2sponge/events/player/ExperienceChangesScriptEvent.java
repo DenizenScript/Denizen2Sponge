@@ -62,7 +62,7 @@ public class ExperienceChangesScriptEvent extends ScriptEvent {
                 && D2SpongeEventHelper.checkCuboid((new LocationTag(player.getOnline(this::error)
                 .getLocation())).getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        player.getOnline(this::error).getLocation().getExtent().getWeather().getId()), data, this::error);
+                player.getOnline(this::error).getLocation().getExtent().getWeather().getId()), data, this::error);
     }
 
     public PlayerTag player;

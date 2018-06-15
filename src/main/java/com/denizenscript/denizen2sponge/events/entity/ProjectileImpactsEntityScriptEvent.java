@@ -61,7 +61,7 @@ public class ProjectileImpactsEntityScriptEvent extends ScriptEvent {
                 && D2SpongeEventHelper.checkWorld(impact_point.getInternal().world, data, this::error)
                 && D2SpongeEventHelper.checkCuboid(impact_point.getInternal(), data, this::error)
                 && D2SpongeEventHelper.checkWeather(Utilities.getIdWithoutDefaultPrefix(
-                        impact_point.getInternal().world.getWeather().getId()), data, this::error);
+                impact_point.getInternal().world.getWeather().getId()), data, this::error);
     }
 
     public EntityTag entity;

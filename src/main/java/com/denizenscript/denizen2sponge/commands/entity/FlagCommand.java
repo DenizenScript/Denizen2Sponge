@@ -73,7 +73,7 @@ public class FlagCommand extends AbstractCommand {
         TimeTag tt = null;
         if (entry.namedArgs.containsKey("duration")) {
             DurationTag duration = DurationTag.getFor(queue.error, entry.getNamedArgumentObject(queue, "duration"));
-            LocalDateTime ldt = LocalDateTime.now(ZoneId.of("UTC")).plus((long)(duration.getInternal() * 1000), ChronoField.MILLI_OF_SECOND.getBaseUnit());
+            LocalDateTime ldt = LocalDateTime.now(ZoneId.of("UTC")).plus((long) (duration.getInternal() * 1000), ChronoField.MILLI_OF_SECOND.getBaseUnit());
             tt = new TimeTag(ldt);
         }
         if (CoreUtilities.toLowerCase(ato.toString()).equals("server")) {

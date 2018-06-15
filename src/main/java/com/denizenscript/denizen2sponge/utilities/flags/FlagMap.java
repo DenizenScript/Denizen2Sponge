@@ -7,7 +7,7 @@ public class FlagMap implements DataSerializable {
 
     public static final DataQuery FLAG = DataQuery.of("denizen_flag");
 
-    public MapTag flags = new MapTag();
+    public MapTag flags;
 
     public FlagMap(MapTag mt) {
         flags = mt;
