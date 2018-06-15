@@ -67,9 +67,4 @@ public class Utilities {
         opt = Sponge.getRegistry().getType(clazz, "denizen2sponge:" + name);
         return opt.orElse(null);
     }
-
-    @FunctionalInterface
-    public interface Function3<A, B, C, R> {
-        R apply(A a, B b, C c);
-    }
 }

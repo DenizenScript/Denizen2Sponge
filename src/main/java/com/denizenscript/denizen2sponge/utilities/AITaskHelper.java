@@ -29,7 +29,7 @@ import java.util.Optional;
 
 public class AITaskHelper {
 
-    public final static HashMap<String, Utilities.Function3<CommandQueue, Agent, HashMap<String, AbstractTagObject>, AITask<? extends Agent>>> handlers = new HashMap<>();
+    public final static HashMap<String, Function3<CommandQueue, Agent, HashMap<String, AbstractTagObject>, AITask<? extends Agent>>> handlers = new HashMap<>();
 
     static {
         handlers.put("attack_living", (queue, entity, properties) -> {
@@ -124,7 +124,7 @@ public class AITaskHelper {
 
     public static void giveAITask(CommandQueue queue, Agent entity, String type, HashMap<String, AbstractTagObject> properties) {
         try {
-            Utilities.Function3<CommandQueue, Agent, HashMap<String, AbstractTagObject>, AITask<? extends Agent>> taskAction = handlers.get(type);
+            Function3<CommandQueue, Agent, HashMap<String, AbstractTagObject>, AITask<? extends Agent>> taskAction = handlers.get(type);
             if (taskAction == null) {
                 queue.error.run("Invalid AI Task type: " + type + "!");
                 return;

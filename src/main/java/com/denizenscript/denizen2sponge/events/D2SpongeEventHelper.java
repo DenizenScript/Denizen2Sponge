@@ -14,6 +14,7 @@ import com.denizenscript.denizen2sponge.utilities.Utilities;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagHelper;
 import com.denizenscript.denizen2sponge.utilities.flags.FlagMap;
 import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.EntityType;
@@ -24,8 +25,6 @@ import org.spongepowered.api.world.weather.Weather;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.spongepowered.api.Sponge.getRegistry;
 
 public class D2SpongeEventHelper {
 
@@ -150,7 +149,7 @@ public class D2SpongeEventHelper {
             return true;
         }
         for (AbstractTagObject ato : ListTag.getFor(error, data.switches.get(tname)).getInternal()) {
-            Optional<CatalogType> opt = getRegistry().getType(clazz, ato.toString());
+            Optional<CatalogType> opt = Sponge.getRegistry().getType(clazz, ato.toString());
             if (!opt.isPresent()) {
                 error.run("Invalid " + clazz.getSimpleName() + " type: '" + ato.debug() + "'!");
                 return false;

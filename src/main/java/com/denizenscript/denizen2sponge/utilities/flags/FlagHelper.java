@@ -16,7 +16,7 @@ public class FlagHelper {
             .type(FLAGMAP_VALUE_TOKEN)
             .query(DataQuery.of("flagmap"))
             .id("flagmap")
-            .name("DenizenFlagMap")
+            .name("Denizen2SpongeFlagMap")
             .build();
 
     public static FlagMapDataBuilder FMDB;
