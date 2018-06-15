@@ -6,6 +6,7 @@ import com.denizenscript.denizen2core.tags.objects.*;
 import com.denizenscript.denizen2core.utilities.Action;
 import com.denizenscript.denizen2core.utilities.CoreUtilities;
 import com.denizenscript.denizen2core.utilities.Function2;
+import com.denizenscript.denizen2core.utilities.debugging.Debug;
 import com.denizenscript.denizen2sponge.utilities.Utilities;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.advancement.Advancement;
@@ -22,6 +23,7 @@ import org.spongepowered.api.util.RespawnLocation;
 import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,7 +75,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("cooldown", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
             return new DurationTag(pl.getCooldownTracker().getCooldown(item.getInternal()).orElse(0) * (1.0 / 20.0));
@@ -89,7 +91,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("cooldown_fraction", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
             return new NumberTag(pl.getCooldownTracker().getFractionRemaining(item.getInternal()).orElse(0));
@@ -105,7 +107,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("exhaustion", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new NumberTag(pl.exhaustion().get());
         });
@@ -120,7 +122,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("food_level", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new IntegerTag(pl.foodLevel().get());
         });
@@ -135,7 +137,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("gamemode", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new TextTag(pl.gameMode().get().toString());
         });
@@ -161,7 +163,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("has_advancement", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             String id = dat.getNextModifier().toString();
             Advancement advancement = (Advancement) Utilities.getTypeWithDefaultPrefix(Advancement.class, id);
@@ -184,7 +186,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("has_cooldown", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             ItemTypeTag item = ItemTypeTag.getFor(dat.error, dat.getNextModifier());
             return BooleanTag.getForBoolean(pl.getCooldownTracker().hasCooldown(item.getInternal()));
@@ -209,7 +211,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("ip", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new TextTag(pl.getConnection().getAddress().getAddress().getHostName());
         });
@@ -224,7 +226,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("latency", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new IntegerTag(pl.getConnection().getLatency());
         });
@@ -249,7 +251,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("saturation", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new NumberTag(pl.saturation().get());
         });
@@ -273,7 +275,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("sneaking", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return BooleanTag.getForBoolean(pl.get(Keys.IS_SNEAKING).get());
         });
@@ -288,7 +290,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("sprinting", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return BooleanTag.getForBoolean(pl.get(Keys.IS_SPRINTING).get());
         });
@@ -366,7 +368,7 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("tablist_header", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new FormattedTextTag(pl.getTabList().getHeader().orElse(Text.of("")));
         });
@@ -381,14 +383,14 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("tablist_footer", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return NullTag.NULL;
+                return offlineFault(dat);
             }
             return new FormattedTextTag(pl.getTabList().getFooter().orElse(Text.of("")));
         });
         // <--[tag]
-        // @Since 0.4.0
+        // @Since 0.5.5
         // @Name PlayerTag.respawn_location[<WorldTag>]
-        // @Updated 2018/02/22
+        // @Updated 2018/06/15
         // @Group Properties
         // @ReturnType LocationTag
         // @Returns whether the player's respawn location in the specified world. ONLINE-PLAYERS-ONLY.
@@ -396,18 +398,26 @@ public class PlayerTag extends AbstractTagObject {
         handlers.put("respawn_location", (dat, obj) -> {
             Player pl = ((PlayerTag) obj).getOnline(dat);
             if (pl == null) {
-                return new NullTag();
+                return offlineFault(dat);
             }
             World world = WorldTag.getFor(dat.error, dat.getNextModifier()).getInternal();
-            RespawnLocation loc = pl.get(Keys.RESPAWN_LOCATIONS).orElse(new HashMap<>()).get(world.getUniqueId());
-            if (loc == null) {
-                if (!dat.hasFallback()) {
-                    dat.error.run("The player has no defined respawn location in the specified world!");
-                }
-                return new NullTag();
+            Optional<Map<UUID, RespawnLocation>> optMap = pl.get(Keys.RESPAWN_LOCATIONS);
+            if (optMap.isPresent()) {
+                RespawnLocation loc = optMap.get().get(world.getUniqueId());
+                return new LocationTag(loc.asLocation().orElseThrow(UnsupportedOperationException::new));
             }
-            return new LocationTag(loc.asLocation().get());
+            if (!dat.hasFallback()) {
+                dat.error.run("The player has no defined respawn location in the specified world!");
+            }
+            return NullTag.NULL;
         });
+    }
+
+    public static NullTag offlineFault(TagData dat) {
+        if (!dat.hasFallback()) {
+            dat.error.run("Player is not online!");
+        }
+        return NullTag.NULL;
     }
 
     public static PlayerTag getFor(Action<String> error, String text) {
@@ -430,6 +440,7 @@ public class PlayerTag extends AbstractTagObject {
             error.run("Invalid PlayerTag named input!");
             return null;
         }
+        Debug.error("PlayerTag has been constructed by name - use ServerTag.match_player instead (see documentation)!");
         return new PlayerTag(oplayer.get());
     }
 

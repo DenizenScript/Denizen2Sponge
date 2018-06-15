@@ -61,6 +61,7 @@ public class ServerTagBase extends AbstractTagBase {
         // @Returns a list of all the current online players on the server.
         // -->
         handlers.put("online_players", (dat, obj) -> {
+            // TODO: Offline players tag too!
             ListTag list = new ListTag();
             for (Player player : (Sponge.getServer().getOnlinePlayers())) {
                 list.getInternal().add(new PlayerTag(player));
@@ -305,7 +306,7 @@ public class ServerTagBase extends AbstractTagBase {
             return BooleanTag.getForBoolean(advancement != null);
         });
         // <--[tag]
-        // @Since 0.5.0
+        // @Since 0.5.5
         // @Name ServerBaseTag.match_player[<TextTag>]
         // @Updated 2018/06/15
         // @Group Server Tools
@@ -313,12 +314,12 @@ public class ServerTagBase extends AbstractTagBase {
         // @Returns the online player that best matches the input name.
         // -->
         handlers.put("match_player", (dat, obj) -> {
-            String matchInput = CoreUtilities.toLowerCase( dat.getNextModifier().toString());
+            String matchInput = CoreUtilities.toLowerCase(dat.getNextModifier().toString());
             try {
                 UUID uuid = CoreUtilities.tryGetUUID(matchInput);
                 if (uuid != null) {
                     Optional<Player> opt = Sponge.getServer().getPlayer(uuid);
-                    if (!opt.isPresent()) {
+                    if (!opt.isPresent() || !opt.get().isOnline()) {
                         return NullTag.NULL;
                     }
                     return new PlayerTag(opt.get());
@@ -327,7 +328,9 @@ public class ServerTagBase extends AbstractTagBase {
             catch (Exception e) {
                 // Ignore.
             }
+            // TODO: Offline tag as well (match_offline_player, matches any player without requiring online)
             Collection<Player> players = Sponge.getServer().getOnlinePlayers();
+            // TODO: Efficiency? Lowercasing player name 3x for each player in list worst case...
             for (Player player : players) {
                 if (CoreUtilities.toLowerCase(player.getName()).equals(matchInput)) {
                     return new PlayerTag(player);

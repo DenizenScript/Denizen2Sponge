@@ -954,54 +954,54 @@ public class EntityTag extends AbstractTagObject {
             }
         });
         // <--[tag]
-        // @Since 0.4.0
+        // @Since 0.5.5
         // @Name EntityTag.burning
-        // @Updated 2018/02/17
+        // @Updated 2018/06/15
         // @Group Entity Properties
         // @ReturnType BooleanTag
         // @Returns whether an entity is currently burning.
         // -->
         handlers.put("burning", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.FIRE_TICKS).orElse(0) > 0));
         // <--[tag]
-        // @Since 0.4.0
+        // @Since 0.5.5
         // @Name EntityTag.burn_time
-        // @Updated 2018/02/17
+        // @Updated 2018/06/15
         // @Group Entity Properties
         // @ReturnType DurationTag
         // @Returns how long an entity is burning for.
         // -->
         handlers.put("burn_time", (dat, obj) -> new DurationTag(((EntityTag) obj).internal.get(Keys.FIRE_TICKS).orElse(0) / 20.0));
         // <--[tag]
-        // @Since 0.4.0
+        // @Since 0.5.5
         // @Name EntityTag.absorption
-        // @Updated 2018/02/17
+        // @Updated 2018/06/15
         // @Group Entity Properties
         // @ReturnType NumberTag
         // @Returns how much absorption this entity has.
         // -->
         handlers.put("absorption", (dat, obj) -> new NumberTag(((EntityTag) obj).internal.get(Keys.ABSORPTION).orElse(0.0)));
         // <--[tag]
-        // @Since 0.4.0
+        // @Since 0.5.5
         // @Name EntityTag.glowing
-        // @Updated 2018/02/18
+        // @Updated 2018/06/15
         // @Group Entity Properties
         // @ReturnType BooleanTag
         // @Returns whether an entity is currently glowing.
         // -->
-        handlers.put("glowing", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.GLOWING).get()));
+        handlers.put("glowing", (dat, obj) -> new BooleanTag(((EntityTag) obj).internal.get(Keys.GLOWING).orElse(false)));
         // <--[tag]
-        // @Since 0.5.0
-        // @Name EntityTag.is_script
-        // @Updated 2018/05/29
+        // @Since 0.5.5
+        // @Name EntityTag.has_script
+        // @Updated 2018/06/15
         // @Group General Information
         // @ReturnType BooleanTag
         // @Returns whether the entity was sourced from a script.
         // -->
-        handlers.put("is_script", (dat, obj) -> new BooleanTag(((EntityTag) obj).getSourceScript() != null));
+        handlers.put("has_script", (dat, obj) -> new BooleanTag(((EntityTag) obj).getSourceScript() != null));
         // <--[tag]
-        // @Since 0.5.0
+        // @Since 0.5.5
         // @Name EntityTag.script
-        // @Updated 2018/05/29
+        // @Updated 2018/06/15
         // @Group General Information
         // @ReturnType ScriptTag
         // @Returns the script this entity was spawned from, if any.
@@ -1012,7 +1012,7 @@ public class EntityTag extends AbstractTagObject {
                 if (!dat.hasFallback()) {
                     dat.error.run("Entity was not sourced from a script.");
                 }
-                return new NullTag();
+                return NullTag.NULL;
             }
             return new ScriptTag(src);
         });
