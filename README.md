@@ -11,6 +11,10 @@ Discuss on our forums at [http://forum.denizenscript.com/](http://forum.denizens
 
 Join our Discord server at [https://discord.gg/Q6pZGSR](https://discord.gg/Q6pZGSR).
 
+### Project Status
+
+On hold for the time being. Sponge is still on MC 1.12 and thus is not currently a viable platform. Denizen 1 on Spigot is the focus for now.
+
 ### Licensing pre-note:
 
 This is an open source project, provided entirely freely, for everyone to use and contribute to.
